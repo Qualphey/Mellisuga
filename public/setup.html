@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>CMBird Setup</title>
+
+    <link rel="stylesheet" type="text/css" href="/res/theme.css">
+    <style>
+      html, body {
+          display: table;
+          position: absolute;
+          height: 100%;
+          width: 100%;
+      }
+
+      .vert_mid_wrapper {
+          display: table-cell;
+          vertical-align: middle;
+          height: 80vh;
+      }
+
+      .vert_mid {
+          margin-left: auto;
+          margin-right: auto;
+          width: 300px;
+      }
+
+      h1 {
+          margin-bottom: 60px;
+
+          position: absolute;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+
+          top: 10vh;
+      }
+
+      .submit {
+        margin-top: 10px;
+        margin-left: 90px;
+      }
+    </style>
+	</head>
+  <body>
+    <h1>Welcome to CMBird CMS</h1>
+    <div class="vert_mid_wrapper">
+      <div class="vert_mid">
+        <h3>Setup your web application</h3>
+        <form action="/initialise" method="post">
+          <input name="name" type="text" placeholder="Name" />
+          <input name="email" type="text" placeholder="E-mail address" />
+          <span >
+            <input name="pwd" type="password" placeholder="**password**" />
+            <input name="pwdr" type="password" placeholder="***repeat***" /><br />
+          </span>
+          <input class="submit" type="submit">
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

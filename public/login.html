@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>CMBird Setup</title>
+    <link rel="stylesheet" type="text/css" href="/res/theme.css">
+    <style>
+      html, body {
+          display: table;
+          position: absolute;
+          height: 100%;
+          width: 100%;
+      }
+
+      .vert_mid_wrapper {
+          display: table-cell;
+          vertical-align: middle;
+          height: 80vh;
+      }
+
+      .vert_mid {
+          margin-left: auto;
+          margin-right: auto;
+          width: 300px;
+      }
+
+      .submit {
+        margin-top: 10px;
+        margin-left: 90px;
+      }
+    </style>
+	</head>
+    <div class="vert_mid_wrapper">
+      <div class="vert_mid">
+        <h3>Sign in</h3>
+        <form action="/authenticate" method="post">
+          <input name="email" type="text" placeholder="E-mail address" />
+          <input name="pwd" type="password" placeholder="**password**" />
+          <input class="submit" type="submit">
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

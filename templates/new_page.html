@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+
+    <% for (var key in style_links) { %>
+      <link href="<%= style_links[key] %>" rel="stylesheet">
+    <% } %>
+
+	</head>
+  <body>
+    <div>
+      <h2><%= title %></h2>
+      <ul>
+        <% for (var key in menu_items) { %>
+          <li><a href="<%= menu_items[key].href %>"><%= menu_items[key].text %></a></li>
+        <% } %>
+      </ul>
+    </div>
+  </body>
+</html>

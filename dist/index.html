@@ -3,58 +3,26 @@
   <head>
     <meta charset="UTF-8">
     <title>CMBird Setup</title>
-    <link rel="stylesheet" type="text/css" href="/res/theme.css">
-    <style>
-      .list_display  {
-        background-color: #DDD;
-        height: 295px;
-        width: 960px;
-        margin: auto;
-        padding: 10px;
-        text-align: left;
-        overflow-x: scroll;
-        white-space: nowrap;
-      }
 
-      .list_item {
-        display: inline-block;
-        width: 280px;
-        height: 280px;
-        background-color: #BBB;
-        color: #FFF;
-        line-height: 280px;
-        font-size: 18px;
-        text-align: center;
-        margin-right: 5px;
-        text-decoration: none;
-        cursor: pointer;
-        user-select: none;
-      }
+    <script src="lib/jquery-3.2.1.min.js"></script>
 
-      .list_item:hover {
-        background-color: #999;
-      }
-    </style>
+    <link href="lib/summernote-lite.css" rel="stylesheet">
+    <script src="lib/summernote-lite.js"></script>
+    <script src="lib/lang/summernote-lt-LT.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="res/theme.css">
 	</head>
   <body>
-    <h1>Welcome to CMBird, bro!</h1>
-    <a href="/terminate">Sign Out</a>
-      Pages - X
-    <div class="list_display" id="pages_edit">
-      <div class="list_item" id="add_page">
-        <b>+</b> Add page
-      </div>
-    </div>
+    <header>
+      <ul>
+        <li style="float:right"><a href="/terminate">Sign Out</a></li>
+      </ul>
+    </header>
       <br />
-      Posts - X
-    <div class="list_display">
-      <div class="list_item" id="add_post">
-        <b>+</b> Add post
-      </div>
-    </div>
-    <button id="tt">
+
+  <!--  <button id="tt">
       Token test
-    </button>
+    </button> -->
   </body>
   <script src="main.js"></script>
 </html>

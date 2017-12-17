@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 41);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -92,6 +92,511 @@ module.exports = g;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = class {
+  static get(url, params, callback) {
+    if (params) {
+      url += "?data="+encodeURIComponent(JSON.stringify(params));
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("load", callback);
+    xhr.open("GET", url);
+    xhr.send();
+
+    console.log(url);
+  }
+
+  static getParamByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  static post(url, params, callback) {
+    var http = new XMLHttpRequest();
+    http.open("POST", url, true);
+
+    //Send the proper header information along with the request
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    http.onreadystatechange = function() {//Call a function when the state changes.
+      if(http.readyState == 4 && http.status == 200) {
+        callback(http.responseText);
+      }
+    }
+
+    var json = JSON.stringify(params);
+    var param_str = 'data='+encodeURIComponent(json);
+    http.send(param_str);
+  }
+}
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+
+var stylesInDom = {};
+
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
+});
+
+var getElement = (function (fn) {
+	var memo = {};
+
+	return function(selector) {
+		if (typeof memo[selector] === "undefined") {
+			var styleTarget = fn.call(this, selector);
+			// Special case to return head of iframe instead of iframe itself
+			if (styleTarget instanceof window.HTMLIFrameElement) {
+				try {
+					// This will throw an exception if access to iframe is blocked
+					// due to cross-origin restrictions
+					styleTarget = styleTarget.contentDocument.head;
+				} catch(e) {
+					styleTarget = null;
+				}
+			}
+			memo[selector] = styleTarget;
+		}
+		return memo[selector]
+	};
+})(function (target) {
+	return document.querySelector(target)
+});
+
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(10);
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton) options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+	if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
+		var nextSibling = getElement(options.insertInto + " " + options.insertAt.before);
+		target.insertBefore(style, nextSibling);
+	} else {
+		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	options.attrs.type = "text/css";
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	options.attrs.type = "text/css";
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = options.transform(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -260,22 +765,22 @@ Emitter.prototype.hasListeners = function(event){
 
 
 /***/ }),
-/* 2 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies.
  */
 
-var keys = __webpack_require__(35);
-var hasBinary = __webpack_require__(13);
-var sliceBuffer = __webpack_require__(36);
-var after = __webpack_require__(37);
-var utf8 = __webpack_require__(38);
+var keys = __webpack_require__(52);
+var hasBinary = __webpack_require__(18);
+var sliceBuffer = __webpack_require__(53);
+var after = __webpack_require__(54);
+var utf8 = __webpack_require__(55);
 
 var base64encoder;
 if (global && global.ArrayBuffer) {
-  base64encoder = __webpack_require__(40);
+  base64encoder = __webpack_require__(57);
 }
 
 /**
@@ -333,7 +838,7 @@ var err = { type: 'error', data: 'parser error' };
  * Create a blob api even for blob builder when vendor prefixes exist
  */
 
-var Blob = __webpack_require__(41);
+var Blob = __webpack_require__(58);
 
 /**
  * Encodes a packet.
@@ -873,7 +1378,7 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 3 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/**
@@ -882,7 +1387,7 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(27);
+exports = module.exports = __webpack_require__(44);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -1062,10 +1567,10 @@ function localstorage() {
   } catch (e) {}
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)))
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /**
@@ -1108,7 +1613,7 @@ exports.decode = function(qs){
 
 
 /***/ }),
-/* 5 */
+/* 8 */
 /***/ (function(module, exports) {
 
 
@@ -1120,7 +1625,7 @@ module.exports = function(a, b){
 };
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/**
@@ -1129,7 +1634,7 @@ module.exports = function(a, b){
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(42);
+exports = module.exports = __webpack_require__(59);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -1309,10 +1814,105 @@ function localstorage() {
   } catch (e) {}
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)))
 
 /***/ }),
-/* 7 */
+/* 10 */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -1320,11 +1920,11 @@ function localstorage() {
  * Module dependencies.
  */
 
-var debug = __webpack_require__(3)('socket.io-parser');
-var Emitter = __webpack_require__(1);
-var hasBin = __webpack_require__(13);
-var binary = __webpack_require__(29);
-var isBuf = __webpack_require__(14);
+var debug = __webpack_require__(6)('socket.io-parser');
+var Emitter = __webpack_require__(4);
+var hasBin = __webpack_require__(18);
+var binary = __webpack_require__(46);
+var isBuf = __webpack_require__(19);
 
 /**
  * Protocol version.
@@ -1718,12 +2318,12 @@ function error() {
 
 
 /***/ }),
-/* 8 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 
-var hasCORS = __webpack_require__(33);
+var hasCORS = __webpack_require__(50);
 
 module.exports = function (opts) {
   var xdomain = opts.xdomain;
@@ -1762,15 +2362,15 @@ module.exports = function (opts) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 9 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Module dependencies.
  */
 
-var parser = __webpack_require__(2);
-var Emitter = __webpack_require__(1);
+var parser = __webpack_require__(5);
+var Emitter = __webpack_require__(4);
 
 /**
  * Module exports.
@@ -1925,7 +2525,8 @@ Transport.prototype.onClose = function () {
 
 
 /***/ }),
-/* 10 */
+/* 14 */,
+/* 15 */
 /***/ (function(module, exports) {
 
 /**
@@ -1970,7 +2571,7 @@ module.exports = function parseuri(str) {
 
 
 /***/ }),
-/* 11 */
+/* 16 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -2160,7 +2761,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 12 */
+/* 17 */
 /***/ (function(module, exports) {
 
 /**
@@ -2318,7 +2919,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 13 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/* global Blob File */
@@ -2327,7 +2928,7 @@ function plural(ms, n, name) {
  * Module requirements.
  */
 
-var isArray = __webpack_require__(28);
+var isArray = __webpack_require__(45);
 
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
@@ -2387,7 +2988,7 @@ function hasBinary (obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 14 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -2407,7 +3008,7 @@ function isBuf(obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 15 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -2415,15 +3016,15 @@ function isBuf(obj) {
  * Module dependencies.
  */
 
-var eio = __webpack_require__(31);
-var Socket = __webpack_require__(20);
-var Emitter = __webpack_require__(1);
-var parser = __webpack_require__(7);
-var on = __webpack_require__(21);
-var bind = __webpack_require__(22);
-var debug = __webpack_require__(3)('socket.io-client:manager');
-var indexOf = __webpack_require__(19);
-var Backoff = __webpack_require__(47);
+var eio = __webpack_require__(48);
+var Socket = __webpack_require__(25);
+var Emitter = __webpack_require__(4);
+var parser = __webpack_require__(11);
+var on = __webpack_require__(26);
+var bind = __webpack_require__(27);
+var debug = __webpack_require__(6)('socket.io-client:manager');
+var indexOf = __webpack_require__(24);
+var Backoff = __webpack_require__(64);
 
 /**
  * IE6+ hasOwnProperty
@@ -2986,17 +3587,17 @@ Manager.prototype.onreconnect = function () {
 
 
 /***/ }),
-/* 16 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies
  */
 
-var XMLHttpRequest = __webpack_require__(8);
-var XHR = __webpack_require__(34);
-var JSONP = __webpack_require__(43);
-var websocket = __webpack_require__(44);
+var XMLHttpRequest = __webpack_require__(12);
+var XHR = __webpack_require__(51);
+var JSONP = __webpack_require__(60);
+var websocket = __webpack_require__(61);
 
 /**
  * Export transports.
@@ -3046,19 +3647,19 @@ function polling (opts) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 17 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Module dependencies.
  */
 
-var Transport = __webpack_require__(9);
-var parseqs = __webpack_require__(4);
-var parser = __webpack_require__(2);
-var inherit = __webpack_require__(5);
-var yeast = __webpack_require__(18);
-var debug = __webpack_require__(6)('engine.io-client:polling');
+var Transport = __webpack_require__(13);
+var parseqs = __webpack_require__(7);
+var parser = __webpack_require__(5);
+var inherit = __webpack_require__(8);
+var yeast = __webpack_require__(23);
+var debug = __webpack_require__(9)('engine.io-client:polling');
 
 /**
  * Module exports.
@@ -3071,7 +3672,7 @@ module.exports = Polling;
  */
 
 var hasXHR2 = (function () {
-  var XMLHttpRequest = __webpack_require__(8);
+  var XMLHttpRequest = __webpack_require__(12);
   var xhr = new XMLHttpRequest({ xdomain: false });
   return null != xhr.responseType;
 })();
@@ -3297,7 +3898,7 @@ Polling.prototype.uri = function () {
 
 
 /***/ }),
-/* 18 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3372,7 +3973,7 @@ module.exports = yeast;
 
 
 /***/ }),
-/* 19 */
+/* 24 */
 /***/ (function(module, exports) {
 
 
@@ -3387,7 +3988,7 @@ module.exports = function(arr, obj){
 };
 
 /***/ }),
-/* 20 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -3395,13 +3996,13 @@ module.exports = function(arr, obj){
  * Module dependencies.
  */
 
-var parser = __webpack_require__(7);
-var Emitter = __webpack_require__(1);
-var toArray = __webpack_require__(46);
-var on = __webpack_require__(21);
-var bind = __webpack_require__(22);
-var debug = __webpack_require__(3)('socket.io-client:socket');
-var parseqs = __webpack_require__(4);
+var parser = __webpack_require__(11);
+var Emitter = __webpack_require__(4);
+var toArray = __webpack_require__(63);
+var on = __webpack_require__(26);
+var bind = __webpack_require__(27);
+var debug = __webpack_require__(6)('socket.io-client:socket');
+var parseqs = __webpack_require__(7);
 
 /**
  * Module exports.
@@ -3811,7 +4412,7 @@ Socket.prototype.compress = function (compress) {
 
 
 /***/ }),
-/* 21 */
+/* 26 */
 /***/ (function(module, exports) {
 
 
@@ -3841,7 +4442,7 @@ function on (obj, ev, fn) {
 
 
 /***/ }),
-/* 22 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /**
@@ -3870,28 +4471,50 @@ module.exports = function(obj, fn){
 
 
 /***/ }),
-/* 23 */,
-/* 24 */
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var config = global.config = {
   admin_path : "/cmb_admin"
 }
 
-var socket = global.socket = __webpack_require__(25)('http://localhost:9639');
+var socket = global.socket = __webpack_require__(42)('http://localhost:9639');
 
-var PageEdit = __webpack_require__(48);
-var pe = new PageEdit();
-
+var templates_div = document.createElement('div');
+document.body.appendChild(templates_div);
+var TemplatesUI = new (__webpack_require__(78))(templates_div);
+/*
+var pages_div = document.createElement('div');
+document.body.appendChild(pages_div);
+var PagesUI = new (require('./pages.ui/index.js'))(pages_div);
+*/
+var posts_div = document.createElement('div');
+document.body.appendChild(posts_div);
+var PostsUI = new (__webpack_require__(71))(posts_div);
+/*
 var ttb = document.getElementById('tt');
 ttb.addEventListener('click', function(e) {
   socket.emit('token_test', 'testing');
 });
+*/
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 25 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -3899,10 +4522,10 @@ ttb.addEventListener('click', function(e) {
  * Module dependencies.
  */
 
-var url = __webpack_require__(26);
-var parser = __webpack_require__(7);
-var Manager = __webpack_require__(15);
-var debug = __webpack_require__(3)('socket.io-client');
+var url = __webpack_require__(43);
+var parser = __webpack_require__(11);
+var Manager = __webpack_require__(20);
+var debug = __webpack_require__(6)('socket.io-client');
 
 /**
  * Module exports.
@@ -3986,12 +4609,12 @@ exports.connect = lookup;
  * @api public
  */
 
-exports.Manager = __webpack_require__(15);
-exports.Socket = __webpack_require__(20);
+exports.Manager = __webpack_require__(20);
+exports.Socket = __webpack_require__(25);
 
 
 /***/ }),
-/* 26 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -3999,8 +4622,8 @@ exports.Socket = __webpack_require__(20);
  * Module dependencies.
  */
 
-var parseuri = __webpack_require__(10);
-var debug = __webpack_require__(3)('socket.io-client:url');
+var parseuri = __webpack_require__(15);
+var debug = __webpack_require__(6)('socket.io-client:url');
 
 /**
  * Module exports.
@@ -4073,7 +4696,7 @@ function url (uri, loc) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 27 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -4089,7 +4712,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(12);
+exports.humanize = __webpack_require__(17);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -4281,7 +4904,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 28 */
+/* 45 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -4292,7 +4915,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 29 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -4301,8 +4924,8 @@ module.exports = Array.isArray || function (arr) {
  * Module requirements
  */
 
-var isArray = __webpack_require__(30);
-var isBuf = __webpack_require__(14);
+var isArray = __webpack_require__(47);
+var isBuf = __webpack_require__(19);
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
 var withNativeFile = typeof global.File === 'function' || toString.call(global.File) === '[object FileConstructor]';
@@ -4440,7 +5063,7 @@ exports.removeBlobs = function(data, callback) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 30 */
+/* 47 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -4451,11 +5074,11 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 31 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-module.exports = __webpack_require__(32);
+module.exports = __webpack_require__(49);
 
 /**
  * Exports parser
@@ -4463,24 +5086,24 @@ module.exports = __webpack_require__(32);
  * @api public
  *
  */
-module.exports.parser = __webpack_require__(2);
+module.exports.parser = __webpack_require__(5);
 
 
 /***/ }),
-/* 32 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies.
  */
 
-var transports = __webpack_require__(16);
-var Emitter = __webpack_require__(1);
-var debug = __webpack_require__(6)('engine.io-client:socket');
-var index = __webpack_require__(19);
-var parser = __webpack_require__(2);
-var parseuri = __webpack_require__(10);
-var parseqs = __webpack_require__(4);
+var transports = __webpack_require__(21);
+var Emitter = __webpack_require__(4);
+var debug = __webpack_require__(9)('engine.io-client:socket');
+var index = __webpack_require__(24);
+var parser = __webpack_require__(5);
+var parseuri = __webpack_require__(15);
+var parseqs = __webpack_require__(7);
 
 /**
  * Module exports.
@@ -4613,9 +5236,9 @@ Socket.protocol = parser.protocol; // this is an int
  */
 
 Socket.Socket = Socket;
-Socket.Transport = __webpack_require__(9);
-Socket.transports = __webpack_require__(16);
-Socket.parser = __webpack_require__(2);
+Socket.Transport = __webpack_require__(13);
+Socket.transports = __webpack_require__(21);
+Socket.parser = __webpack_require__(5);
 
 /**
  * Creates transport of the given type.
@@ -5217,7 +5840,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 33 */
+/* 50 */
 /***/ (function(module, exports) {
 
 
@@ -5240,18 +5863,18 @@ try {
 
 
 /***/ }),
-/* 34 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module requirements.
  */
 
-var XMLHttpRequest = __webpack_require__(8);
-var Polling = __webpack_require__(17);
-var Emitter = __webpack_require__(1);
-var inherit = __webpack_require__(5);
-var debug = __webpack_require__(6)('engine.io-client:polling-xhr');
+var XMLHttpRequest = __webpack_require__(12);
+var Polling = __webpack_require__(22);
+var Emitter = __webpack_require__(4);
+var inherit = __webpack_require__(8);
+var debug = __webpack_require__(9)('engine.io-client:polling-xhr');
 
 /**
  * Module exports.
@@ -5660,7 +6283,7 @@ function unloadHandler () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 35 */
+/* 52 */
 /***/ (function(module, exports) {
 
 
@@ -5685,7 +6308,7 @@ module.exports = Object.keys || function keys (obj){
 
 
 /***/ }),
-/* 36 */
+/* 53 */
 /***/ (function(module, exports) {
 
 /**
@@ -5720,7 +6343,7 @@ module.exports = function(arraybuffer, start, end) {
 
 
 /***/ }),
-/* 37 */
+/* 54 */
 /***/ (function(module, exports) {
 
 module.exports = after
@@ -5754,7 +6377,7 @@ function noop() {}
 
 
 /***/ }),
-/* 38 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/utf8js v2.1.2 by @mathias */
@@ -5992,9 +6615,9 @@ function noop() {}
 	if (
 		true
 	) {
-		!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+		!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
 			return utf8;
-		}.call(exports, __webpack_require__, exports, module),
+		}).call(exports, __webpack_require__, exports, module),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	}	else if (freeExports && !freeExports.nodeType) {
 		if (freeModule) { // in Node.js or RingoJS v0.8.0+
@@ -6012,10 +6635,10 @@ function noop() {}
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(39)(module), __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(56)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 39 */
+/* 56 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -6043,7 +6666,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 40 */
+/* 57 */
 /***/ (function(module, exports) {
 
 /*
@@ -6116,7 +6739,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 41 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -6219,7 +6842,7 @@ module.exports = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 42 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -6235,7 +6858,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(12);
+exports.humanize = __webpack_require__(17);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -6427,7 +7050,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 43 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -6435,8 +7058,8 @@ function coerce(val) {
  * Module requirements.
  */
 
-var Polling = __webpack_require__(17);
-var inherit = __webpack_require__(5);
+var Polling = __webpack_require__(22);
+var inherit = __webpack_require__(8);
 
 /**
  * Module exports.
@@ -6665,24 +7288,24 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 44 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies.
  */
 
-var Transport = __webpack_require__(9);
-var parser = __webpack_require__(2);
-var parseqs = __webpack_require__(4);
-var inherit = __webpack_require__(5);
-var yeast = __webpack_require__(18);
-var debug = __webpack_require__(6)('engine.io-client:websocket');
+var Transport = __webpack_require__(13);
+var parser = __webpack_require__(5);
+var parseqs = __webpack_require__(7);
+var inherit = __webpack_require__(8);
+var yeast = __webpack_require__(23);
+var debug = __webpack_require__(9)('engine.io-client:websocket');
 var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(45);
+    NodeWebSocket = __webpack_require__(62);
   } catch (e) { }
 }
 
@@ -6958,13 +7581,13 @@ WS.prototype.check = function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 45 */
+/* 62 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 46 */
+/* 63 */
 /***/ (function(module, exports) {
 
 module.exports = toArray
@@ -6983,7 +7606,7 @@ function toArray(list, index) {
 
 
 /***/ }),
-/* 47 */
+/* 64 */
 /***/ (function(module, exports) {
 
 
@@ -7074,91 +7697,622 @@ Backoff.prototype.setJitter = function(jitter){
 
 
 /***/ }),
-/* 48 */
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-const XHR = __webpack_require__(49);
+const XHR = __webpack_require__(1);
+const Post = __webpack_require__(72);
+
+__webpack_require__(75);
+var html = __webpack_require__(77);
 
 module.exports = class {
-  constructor() {
-    var pages_edit = document.getElementById('pages_edit');
-    var add_page = document.getElementById('add_page');
+  constructor(div) {
+    div.innerHTML = html;
+    div.classList.add('posts');
 
-    XHR.get('/pages', null, function() {
-      var pages = JSON.parse(this.responseText);
-      for (var p = 0; p < pages.length; p++) {
-        var page_element = document.createElement('a');
-        page_element.classList.add('list_item');
-        page_element.href = "/p/"+pages[p].data.uri;
-        page_element.innerHTML = pages[p].data.name;
-        pages_edit.insertBefore(page_element, add_page);
+    var post_list = div.querySelector(".post_list");
+
+    XHR.get('/posts', null, function() {
+      var posts = JSON.parse(this.responseText);
+      for (let p = 0; p < posts.length; p++) {
+        var post = new Post(posts[p]);
+        post_list.insertBefore(post.element, post_list.firstChild);
       }
     });
 
-    var add_page_btn = document.getElementById("add_page");
-    add_page_btn.addEventListener("click", new_page);
+    var new_post_button = div.querySelector(".new_post_button");
+    new_post_button.addEventListener("click", function(e) {
+      var post_editor = div.querySelector(".post_editor"),
+      title_input = div.querySelector(".post_title_input"),
+      tags_input = div.querySelector(".post_tags_input"),
+      submit_input = div.querySelector(".post_submit_input"),
+      post_display_title = div.querySelector(".post_display_title"),
+      post_display = div.querySelector(".post_display");
 
-    function new_page(e) {
-      var input = document.createElement("input");
-      input.type = "text";
-      input.placeholder = "Title";
-      add_page_btn.innerHTML = "";
-      add_page_btn.appendChild(input);
-      input.focus();
-      input.addEventListener('keyup', function (e) {
-        if (e.keyCode == 13) {
-          var page = {
-            name : input.value,
-            uri : encodeURIComponent(input.value)+".html"
-          }
+      new_post_button.style.display = "none";
+      post_editor.style.display = "block";
 
-          XHR.get(global.config.admin_path+'/new_page', page, function() {
-            if (this.responseText === "success") {
-              var page_element = document.createElement('a');
-              page_element.classList.add('list_item');
-              page_element.href = "/p/"+page.uri;
-              page_element.innerHTML = page.name;
-              pages_edit.insertBefore(page_element, add_page);
-              input.value = '';
-            }
-          });
-        }
+      title_input.addEventListener("input", function(e) {
+        post_display_title.innerHTML = title_input.value;
       });
-      add_page_btn.removeEventListener("click", new_page);
-    }
-  }
 
+
+      $('.post_summernote').summernote({
+        minHeight: 300,
+        callbacks: {
+          onChange: function(contents) {
+            post_display.innerHTML = contents;
+          }
+        },
+        fontSizes: [
+          '8', '10', '12', '14', '16',
+          '18', '20', '24', '36', '48',
+          '64', '82', '150'
+        ]
+//        lang: "lt-LT"
+      });
+      submit_input.addEventListener("click", function(e) {
+        var data = {
+          title: title_input.value,
+          content: $('.post_summernote').summernote('code'),
+          tags: tags_input.value.split(" ")
+        }
+
+        console.log("post", data);
+        XHR.get(global.config.admin_path+'/new_post', data, function() {
+          var res = JSON.parse(this.responseText);
+
+          if (res.err) {
+            console.log(res.err);
+          } else {
+            var post = new Post({
+              id: res.id,
+              data: {
+                title: title_input.value,
+                content: $('.post_summernote').summernote('code'),
+                tags: tags_input.value.split(" ")
+              }
+            });
+            post_list.insertBefore(post.element, post_list.firstChild);
+            new_post_button.style.display = "block";
+            post_editor.style.display = "none";
+
+            title_input.value = '';
+            $('.post_summernote').summernote("code", '');
+            tags_input.value = '';
+          }
+        });
+      });
+    });
+  }
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 49 */
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
+
+const XHR = __webpack_require__(1);
+
+var html = __webpack_require__(73);
+var edit_html = __webpack_require__(74);
+
+module.exports = class {
+  constructor(obj) {
+    this.element = document.createElement('div');
+
+    this.display(obj);
+
+  }
+
+  edit(obj) {
+    var div = this.element;
+
+    div.innerHTML = edit_html;
+
+    var title_input = div.querySelector(".post_title_input");
+    title_input.value = obj.data.title;
+    var tags_input = div.querySelector(".post_tags_input");
+    tags_input.value = obj.data.tags;
+    var submit_input = div.querySelector(".post_submit_input"),
+    cancel_input = div.querySelector(".post_cancel_input"),
+    post_display_title = div.querySelector(".post_display_title"),
+    post_display = div.querySelector(".post_display");
+
+    var this_class = this;
+    cancel_input.addEventListener("click", function(e) {
+      this_class.display(obj);
+    });
+
+    title_input.addEventListener("input", function(e) {
+      post_display_title.innerHTML = title_input.value;
+    });
+
+    var sn = $('.cur_sn');
+    sn.removeClass('cur_sn');
+
+    sn.summernote({
+      minHeight: 300,
+      callbacks: {
+        onChange: function(contents) {
+          post_display.innerHTML = contents;
+        }
+      },
+      fontSizes: [
+        '8', '10', '12', '14', '16',
+        '18', '20', '24', '36', '48',
+        '64', '82', '150'
+      ]
+    //        lang: "lt-LT"
+    });
+    sn.summernote("code", obj.data.content);
+
+    submit_input.addEventListener("click", function(e) {
+      var data = {
+        id: obj.id,
+        title: title_input.value,
+        content: sn.summernote('code'),
+        tags: tags_input.value.split(" ")
+      }
+
+
+      console.log(data.content);
+
+      XHR.get(global.config.admin_path+'/edit_post', data, function() {
+        console.log(this.responseText);
+        if (this.responseText === "success") {
+          console.log("Post successfuly edited!");
+          obj.data.title = title_input.value;
+          obj.data.content = sn.summernote('code');
+          obj.data.tags = tags_input.value.split(" ");
+          this_class.display(obj);
+          this_class.make_first();
+        }
+      });
+    });
+  }
+
+  make_first() {
+    var parent = this.element.parentNode;
+    parent.removeChild(this.element);
+    parent.insertBefore(this.element, parent.firstChild);
+  }
+
+  display(obj) {
+    this.element.innerHTML = html;
+    this.element.classList.add('post_element');
+
+    var title = this.element.querySelector('.post_title');
+    title.innerHTML = obj.data.title;
+    title.classList.add('post_display_title');
+
+    var edit_btn = this.element.querySelector('.post_edit_btn');
+
+    var this_class = this;
+    edit_btn.addEventListener("click", function(e) {
+      this_class.edit(obj);
+    });
+
+    var del_btn = this.element.querySelector('.post_del_btn');
+    del_btn.addEventListener("click", function(e) {
+      XHR.get('del_post', { id: obj.id }, function() {
+        if (this.responseText == "success") {
+          this_class.element.parentNode.removeChild(this_class.element);
+        }
+      });
+    });
+
+    var content = this.element.querySelector('.post_content');
+
+    var content_str = obj.data.content;
+    var max_length = 1024;
+    if(content_str.length > max_length) {
+      content_str = content_str.substring(0,max_length)+'...';
+    }
+    content.innerHTML = content_str;
+    content.classList.add('post_display');
+  }
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports) {
+
+module.exports = "\n<h3 class=\"post_title\"></h3>\n<button class=\"post_edit_btn\">/</button>\n<button class=\"post_del_btn\">X</button>\n<div class=\"post_content\"></div>\n";
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports) {
+
+module.exports = "<input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n<div id=\"post_summernote\" class=\"cur_sn\"></div>\n<input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n<input type=\"submit\" class=\"post_submit_input\" />\n<input type=\"submit\" value=\"Cancel\" class=\"post_cancel_input\" />\n<div class=\"post_element\">\n  <h3 class=\"post_display_title post_title\"></h3>\n  <div class=\"post_display post_content\"></div>\n</div>\n";
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(76);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(3)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./style.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./style.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".posts  {\n  background-color: #333;\n  width: 960px;\n  margin: auto;\n  margin-top: 100px;\n  padding: 10px;\n}\n\n.post_display, table {\n  width: 100%;\n}\n\n.post_title {\n  display: inline-block;\n  margin: 0;\n  padding: 10px 30px;\n}\n\n.post_element button {\n  float: right;\n}\n\n.post_element {\n  margin-top: 20px;\n}\n\n.post_content {\n  padding: 0px 20px;\n  width: calc(100% - 40px);\n  word-wrap: break-word;\n}\n\n\n.new_post_button {\n  width: 100%;\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n  background-color: #111;\n  color: #FFF;\n  cursor: pointer;\n  user-select: none;\n}\n\n.new_post_button:hover {\n  background-color: #222;\n}\n\n.post_title_input {\n  width: 300px;\n}\n\n.post_tags_input {\n  width: 500px;\n}\n\n.post_submit_input, .post_cancel_input {\n  width: 120px;\n  float: right;\n}\n\n.note-toolbar {\n  z-index: 1;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports) {
+
+module.exports = "<h2>Posts</h2>\n\n<div class=\"new_post_button\">\n  Write a new post\n</div>\n\n<div class=\"post_editor\" style=\"display: none\">\n  <input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n  <div class=\"post_summernote\"></div>\n  <input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n  <input type=\"submit\" class=\"post_submit_input\" />\n  <div class=\"post_element\">\n    <h3 class=\"post_display_title post_title\"></h3>\n    <div class=\"post_display post_content\"></div>\n  </div>\n</div>\n\n<div class=\"post_list\">\n\n</div>\n";
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+const XHR = __webpack_require__(1);
+const Template = __webpack_require__(86);
+
+
+var DynTable = __webpack_require__(84);
+
+__webpack_require__(81);
+var html = __webpack_require__(83);
+
+module.exports = class {
+  constructor(div) {
+    div.innerHTML = html;
+    div.classList.add('templates');
+
+    this.list = div.querySelector(".list_display");
+
+    var table = new DynTable();
+    this.list.appendChild(table.element);
+
+    var this_class = this;
+    XHR.get('templates.io', {
+      command: "all"
+    }, function() {
+      var templates = JSON.parse(this.responseText);
+      for (let t = 0; t < templates.length; t++) {
+        var template = new Template(templates[t], table);
+        table.add(template.element);
+      }
+
+      var add_temp_btn = document.createElement("div");
+      add_temp_btn.classList.add("list_item");
+      add_temp_btn.classList.add("add_item");
+      add_temp_btn.addEventListener("click", new_template);
+      table.add(add_temp_btn);
+
+      var text = document.createElement("h3");
+      text.innerHTML = "++";
+      add_temp_btn.appendChild(text);
+
+      function new_template(e) {
+        var input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Name";
+        add_temp_btn.innerHTML = "";
+        add_temp_btn.appendChild(input);
+        input.focus();
+        input.addEventListener('keyup', function (e) {
+          if (e.keyCode == 13) {
+            var data = {
+              name: input.value
+            }
+
+            XHR.get('templates.io', {
+              command: "add",
+              name: data.name
+            }, function() {
+              var res = JSON.parse(this.responseText);
+              console.log(res);
+              if (res.err) {
+                console.log(res.err);
+              } else {
+                var template = new Template(data.name, table);
+
+                table.remove(add_temp_btn);
+                table.add(template.element);
+                table.add(add_temp_btn);
+                input.focus();
+                input.value = '';
+              }
+            });
+          }
+        });
+        add_temp_btn.removeEventListener("click", new_template);
+      }
+    });
+  }
+
+}
+
+
+/***/ }),
+/* 79 */,
+/* 80 */,
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(82);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(3)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/cjs.js!./style.less", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/cjs.js!./style.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".color_wrap {\n  background-color: #333;\n  width: 960px;\n  padding: 10px;\n  margin: auto;\n}\n.list_display {\n  background-color: #333;\n  height: 308px;\n  width: 960px;\n  margin: auto;\n  padding: 10px;\n  text-align: left;\n  overflow-y: auto;\n  white-space: nowrap;\n}\n.list_display table {\n  table-layout: fixed;\n  width: 100%;\n  height: 100%;\n}\n.list_display tr {\n  height: 150px;\n}\n.list_item {\n  display: inline-block;\n  width: 150px;\n  height: 150px;\n  background-color: #111;\n  color: #FFF;\n  font-size: 18px;\n  text-align: center;\n  margin: 0 auto;\n  text-decoration: none;\n  user-select: none;\n}\n.list_item table {\n  table-layout: fixed;\n  width: 100%;\n  height: 100%;\n}\n.list_item tr {\n  height: 50%;\n}\n.list_item td {\n  word-wrap: break-word;\n  word-break: break-all;\n  white-space: normal;\n}\n.add_item {\n  cursor: pointer;\n}\n.add_item h3 {\n  margin: 0;\n  line-height: 150px;\n}\n.list_item button:hover {\n  background-color: #191919;\n}\n.list_item input {\n  background-color: #090909;\n  color: #FFF;\n  border: 1px solid #333;\n  width: 130px;\n  padding: 2px 4px;\n  height: 20px;\n  line-height: 20px;\n  margin-top: 65px;\n}\n.page_name {\n  cursor: pointer;\n}\n.page_name:hover {\n  background-color: #222;\n}\n.list_item:hover {\n  background-color: #191919;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports) {
+
+module.exports = "\n<div class=\"color_wrap\">\n  <h2>Templates</h2>\n</div>\n<div class=\"list_display\">\n</div>\n";
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var TR = __webpack_require__(85);
+
+module.exports = class {
+  constructor() {
+    this.element = document.createElement('table');
+    this.element.classList.add('dynamic_table');
+
+    this.trs = [];
+    this.cur_tr = new TR();
+    this.element.appendChild(this.cur_tr.element);
+    this.trs.push(this.cur_tr);
+
+  }
+
+  add(item) {
+    if (this.cur_tr.items == this.cur_tr.max_items) {
+      this.cur_tr = new TR();
+      this.element.appendChild(this.cur_tr.element);
+
+      var td = document.createElement('td');
+      td.appendChild(item);
+      this.cur_tr.add(td);
+
+      this.trs.push(this.cur_tr);
+    } else {
+      var td = document.createElement('td');
+      td.appendChild(item);
+      this.cur_tr.add(td);
+    }
+  }
+
+  remove(item) {
+    for (var t = 0; t < this.trs.length; t++) {
+      var tr = this.trs[t];
+      if (tr.contains(item)) {
+        tr.remove(item.parentNode);
+        if (tr.items == 0 && t > 0) {
+          this.element.removeChild(tr.element);
+          this.trs.splice(t, 1);
+          this.cur_tr = this.trs[t-1];
+        } else if (tr.items == tr.max_items-1) {
+          this.track(t+1);
+        }
+      }
+    }
+  }
+
+  track(t) {
+    if (t < this.trs.length) {
+      var tr = this.trs[t];
+      if (tr.items > 0) {
+        var td = tr.tds[0];
+        tr.remove(td);
+        this.trs[t-1].add(td);
+        if (tr.items == tr.max_items-1) {
+          this.track(t+1);
+        }
+      } else {
+        this.element.removeChild(this.trs[t].element);
+        this.trs.splice(t, 1);
+        this.cur_tr = this.trs[t-1];
+      }
+    }
+  }
+}
+
+
+/***/ }),
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 module.exports = class {
-  static get(url, params, callback) {
-    url += '?';
-    var first = true;
-    for (var key in params) {
-      if (!first) url += '&';
-      url += key+'='+encodeURIComponent(params[key]);
-      first = false;
-    }
+  constructor() {
+    this.element = document.createElement('tr');
+    this.items = 0;
+    this.max_items = 6;
+    this.tds = [];
 
-    var xhr = new XMLHttpRequest();
-    xhr.addEventListener("load", callback);
-    xhr.open("GET", url);
-    xhr.send();
+  }
+
+  add(td) {
+    this.tds.push(td);
+    this.items++;
+    this.element.appendChild(td);
+  }
+
+  remove(td) {
+    var td_index = this.tds.indexOf(td);
+    this.tds.splice(td_index, 1);
+    this.items--;
+    this.element.removeChild(td);
+  }
+
+  contains(td) {
+    return this.element.contains(td);
   }
 }
 
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+const XHR = __webpack_require__(1);
+
+var html = __webpack_require__(87);
+
+module.exports = class {
+  constructor(name, table) {
+    this.element = document.createElement('div');
+    this.element.innerHTML = html;
+    this.name = name;
+
+    var max_length = 16;
+    if(this.name.length > max_length) {
+      this.name = this.name.substring(0,max_length)+'...';
+    }
+
+    this.display();
+    this.table = table;
+  }
+
+  edit() {
+
+  }
+
+  display() {
+
+    var page_element = this.element;
+    page_element.classList.add('list_item');
+
+    var link = page_element.querySelector('.page_name');
+    link.addEventListener('click', function(e) {
+      window.location.href = "/p/"+page.data.uri;
+    });
+
+    link.innerHTML = this.name;
+/*
+    var edit_btn = page_element.querySelector('.edit_btn');
+    edit_btn.addEventListener('click', function(e) {
+      window.location.href = "edit.html?page="+page.data.uri+"&context="+page.data.context_uri;
+    });
+    edit_btn.innerHTML = '/';
+*/
+    var this_class = this;
+
+    var del_button = page_element.querySelector('.del_btn');
+    del_button.addEventListener('click', function(e) {
+      XHR.get('templates.io', {
+        command: 'rm',
+        name: this_class.name
+      }, function() {
+        if (this.responseText == "success") {
+          this_class.table.remove(this_class.element);
+        }
+      });
+    });
+    del_button.innerHTML = "X";
+  }
+}
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports) {
+
+module.exports = "<table>\n  <tr>\n    <td class=\"page_name\" colspan=\"2\">\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <button class=\"edit_btn\">/</a>\n    </td>\n    <td>\n      <button class=\"del_btn\">X</a>\n    </td>\n  </tr>\n</table>\n";
 
 /***/ })
 /******/ ]);

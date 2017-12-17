@@ -1,4 +1,6 @@
 {
-  "name" : "CMBird",
-  "admin_path" : "/cmb_admin"
+    "setup": false,
+    "admin_path": "/cmb_admin",
+    "page_template": "<!DOCTYPE html>\n<html>\n  <head>\n    <meta charset=\"UTF-8\">\n    <title><%= title %></title>\n\n    <% for (var key in style_links) { %>\n      <link href=\"<%= style_links[key] %>\" rel=\"stylesheet\">\n    <% } %>\n\n\t</head>\n  <body>\n    <div>\n      <h2><%= title %></h2>\n      <ul>\n        <% for (var key in menu_items) { %>\n          <li><a href=\"<%= menu_items[key].href %>\"><%= menu_items[key].text %></a></li>\n        <% } %>\n      </ul>\n    </div>\n  </body>\n</html>\n",
+    "name": "Qualphey"
 }

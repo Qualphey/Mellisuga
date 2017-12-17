@@ -1,0 +1,142 @@
+.window_mod {
+  position: fixed;
+  top: 100px;
+  left: 100px;
+  padding: 0;
+
+  background-color: #000000dd;
+  border: 1px solid #333;
+
+  min-height: 150px;
+  min-width: 250px;
+}
+
+.window_mod header {
+  color: rgb(0, 201, 255);
+  height: 25px;
+  cursor: default;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 25px;
+}
+
+.window_mod_titlebar {
+  float:left;
+  line-height: 25px;
+  display: inline-block;
+  padding: 0px 10px;
+  height: 100%;
+  width: calc(100% - 72px);
+}
+
+.window_mod header .window_mod_actions {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+  height: 100%;
+  line-height: 25px;
+  float:right;
+}
+
+.window_mod header button {
+  display: inline-block;
+  background-color: #111;
+  color: #FFF;
+  border: 1px solid #333;
+  margin: 0;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.window_mod header button:hover {
+  background-color: #050505;
+}
+
+.window_mod .window_mod_content {
+  height: calc(100% - 25px);
+  overflow: auto;
+}
+
+/* Resz */
+
+.resizeN {
+  cursor: n-resize;
+  width: calc(100% - 16px);
+  height: 10px;
+  top: -10px;
+  left: 8px;
+}
+
+.resizeNE {
+  cursor: ne-resize;
+  width: 20px;
+  height: 20px;
+  right: -10px;
+  top: -10px;
+}
+
+.resizeE {
+  cursor: e-resize;
+  width: 10px;
+  height: calc(100% - 16px);
+  right: -10px;
+  top: 8px;
+}
+
+.resizeSE {
+  cursor: se-resize;
+  width: 20px;
+  height: 20px;
+  right: -10px;
+  bottom: -10px;
+}
+
+.resizeS {
+  cursor: s-resize;
+  width: calc(100% - 16px);
+  height: 10px;
+  bottom: -10px;
+  left: 8px;
+}
+
+.resizeSW {
+  cursor: sw-resize;
+  width: 20px;
+  height: 20px;
+  left: -10px;
+  bottom: -10px;
+}
+
+.resizeW {
+  cursor: w-resize;
+  width: 10px;
+  height: calc(100% - 16px);
+  left: -10px;
+  top: 8px;
+}
+
+.resizeNW {
+  cursor: nw-resize;
+  width: 20px;
+  height: 20px;
+  left: -10px;
+  top: -10px;
+}
+
+.resize {
+  position: absolute;
+/*  background-color: red;*/
+  z-index: 1;
+}
+
+.mouse_div {
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+  z-index: 99;
+
+  display: none;
+}

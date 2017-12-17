@@ -1,0 +1,29 @@
+.tabs_ui_container {
+  height: 100%;
+}
+
+.tabs_ui_container .tabs_ui_menu {
+  display: block;
+  margin: 0 auto;
+  list-style-type: none;
+  padding: 0;
+}
+
+.tabs_ui_display {
+  overflow: auto;
+}
+
+.tabs_ui_container .tabs_ui_menu button {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome and Opera */
+}

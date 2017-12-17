@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+
+    {% for style_link in style_links %}
+      <link href="{{ style_link }}" rel="stylesheet">
+    {% endfor %}
+
+	</head>
+  <body>
+    <div>
+      <h2>{{ title }}</h2>
+      <ul>
+        {% for menu_item in menu_items %}
+          <li><a href="{{ menu_item.href }}">{{ menu_item.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>

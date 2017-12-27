@@ -1,8 +1,5 @@
 'use strict'
 
-const server_port = 9639;
-const server_ip_address = '127.0.0.1';
-
 var http = require('http');
 var path = require('path');
 var bodyParser = require('body-parser')
@@ -65,7 +62,9 @@ module.exports = class {
           next();
         });*/
 
-        server.listen(server_port, server_ip_address, function(){
+        console.log(global.cmb_config.port, global.cmb_config.host);
+
+        server.listen(global.cmb_config.port, global.cmb_config.host, function(){
           var addr = server.address();
           console.log("Server running ", addr.address + ":" + addr.port);
           resolve(app);

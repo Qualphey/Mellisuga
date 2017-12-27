@@ -1,83 +1,58 @@
 'use strict'
 
 const XHR = require('../utils/xhr.js');
-const Page = require('./page.js');
 
-
-var DynTable = require('../dyn_table.ui/index.js');
-
-require('./style.less');
-var html = require('./body.html');
+var html = require('./page.html');
 
 module.exports = class {
-  constructor(div) {
-    div.innerHTML = html;
-    div.classList.add('pages');
+  constructor(name, table) {
+    this.element = document.createElement('div');
+    this.element.innerHTML = html;
+    this.name = name;
 
-    this.list = div.querySelector(".list_display");
+    var max_length = 16;
+    if(this.name.length > max_length) {
+      this.name = this.name.substring(0,max_length)+'...';
+    }
 
-    var table = new DynTable();
-    this.list.appendChild(table.element);
-
-    var this_class = this;
-    XHR.get('/pages', null, function() {
-      var pages = JSON.parse(this.responseText);
-
-
-      for (let p = 0; p < pages.length; p++) {
-        var page = new Page(pages[p], table);
-        table.add(page.element);
-      }
-
-      var add_page_btn = document.createElement("div");
-      add_page_btn.classList.add("list_item");
-      add_page_btn.classList.add("add_item");
-      add_page_btn.addEventListener("click", new_page);
-      table.add(add_page_btn);
-
-      var text = document.createElement("h3");
-      text.innerHTML = "++";
-      add_page_btn.appendChild(text);
-
-      function new_page(e) {
-        var input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = "Title";
-        add_page_btn.innerHTML = "";
-        add_page_btn.appendChild(input);
-        input.focus();
-        input.addEventListener('keyup', function (e) {
-          if (e.keyCode == 13) {
-            var data = {
-              title: input.value
-            }
-
-            XHR.get(global.config.admin_path+'/new_page', data, function() {
-              var res = JSON.parse(this.responseText);
-              if (res.err) {
-                console.log(res.err);
-              } else {
-                var page = new Page({
-                  id: res.id,
-                  data: {
-                    title: data.title,
-                    uri: encodeURIComponent(input.value)+".html",
-                    context_uri: encodeURIComponent(input.value)+".json"
-                  }
-                }, table);
-
-                table.remove(add_page_btn);
-                table.add(page.element);
-                table.add(add_page_btn);
-                input.focus();
-                input.value = '';
-              }
-            });
-          }
-        });
-        add_page_btn.removeEventListener("click", new_page);
-      }
-    });
+    this.display();
+    this.table = table;
   }
 
+  display() {
+
+    var page_element = this.element;
+    page_element.classList.add('list_item');
+
+    var this_class = this;
+
+    var link = page_element.querySelector('.page_name');
+
+    link.addEventListener('click', function(e) {
+      window.location.href = "/p/"+this_class.name;
+    });
+
+    link.innerHTML = this.name;
+
+    var edit_btn = page_element.querySelector('.edit_btn');
+    edit_btn.addEventListener('click', function(e) {
+      window.location.href = "edit.html?page="+this_class.name;
+    });
+    edit_btn.innerHTML = '/';
+
+    var this_class = this;
+
+    var del_button = page_element.querySelector('.del_btn');
+    del_button.addEventListener('click', function(e) {
+      XHR.get('pages.io', {
+        command: 'rm',
+        name: this_class.name
+      }, function() {
+        if (this.responseText == "success") {
+          this_class.table.remove(this_class.element);
+        }
+      });
+    });
+    del_button.innerHTML = "X";
+  }
 }

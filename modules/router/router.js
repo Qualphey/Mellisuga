@@ -50,7 +50,7 @@ module.exports = class {
           extended: true
         }));
 
-        nunjucks.configure(global.cmb_config.pages_path, {
+        nunjucks.configure([global.cmb_config.pages_path, global.cmb_config.templates_path], {
           autoescape: true,
           express: app,
           watch: true

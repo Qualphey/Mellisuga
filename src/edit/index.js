@@ -1,90 +1,146 @@
 require("./style.css")
 
-var XHR = require("../utils/xhr.js");
+const XHR = require("../utils/xhr.js");
+const WindowUI = require("./window.ui/index.js");
+const SplitUI = require("./split.ui/index.js");
+const TreeFM = require("./treefm.ui");
+const TabsUI = require("./tabs.ui/index.js");
+const CodeMirror = require("./codemirror.ui/index.js");
+
+const template = XHR.getParamByName('template');
+const page = XHR.getParamByName('page');
 
 var tools = document.createElement("div");
 tools.classList.add("tools");
 tools.innerHTML = require("./body.html");
 document.body.appendChild(tools);
 
-var WindowUI = require("./window.ui/index.js");
-var html_win = new WindowUI({
+var editor_win = new WindowUI({
   DOM: document.body,
-  title: "HTML editor"
-});
-
-var HTMLEdit = require("./html.edit/index.js");
-var html_editor = new HTMLEdit(html_win.content);
-
-var html_btn = tools.querySelector(".html_btn");
-html_btn.addEventListener("click", function(e) {
-  if (html_win.visible) {
-    html_win.hide();
-  } else {
-    html_win.dipslay();
+  title: "Editor",
+  resize_cb: function() {
+    split.auto_resize();
   }
 });
 
-var TabsUI = require("./tabs.ui/index.js");
+var editor_btn = tools.querySelector(".editor_btn");
+editor_btn.addEventListener("click", function(e) {
+  if (editor_win.visible) {
+    editor_win.hide();
+  } else {
+    editor_win.dipslay();
+  }
+});
+
+global.editor_window = editor_win;
+
+editor_win.content.style.overflow = "hidden";
+
+var split = new SplitUI(editor_win.content, "horizontal");
+split.split(2);
+
+
 var tabs = new TabsUI();
 
-var ContextEdit = require("./context.edit/index.js");
-var context = new ContextEdit(tabs.display);
+var last_save_callback = false;
 
-var HTMLEdit = require("./html.edit/index.js");
-var html_editor = new HTMLEdit(tabs.display);
+function file_cb(file) {
 
-tabs.set([
-  {
-    text: "html",
-    cb: function(display) {
-      display.appendChild(html_editor.element);
-    }
-  }, {
-    text: "context",
-    cb: function(display) {
-      display.appendChild(context.element);
-    }
-  }
-]);
-
-var iframe = document.getElementById("cmb_page_display");
-iframe.src = '/p/'+XHR.getParamByName('page');
-iframe.addEventListener('mouseup', function(e) {
-  console.log("iframe up ");
-});
-
-function save() {
-  XHR.get('edit_page', {
-    html: html_editor.cm.getValue(),
-    context: context.cm.getValue(),
-    uri: XHR.getParamByName('page'),
-    context_uri: XHR.getParamByName('context')
-  }, function(response){
-    console.log(response);
-    iframe.src = iframe.src;
-  });
 }
 
-var save_button = document.createElement('button');
-save_button.innerHTML = "save";
-save_button.addEventListener("click", function(e) {
-  save();
-});
+if (template) {
+  var iframe = document.getElementById("cmb_page_display");
+  iframe.src = 't/'+template;
 
-document.addEventListener("keydown", function(e) {
-  if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-    e.preventDefault();
-    save();
-  }
-}, false);
+  var treefm = new TreeFM({
+    target: "templates",
+    dir: template,
+    file_cb: function(file) {
+      console.log(file);
+      var tab = tabs.select(file.rel_path);
+      if (tab) {
+        tab.display();
+      } else {
+        treefm.read_file(file.rel_path, function(file_content) {
+          var extension = file.rel_path.substr(file.rel_path.lastIndexOf('.')+1);
+          if (extension == "json") extension = "js";
+          var html_editor = new CodeMirror(file_content, extension);
+          tabs.add({
+            text: file.name,
+            cb: function(display) {
+              display.appendChild(html_editor.element);
+              html_editor.cm.refresh();
+              if (last_save_callback) {
+                document.body.removeEventListener("keydown", last_save_callback);
+              }
+              document.body.addEventListener("keydown", save_cur_file);
+              last_save_callback = save_cur_file;
+            },
+            id: file.rel_path
+          });
+          function save_cur_file(e) {
+            if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+              e.preventDefault();
+              treefm.write_file(file.rel_path, html_editor.cm.getValue(), function() {
+                iframe.src = iframe.src;
+              });
+            }
+          }
+        });
+      }
+    }
+  });
 
-save_button.style.float = "right";
-tabs.list.appendChild(save_button);
-/*
-var WindowUI = require("./window.ui/index.js");
-var editor_win = new WindowUI(function(obj) {
-  document.body.appendChild(obj.element);
-  obj.content_element.appendChild(tabs.element);
-});
-*/
+  split.list[0].appendChild(treefm.element);
+  split.list[1].style.overflow = "hidden";
+  split.list[1].appendChild(tabs.element);
+} else if (page) {
+  var iframe = document.getElementById("cmb_page_display");
+  iframe.src = '/p/'+page;
+
+  var treefm = new TreeFM({
+    target: "pages",
+    dir: page,
+    file_cb: function(file) {
+      console.log(file);
+      var tab = tabs.select(file.rel_path);
+      if (tab) {
+        tab.display();
+      } else {
+        treefm.read_file(file.rel_path, function(file_content) {
+          var extension = file.rel_path.substr(file.rel_path.lastIndexOf('.')+1);
+          if (extension == "json") extension = "js";
+          var html_editor = new CodeMirror(file_content, extension);
+          tabs.add({
+            text: file.name,
+            cb: function(display) {
+              display.appendChild(html_editor.element);
+              html_editor.cm.refresh();
+              if (last_save_callback) {
+                document.body.removeEventListener("keydown", last_save_callback);
+              }
+              document.body.addEventListener("keydown", save_cur_file);
+              last_save_callback = save_cur_file;
+            },
+            id: file.rel_path
+          });
+          function save_cur_file(e) {
+            if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+              e.preventDefault();
+              treefm.write_file(file.rel_path, html_editor.cm.getValue(), function() {
+                iframe.src = iframe.src;
+              });
+            }
+          }
+        });
+      }
+    }
+  });
+
+  split.list[0].appendChild(treefm.element);
+  split.list[1].style.overflow = "hidden";
+  split.list[1].appendChild(tabs.element);
+
+} else {
+
+}

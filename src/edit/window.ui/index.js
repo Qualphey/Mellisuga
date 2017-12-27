@@ -7,18 +7,24 @@ var html = require(__dirname+"/body.html");
 var min_width = 181;
 var min_height = 65;
 
+var init_width = 680;
+var init_height = 360;
+
 module.exports = class {
   constructor(cfg) {
     this.element = document.createElement("div");
     this.element.innerHTML = html;
     this.element.style.minWidth = min_width+"px";
     this.element.style.minHeight = min_height+"px";
+    this.element.style.width = init_width+"px";
+    this.element.style.height = init_height+"px";
     this.element.classList.add('window_mod');
     this.element.classList.add('container_rgb');
     cfg.DOM.appendChild(this.element);
 
     this.visible = true;
     this.DOM = cfg.DOM;
+    this.resize_cb = cfg.resize_cb;
 
     var this_class = this;
 
@@ -522,9 +528,7 @@ module.exports = class {
       };
     }
 
-    make(this_class.element, '*', function() {
-
-    });
+    make(this_class.element, '*', cfg.resize_cb);
   }
 
   maximize() {
@@ -547,6 +551,8 @@ module.exports = class {
       this.element.removeChild(this.resize_controls);
 
       this.maximized = true;
+
+      this.resize_cb();
     }
   }
 
@@ -565,6 +571,8 @@ module.exports = class {
       this.resize_controls.style.display = "auto";
 
       this.maximized = false;
+
+      this.resize_cb();
     }
   }
 

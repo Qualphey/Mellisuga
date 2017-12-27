@@ -48,6 +48,7 @@ module.exports = class {
       cfg.autoCloseTags = true;
   //  matchTags: true
     }
+    console.log("mode:", cfg.mode);
     this_class.cm = CodeMirror.fromTextArea(textarea, cfg);
     this_class.cm.refresh();
   }

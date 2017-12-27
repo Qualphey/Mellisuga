@@ -61,3 +61,7 @@ button {
 td {
       text-align: center;
 }
+
+select option:disabled {
+    display:none;
+}

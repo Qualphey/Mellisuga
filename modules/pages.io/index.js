@@ -1,6 +1,6 @@
 "use strict"
 
-const fs = require('fs');
+const fs = require('fs-extra')
 const path = require('path');
 function rmrf(dir_path) {
   if (fs.existsSync(dir_path)) {
@@ -22,10 +22,11 @@ var default_css = fs.readFileSync(__dirname+'/default_templates/theme.css', 'utf
 var default_js = fs.readFileSync(__dirname+'/default_templates/main.js', 'utf8');
 
 module.exports = class {
-  constructor(app) {
+  constructor(app, templates) {
     this.app = app;
 
-    var template_dir = this.template_dir = global.cmb_config.templates_path;
+    var page_dir = this.page_dir = global.cmb_config.pages_path;
+    var template_dir = global.cmb_config.templates_path;
 
 
     var err_response = function(res, text) {
@@ -36,7 +37,7 @@ module.exports = class {
 
     var this_class = this;
 
-    app.get(global.cmb_config.admin_path+"/templates.io", function(req, res) {
+    app.get(global.cmb_config.admin_path+"/pages.io", function(req, res) {
       var data = JSON.parse(req.query.data);
       /*
         {
@@ -53,43 +54,53 @@ module.exports = class {
         case 'add':
           if (data.name) {
             if (data.name.length > 0) {
-              data.path = path.resolve(template_dir, data.name);
-              if (data.path.startsWith(template_dir)) {
+              data.path = path.resolve(page_dir, data.name);
+              if (data.path.startsWith(page_dir)) {
                 if (!fs.existsSync(data.path)){
-                  fs.mkdirSync(data.path);
-                  fs.writeFileSync(path.resolve(data.path, "index.html"), default_html);
-                  fs.writeFileSync(path.resolve(data.path, "context.json"), default_json);
-                  fs.writeFileSync(path.resolve(data.path, "theme.css"), default_css);
-                  fs.writeFileSync(path.resolve(data.path, "main.js"), default_js);
-                  res.send(JSON.stringify({ msg: "success" }));
+                  if (data.template) {
+                    var src_path = path.resolve(template_dir, data.template);
+                    console.log(data.path);
+                    fs.copy(src_path, data.path, function (err) {
+                      if (err) return console.error(err)
+                      console.log('success!')
+                      res.send(JSON.stringify({ msg: "success" }));
+                    });
+                  } else {
+                    fs.mkdirSync(data.path);
+                    fs.writeFileSync(path.resolve(data.path, "index.html"), default_html);
+                    fs.writeFileSync(path.resolve(data.path, "context.json"), default_json);
+                    fs.writeFileSync(path.resolve(data.path, "theme.css"), default_css);
+                    fs.writeFileSync(path.resolve(data.path, "main.js"), default_js);
+                    res.send(JSON.stringify({ msg: "success" }));
+                  }
                 } else {
-                  err_response(res, "Template `"+data.name+"` already exists!");
+                  err_response(res, "Page `"+data.name+"` already exists!");
                 }
               }
             } else {
-              err_response(res, "Template name not specified!");
+              err_response(res, "Page name not specified!");
             }
           } else {
-            err_response(res, "Template name not specified!");
+            err_response(res, "Page name not specified!");
           }
           break;
         case 'rm':
           if (data.name) {
             if (data.name.length > 0) {
-              data.path = path.resolve(template_dir, data.name);
-              if (data.path.startsWith(template_dir)) {
+              data.path = path.resolve(page_dir, data.name);
+              if (data.path.startsWith(page_dir)) {
                 rmrf(data.path);
                 res.send("success");
               }
             } else {
-              err_response(res, "Template name not specified!");
+              err_response(res, "Page name not specified!");
             }
           } else {
-            err_response(res, "Template name not specified!");
+            err_response(res, "Page name not specified!");
           }
           break;
         default:
-          console.log("TemplatesIO: unknown command", data.command);
+          console.log("PagesIO: unknown command", data.command);
       }
     });
 
@@ -98,8 +109,8 @@ module.exports = class {
   all() {
     var list = [];
     var this_class = this;
-    fs.readdirSync(this.template_dir).forEach(file => {
-      var lstat = fs.lstatSync(path.resolve(this_class.template_dir, file));
+    fs.readdirSync(this.page_dir).forEach(file => {
+      var lstat = fs.lstatSync(path.resolve(this_class.page_dir, file));
       if (lstat.isDirectory()) {
         list.push(file);
       }

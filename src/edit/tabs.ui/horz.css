@@ -13,11 +13,12 @@
   overflow: auto;
 }
 
-.tabs_ui_container .tabs_ui_menu button {
+.tabs_ui_menu_item {
   display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
+  background-color: #111;
+  color: #DDD;
+
+  cursor: default;
 
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
@@ -26,4 +27,27 @@
       -ms-user-select: none; /* Internet Explorer/Edge */
           user-select: none; /* Non-prefixed version, currently
                                 supported by Chrome and Opera */
+}
+
+.tabs_ui_menu_item div {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 14px;
+}
+
+.tabs_ui_menu_item button {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 14px;
+  border: 0;
+  color: #DDD;
+  background-color: transparent;
+}
+
+.tabs_ui_menu_item div:hover, .tabs_ui_menu_item button:hover {
+  background-color: #222;
+}
+
+.tabs_ui_selected {
+  background-color: #151515;
 }

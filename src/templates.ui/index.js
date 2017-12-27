@@ -4,7 +4,7 @@ const XHR = require('../utils/xhr.js');
 const Template = require('./template.js');
 
 
-var DynTable = require('../dyn_table.ui/index.js');
+var GridUI = require('../grid.ui/index.js');
 
 require('./style.less');
 var html = require('./body.html');
@@ -16,7 +16,7 @@ module.exports = class {
 
     this.list = div.querySelector(".list_display");
 
-    var table = new DynTable();
+    var table = new GridUI();
     this.list.appendChild(table.element);
 
     var this_class = this;

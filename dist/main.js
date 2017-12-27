@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 41);
+/******/ 	return __webpack_require__(__webpack_require__.s = 50);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -92,57 +92,6 @@ module.exports = g;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = class {
-  static get(url, params, callback) {
-    if (params) {
-      url += "?data="+encodeURIComponent(JSON.stringify(params));
-    }
-
-    var xhr = new XMLHttpRequest();
-    xhr.addEventListener("load", callback);
-    xhr.open("GET", url);
-    xhr.send();
-
-    console.log(url);
-  }
-
-  static getParamByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
-
-  static post(url, params, callback) {
-    var http = new XMLHttpRequest();
-    http.open("POST", url, true);
-
-    //Send the proper header information along with the request
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-    http.onreadystatechange = function() {//Call a function when the state changes.
-      if(http.readyState == 4 && http.status == 200) {
-        callback(http.responseText);
-      }
-    }
-
-    var json = JSON.stringify(params);
-    var param_str = 'data='+encodeURIComponent(json);
-    http.send(param_str);
-  }
-}
-
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports) {
 
 /*
@@ -224,7 +173,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -596,6 +545,57 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = class {
+  static get(url, params, callback) {
+    if (params) {
+      url += "?data="+encodeURIComponent(JSON.stringify(params));
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("load", callback);
+    xhr.open("GET", url);
+    xhr.send();
+
+    console.log(url);
+  }
+
+  static getParamByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  static post(url, params, callback) {
+    var http = new XMLHttpRequest();
+    http.open("POST", url, true);
+
+    //Send the proper header information along with the request
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    http.onreadystatechange = function() {//Call a function when the state changes.
+      if(http.readyState == 4 && http.status == 200) {
+        callback(http.responseText);
+      }
+    }
+
+    var json = JSON.stringify(params);
+    var param_str = 'data='+encodeURIComponent(json);
+    http.send(param_str);
+  }
+}
+
+
+/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -772,15 +772,15 @@ Emitter.prototype.hasListeners = function(event){
  * Module dependencies.
  */
 
-var keys = __webpack_require__(52);
-var hasBinary = __webpack_require__(18);
-var sliceBuffer = __webpack_require__(53);
-var after = __webpack_require__(54);
-var utf8 = __webpack_require__(55);
+var keys = __webpack_require__(61);
+var hasBinary = __webpack_require__(17);
+var sliceBuffer = __webpack_require__(62);
+var after = __webpack_require__(63);
+var utf8 = __webpack_require__(64);
 
 var base64encoder;
 if (global && global.ArrayBuffer) {
-  base64encoder = __webpack_require__(57);
+  base64encoder = __webpack_require__(66);
 }
 
 /**
@@ -838,7 +838,7 @@ var err = { type: 'error', data: 'parser error' };
  * Create a blob api even for blob builder when vendor prefixes exist
  */
 
-var Blob = __webpack_require__(58);
+var Blob = __webpack_require__(67);
 
 /**
  * Encodes a packet.
@@ -1387,7 +1387,7 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(44);
+exports = module.exports = __webpack_require__(53);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -1567,7 +1567,7 @@ function localstorage() {
   } catch (e) {}
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)))
 
 /***/ }),
 /* 7 */
@@ -1634,7 +1634,7 @@ module.exports = function(a, b){
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(59);
+exports = module.exports = __webpack_require__(68);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -1814,7 +1814,7 @@ function localstorage() {
   } catch (e) {}
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)))
 
 /***/ }),
 /* 10 */
@@ -1922,9 +1922,9 @@ module.exports = function (css) {
 
 var debug = __webpack_require__(6)('socket.io-parser');
 var Emitter = __webpack_require__(4);
-var hasBin = __webpack_require__(18);
-var binary = __webpack_require__(46);
-var isBuf = __webpack_require__(19);
+var hasBin = __webpack_require__(17);
+var binary = __webpack_require__(55);
+var isBuf = __webpack_require__(18);
 
 /**
  * Protocol version.
@@ -2323,7 +2323,7 @@ function error() {
 
 /* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 
-var hasCORS = __webpack_require__(50);
+var hasCORS = __webpack_require__(59);
 
 module.exports = function (opts) {
   var xdomain = opts.xdomain;
@@ -2525,8 +2525,7 @@ Transport.prototype.onClose = function () {
 
 
 /***/ }),
-/* 14 */,
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -2571,7 +2570,7 @@ module.exports = function parseuri(str) {
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -2761,7 +2760,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /**
@@ -2919,7 +2918,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/* global Blob File */
@@ -2928,7 +2927,7 @@ function plural(ms, n, name) {
  * Module requirements.
  */
 
-var isArray = __webpack_require__(45);
+var isArray = __webpack_require__(54);
 
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
@@ -2988,7 +2987,7 @@ function hasBinary (obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -3008,7 +3007,7 @@ function isBuf(obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -3016,15 +3015,15 @@ function isBuf(obj) {
  * Module dependencies.
  */
 
-var eio = __webpack_require__(48);
-var Socket = __webpack_require__(25);
+var eio = __webpack_require__(57);
+var Socket = __webpack_require__(24);
 var Emitter = __webpack_require__(4);
 var parser = __webpack_require__(11);
-var on = __webpack_require__(26);
-var bind = __webpack_require__(27);
+var on = __webpack_require__(25);
+var bind = __webpack_require__(26);
 var debug = __webpack_require__(6)('socket.io-client:manager');
-var indexOf = __webpack_require__(24);
-var Backoff = __webpack_require__(64);
+var indexOf = __webpack_require__(23);
+var Backoff = __webpack_require__(73);
 
 /**
  * IE6+ hasOwnProperty
@@ -3587,7 +3586,7 @@ Manager.prototype.onreconnect = function () {
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -3595,9 +3594,9 @@ Manager.prototype.onreconnect = function () {
  */
 
 var XMLHttpRequest = __webpack_require__(12);
-var XHR = __webpack_require__(51);
-var JSONP = __webpack_require__(60);
-var websocket = __webpack_require__(61);
+var XHR = __webpack_require__(60);
+var JSONP = __webpack_require__(69);
+var websocket = __webpack_require__(70);
 
 /**
  * Export transports.
@@ -3647,7 +3646,7 @@ function polling (opts) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -3658,7 +3657,7 @@ var Transport = __webpack_require__(13);
 var parseqs = __webpack_require__(7);
 var parser = __webpack_require__(5);
 var inherit = __webpack_require__(8);
-var yeast = __webpack_require__(23);
+var yeast = __webpack_require__(22);
 var debug = __webpack_require__(9)('engine.io-client:polling');
 
 /**
@@ -3898,7 +3897,7 @@ Polling.prototype.uri = function () {
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3973,7 +3972,7 @@ module.exports = yeast;
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports) {
 
 
@@ -3988,7 +3987,7 @@ module.exports = function(arr, obj){
 };
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -3998,9 +3997,9 @@ module.exports = function(arr, obj){
 
 var parser = __webpack_require__(11);
 var Emitter = __webpack_require__(4);
-var toArray = __webpack_require__(63);
-var on = __webpack_require__(26);
-var bind = __webpack_require__(27);
+var toArray = __webpack_require__(72);
+var on = __webpack_require__(25);
+var bind = __webpack_require__(26);
 var debug = __webpack_require__(6)('socket.io-client:socket');
 var parseqs = __webpack_require__(7);
 
@@ -4412,7 +4411,7 @@ Socket.prototype.compress = function (compress) {
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports) {
 
 
@@ -4442,7 +4441,7 @@ function on (obj, ev, fn) {
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports) {
 
 /**
@@ -4471,6 +4470,7 @@ module.exports = function(obj, fn){
 
 
 /***/ }),
+/* 27 */,
 /* 28 */,
 /* 29 */,
 /* 30 */,
@@ -4484,18 +4484,31 @@ module.exports = function(obj, fn){
 /* 38 */,
 /* 39 */,
 /* 40 */,
-/* 41 */
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var config = global.config = {
   admin_path : "/cmb_admin"
 }
 
-var socket = global.socket = __webpack_require__(42)('http://localhost:9639');
+var socket = global.socket = __webpack_require__(51)('http://localhost:9639');
 
 var templates_div = document.createElement('div');
 document.body.appendChild(templates_div);
-var TemplatesUI = new (__webpack_require__(78))(templates_div);
+var TemplatesUI = new (__webpack_require__(74))(templates_div);
+
+var pages_div = document.createElement('div');
+document.body.appendChild(pages_div);
+var PagesUI = new (__webpack_require__(91))(pages_div);
 /*
 var pages_div = document.createElement('div');
 document.body.appendChild(pages_div);
@@ -4503,7 +4516,7 @@ var PagesUI = new (require('./pages.ui/index.js'))(pages_div);
 */
 var posts_div = document.createElement('div');
 document.body.appendChild(posts_div);
-var PostsUI = new (__webpack_require__(71))(posts_div);
+var PostsUI = new (__webpack_require__(82))(posts_div);
 /*
 var ttb = document.getElementById('tt');
 ttb.addEventListener('click', function(e) {
@@ -4514,7 +4527,7 @@ ttb.addEventListener('click', function(e) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 42 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -4522,9 +4535,9 @@ ttb.addEventListener('click', function(e) {
  * Module dependencies.
  */
 
-var url = __webpack_require__(43);
+var url = __webpack_require__(52);
 var parser = __webpack_require__(11);
-var Manager = __webpack_require__(20);
+var Manager = __webpack_require__(19);
 var debug = __webpack_require__(6)('socket.io-client');
 
 /**
@@ -4609,12 +4622,12 @@ exports.connect = lookup;
  * @api public
  */
 
-exports.Manager = __webpack_require__(20);
-exports.Socket = __webpack_require__(25);
+exports.Manager = __webpack_require__(19);
+exports.Socket = __webpack_require__(24);
 
 
 /***/ }),
-/* 43 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -4622,7 +4635,7 @@ exports.Socket = __webpack_require__(25);
  * Module dependencies.
  */
 
-var parseuri = __webpack_require__(15);
+var parseuri = __webpack_require__(14);
 var debug = __webpack_require__(6)('socket.io-client:url');
 
 /**
@@ -4696,7 +4709,7 @@ function url (uri, loc) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 44 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -4712,7 +4725,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(17);
+exports.humanize = __webpack_require__(16);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -4904,7 +4917,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 45 */
+/* 54 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -4915,7 +4928,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 46 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -4924,8 +4937,8 @@ module.exports = Array.isArray || function (arr) {
  * Module requirements
  */
 
-var isArray = __webpack_require__(47);
-var isBuf = __webpack_require__(19);
+var isArray = __webpack_require__(56);
+var isBuf = __webpack_require__(18);
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
 var withNativeFile = typeof global.File === 'function' || toString.call(global.File) === '[object FileConstructor]';
@@ -5063,7 +5076,7 @@ exports.removeBlobs = function(data, callback) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 47 */
+/* 56 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -5074,11 +5087,11 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 48 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-module.exports = __webpack_require__(49);
+module.exports = __webpack_require__(58);
 
 /**
  * Exports parser
@@ -5090,19 +5103,19 @@ module.exports.parser = __webpack_require__(5);
 
 
 /***/ }),
-/* 49 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies.
  */
 
-var transports = __webpack_require__(21);
+var transports = __webpack_require__(20);
 var Emitter = __webpack_require__(4);
 var debug = __webpack_require__(9)('engine.io-client:socket');
-var index = __webpack_require__(24);
+var index = __webpack_require__(23);
 var parser = __webpack_require__(5);
-var parseuri = __webpack_require__(15);
+var parseuri = __webpack_require__(14);
 var parseqs = __webpack_require__(7);
 
 /**
@@ -5237,7 +5250,7 @@ Socket.protocol = parser.protocol; // this is an int
 
 Socket.Socket = Socket;
 Socket.Transport = __webpack_require__(13);
-Socket.transports = __webpack_require__(21);
+Socket.transports = __webpack_require__(20);
 Socket.parser = __webpack_require__(5);
 
 /**
@@ -5840,7 +5853,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 50 */
+/* 59 */
 /***/ (function(module, exports) {
 
 
@@ -5863,7 +5876,7 @@ try {
 
 
 /***/ }),
-/* 51 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -5871,7 +5884,7 @@ try {
  */
 
 var XMLHttpRequest = __webpack_require__(12);
-var Polling = __webpack_require__(22);
+var Polling = __webpack_require__(21);
 var Emitter = __webpack_require__(4);
 var inherit = __webpack_require__(8);
 var debug = __webpack_require__(9)('engine.io-client:polling-xhr');
@@ -6283,7 +6296,7 @@ function unloadHandler () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 52 */
+/* 61 */
 /***/ (function(module, exports) {
 
 
@@ -6308,7 +6321,7 @@ module.exports = Object.keys || function keys (obj){
 
 
 /***/ }),
-/* 53 */
+/* 62 */
 /***/ (function(module, exports) {
 
 /**
@@ -6343,7 +6356,7 @@ module.exports = function(arraybuffer, start, end) {
 
 
 /***/ }),
-/* 54 */
+/* 63 */
 /***/ (function(module, exports) {
 
 module.exports = after
@@ -6377,7 +6390,7 @@ function noop() {}
 
 
 /***/ }),
-/* 55 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/utf8js v2.1.2 by @mathias */
@@ -6635,10 +6648,10 @@ function noop() {}
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(56)(module), __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 56 */
+/* 65 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -6666,7 +6679,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 57 */
+/* 66 */
 /***/ (function(module, exports) {
 
 /*
@@ -6739,7 +6752,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 58 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -6842,7 +6855,7 @@ module.exports = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 59 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -6858,7 +6871,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(17);
+exports.humanize = __webpack_require__(16);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -7050,7 +7063,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 60 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -7058,7 +7071,7 @@ function coerce(val) {
  * Module requirements.
  */
 
-var Polling = __webpack_require__(22);
+var Polling = __webpack_require__(21);
 var inherit = __webpack_require__(8);
 
 /**
@@ -7288,7 +7301,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 61 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -7299,13 +7312,13 @@ var Transport = __webpack_require__(13);
 var parser = __webpack_require__(5);
 var parseqs = __webpack_require__(7);
 var inherit = __webpack_require__(8);
-var yeast = __webpack_require__(23);
+var yeast = __webpack_require__(22);
 var debug = __webpack_require__(9)('engine.io-client:websocket');
 var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(62);
+    NodeWebSocket = __webpack_require__(71);
   } catch (e) { }
 }
 
@@ -7581,13 +7594,13 @@ WS.prototype.check = function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 62 */
+/* 71 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 63 */
+/* 72 */
 /***/ (function(module, exports) {
 
 module.exports = toArray
@@ -7606,7 +7619,7 @@ function toArray(list, index) {
 
 
 /***/ }),
-/* 64 */
+/* 73 */
 /***/ (function(module, exports) {
 
 
@@ -7697,23 +7710,335 @@ Backoff.prototype.setJitter = function(jitter){
 
 
 /***/ }),
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */,
-/* 71 */
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+const XHR = __webpack_require__(3);
+const Template = __webpack_require__(75);
+
+
+var GridUI = __webpack_require__(77);
+
+__webpack_require__(79);
+var html = __webpack_require__(81);
+
+module.exports = class {
+  constructor(div) {
+    div.innerHTML = html;
+    div.classList.add('templates');
+
+    this.list = div.querySelector(".list_display");
+
+    var table = new GridUI();
+    this.list.appendChild(table.element);
+
+    var this_class = this;
+    XHR.get('templates.io', {
+      command: "all"
+    }, function() {
+      var templates = JSON.parse(this.responseText);
+      for (let t = 0; t < templates.length; t++) {
+        var template = new Template(templates[t], table);
+        table.add(template.element);
+      }
+
+      var add_temp_btn = document.createElement("div");
+      add_temp_btn.classList.add("list_item");
+      add_temp_btn.classList.add("add_item");
+      add_temp_btn.addEventListener("click", new_template);
+      table.add(add_temp_btn);
+
+      var text = document.createElement("h3");
+      text.innerHTML = "++";
+      add_temp_btn.appendChild(text);
+
+      function new_template(e) {
+        var input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Name";
+        add_temp_btn.innerHTML = "";
+        add_temp_btn.appendChild(input);
+        input.focus();
+        input.addEventListener('keyup', function (e) {
+          if (e.keyCode == 13) {
+            var data = {
+              name: input.value
+            }
+
+            XHR.get('templates.io', {
+              command: "add",
+              name: data.name
+            }, function() {
+              var res = JSON.parse(this.responseText);
+              console.log(res);
+              if (res.err) {
+                console.log(res.err);
+              } else {
+                var template = new Template(data.name, table);
+
+                table.remove(add_temp_btn);
+                table.add(template.element);
+                table.add(add_temp_btn);
+                input.focus();
+                input.value = '';
+              }
+            });
+          }
+        });
+        add_temp_btn.removeEventListener("click", new_template);
+      }
+    });
+  }
+
+}
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+const XHR = __webpack_require__(3);
+
+var html = __webpack_require__(76);
+
+module.exports = class {
+  constructor(name, table) {
+    this.element = document.createElement('div');
+    this.element.innerHTML = html;
+    this.name = name;
+
+    var max_length = 16;
+    if(this.name.length > max_length) {
+      this.name = this.name.substring(0,max_length)+'...';
+    }
+
+    this.display();
+    this.table = table;
+  }
+
+  display() {
+
+    var page_element = this.element;
+    page_element.classList.add('list_item');
+
+    var this_class = this;
+
+    var link = page_element.querySelector('.page_name');
+
+    link.addEventListener('click', function(e) {
+      window.location.href = "t/"+this_class.name;
+    });
+
+    link.innerHTML = this.name;
+
+    var edit_btn = page_element.querySelector('.edit_btn');
+    edit_btn.addEventListener('click', function(e) {
+      window.location.href = "edit.html?template="+this_class.name;
+    });
+    edit_btn.innerHTML = '/';
+
+    var this_class = this;
+
+    var del_button = page_element.querySelector('.del_btn');
+    del_button.addEventListener('click', function(e) {
+      XHR.get('templates.io', {
+        command: 'rm',
+        name: this_class.name
+      }, function() {
+        if (this.responseText == "success") {
+          this_class.table.remove(this_class.element);
+        }
+      });
+    });
+    del_button.innerHTML = "X";
+  }
+}
+
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports) {
+
+module.exports = "<table>\n  <tr>\n    <td class=\"page_name\" colspan=\"2\">\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <button class=\"edit_btn\">/</a>\n    </td>\n    <td>\n      <button class=\"del_btn\">X</a>\n    </td>\n  </tr>\n</table>\n";
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var TR = __webpack_require__(78);
+
+module.exports = class {
+  constructor() {
+    this.element = document.createElement('table');
+    this.element.classList.add('dynamic_table');
+
+    this.trs = [];
+    this.cur_tr = new TR();
+    this.element.appendChild(this.cur_tr.element);
+    this.trs.push(this.cur_tr);
+
+  }
+
+  add(item) {
+    if (this.cur_tr.items == this.cur_tr.max_items) {
+      this.cur_tr = new TR();
+      this.element.appendChild(this.cur_tr.element);
+
+      var td = document.createElement('td');
+      td.appendChild(item);
+      this.cur_tr.add(td);
+
+      this.trs.push(this.cur_tr);
+    } else {
+      var td = document.createElement('td');
+      td.appendChild(item);
+      this.cur_tr.add(td);
+    }
+  }
+
+  remove(item) {
+    for (var t = 0; t < this.trs.length; t++) {
+      var tr = this.trs[t];
+      if (tr.contains(item)) {
+        tr.remove(item.parentNode);
+        if (tr.items == 0 && t > 0) {
+          this.element.removeChild(tr.element);
+          this.trs.splice(t, 1);
+          this.cur_tr = this.trs[t-1];
+        } else if (tr.items == tr.max_items-1) {
+          this.track(t+1);
+        }
+      }
+    }
+  }
+
+  track(t) {
+    if (t < this.trs.length) {
+      var tr = this.trs[t];
+      if (tr.items > 0) {
+        var td = tr.tds[0];
+        tr.remove(td);
+        this.trs[t-1].add(td);
+        if (tr.items == tr.max_items-1) {
+          this.track(t+1);
+        }
+      } else {
+        this.element.removeChild(this.trs[t].element);
+        this.trs.splice(t, 1);
+        this.cur_tr = this.trs[t-1];
+      }
+    }
+  }
+}
+
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = class {
+  constructor() {
+    this.element = document.createElement('tr');
+    this.items = 0;
+    this.max_items = 6;
+    this.tds = [];
+
+  }
+
+  add(td) {
+    this.tds.push(td);
+    this.items++;
+    this.element.appendChild(td);
+  }
+
+  remove(td) {
+    var td_index = this.tds.indexOf(td);
+    this.tds.splice(td_index, 1);
+    this.items--;
+    this.element.removeChild(td);
+  }
+
+  contains(td) {
+    return this.element.contains(td);
+  }
+}
+
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(80);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/cjs.js!./style.less", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/cjs.js!./style.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".color_wrap {\n  background-color: #333;\n  width: 960px;\n  padding: 10px;\n  margin: auto;\n}\n.list_display {\n  background-color: #333;\n  height: 308px;\n  width: 960px;\n  margin: auto;\n  padding: 10px;\n  text-align: left;\n  overflow-y: auto;\n  white-space: nowrap;\n}\n.list_display table {\n  table-layout: fixed;\n  width: 100%;\n  height: 100%;\n}\n.list_display tr {\n  height: 150px;\n}\n.list_item {\n  display: inline-block;\n  width: 150px;\n  height: 150px;\n  background-color: #111;\n  color: #FFF;\n  font-size: 18px;\n  text-align: center;\n  margin: 0 auto;\n  text-decoration: none;\n  user-select: none;\n}\n.list_item table {\n  table-layout: fixed;\n  width: 100%;\n  height: 100%;\n}\n.list_item tr {\n  height: 50%;\n}\n.list_item td {\n  word-wrap: break-word;\n  word-break: break-all;\n  white-space: normal;\n}\n.add_item {\n  cursor: pointer;\n}\n.add_item h3 {\n  margin: 0;\n  line-height: 150px;\n}\n.list_item button:hover {\n  background-color: #191919;\n}\n.list_item input {\n  background-color: #090909;\n  color: #FFF;\n  border: 1px solid #333;\n  width: 130px;\n  padding: 2px 4px;\n  height: 20px;\n  line-height: 20px;\n  margin-top: 65px;\n}\n.page_name {\n  cursor: pointer;\n}\n.page_name:hover {\n  background-color: #222;\n}\n.list_item:hover {\n  background-color: #191919;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports) {
+
+module.exports = "\n<div class=\"color_wrap\">\n  <h2>Templates</h2>\n</div>\n<div class=\"list_display\">\n</div>\n";
+
+/***/ }),
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-const XHR = __webpack_require__(1);
-const Post = __webpack_require__(72);
+const XHR = __webpack_require__(3);
+const Post = __webpack_require__(83);
 
-__webpack_require__(75);
-var html = __webpack_require__(77);
+__webpack_require__(86);
+var html = __webpack_require__(88);
 
 module.exports = class {
   constructor(div) {
@@ -7800,16 +8125,16 @@ module.exports = class {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 72 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-const XHR = __webpack_require__(1);
+const XHR = __webpack_require__(3);
 
-var html = __webpack_require__(73);
-var edit_html = __webpack_require__(74);
+var html = __webpack_require__(84);
+var edit_html = __webpack_require__(85);
 
 module.exports = class {
   constructor(obj) {
@@ -7931,25 +8256,25 @@ module.exports = class {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 73 */
+/* 84 */
 /***/ (function(module, exports) {
 
 module.exports = "\n<h3 class=\"post_title\"></h3>\n<button class=\"post_edit_btn\">/</button>\n<button class=\"post_del_btn\">X</button>\n<div class=\"post_content\"></div>\n";
 
 /***/ }),
-/* 74 */
+/* 85 */
 /***/ (function(module, exports) {
 
 module.exports = "<input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n<div id=\"post_summernote\" class=\"cur_sn\"></div>\n<input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n<input type=\"submit\" class=\"post_submit_input\" />\n<input type=\"submit\" value=\"Cancel\" class=\"post_cancel_input\" />\n<div class=\"post_element\">\n  <h3 class=\"post_display_title post_title\"></h3>\n  <div class=\"post_display post_content\"></div>\n</div>\n";
 
 /***/ }),
-/* 75 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(76);
+var content = __webpack_require__(87);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -7957,7 +8282,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(2)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -7974,105 +8299,133 @@ if(false) {
 }
 
 /***/ }),
-/* 76 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(1)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, ".posts  {\n  background-color: #333;\n  width: 960px;\n  margin: auto;\n  margin-top: 100px;\n  padding: 10px;\n}\n\n.post_display, table {\n  width: 100%;\n}\n\n.post_title {\n  display: inline-block;\n  margin: 0;\n  padding: 10px 30px;\n}\n\n.post_element button {\n  float: right;\n}\n\n.post_element {\n  margin-top: 20px;\n}\n\n.post_content {\n  padding: 0px 20px;\n  width: calc(100% - 40px);\n  word-wrap: break-word;\n}\n\n\n.new_post_button {\n  width: 100%;\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n  background-color: #111;\n  color: #FFF;\n  cursor: pointer;\n  user-select: none;\n}\n\n.new_post_button:hover {\n  background-color: #222;\n}\n\n.post_title_input {\n  width: 300px;\n}\n\n.post_tags_input {\n  width: 500px;\n}\n\n.post_submit_input, .post_cancel_input {\n  width: 120px;\n  float: right;\n}\n\n.note-toolbar {\n  z-index: 1;\n}\n", ""]);
+exports.push([module.i, ".posts  {\n  background-color: #333;\n  width: 960px;\n  margin: auto;\n  margin-top: 40px;\n  margin-bottom: 40px;\n  padding: 10px;\n}\n\n.post_display, table {\n  width: 100%;\n}\n\n.post_title {\n  display: inline-block;\n  margin: 0;\n  padding: 10px 30px;\n}\n\n.post_element button {\n  float: right;\n}\n\n.post_element {\n  margin-top: 20px;\n}\n\n.post_content {\n  padding: 0px 20px;\n  width: calc(100% - 40px);\n  word-wrap: break-word;\n}\n\n\n.new_post_button {\n  width: 100%;\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n  background-color: #111;\n  color: #FFF;\n  cursor: pointer;\n  user-select: none;\n}\n\n.new_post_button:hover {\n  background-color: #222;\n}\n\n.post_title_input {\n  width: 300px;\n}\n\n.post_tags_input {\n  width: 500px;\n}\n\n.post_submit_input, .post_cancel_input {\n  width: 120px;\n  float: right;\n}\n\n.note-toolbar {\n  z-index: 1;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 77 */
+/* 88 */
 /***/ (function(module, exports) {
 
 module.exports = "<h2>Posts</h2>\n\n<div class=\"new_post_button\">\n  Write a new post\n</div>\n\n<div class=\"post_editor\" style=\"display: none\">\n  <input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n  <div class=\"post_summernote\"></div>\n  <input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n  <input type=\"submit\" class=\"post_submit_input\" />\n  <div class=\"post_element\">\n    <h3 class=\"post_display_title post_title\"></h3>\n    <div class=\"post_display post_content\"></div>\n  </div>\n</div>\n\n<div class=\"post_list\">\n\n</div>\n";
 
 /***/ }),
-/* 78 */
+/* 89 */,
+/* 90 */,
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-const XHR = __webpack_require__(1);
-const Template = __webpack_require__(86);
+const XHR = __webpack_require__(3);
+const Page = __webpack_require__(92);
 
 
-var DynTable = __webpack_require__(84);
+var GridUI = __webpack_require__(77);
 
-__webpack_require__(81);
-var html = __webpack_require__(83);
+__webpack_require__(94);
+var html = __webpack_require__(96);
 
 module.exports = class {
-  constructor(div) {
+  constructor(div, templates) {
     div.innerHTML = html;
-    div.classList.add('templates');
+    div.classList.add('pages');
 
     this.list = div.querySelector(".list_display");
 
-    var table = new DynTable();
+    var table = new GridUI();
     this.list.appendChild(table.element);
 
     var this_class = this;
-    XHR.get('templates.io', {
+    XHR.get('pages.io', {
       command: "all"
     }, function() {
-      var templates = JSON.parse(this.responseText);
-      for (let t = 0; t < templates.length; t++) {
-        var template = new Template(templates[t], table);
-        table.add(template.element);
+      var pages = JSON.parse(this.responseText);
+      for (let t = 0; t < pages.length; t++) {
+        var page = new Page(pages[t], table);
+        table.add(page.element);
       }
 
       var add_temp_btn = document.createElement("div");
       add_temp_btn.classList.add("list_item");
       add_temp_btn.classList.add("add_item");
-      add_temp_btn.addEventListener("click", new_template);
+      add_temp_btn.addEventListener("click", new_page);
       table.add(add_temp_btn);
 
       var text = document.createElement("h3");
       text.innerHTML = "++";
       add_temp_btn.appendChild(text);
 
-      function new_template(e) {
+      function new_page(e) {
         var input = document.createElement("input");
         input.type = "text";
         input.placeholder = "Name";
-        add_temp_btn.innerHTML = "";
-        add_temp_btn.appendChild(input);
-        input.focus();
-        input.addEventListener('keyup', function (e) {
-          if (e.keyCode == 13) {
+
+        var select = document.createElement("select");
+        XHR.get('templates.io', {
+          command: "all"
+        }, function() {
+          var placeholder = document.createElement("option");
+          placeholder.value = "";
+          placeholder.innerHTML = "Template";
+          placeholder.disabled = true;
+          placeholder.selected = true;
+          select.appendChild(placeholder);
+
+          var templates = JSON.parse(this.responseText);
+          for (let t = 0; t < templates.length; t++) {
+            var option = document.createElement("option");
+            option.value = templates[t];
+            option.innerHTML = templates[t];
+            select.appendChild(option);
+          }
+
+          add_temp_btn.innerHTML = "";
+          add_temp_btn.appendChild(input);
+          input.focus();
+          add_temp_btn.appendChild(select);
+
+          var submit = document.createElement("button");
+          submit.innerHTML = "Submit";
+          add_temp_btn.appendChild(submit);
+
+          submit.addEventListener('click', function (e) {
             var data = {
               name: input.value
             }
 
-            XHR.get('templates.io', {
+            XHR.get('pages.io', {
               command: "add",
-              name: data.name
+              name: data.name,
+              template: select.value
             }, function() {
               var res = JSON.parse(this.responseText);
               console.log(res);
               if (res.err) {
                 console.log(res.err);
               } else {
-                var template = new Template(data.name, table);
+                var page = new Page(data.name, table);
 
                 table.remove(add_temp_btn);
-                table.add(template.element);
+                table.add(page.element);
                 table.add(add_temp_btn);
                 input.focus();
                 input.value = '';
               }
             });
-          }
+          });
         });
-        add_temp_btn.removeEventListener("click", new_template);
+        add_temp_btn.removeEventListener("click", new_page);
       }
     });
   }
@@ -8081,177 +8434,15 @@ module.exports = class {
 
 
 /***/ }),
-/* 79 */,
-/* 80 */,
-/* 81 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(82);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {"hmr":true}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/cjs.js!./style.less", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/cjs.js!./style.less");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 82 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".color_wrap {\n  background-color: #333;\n  width: 960px;\n  padding: 10px;\n  margin: auto;\n}\n.list_display {\n  background-color: #333;\n  height: 308px;\n  width: 960px;\n  margin: auto;\n  padding: 10px;\n  text-align: left;\n  overflow-y: auto;\n  white-space: nowrap;\n}\n.list_display table {\n  table-layout: fixed;\n  width: 100%;\n  height: 100%;\n}\n.list_display tr {\n  height: 150px;\n}\n.list_item {\n  display: inline-block;\n  width: 150px;\n  height: 150px;\n  background-color: #111;\n  color: #FFF;\n  font-size: 18px;\n  text-align: center;\n  margin: 0 auto;\n  text-decoration: none;\n  user-select: none;\n}\n.list_item table {\n  table-layout: fixed;\n  width: 100%;\n  height: 100%;\n}\n.list_item tr {\n  height: 50%;\n}\n.list_item td {\n  word-wrap: break-word;\n  word-break: break-all;\n  white-space: normal;\n}\n.add_item {\n  cursor: pointer;\n}\n.add_item h3 {\n  margin: 0;\n  line-height: 150px;\n}\n.list_item button:hover {\n  background-color: #191919;\n}\n.list_item input {\n  background-color: #090909;\n  color: #FFF;\n  border: 1px solid #333;\n  width: 130px;\n  padding: 2px 4px;\n  height: 20px;\n  line-height: 20px;\n  margin-top: 65px;\n}\n.page_name {\n  cursor: pointer;\n}\n.page_name:hover {\n  background-color: #222;\n}\n.list_item:hover {\n  background-color: #191919;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 83 */
-/***/ (function(module, exports) {
-
-module.exports = "\n<div class=\"color_wrap\">\n  <h2>Templates</h2>\n</div>\n<div class=\"list_display\">\n</div>\n";
-
-/***/ }),
-/* 84 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var TR = __webpack_require__(85);
+const XHR = __webpack_require__(3);
 
-module.exports = class {
-  constructor() {
-    this.element = document.createElement('table');
-    this.element.classList.add('dynamic_table');
-
-    this.trs = [];
-    this.cur_tr = new TR();
-    this.element.appendChild(this.cur_tr.element);
-    this.trs.push(this.cur_tr);
-
-  }
-
-  add(item) {
-    if (this.cur_tr.items == this.cur_tr.max_items) {
-      this.cur_tr = new TR();
-      this.element.appendChild(this.cur_tr.element);
-
-      var td = document.createElement('td');
-      td.appendChild(item);
-      this.cur_tr.add(td);
-
-      this.trs.push(this.cur_tr);
-    } else {
-      var td = document.createElement('td');
-      td.appendChild(item);
-      this.cur_tr.add(td);
-    }
-  }
-
-  remove(item) {
-    for (var t = 0; t < this.trs.length; t++) {
-      var tr = this.trs[t];
-      if (tr.contains(item)) {
-        tr.remove(item.parentNode);
-        if (tr.items == 0 && t > 0) {
-          this.element.removeChild(tr.element);
-          this.trs.splice(t, 1);
-          this.cur_tr = this.trs[t-1];
-        } else if (tr.items == tr.max_items-1) {
-          this.track(t+1);
-        }
-      }
-    }
-  }
-
-  track(t) {
-    if (t < this.trs.length) {
-      var tr = this.trs[t];
-      if (tr.items > 0) {
-        var td = tr.tds[0];
-        tr.remove(td);
-        this.trs[t-1].add(td);
-        if (tr.items == tr.max_items-1) {
-          this.track(t+1);
-        }
-      } else {
-        this.element.removeChild(this.trs[t].element);
-        this.trs.splice(t, 1);
-        this.cur_tr = this.trs[t-1];
-      }
-    }
-  }
-}
-
-
-/***/ }),
-/* 85 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = class {
-  constructor() {
-    this.element = document.createElement('tr');
-    this.items = 0;
-    this.max_items = 6;
-    this.tds = [];
-
-  }
-
-  add(td) {
-    this.tds.push(td);
-    this.items++;
-    this.element.appendChild(td);
-  }
-
-  remove(td) {
-    var td_index = this.tds.indexOf(td);
-    this.tds.splice(td_index, 1);
-    this.items--;
-    this.element.removeChild(td);
-  }
-
-  contains(td) {
-    return this.element.contains(td);
-  }
-}
-
-
-/***/ }),
-/* 86 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-const XHR = __webpack_require__(1);
-
-var html = __webpack_require__(87);
+var html = __webpack_require__(93);
 
 module.exports = class {
   constructor(name, table) {
@@ -8268,33 +8459,32 @@ module.exports = class {
     this.table = table;
   }
 
-  edit() {
-
-  }
-
   display() {
 
     var page_element = this.element;
     page_element.classList.add('list_item');
 
+    var this_class = this;
+
     var link = page_element.querySelector('.page_name');
+
     link.addEventListener('click', function(e) {
-      window.location.href = "/p/"+page.data.uri;
+      window.location.href = "/p/"+this_class.name;
     });
 
     link.innerHTML = this.name;
-/*
+
     var edit_btn = page_element.querySelector('.edit_btn');
     edit_btn.addEventListener('click', function(e) {
-      window.location.href = "edit.html?page="+page.data.uri+"&context="+page.data.context_uri;
+      window.location.href = "edit.html?page="+this_class.name;
     });
     edit_btn.innerHTML = '/';
-*/
+
     var this_class = this;
 
     var del_button = page_element.querySelector('.del_btn');
     del_button.addEventListener('click', function(e) {
-      XHR.get('templates.io', {
+      XHR.get('pages.io', {
         command: 'rm',
         name: this_class.name
       }, function() {
@@ -8309,10 +8499,61 @@ module.exports = class {
 
 
 /***/ }),
-/* 87 */
+/* 93 */
 /***/ (function(module, exports) {
 
 module.exports = "<table>\n  <tr>\n    <td class=\"page_name\" colspan=\"2\">\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <button class=\"edit_btn\">/</a>\n    </td>\n    <td>\n      <button class=\"del_btn\">X</a>\n    </td>\n  </tr>\n</table>\n";
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(95);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/cjs.js!./style.less", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/cjs.js!./style.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".pages {\n  margin-top: 40px;\n}\n.color_wrap {\n  background-color: #333;\n  width: 960px;\n  padding: 10px;\n  margin: auto;\n}\n.list_display {\n  background-color: #333;\n  height: 308px;\n  width: 960px;\n  margin: auto;\n  padding: 10px;\n  text-align: left;\n  overflow-y: auto;\n  white-space: nowrap;\n}\n.list_display table {\n  table-layout: fixed;\n  width: 100%;\n  height: 100%;\n}\n.list_display tr {\n  height: 150px;\n}\n.list_item {\n  display: inline-block;\n  width: 150px;\n  height: 150px;\n  background-color: #111;\n  color: #FFF;\n  font-size: 18px;\n  text-align: center;\n  margin: 0 auto;\n  text-decoration: none;\n  user-select: none;\n}\n.list_item table {\n  table-layout: fixed;\n  width: 100%;\n  height: 100%;\n}\n.list_item tr {\n  height: 50%;\n}\n.list_item td {\n  word-wrap: break-word;\n  word-break: break-all;\n  white-space: normal;\n}\n.add_item {\n  cursor: pointer;\n}\n.add_item h3 {\n  margin: 0;\n  line-height: 150px;\n}\n.list_item button {\n  float: right;\n  margin-top: 7px;\n  margin-right: 15px;\n}\n.list_item input {\n  background-color: #090909;\n  color: #FFF;\n  border: 1px solid #333;\n  width: 130px;\n  padding: 2px 4px;\n  height: 20px;\n  line-height: 20px;\n  margin-top: 45px;\n}\n.list_item select {\n  display: block;\n  margin: 0 auto;\n  margin-top: 3px;\n  background-color: #090909;\n  color: #FFF;\n  border: 1px solid #333;\n  width: 130px;\n  padding: 2px 4px;\n  height: 20px;\n  line-height: 20px;\n}\n.page_name {\n  cursor: pointer;\n}\n.page_name:hover {\n  background-color: #222;\n}\n.list_item:hover {\n  background-color: #191919;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports) {
+
+module.exports = "\n<div class=\"color_wrap\">\n  <h2>Pages</h2>\n</div>\n<div class=\"list_display\">\n</div>\n";
 
 /***/ })
 /******/ ]);

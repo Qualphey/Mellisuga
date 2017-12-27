@@ -19,28 +19,27 @@ module.exports = class {
     this.table = table;
   }
 
-  edit() {
-
-  }
-
   display() {
 
     var page_element = this.element;
     page_element.classList.add('list_item');
 
+    var this_class = this;
+
     var link = page_element.querySelector('.page_name');
+
     link.addEventListener('click', function(e) {
-      window.location.href = "/p/"+page.data.uri;
+      window.location.href = "t/"+this_class.name;
     });
 
     link.innerHTML = this.name;
-/*
+
     var edit_btn = page_element.querySelector('.edit_btn');
     edit_btn.addEventListener('click', function(e) {
-      window.location.href = "edit.html?page="+page.data.uri+"&context="+page.data.context_uri;
+      window.location.href = "edit.html?template="+this_class.name;
     });
     edit_btn.innerHTML = '/';
-*/
+
     var this_class = this;
 
     var del_button = page_element.querySelector('.del_btn');

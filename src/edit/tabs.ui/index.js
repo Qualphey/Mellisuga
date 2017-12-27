@@ -1,34 +1,65 @@
 require('./horz.css');
 
-module.exports = function() {
+var Tab = require("./tab.js");
 
-  this.element = document.createElement('div');
-  this.element.classList.add('tabs_ui_container');
+module.exports = class {
+  constructor() {
+    this.element = document.createElement('div');
+    this.element.classList.add('tabs_ui_container');
 
-  var list = this.list = document.createElement('div');
-  list.classList.add('tabs_ui_menu');
-  this.element.appendChild(list);
+    this.menu = document.createElement('div');
+    this.menu.classList.add('tabs_ui_menu');
+    this.element.appendChild(this.menu);
 
-  var display = this.display = document.createElement('div');
-  display.classList.add('tabs_ui_display');
-  display.style.height = "calc(100% - 15px)";
-  this.element.appendChild(display);
+    this.display_div = document.createElement('div');
+    this.display_div.classList.add('tabs_ui_display');
+    this.display_div.style.height = "calc(100% - 21px)";
+    this.element.appendChild(this.display_div);
 
-  this.set = function(pages) {
-    this.pages = pages;
-    for (p=0;p<pages.length;p++) {
-      let page = pages[p];
+    this.list = [];
+  }
 
-      var item = document.createElement('button');
-      item.innerHTML = page.text;
-      item.addEventListener("click", function(e) {
-        page.cb(function(element) {
-          display.innerHTML = "";
-          return display;
-        }());
-      });
+  add(data) {
+    var tab = new Tab(data, this);
+    this.menu.appendChild(tab.element);
+    this.list.push(tab);
+    tab.display();
+  }
 
-      list.appendChild(item);
+  remove(tab) {
+    this.menu.removeChild(tab.element);
+    this.list.splice(this.list.indexOf(tab), 1);
+    if (tab.element == this.displayed_tab) {
+      if (this.list.length > 0) {
+        this.display(this.list[this.list.length-1]);
+      } else {
+        this.display_div.innerHTML = "";
+      }
     }
-  };
+  }
+
+  select(id) {
+    var result = false;
+    for (var t = 0; t < this.list.length; t++) {
+      if (this.list[t].id == id) {
+        result = this.list[t];
+        break;
+      }
+    }
+    return result;
+  }
+
+  display(tab) {
+    var this_class = this;
+    tab.cb(function() {
+      if (this_class.displayed_tab) {
+        this_class.displayed_tab.classList.remove("tabs_ui_selected");
+      }
+      this_class.displayed_tab = tab.element;
+      this_class.displayed_tab.classList.add("tabs_ui_selected");
+
+      this_class.display_div.innerHTML = "";
+      return this_class.display_div;
+    }());
+  }
 }

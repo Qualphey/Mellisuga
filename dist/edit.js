@@ -60,63 +60,38 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 29);
+/******/ 	return __webpack_require__(__webpack_require__.s = 28);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */,
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 0 */
+/***/ (function(module, exports) {
 
-"use strict";
+var g;
 
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
 
-module.exports = class {
-  static get(url, params, callback) {
-    if (params) {
-      url += "?data="+encodeURIComponent(JSON.stringify(params));
-    }
-
-    var xhr = new XMLHttpRequest();
-    xhr.addEventListener("load", callback);
-    xhr.open("GET", url);
-    xhr.send();
-
-    console.log(url);
-  }
-
-  static getParamByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
-
-  static post(url, params, callback) {
-    var http = new XMLHttpRequest();
-    http.open("POST", url, true);
-
-    //Send the proper header information along with the request
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-    http.onreadystatechange = function() {//Call a function when the state changes.
-      if(http.readyState == 4 && http.status == 200) {
-        callback(http.responseText);
-      }
-    }
-
-    var json = JSON.stringify(params);
-    var param_str = 'data='+encodeURIComponent(json);
-    http.send(param_str);
-  }
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
 }
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
 
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports) {
 
 /*
@@ -198,7 +173,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -570,6 +545,57 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = class {
+  static get(url, params, callback) {
+    if (params) {
+      url += "?data="+encodeURIComponent(JSON.stringify(params));
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("load", callback);
+    xhr.open("GET", url);
+    xhr.send();
+
+    console.log(url);
+  }
+
+  static getParamByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  static post(url, params, callback) {
+    var http = new XMLHttpRequest();
+    http.open("POST", url, true);
+
+    //Send the proper header information along with the request
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    http.onreadystatechange = function() {//Call a function when the state changes.
+      if(http.readyState == 4 && http.status == 200) {
+        callback(http.responseText);
+      }
+    }
+
+    var json = JSON.stringify(params);
+    var param_str = 'data='+encodeURIComponent(json);
+    http.send(param_str);
+  }
+}
+
+
+/***/ }),
 /* 4 */,
 /* 5 */,
 /* 6 */,
@@ -674,46 +700,7 @@ module.exports = function (css) {
 /* 11 */,
 /* 12 */,
 /* 13 */,
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-//require("./style.css");
-
-var XHR = __webpack_require__(1);
-
-module.exports = class {
-  constructor(parent) {
-    this.element = document.createElement("div");
-    parent.appendChild(this.element);
-
-    var textarea = document.createElement("textarea");
-    this.element.appendChild(textarea);
-
-    var this_class = this;
-    XHR.get('e/'+XHR.getParamByName('page'), null, function() {
-      textarea.innerHTML = this.responseText;
-
-      this_class.cm = CodeMirror.fromTextArea(textarea, {
-        lineNumbers: true,
-        theme: "base16-dark",
-        mode: "htmlmixed",
-        indentWithTabs: true,
-        tabSize: 2,
-        autoCloseTags: true,
-        scrollbarStyle: "null",
-        smartIndent: false
-      //  matchTags: true
-      });
-      this_class.cm.refresh();
-    });
-  }
-}
-
-
-/***/ }),
+/* 14 */,
 /* 15 */,
 /* 16 */,
 /* 17 */,
@@ -727,110 +714,166 @@ module.exports = class {
 /* 25 */,
 /* 26 */,
 /* 27 */,
-/* 28 */,
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(30)
+/* WEBPACK VAR INJECTION */(function(global) {__webpack_require__(29)
 
-var XHR = __webpack_require__(1);
+const XHR = __webpack_require__(3);
+const WindowUI = __webpack_require__(31);
+const SplitUI = __webpack_require__(35);
+const TreeFM = __webpack_require__(38);
+const TabsUI = __webpack_require__(45);
+const CodeMirror = __webpack_require__(90);
+
+const template = XHR.getParamByName('template');
+const page = XHR.getParamByName('page');
 
 var tools = document.createElement("div");
 tools.classList.add("tools");
-tools.innerHTML = __webpack_require__(32);
+tools.innerHTML = __webpack_require__(49);
 document.body.appendChild(tools);
 
-var WindowUI = __webpack_require__(33);
-var html_win = new WindowUI({
+var editor_win = new WindowUI({
   DOM: document.body,
-  title: "HTML editor"
-});
-
-var HTMLEdit = __webpack_require__(14);
-var html_editor = new HTMLEdit(html_win.content);
-
-var html_btn = tools.querySelector(".html_btn");
-html_btn.addEventListener("click", function(e) {
-  if (html_win.visible) {
-    html_win.hide();
-  } else {
-    html_win.dipslay();
+  title: "Editor",
+  resize_cb: function() {
+    split.auto_resize();
   }
 });
 
-var TabsUI = __webpack_require__(37);
+var editor_btn = tools.querySelector(".editor_btn");
+editor_btn.addEventListener("click", function(e) {
+  if (editor_win.visible) {
+    editor_win.hide();
+  } else {
+    editor_win.dipslay();
+  }
+});
+
+global.editor_window = editor_win;
+
+editor_win.content.style.overflow = "hidden";
+
+var split = new SplitUI(editor_win.content, "horizontal");
+split.split(2);
+
+
 var tabs = new TabsUI();
 
-var ContextEdit = __webpack_require__(40);
-var context = new ContextEdit(tabs.display);
+var last_save_callback = false;
 
-var HTMLEdit = __webpack_require__(14);
-var html_editor = new HTMLEdit(tabs.display);
+function file_cb(file) {
 
-tabs.set([
-  {
-    text: "html",
-    cb: function(display) {
-      display.appendChild(html_editor.element);
-    }
-  }, {
-    text: "context",
-    cb: function(display) {
-      display.appendChild(context.element);
-    }
-  }
-]);
-
-var iframe = document.getElementById("cmb_page_display");
-iframe.src = '/p/'+XHR.getParamByName('page');
-iframe.addEventListener('mouseup', function(e) {
-  console.log("iframe up ");
-});
-
-function save() {
-  XHR.get('edit_page', {
-    html: html_editor.cm.getValue(),
-    context: context.cm.getValue(),
-    uri: XHR.getParamByName('page'),
-    context_uri: XHR.getParamByName('context')
-  }, function(response){
-    console.log(response);
-    iframe.src = iframe.src;
-  });
 }
 
-var save_button = document.createElement('button');
-save_button.innerHTML = "save";
-save_button.addEventListener("click", function(e) {
-  save();
-});
+if (template) {
+  var iframe = document.getElementById("cmb_page_display");
+  iframe.src = 't/'+template;
 
-document.addEventListener("keydown", function(e) {
-  if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-    e.preventDefault();
-    save();
-  }
-}, false);
+  var treefm = new TreeFM({
+    target: "templates",
+    dir: template,
+    file_cb: function(file) {
+      console.log(file);
+      var tab = tabs.select(file.rel_path);
+      if (tab) {
+        tab.display();
+      } else {
+        treefm.read_file(file.rel_path, function(file_content) {
+          var extension = file.rel_path.substr(file.rel_path.lastIndexOf('.')+1);
+          if (extension == "json") extension = "js";
+          var html_editor = new CodeMirror(file_content, extension);
+          tabs.add({
+            text: file.name,
+            cb: function(display) {
+              display.appendChild(html_editor.element);
+              html_editor.cm.refresh();
+              if (last_save_callback) {
+                document.body.removeEventListener("keydown", last_save_callback);
+              }
+              document.body.addEventListener("keydown", save_cur_file);
+              last_save_callback = save_cur_file;
+            },
+            id: file.rel_path
+          });
+          function save_cur_file(e) {
+            if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+              e.preventDefault();
+              treefm.write_file(file.rel_path, html_editor.cm.getValue(), function() {
+                iframe.src = iframe.src;
+              });
+            }
+          }
+        });
+      }
+    }
+  });
 
-save_button.style.float = "right";
-tabs.list.appendChild(save_button);
-/*
-var WindowUI = require("./window.ui/index.js");
-var editor_win = new WindowUI(function(obj) {
-  document.body.appendChild(obj.element);
-  obj.content_element.appendChild(tabs.element);
-});
-*/
+  split.list[0].appendChild(treefm.element);
+  split.list[1].style.overflow = "hidden";
+  split.list[1].appendChild(tabs.element);
+} else if (page) {
+  var iframe = document.getElementById("cmb_page_display");
+  iframe.src = '/p/'+page;
 
+  var treefm = new TreeFM({
+    target: "pages",
+    dir: page,
+    file_cb: function(file) {
+      console.log(file);
+      var tab = tabs.select(file.rel_path);
+      if (tab) {
+        tab.display();
+      } else {
+        treefm.read_file(file.rel_path, function(file_content) {
+          var extension = file.rel_path.substr(file.rel_path.lastIndexOf('.')+1);
+          if (extension == "json") extension = "js";
+          var html_editor = new CodeMirror(file_content, extension);
+          tabs.add({
+            text: file.name,
+            cb: function(display) {
+              display.appendChild(html_editor.element);
+              html_editor.cm.refresh();
+              if (last_save_callback) {
+                document.body.removeEventListener("keydown", last_save_callback);
+              }
+              document.body.addEventListener("keydown", save_cur_file);
+              last_save_callback = save_cur_file;
+            },
+            id: file.rel_path
+          });
+          function save_cur_file(e) {
+            if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+              e.preventDefault();
+              treefm.write_file(file.rel_path, html_editor.cm.getValue(), function() {
+                iframe.src = iframe.src;
+              });
+            }
+          }
+        });
+      }
+    }
+  });
+
+  split.list[0].appendChild(treefm.element);
+  split.list[1].style.overflow = "hidden";
+  split.list[1].appendChild(tabs.element);
+
+} else {
+
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(31);
+var content = __webpack_require__(30);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -838,7 +881,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(2)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -855,10 +898,10 @@ if(false) {
 }
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(1)(undefined);
 // imports
 
 
@@ -869,23 +912,20 @@ exports.push([module.i, "body {\n  overflow: hidden;\n}\n\n.tools {\n  position:
 
 
 /***/ }),
-/* 32 */
-/***/ (function(module, exports) {
-
-module.exports = "<button class=\"html_btn\">&lt;&sol;&gt;</button>\n<button>.json</button>\n<button>.css</button>\n<button>{js}</button>\n";
-
-/***/ }),
-/* 33 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 
-__webpack_require__(34);
-var html = __webpack_require__(36);
+__webpack_require__(32);
+var html = __webpack_require__(34);
 
 
 var min_width = 181;
 var min_height = 65;
+
+var init_width = 680;
+var init_height = 360;
 
 module.exports = class {
   constructor(cfg) {
@@ -893,12 +933,15 @@ module.exports = class {
     this.element.innerHTML = html;
     this.element.style.minWidth = min_width+"px";
     this.element.style.minHeight = min_height+"px";
+    this.element.style.width = init_width+"px";
+    this.element.style.height = init_height+"px";
     this.element.classList.add('window_mod');
     this.element.classList.add('container_rgb');
     cfg.DOM.appendChild(this.element);
 
     this.visible = true;
     this.DOM = cfg.DOM;
+    this.resize_cb = cfg.resize_cb;
 
     var this_class = this;
 
@@ -1402,9 +1445,7 @@ module.exports = class {
       };
     }
 
-    make(this_class.element, '*', function() {
-
-    });
+    make(this_class.element, '*', cfg.resize_cb);
   }
 
   maximize() {
@@ -1427,6 +1468,8 @@ module.exports = class {
       this.element.removeChild(this.resize_controls);
 
       this.maximized = true;
+
+      this.resize_cb();
     }
   }
 
@@ -1445,6 +1488,8 @@ module.exports = class {
       this.resize_controls.style.display = "auto";
 
       this.maximized = false;
+
+      this.resize_cb();
     }
   }
 
@@ -1465,13 +1510,13 @@ module.exports = class {
 
 
 /***/ }),
-/* 34 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(35);
+var content = __webpack_require__(33);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -1479,7 +1524,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(2)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -1496,10 +1541,10 @@ if(false) {
 }
 
 /***/ }),
-/* 35 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(1)(undefined);
 // imports
 
 
@@ -1510,59 +1555,162 @@ exports.push([module.i, ".window_mod {\n  position: fixed;\n  top: 100px;\n  lef
 
 
 /***/ }),
-/* 36 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = "<header class=\"window_mod_header\">\n  <div class=\"window_mod_titlebar\">New Window</div>\n  <div class=\"window_mod_actions\">\n    <button class=\"window_mod_hide\">-</button>\n    <button class=\"window_mod_min_max_imize\">+</button>\n  </div>\n</header>\n<div class=\"window_mod_content\">\n\n</div>\n\n<div class=\"window_mod_resize_controls\">\n  <div class=\"resizeN resize\"></div>\n  <div class=\"resizeNE resize\"></div>\n  <div class=\"resizeE resize\"></div>\n  <div class=\"resizeSE resize\"></div>\n  <div class=\"resizeS resize\"></div>\n  <div class=\"resizeSW resize\"></div>\n  <div class=\"resizeW resize\"></div>\n  <div class=\"resizeNW resize\"></div>\n</div>\n";
 
 /***/ }),
-/* 37 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(38);
+__webpack_require__(36);
 
-module.exports = function() {
+module.exports = class {
+  constructor(dom, direction) {
+    this.element = document.createElement("div");
+    this.element.classList.add("split_ui");
+    dom.appendChild(this.element);
 
-  this.element = document.createElement('div');
-  this.element.classList.add('tabs_ui_container');
+    this.width = this.element.offsetWidth;
+    this.height = this.element.offsetHeight;
 
-  var list = this.list = document.createElement('div');
-  list.classList.add('tabs_ui_menu');
-  this.element.appendChild(list);
+    this.min_piece_width = 50;
+    this.min_piece_height = 50;
 
-  var display = this.display = document.createElement('div');
-  display.classList.add('tabs_ui_display');
-  display.style.height = "calc(100% - 15px)";
-  this.element.appendChild(display);
+    this.list = [];
+    this.direction = direction;
+  }
 
-  this.set = function(pages) {
-    this.pages = pages;
-    for (p=0;p<pages.length;p++) {
-      let page = pages[p];
+  split(pieces) {
+    if (this.direction == "horizontal") {
+      this.pieces = pieces;
+      var split_div_width = Math.floor(this.width/pieces);
+      for (var p = 0; p < pieces; p++) {
+        var piece_width = split_div_width;
+        if (p > 0) {
+          let resize_line = document.createElement("div");
+          resize_line.classList.add("split_ui_horizontal_line");
+          this.element.appendChild(resize_line);
+          piece_width -= 3;
 
-      var item = document.createElement('button');
-      item.innerHTML = page.text;
-      item.addEventListener("click", function(e) {
-        page.cb(function(element) {
-          display.innerHTML = "";
-          return display;
-        }());
-      });
+          var startX;
 
-      list.appendChild(item);
+          var this_class = this;
+
+          resize_line.addEventListener("mousedown", function(e) {
+            startX = e.clientX;
+            this_class.element.addEventListener('mousemove', resize_drag);
+          });
+
+          this.element.addEventListener('mouseup', function(e) {
+            this_class.element.removeEventListener('mousemove', resize_drag);
+          });
+
+          function resize_drag(e) {
+            var deltaX = e.clientX-startX;
+            startX = e.clientX;
+
+            var target_left = resize_line.previousSibling;
+            var target_right = resize_line.nextSibling;
+            if (target_left.offsetWidth+deltaX > 0 && target_right.offsetWidth-deltaX > 0) {
+              var left_width = target_left.offsetWidth+deltaX;
+              var right_width_dec = 0;
+              if (left_width < this_class.min_piece_width) {
+                right_width_dec = this_class.min_piece_width-left_width;
+                left_width = this_class.min_piece_width;
+              }
+
+              var right_width = target_right.offsetWidth-deltaX;
+              var left_width_dec = 0;
+              if (right_width < this_class.min_piece_width) {
+                left_width_dec = this_class.min_piece_width-right_width;
+                right_width = this_class.min_piece_width;
+              }
+
+              target_left.style.width = left_width-left_width_dec+"px";
+              target_right.style.width = right_width-right_width_dec+"px";
+            } else {
+              startX -= deltaX;
+            }
+          }
+        }
+        var split_div = document.createElement("div");
+        split_div.classList.add("split_ui_horizontal");
+        split_div.style.width = piece_width+"px";
+        this.element.appendChild(split_div);
+        this.list.push(split_div);
+      }
     }
-  };
+  }
+
+  auto_resize() {
+    var old_width = this.width;
+    this.width = this.element.offsetWidth;
+    var delta_width = this.width - old_width;
+    this.height = this.element.offsetHeight;
+
+    if (this.direction == "horizontal") {
+      var piece_delta_width = delta_width/this.pieces;
+      var next_delta = 0;
+      for (var p = 0; p < this.pieces; p++) {
+        var new_width;
+        if (piece_delta_width > 0) {
+          if (p == this.pieces-1) {
+            new_width = this.list[p].offsetWidth+Math.ceil(piece_delta_width);
+          } else {
+            new_width = this.list[p].offsetWidth+Math.floor(piece_delta_width);
+          }
+        } else if (piece_delta_width < 0) {
+          if (p == this.pieces-1) {
+            new_width = this.list[p].offsetWidth+Math.floor(piece_delta_width);
+          } else {
+            new_width = this.list[p].offsetWidth+Math.ceil(piece_delta_width);
+          }
+        } else {
+          new_width = this.list[p].offsetWidth;
+        }
+
+        this.list[p].style.width = new_width+"px";
+
+        if (new_width < this.min_piece_width) {
+          next_delta = this.min_piece_width-new_width;
+          new_width = this.min_piece_width;
+          this.list[p].style.width = new_width+"px";
+        } else {
+          this.list[p].style.width = new_width-next_delta+"px";
+          next_delta = 0;
+        }
+      }
+
+      if (next_delta > 0) {
+        for (var p = 0; p < this.pieces; p++) {
+          var new_width = this.list[p].offsetWidth-next_delta;
+
+          if (new_width < this.min_piece_width) {
+            next_delta = this.min_piece_width-new_width;
+            new_width = this.min_piece_width;
+            this.list[p].style.width = new_width+"px";
+          } else {
+            this.list[p].style.width = new_width+"px";
+            next_delta = 0;
+            break;
+          }
+        }
+      }
+    }
+  }
 }
 
 
 /***/ }),
-/* 38 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(39);
+var content = __webpack_require__(37);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -1570,7 +1718,558 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!./theme.css", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!./theme.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.split_ui {\n  width: 100%;\n  height: 100%;\n}\n\n.split_ui_horizontal {\n  display: inline-block;\n  overflow: auto;\n  height: 100%;\n}\n\n.split_ui_horizontal_line {\n  display: inline-block;\n  background-color: #000;\n  width: 3px;\n  height: 100%;\n  cursor: col-resize;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const XHR = __webpack_require__(3);
+const Dir = __webpack_require__(39);
+const ContextMenu = __webpack_require__(41);
+__webpack_require__(43);
+
+
+module.exports = class {
+  constructor(cfg) {
+    this.element = document.createElement("div");
+    this.element.classList.add("treefm");
+    this.file_cb = cfg.file_cb;
+
+    this.target = cfg.target;
+    this.dir = cfg.dir;
+
+    this.contextmenu = new ContextMenu();
+
+    var this_class = this;
+    XHR.get('treefm.io', {
+      target: cfg.target,
+      command: "read",
+      path: cfg.dir
+    }, function() {
+      var dir_tree = JSON.parse(this.responseText);
+      dir_tree.root = true;
+      dir_tree.padding_index = 0;
+      var root_dir = new Dir(dir_tree, this_class);
+      this_class.element.appendChild(root_dir.element);
+    });
+  }
+
+  read_file(file_path, cb) {
+    XHR.get('treefm.io', {
+      target: this.target,
+      command: "read",
+      path: file_path
+    }, function() {
+      var file_content = JSON.parse(this.responseText);
+      cb(file_content);
+    });
+  }
+
+  write_file(file_path, content, cb) {
+    XHR.get('treefm.io', {
+      target: this.target,
+      command: "write",
+      path: file_path,
+      data: content
+    }, function() {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+
+  rm_file(file_path, cb) {
+    XHR.get('treefm.io', {
+      target: this.target,
+      command: "rm",
+      path: file_path
+    }, function() {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+
+  mkdir(file_path, cb) {
+    XHR.get('treefm.io', {
+      target: this.target,
+      command: "mkdir",
+      path: file_path
+    }, function() {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+
+  rm_dir(file_path, cb) {
+    XHR.get('treefm.io', {
+      target: this.target,
+      command: "rmdir",
+      path: file_path
+    }, function() {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+
+  rename(file_path, new_path, cb) {
+    XHR.get('treefm.io', {
+      target: this.target,
+      command: "rename",
+      path: file_path,
+      data: new_path
+    }, function() {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+}
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {const File = __webpack_require__(40);
+
+var padding_left = 10;
+
+var Dir = module.exports = class {
+  constructor(data, treefm) {
+    this.element = document.createElement('div');
+    this.path = data.rel_path;
+    this.name = data.name;
+    this.padding_index = data.padding_index;
+
+    var this_class = this;
+
+    var name_div = document.createElement("div");
+    name_div.classList.add("treefm_item");
+    name_div.innerHTML = "▹ "+data.name;
+    name_div.style.paddingLeft = this.padding_index*padding_left+padding_left+"px";
+
+    name_div.addEventListener("click", function(e) {
+      if (content_div.displayed) {
+        var str = name_div.innerHTML;
+        name_div.innerHTML = "▹ "+str.substring(2);
+        content_div.style.display = "none";
+        content_div.displayed = false;
+      } else {
+        var str = name_div.innerHTML;
+        name_div.innerHTML = "▿ "+str.substring(2);
+        content_div.style.display = "block";
+        content_div.displayed = true;
+      }
+    });
+
+    name_div.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      var callbacks = {
+        new_file: function() {
+          content_div.style.display = "block";
+          content_div.displayed = true;
+
+          var name_input = document.createElement("input");
+          name_input.type = "text";
+          name_input.placeholder = "new file name";
+          content_div.appendChild(name_input);
+          name_input.focus();
+          treefm.contextmenu.hide();
+          name_input.addEventListener('keyup', function (e) {
+            if (e.keyCode == 13) {
+              var file_path = this_class.path+"/"+name_input.value;
+              treefm.write_file(file_path, "", function() {
+                var new_file = new File({
+                  name: name_input.value,
+                  rel_path: this_class.path+"/"+name_input.value,
+                  padding_index: this_class.padding_index+1,
+                  type: "txt"
+                }, treefm);
+                content_div.replaceChild(new_file.element, name_input);
+              });
+            }
+          });
+        },
+        new_folder: function() {
+          content_div.style.display = "block";
+          content_div.displayed = true;
+
+          var name_input = document.createElement("input");
+          name_input.type = "text";
+          name_input.placeholder = "new folder name";
+          content_div.appendChild(name_input);
+          name_input.focus();
+          treefm.contextmenu.hide();
+          name_input.addEventListener('keyup', function(e) {
+            if (e.keyCode == 13) {
+              var file_path = this_class.path+"/"+name_input.value;
+              treefm.mkdir(file_path, function() {
+                var new_file = new Dir({
+                  name: name_input.value,
+                  rel_path: this_class.path+"/"+name_input.value,
+                  type: "dir",
+                  padding_index: this_class.padding_index+1,
+                  content: []
+                }, treefm);
+                content_div.replaceChild(new_file.element, name_input);
+              });
+            }
+          });
+        },
+        rename: function() {
+          treefm.contextmenu.hide();
+          var name_input = document.createElement("input");
+          name_input.type = "text";
+          name_input.value = this_class.name;
+          this_class.element.replaceChild(name_input, name_div);
+          name_input.focus();
+          name_input.addEventListener('keyup', function(e) {
+            if (e.keyCode == 13) {
+              var dir_arr = this_class.path.split('/');
+              dir_arr.pop();
+              var file_path = dir_arr.join('/')+"/"+name_input.value;
+              treefm.rename(this_class.path, file_path, function() {
+                name_div.innerHTML = name_input.value;
+                this_class.element.replaceChild(name_div, name_input);
+              });
+            }
+          });
+        },
+        delete: function() {
+          treefm.contextmenu.hide();
+          treefm.rm_dir(this_class.path, function() {
+            this_class.element.parentNode.removeChild(this_class.element);
+          });
+        }
+      };
+      if (data.root) {
+        callbacks["rename"] = false;
+        callbacks["delete"] = false;
+      }
+      treefm.contextmenu.display(e.clientX, e.clientY, callbacks);
+
+      global.editor_window.element.addEventListener("click", hide_contextmenu);
+
+      function hide_contextmenu(e) {
+        treefm.contextmenu.hide();
+        global.editor_window.element.removeEventListener("click", hide_contextmenu);
+      }
+    });
+    this.element.appendChild(name_div);
+
+    var content_div = document.createElement("div");
+    content_div.displayed = false;
+    content_div.classList.add("treefm_dir_content");
+    for (var f = 0; f < data.content.length; f++) {
+      let child_file = data.content[f];
+      if (child_file.type == "dir") {
+        child_file.padding_index = this_class.padding_index+1;
+        var child_dir = new Dir(child_file, treefm);
+        content_div.appendChild(child_dir.element);
+      } else if (child_file.type == "txt") {
+        child_file.padding_index = this_class.padding_index+1;
+        var file = new File(child_file, treefm);
+        content_div.appendChild(file.element);
+      } else {
+        console.error("TreeFM: Unknown file type", child_file.type);
+      }
+    }
+
+    if (data.root) {
+      var str = name_div.innerHTML;
+      name_div.innerHTML = "▿ "+str.substring(2);
+      content_div.style.display = "block";
+      content_div.displayed = true;
+    }
+
+    this.element.appendChild(content_div);
+  }
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {
+var padding_left = 10;
+
+module.exports = class {
+  constructor(data, treefm) {
+    this.path = data.rel_path;
+    this.name = data.name;
+    this.padding_index = data.padding_index;
+
+    this.element = document.createElement("div");
+    this.element.innerHTML = "⋄ "+data.name;
+    this.element.style.paddingLeft = this.padding_index*padding_left+padding_left+"px";
+    this.element.classList.add("treefm_item");
+    this.element.addEventListener("click", function(e) {
+      treefm.file_cb(data);
+    });
+
+    var this_class = this;
+    this.element.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+
+      var callbacks = {
+        new_file: false,
+        new_folder: false,
+        rename: function() {
+          treefm.contextmenu.hide();
+          var name_input = document.createElement("input");
+          name_input.type = "text";
+          name_input.value = this_class.name;
+          this_class.element.parentNode.replaceChild(name_input, this_class.element);
+          name_input.focus();
+          name_input.addEventListener('keyup', function(e) {
+            if (e.keyCode == 13) {
+              var dir_arr = this_class.path.split('/');
+              dir_arr.pop();
+              var file_path = dir_arr.join('/')+"/"+name_input.value;
+              treefm.rename(this_class.path, file_path, function() {
+                this_class.element.innerHTML = name_input.value;
+                name_input.parentNode.replaceChild(this_class.element, name_input);
+              });
+            }
+          });
+        },
+        delete: function() {
+          treefm.contextmenu.hide();
+          treefm.rm_file(this_class.path, function() {
+            this_class.element.parentNode.removeChild(this_class.element);
+          });
+        }
+      };
+
+      treefm.contextmenu.display(e.clientX, e.clientY, callbacks);
+
+      global.editor_window.element.addEventListener("click", hide_contextmenu);
+
+      function hide_contextmenu(e) {
+        treefm.contextmenu.hide();
+        global.editor_window.element.removeEventListener("click", hide_contextmenu);
+      }
+    });
+  }
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var html = __webpack_require__(42);
+
+module.exports = class {
+  constructor() {
+    this.element = document.createElement('div');
+    this.element.classList.add("treefm_contexmenu");
+    document.body.appendChild(this.element);
+  }
+
+  display(x, y, callbacks) {
+    this.element.innerHTML = html;
+
+    for (let name in callbacks) {
+      var item = this.element.querySelector('div[name="'+name+'"]');
+      if (!callbacks[name]) {
+        item.style.display = "none";
+      } else {
+        item.addEventListener("click", function(e) {
+          callbacks[name]();
+        });
+      }
+    }
+
+    this.element.style.display = "block";
+    this.element.style.left = x+"px";
+    this.element.style.top = y+"px";
+  }
+
+  hide() {
+    this.element.style.display = "none";
+  }
+}
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports) {
+
+module.exports = "<div name=\"new_file\">New File</div>\n<div name=\"new_folder\">New Folder</div>\n<div name=\"rename\">Rename</div>\n<div name=\"delete\">Delete</div>\n";
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(44);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!./style.css", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!./style.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".treefm {\n  background-color: #111;\n  height: 100%;\n  font-size: 14px;\n  padding: 2px;\n  user-select: none;\n}\n\n.treefm_dir_content {\n  display: none;\n}\n\n.treefm_item {\n  color: #DDD;\n  padding: 2px 10px;\n  white-space: nowrap;\n}\n\n.treefm_item:hover, .treefm_contexmenu div:hover {\n  background-color: #1C1C1C;\n  cursor: default;\n}\n\n.treefm_contexmenu {\n  display: none;\n  position: fixed;\n  background-color: #090909;\n  color: #DDD;\n  cursor: default;\n  font-size: 15px;\n}\n\n.treefm_contexmenu div {\n  padding: 2px 10px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(46);
+
+var Tab = __webpack_require__(89);
+
+module.exports = class {
+  constructor() {
+    this.element = document.createElement('div');
+    this.element.classList.add('tabs_ui_container');
+
+    this.menu = document.createElement('div');
+    this.menu.classList.add('tabs_ui_menu');
+    this.element.appendChild(this.menu);
+
+    this.display_div = document.createElement('div');
+    this.display_div.classList.add('tabs_ui_display');
+    this.display_div.style.height = "calc(100% - 21px)";
+    this.element.appendChild(this.display_div);
+
+    this.list = [];
+  }
+
+  add(data) {
+    var tab = new Tab(data, this);
+    this.menu.appendChild(tab.element);
+    this.list.push(tab);
+    tab.display();
+  }
+
+  remove(tab) {
+    this.menu.removeChild(tab.element);
+    this.list.splice(this.list.indexOf(tab), 1);
+    if (tab.element == this.displayed_tab) {
+      if (this.list.length > 0) {
+        this.display(this.list[this.list.length-1]);
+      } else {
+        this.display_div.innerHTML = "";
+      }
+    }
+  }
+
+  select(id) {
+    var result = false;
+    for (var t = 0; t < this.list.length; t++) {
+      if (this.list[t].id == id) {
+        result = this.list[t];
+        break;
+      }
+    }
+    return result;
+  }
+
+  display(tab) {
+    var this_class = this;
+    tab.cb(function() {
+      if (this_class.displayed_tab) {
+        this_class.displayed_tab.classList.remove("tabs_ui_selected");
+      }
+      this_class.displayed_tab = tab.element;
+      this_class.displayed_tab.classList.add("tabs_ui_selected");
+
+      this_class.display_div.innerHTML = "";
+      return this_class.display_div;
+    }());
+  }
+}
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(47);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -1587,21 +2286,107 @@ if(false) {
 }
 
 /***/ }),
-/* 39 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(1)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, ".tabs_ui_container {\n  height: 100%;\n}\n\n.tabs_ui_container .tabs_ui_menu {\n  display: block;\n  margin: 0 auto;\n  list-style-type: none;\n  padding: 0;\n}\n\n.tabs_ui_display {\n  overflow: auto;\n}\n\n.tabs_ui_container .tabs_ui_menu button {\n  display: inline-block;\n  text-align: center;\n  text-decoration: none;\n  cursor: pointer;\n\n  -webkit-touch-callout: none; /* iOS Safari */\n  -webkit-user-select: none; /* Safari */\n   -khtml-user-select: none; /* Konqueror HTML */\n     -moz-user-select: none; /* Firefox */\n      -ms-user-select: none; /* Internet Explorer/Edge */\n          user-select: none; /* Non-prefixed version, currently\n                                supported by Chrome and Opera */\n}\n", ""]);
+exports.push([module.i, ".tabs_ui_container {\n  height: 100%;\n}\n\n.tabs_ui_container .tabs_ui_menu {\n  display: block;\n  margin: 0 auto;\n  list-style-type: none;\n  padding: 0;\n}\n\n.tabs_ui_display {\n  overflow: auto;\n}\n\n.tabs_ui_menu_item {\n  display: inline-block;\n  background-color: #111;\n  color: #DDD;\n\n  cursor: default;\n\n  -webkit-touch-callout: none; /* iOS Safari */\n  -webkit-user-select: none; /* Safari */\n   -khtml-user-select: none; /* Konqueror HTML */\n     -moz-user-select: none; /* Firefox */\n      -ms-user-select: none; /* Internet Explorer/Edge */\n          user-select: none; /* Non-prefixed version, currently\n                                supported by Chrome and Opera */\n}\n\n.tabs_ui_menu_item div {\n  display: inline-block;\n  padding: 3px 10px;\n  font-size: 14px;\n}\n\n.tabs_ui_menu_item button {\n  display: inline-block;\n  padding: 3px 5px;\n  font-size: 14px;\n  border: 0;\n  color: #DDD;\n  background-color: transparent;\n}\n\n.tabs_ui_menu_item div:hover, .tabs_ui_menu_item button:hover {\n  background-color: #222;\n}\n\n.tabs_ui_selected {\n  background-color: #151515;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 40 */
+/* 48 */,
+/* 49 */
+/***/ (function(module, exports) {
+
+module.exports = "<button class=\"editor_btn\">&lt;&sol;&gt;</button>\n";
+
+/***/ }),
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */
+/***/ (function(module, exports) {
+
+
+
+module.exports = class {
+  constructor(data, tabs) {
+    this.id = data.id;
+    this.cb = data.cb;
+    this.tabs = tabs;
+
+    this.element = document.createElement('div');
+    this.element.classList.add("tabs_ui_menu_item");
+
+    var text = document.createElement('div');
+    text.innerHTML = data.text;
+    this.element.appendChild(text);
+
+    var this_class = this;
+
+    text.addEventListener("click", function(e) {
+      this_class.display();
+    });
+
+    var close = document.createElement('button');
+    close.innerHTML = "⨯";
+    this.element.appendChild(close);
+
+    close.addEventListener("click", function(e) {
+      this_class.tabs.remove(this_class);
+    });
+  }
+
+  display() {
+    this.tabs.display(this);
+  }
+}
+
+
+/***/ }),
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1609,34 +2394,55 @@ exports.push([module.i, ".tabs_ui_container {\n  height: 100%;\n}\n\n.tabs_ui_co
 
 //require("./style.css");
 
-var XHR = __webpack_require__(1);
+var XHR = __webpack_require__(3);
 
 module.exports = class {
-  constructor(parent) {
+  constructor(text, mode) {
     this.element = document.createElement("div");
-    parent.appendChild(this.element);
+    this.element.style.height = "100%";
+
+  //  parent.appendChild(this.element);
 
     var textarea = document.createElement("textarea");
     this.element.appendChild(textarea);
 
     var this_class = this;
-    XHR.get('e/'+XHR.getParamByName('context'), null, function() {
-      textarea.innerHTML = this.responseText;
 
-      this_class.cm = CodeMirror.fromTextArea(textarea, {
-        lineNumbers: true,
-        theme: "base16-dark",
-        mode: "javascript",
-        indentWithTabs: true,
-        tabSize: 2,
-        autoCloseBrackets: true,
-        matchBrackets: true,
-        scrollbarStyle: "null",
-        smartIndent: false
-      });
-      this_class.cm.refresh();
-      parent.removeChild(this_class.element);
-    });
+    textarea.innerHTML = text;
+
+    var cfg = {
+      lineNumbers: true,
+      theme: "base16-dark",
+      indentWithTabs: true,
+      tabSize: 2,
+      scrollbarStyle: "null",
+      smartIndent: false
+  //  matchTags: true
+    };
+    switch (mode) {
+      case 'html':
+        cfg.mode = "htmlmixed";
+        cfg.autoCloseTags = true;
+    //  matchTags: true
+        break;
+      case 'css':
+        cfg.mode = "css";
+        cfg.autoCloseBrackets = true;
+        cfg.matchBrackets = true;
+        break;
+      case 'js':
+        cfg.mode = "javascript";
+        cfg.autoCloseBrackets = true;
+        cfg.matchBrackets = true;
+        break;
+      default:
+      cfg.mode = "htmlmixed";
+      cfg.autoCloseTags = true;
+  //  matchTags: true
+    }
+    console.log("mode:", cfg.mode);
+    this_class.cm = CodeMirror.fromTextArea(textarea, cfg);
+    this_class.cm.refresh();
   }
 }
 

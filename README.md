@@ -1,31 +1,25 @@
-# README #
+# CMBird #
 
 CMBird -  Content Management Bird
 
 A lightweight NodeJS based content management system that aims for flexibility, performance, stability and ease of use.
 
-### What is this repository for? ###
+### Installation ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+`npm install cmbird`
 
-### How do I get set up? ###
+Though you also need to install `PostgreSQL` database.
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+### Basic usage ###
 
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+```
+var CMS = require("cmbird");
+var cms = new CMS({
+  host : '127.0.0.1',
+  port : 9639,
+  db_user : 'postgres', // or any other database user
+  db_pwd: 'password',
+  pages_path : __dirname+"/pages",
+  templates_path : __dirname+"/templates"
+});
+```

@@ -1,6 +1,6 @@
 {
   "name": "cmbird",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Node.js based, highly configurable content management system",
   "main": "index.js",
   "repository": "https://github.com/Qualphey/CMBird.git",

@@ -12,7 +12,7 @@ Though you also need to install `PostgreSQL` database.
 
 ### Basic usage ###
 
-```
+```javascript
 var CMS = require("cmbird");
 var cms = new CMS({
   host : '127.0.0.1',

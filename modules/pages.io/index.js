@@ -22,8 +22,9 @@ var default_css = fs.readFileSync(__dirname+'/default_templates/theme.css', 'utf
 var default_js = fs.readFileSync(__dirname+'/default_templates/main.js', 'utf8');
 
 module.exports = class {
-  constructor(app, templates) {
+  constructor(app, db, templates) {
     this.app = app;
+    this.db = db;
 
     var page_dir = this.page_dir = global.cmb_config.pages_path;
     var template_dir = global.cmb_config.templates_path;
@@ -106,6 +107,31 @@ module.exports = class {
 
   }
 
+  async compile_context(context) {
+    if (context.posts) {
+      var tags = context.posts.split(" ");
+      var result = await this.db.select("*", "posts", {
+        tags: tags
+      });
+
+      context.posts = result;
+    }
+    if (context.menu) {
+      var names = context.menu.split(" ");
+      console.log(names);
+      context.menu = [];
+      var page_list = this.all();
+      for (var p = 0; p < page_list.length; p++) {
+        for (var n = 0; n < names.length; n++) {
+          if (page_list[p] == names[n]) {
+            context.menu.push(names[n]);
+          }
+        }
+      }
+    }
+    return context;
+  }
+
   all() {
     var list = [];
     var this_class = this;
@@ -115,6 +141,11 @@ module.exports = class {
         list.push(file);
       }
     });
+
+    list.sort(function(a, b) {
+         return fs.statSync(path.resolve(this_class.page_dir, a)).mtime.getTime() - fs.statSync(path.resolve(this_class.page_dir, b)).mtime.getTime();
+     });
+
     return list;
   }
 }

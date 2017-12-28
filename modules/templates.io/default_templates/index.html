@@ -4,19 +4,25 @@
     <meta charset="UTF-8">
     <title>{{ title }}</title>
 
-    {% for style_link in style_links %}
-      <link href="{{ style_link }}" rel="stylesheet">
-    {% endfor %}
-
+    <link href="theme.css" rel="stylesheet">
 	</head>
   <body>
-    <div>
-      <h2>{{ title }}</h2>
-      <ul>
-        {% for menu_item in menu_items %}
-          <li><a href="{{ menu_item.href }}">{{ menu_item.text }}</a></li>
-        {% endfor %}
-      </ul>
-    </div>
+		<header>
+			<h2>{{ title }}</h2>
+			<div>
+				{% for item in menu %}
+				<a href="/p/{{ item }}">{{ item }}</a>
+				{% endfor %}
+			</div>
+		</header>
+
+		<div class="posts">
+			{% for post in posts %}
+			<div class="post">
+				<h3>{{ post.data.title }}</h3>
+				<p>{{ post.data.content }}</p>
+			</div>
+			{% endfor %}
+		</div>
   </body>
 </html>

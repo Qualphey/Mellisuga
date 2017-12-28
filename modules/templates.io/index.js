@@ -104,6 +104,11 @@ module.exports = class {
         list.push(file);
       }
     });
+
+    list.sort(function(a, b) {
+      return fs.statSync(path.resolve(this_class.template_dir, a)).mtime.getTime() - fs.statSync(path.resolve(this_class.page_dir, b)).mtime.getTime();
+    });
+
     return list;
   }
 }

@@ -6,7 +6,6 @@ var bodyParser = require('body-parser')
 
 var express = require('express');
 
-var nunjucks = require('nunjucks');
 
 module.exports = class {
     constructor(app, server, io) {
@@ -46,12 +45,6 @@ module.exports = class {
         app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
           extended: true
         }));
-
-        nunjucks.configure([global.cmb_config.pages_path, global.cmb_config.templates_path], {
-          autoescape: true,
-          express: app,
-          watch: true
-        });
 
   /*      app.set('view engine', 'html');
         app.set('views', global.cmb_config.pages_path)

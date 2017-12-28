@@ -23,3 +23,5 @@ var cms = new CMS({
   templates_path : __dirname+"/templates"
 });
 ```
+
+#### WARNING: This is an experimental version. There might be serious security vulnerabilities and bugs. Reported issues and calaborators appreciated. ####

@@ -87,10 +87,7 @@ module.exports = class {
       readdir(file_tree);
       function readdir(dir) {
         var file_list = fs.readdirSync(dir.path);
-        file_list.sort(function(a, b) {
-          return fs.statSync(path.resolve(dir.path, a)).mtime.getTime() - fs.statSync(path.resolve(dir.path, b)).mtime.getTime();
-        });
-
+        file_list.sort();
         file_list.sort(function(a, b) {
           var aIsDir = fs.statSync(dir.path + "/" + a).isDirectory();
           var bIsDir = fs.statSync(dir.path + "/" + b).isDirectory();

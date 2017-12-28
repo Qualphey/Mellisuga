@@ -715,14 +715,10 @@ module.exports = function (css) {
 /* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {__webpack_require__(27)
+__webpack_require__(27)
 
 const XHR = __webpack_require__(1);
-const WindowUI = __webpack_require__(29);
-const SplitUI = __webpack_require__(33);
-const TreeFM = __webpack_require__(36);
-const TabsUI = __webpack_require__(43);
-const CodeMirror = __webpack_require__(47);
+const Editor = __webpack_require__(94);
 
 const template = XHR.getParamByName('template');
 const page = XHR.getParamByName('page');
@@ -732,44 +728,50 @@ tools.classList.add("tools");
 tools.innerHTML = __webpack_require__(48);
 document.body.appendChild(tools);
 
-var editor_win = new WindowUI({
-  DOM: document.body,
-  title: "Editor",
-  resize_cb: function() {
-    split.auto_resize();
-  }
-});
-
 var editor_btn = tools.querySelector(".editor_btn");
-editor_btn.addEventListener("click", function(e) {
-  if (editor_win.visible) {
-    editor_win.hide();
-  } else {
-    editor_win.dipslay();
+function editor_replaced(n_window) {
+  editor_btn.removeEventListener("click", listener);
+  editor_btn.addEventListener("click", listener);
+  function listener(e) {
+    if (n_window.visible) {
+      n_window.hide();
+    } else {
+      n_window.dipslay();
+    }
   }
-});
-
-global.editor_window = editor_win;
-
-editor_win.content.style.overflow = "hidden";
-
-var split = new SplitUI(editor_win.content, "horizontal");
-split.split(2);
-
-
-var tabs = new TabsUI();
-
-var last_save_callback = false;
-
-function file_cb(file) {
-
 }
 
+var iframe = document.getElementById("cmb_page_display");
+var target;
 if (template) {
-  var iframe = document.getElementById("cmb_page_display");
   iframe.src = 't/'+template;
+  target = "templates";
+} else if (page) {
+  iframe.src = '/p/'+page;
+  target = "pages";
+}
 
-  var treefm = new TreeFM({
+function firstLoad() {
+  var editor = new Editor(target, iframe.contentWindow.location.pathname, iframe);
+  editor_replaced(editor.window);
+  iframe.removeEventListener("load", firstLoad);
+
+  var last_pathname = iframe.contentWindow.location.pathname;
+  iframe.addEventListener("load", function(e) {
+    var new_pathname = iframe.contentWindow.location.pathname;
+    console.log(last_pathname, new_pathname);
+    console.log(last_pathname != new_pathname);
+    if (last_pathname != new_pathname) {
+      editor.destroy();
+      editor = new Editor(target, iframe.contentWindow.location.pathname, iframe);
+      editor_replaced(editor.window);
+    }
+    last_pathname = new_pathname;
+  });
+}
+iframe.addEventListener("load", firstLoad);
+
+/*  var treefm = new TreeFM({
     target: "templates",
     dir: template,
     file_cb: function(file) {
@@ -811,58 +813,8 @@ if (template) {
   split.list[0].appendChild(treefm.element);
   split.list[1].style.overflow = "hidden";
   split.list[1].appendChild(tabs.element);
-} else if (page) {
-  var iframe = document.getElementById("cmb_page_display");
-  iframe.src = '/p/'+page;
+  */
 
-  var treefm = new TreeFM({
-    target: "pages",
-    dir: page,
-    file_cb: function(file) {
-      console.log(file);
-      var tab = tabs.select(file.rel_path);
-      if (tab) {
-        tab.display();
-      } else {
-        treefm.read_file(file.rel_path, function(file_content) {
-          var extension = file.rel_path.substr(file.rel_path.lastIndexOf('.')+1);
-          if (extension == "json") extension = "js";
-          var html_editor = new CodeMirror(file_content, extension);
-          tabs.add({
-            text: file.name,
-            cb: function(display) {
-              display.appendChild(html_editor.element);
-              html_editor.cm.refresh();
-              if (last_save_callback) {
-                document.body.removeEventListener("keydown", last_save_callback);
-              }
-              document.body.addEventListener("keydown", save_cur_file);
-              last_save_callback = save_cur_file;
-            },
-            id: file.rel_path
-          });
-          function save_cur_file(e) {
-            if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-              e.preventDefault();
-              treefm.write_file(file.rel_path, html_editor.cm.getValue(), function() {
-                iframe.src = iframe.src;
-              });
-            }
-          }
-        });
-      }
-    }
-  });
-
-  split.list[0].appendChild(treefm.element);
-  split.list[1].style.overflow = "hidden";
-  split.list[1].appendChild(tabs.element);
-
-} else {
-
-}
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 27 */
@@ -1504,6 +1456,10 @@ module.exports = class {
       this.visible = false;
     }
   }
+
+  destroy() {
+    this.element.parentNode.removeChild(this.element);
+  }
 }
 
 
@@ -1768,6 +1724,8 @@ module.exports = class {
     this.contextmenu = new ContextMenu();
 
     var this_class = this;
+
+    console.log(cfg.target, cfg.dir);
     XHR.get('treefm.io', {
       target: cfg.target,
       command: "read",
@@ -2404,6 +2362,146 @@ module.exports = class {
 /***/ (function(module, exports) {
 
 module.exports = "<button class=\"editor_btn\">&lt;&sol;&gt;</button>\n";
+
+/***/ }),
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {const XHR = __webpack_require__(1);
+const WindowUI = __webpack_require__(29);
+const SplitUI = __webpack_require__(33);
+const TreeFM = __webpack_require__(36);
+const TabsUI = __webpack_require__(43);
+const CodeMirror = __webpack_require__(47);
+
+const template_prefix = "/cmb_admin/t/";
+const page_prefix = "/p/";
+
+module.exports = class {
+  constructor(target, pathname, iframe) {
+    this.window = new WindowUI({
+      DOM: document.body,
+      title: "Editor",
+      resize_cb: function() {
+        split.auto_resize();
+      }
+    });
+    global.editor_window = this.window;
+    this.window.content.style.overflow = "hidden";
+
+    var split = new SplitUI(this.window.content, "horizontal");
+    split.split(2);
+
+    var tabs = new TabsUI();
+
+    var last_save_callback = false;
+
+    var dir = pathname;
+
+    if (dir.startsWith(template_prefix)) {
+      dir = dir.substring(template_prefix.length);
+    } else if (dir.startsWith(page_prefix)) {
+      dir = dir.substring(page_prefix.length);
+    }
+
+
+
+    var treefm = new TreeFM({
+      target: target,
+      dir: dir,
+      file_cb: function(file) {
+        console.log(file);
+        var tab = tabs.select(file.rel_path);
+        if (tab) {
+          tab.display();
+        } else {
+          treefm.read_file(file.rel_path, function(file_content) {
+            var extension = file.rel_path.substr(file.rel_path.lastIndexOf('.')+1);
+            if (extension == "json") extension = "js";
+            var html_editor = new CodeMirror(file_content, extension);
+            tabs.add({
+              text: file.name,
+              cb: function(display) {
+                display.appendChild(html_editor.element);
+                html_editor.cm.refresh();
+                if (last_save_callback) {
+                  document.body.removeEventListener("keydown", last_save_callback);
+                }
+                document.body.addEventListener("keydown", save_cur_file);
+                last_save_callback = save_cur_file;
+              },
+              id: file.rel_path
+            });
+            function save_cur_file(e) {
+              if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+                e.preventDefault();
+                treefm.write_file(file.rel_path, html_editor.cm.getValue(), function() {
+                  iframe.contentWindow.location.replace(pathname);
+                });
+              }
+            }
+          });
+        }
+      }
+    });
+
+    split.list[0].appendChild(treefm.element);
+    split.list[1].style.overflow = "hidden";
+    split.list[1].appendChild(tabs.element);
+
+  }
+
+  destroy() {
+    this.window.destroy();
+  }
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ })
 /******/ ]);

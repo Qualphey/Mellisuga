@@ -589,4 +589,8 @@ module.exports = class {
       this.visible = false;
     }
   }
+
+  destroy() {
+    this.element.parentNode.removeChild(this.element);
+  }
 }

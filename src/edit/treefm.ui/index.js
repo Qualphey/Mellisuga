@@ -16,6 +16,8 @@ module.exports = class {
     this.contextmenu = new ContextMenu();
 
     var this_class = this;
+
+    console.log(cfg.target, cfg.dir);
     XHR.get('treefm.io', {
       target: cfg.target,
       command: "read",

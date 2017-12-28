@@ -143,7 +143,7 @@ module.exports = class {
     });
 
     list.sort(function(a, b) {
-      return fs.statSync(path.resolve(this_class.page_dir, a)).mtime.getTime() - fs.statSync(path.resolve(this_class.page_dir, b)).mtime.getTime();
+      return fs.statSync(path.resolve(this_class.page_dir, a)).birthtime.getTime() - fs.statSync(path.resolve(this_class.page_dir, b)).birthtime.getTime();
     });
 
     return list;

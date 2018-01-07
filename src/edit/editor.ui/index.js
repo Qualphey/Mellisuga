@@ -1,12 +1,10 @@
 const XHR = require("../../utils/xhr.js");
 const WindowUI = require("../window.ui/index.js");
 const SplitUI = require("../split.ui/index.js");
-const TreeFM = require("../treefm.ui");
-const TabsUI = require("../tabs.ui/index.js");
-const CodeMirror = require("../codemirror.ui/index.js");
 
-const template_prefix = "/cmb_admin/t/";
-const page_prefix = "/p/";
+require("./theme.css")
+
+const Session = require("./session.js");
 
 module.exports = class {
   constructor(target, pathname, iframe) {
@@ -20,66 +18,39 @@ module.exports = class {
     global.editor_window = this.window;
     this.window.content.style.overflow = "hidden";
 
-    var split = new SplitUI(this.window.content, "horizontal");
+    var split = this.split = new SplitUI(this.window.content, "horizontal");
     split.split(2);
 
-    var tabs = new TabsUI();
+    var global_local_switch = document.createElement("button");
+    global_local_switch.innerHTML = "Global";
+    global_local_switch.classList.add('global_local_switch');
+    this.split.list[0].appendChild(global_local_switch);
 
-    var last_save_callback = false;
+    var local_session = new Session(target, pathname, iframe, pathname);
+    this.append_session_elements(local_session);
+    var global_session = new Session("globals", ".", iframe, pathname);
 
-    var dir = pathname;
-
-    if (dir.startsWith(template_prefix)) {
-      dir = dir.substring(template_prefix.length);
-    } else if (dir.startsWith(page_prefix)) {
-      dir = dir.substring(page_prefix.length);
-    }
-
-
-
-    var treefm = new TreeFM({
-      target: target,
-      dir: dir,
-      file_cb: function(file) {
-        console.log(file);
-        var tab = tabs.select(file.rel_path);
-        if (tab) {
-          tab.display();
-        } else {
-          treefm.read_file(file.rel_path, function(file_content) {
-            var extension = file.rel_path.substr(file.rel_path.lastIndexOf('.')+1);
-            if (extension == "json") extension = "js";
-            var html_editor = new CodeMirror(file_content, extension);
-            tabs.add({
-              text: file.name,
-              cb: function(display) {
-                display.appendChild(html_editor.element);
-                html_editor.cm.refresh();
-                if (last_save_callback) {
-                  document.body.removeEventListener("keydown", last_save_callback);
-                }
-                document.body.addEventListener("keydown", save_cur_file);
-                last_save_callback = save_cur_file;
-              },
-              id: file.rel_path
-            });
-            function save_cur_file(e) {
-              if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-                e.preventDefault();
-                treefm.write_file(file.rel_path, html_editor.cm.getValue(), function() {
-                  iframe.contentWindow.location.replace(pathname);
-                });
-              }
-            }
-          });
-        }
+    var this_class = this;
+    global_local_switch.addEventListener("click", function(e) {
+      if (global_local_switch.innerHTML == "Global") {
+        local_session.destroy();
+        this_class.append_session_elements(global_session);
+        global_local_switch.innerHTML = "Local";
+      } else {
+        global_session.destroy();
+        this_class.append_session_elements(local_session);
+        global_local_switch.innerHTML = "Global";
       }
     });
+  }
 
-    split.list[0].appendChild(treefm.element);
-    split.list[1].style.overflow = "hidden";
-    split.list[1].appendChild(tabs.element);
+  append_session_elements(session) {
+    var treefm = session.treefm;
+    var tabs = session.tabs;
 
+    this.split.list[0].appendChild(treefm.element);
+    this.split.list[1].style.overflow = "hidden";
+    this.split.list[1].appendChild(tabs.element);
   }
 
   destroy() {

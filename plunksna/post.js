@@ -1,32 +1,41 @@
 
 module.exports = class {
   constructor(db, config) {
-    this.db = db;
+    this.table = new db.Table('posts', {
+      arrays: ['tags'],
+      props: ['title']
+    });
     this.config = config;
   }
 
+  async init() {
+    await this.table.init();
+  }
+
   async all() {
-    return await this.db.select("*", "posts");
+    return await this.table.all();
   }
 
   async select(tags) {
-    return await this.db.select("*", "posts", {
-      tags: tags
-    });
+    return await this.table.select_by_array("tags", tags);
   };
 
+  async select_by_title(title) {
+    return await this.table.select_by_property('title', title)
+  }
+
   async create(data) {
-    return await this.db.insert("posts(data)", [data]);
+    return await this.table.insert(data);
   }
 
   async edit(data) {
     var id = data.id;
     delete data.id;
-    await this.db.update("posts", { data: data }, { id: id });
+    await this.table.update(data, id);
     console.log("post created");
   }
 
   async delete(data) {
-    await this.db.delete("posts", { id: data.id });
+    await this.table.delete(data.id);
   }
 }

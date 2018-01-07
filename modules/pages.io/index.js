@@ -22,9 +22,9 @@ var default_css = fs.readFileSync(__dirname+'/default_templates/theme.css', 'utf
 var default_js = fs.readFileSync(__dirname+'/default_templates/main.js', 'utf8');
 
 module.exports = class {
-  constructor(app, db, templates) {
+  constructor(app, posts, templates) {
     this.app = app;
-    this.db = db;
+    this.posts = posts;
 
     var page_dir = this.page_dir = global.cmb_config.pages_path;
     var template_dir = global.cmb_config.templates_path;
@@ -110,9 +110,7 @@ module.exports = class {
   async compile_context(context) {
     if (context.posts) {
       var tags = context.posts.split(" ");
-      var result = await this.db.select("*", "posts", {
-        tags: tags
-      });
+      var result = await this.posts.select(tags);
 
       context.posts = result;
     }

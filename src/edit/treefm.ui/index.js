@@ -108,4 +108,8 @@ module.exports = class {
       };
     });
   }
+
+  destroy() {
+    this.element.parentNode.removeChild(this.element);
+  }
 }

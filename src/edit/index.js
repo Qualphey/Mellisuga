@@ -1,4 +1,4 @@
-require("./style.css")
+require("./theme.css")
 
 const XHR = require("../utils/xhr.js");
 const Editor = require("./editor.ui/index.js");

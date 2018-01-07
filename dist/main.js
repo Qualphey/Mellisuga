@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 49);
+/******/ 	return __webpack_require__(__webpack_require__.s = 53);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -605,7 +605,7 @@ function updateLink (link, options, obj) {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(53);
+exports = module.exports = __webpack_require__(57);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -785,7 +785,7 @@ function localstorage() {
   } catch (e) {}
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(56)))
 
 /***/ }),
 /* 5 */
@@ -964,15 +964,15 @@ Emitter.prototype.hasListeners = function(event){
  * Module dependencies.
  */
 
-var keys = __webpack_require__(62);
+var keys = __webpack_require__(66);
 var hasBinary = __webpack_require__(14);
-var sliceBuffer = __webpack_require__(63);
-var after = __webpack_require__(64);
-var utf8 = __webpack_require__(65);
+var sliceBuffer = __webpack_require__(67);
+var after = __webpack_require__(68);
+var utf8 = __webpack_require__(69);
 
 var base64encoder;
 if (global && global.ArrayBuffer) {
-  base64encoder = __webpack_require__(67);
+  base64encoder = __webpack_require__(71);
 }
 
 /**
@@ -1030,7 +1030,7 @@ var err = { type: 'error', data: 'parser error' };
  * Create a blob api even for blob builder when vendor prefixes exist
  */
 
-var Blob = __webpack_require__(68);
+var Blob = __webpack_require__(72);
 
 /**
  * Encodes a packet.
@@ -1731,7 +1731,7 @@ module.exports = function (css) {
 var debug = __webpack_require__(4)('socket.io-parser');
 var Emitter = __webpack_require__(5);
 var hasBin = __webpack_require__(14);
-var binary = __webpack_require__(56);
+var binary = __webpack_require__(60);
 var isBuf = __webpack_require__(15);
 
 /**
@@ -2131,7 +2131,7 @@ function error() {
 
 /* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 
-var hasCORS = __webpack_require__(60);
+var hasCORS = __webpack_require__(64);
 
 module.exports = function (opts) {
   var xdomain = opts.xdomain;
@@ -2387,7 +2387,7 @@ module.exports = function parseuri(str) {
  * Module requirements.
  */
 
-var isArray = __webpack_require__(55);
+var isArray = __webpack_require__(59);
 
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
@@ -2475,7 +2475,7 @@ function isBuf(obj) {
  * Module dependencies.
  */
 
-var eio = __webpack_require__(58);
+var eio = __webpack_require__(62);
 var Socket = __webpack_require__(21);
 var Emitter = __webpack_require__(5);
 var parser = __webpack_require__(10);
@@ -2483,7 +2483,7 @@ var on = __webpack_require__(22);
 var bind = __webpack_require__(23);
 var debug = __webpack_require__(4)('socket.io-client:manager');
 var indexOf = __webpack_require__(20);
-var Backoff = __webpack_require__(73);
+var Backoff = __webpack_require__(77);
 
 /**
  * IE6+ hasOwnProperty
@@ -3054,9 +3054,9 @@ Manager.prototype.onreconnect = function () {
  */
 
 var XMLHttpRequest = __webpack_require__(11);
-var XHR = __webpack_require__(61);
-var JSONP = __webpack_require__(69);
-var websocket = __webpack_require__(70);
+var XHR = __webpack_require__(65);
+var JSONP = __webpack_require__(73);
+var websocket = __webpack_require__(74);
 
 /**
  * Export transports.
@@ -3457,7 +3457,7 @@ module.exports = function(arr, obj){
 
 var parser = __webpack_require__(10);
 var Emitter = __webpack_require__(5);
-var toArray = __webpack_require__(72);
+var toArray = __webpack_require__(76);
 var on = __webpack_require__(22);
 var bind = __webpack_require__(23);
 var debug = __webpack_require__(4)('socket.io-client:socket');
@@ -3936,7 +3936,7 @@ module.exports = function(obj, fn){
 "use strict";
 
 
-var TR = __webpack_require__(77);
+var TR = __webpack_require__(81);
 
 module.exports = class {
   constructor() {
@@ -4028,22 +4028,26 @@ module.exports = class {
 /* 46 */,
 /* 47 */,
 /* 48 */,
-/* 49 */
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var config = global.config = {
   admin_path : "/cmb_admin"
 }
 
-var socket = global.socket = __webpack_require__(50)('http://localhost:9639');
+var socket = global.socket = __webpack_require__(54)('http://localhost:9639');
 
 var templates_div = document.createElement('div');
 document.body.appendChild(templates_div);
-var TemplatesUI = new (__webpack_require__(74))(templates_div);
+var TemplatesUI = new (__webpack_require__(78))(templates_div);
 
 var pages_div = document.createElement('div');
 document.body.appendChild(pages_div);
-var PagesUI = new (__webpack_require__(81))(pages_div);
+var PagesUI = new (__webpack_require__(85))(pages_div);
 /*
 var pages_div = document.createElement('div');
 document.body.appendChild(pages_div);
@@ -4051,7 +4055,7 @@ var PagesUI = new (require('./pages.ui/index.js'))(pages_div);
 */
 var posts_div = document.createElement('div');
 document.body.appendChild(posts_div);
-var PostsUI = new (__webpack_require__(87))(posts_div);
+var PostsUI = new (__webpack_require__(91))(posts_div);
 /*
 var ttb = document.getElementById('tt');
 ttb.addEventListener('click', function(e) {
@@ -4062,7 +4066,7 @@ ttb.addEventListener('click', function(e) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 50 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -4070,7 +4074,7 @@ ttb.addEventListener('click', function(e) {
  * Module dependencies.
  */
 
-var url = __webpack_require__(51);
+var url = __webpack_require__(55);
 var parser = __webpack_require__(10);
 var Manager = __webpack_require__(16);
 var debug = __webpack_require__(4)('socket.io-client');
@@ -4162,7 +4166,7 @@ exports.Socket = __webpack_require__(21);
 
 
 /***/ }),
-/* 51 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -4244,7 +4248,7 @@ function url (uri, loc) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 52 */
+/* 56 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -4434,7 +4438,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 53 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -4450,7 +4454,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(54);
+exports.humanize = __webpack_require__(58);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -4642,7 +4646,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 54 */
+/* 58 */
 /***/ (function(module, exports) {
 
 /**
@@ -4800,7 +4804,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 55 */
+/* 59 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -4811,7 +4815,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 56 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -4820,7 +4824,7 @@ module.exports = Array.isArray || function (arr) {
  * Module requirements
  */
 
-var isArray = __webpack_require__(57);
+var isArray = __webpack_require__(61);
 var isBuf = __webpack_require__(15);
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
@@ -4959,7 +4963,7 @@ exports.removeBlobs = function(data, callback) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 57 */
+/* 61 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -4970,11 +4974,11 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 58 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-module.exports = __webpack_require__(59);
+module.exports = __webpack_require__(63);
 
 /**
  * Exports parser
@@ -4986,7 +4990,7 @@ module.exports.parser = __webpack_require__(6);
 
 
 /***/ }),
-/* 59 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -5736,7 +5740,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 60 */
+/* 64 */
 /***/ (function(module, exports) {
 
 
@@ -5759,7 +5763,7 @@ try {
 
 
 /***/ }),
-/* 61 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -6179,7 +6183,7 @@ function unloadHandler () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 62 */
+/* 66 */
 /***/ (function(module, exports) {
 
 
@@ -6204,7 +6208,7 @@ module.exports = Object.keys || function keys (obj){
 
 
 /***/ }),
-/* 63 */
+/* 67 */
 /***/ (function(module, exports) {
 
 /**
@@ -6239,7 +6243,7 @@ module.exports = function(arraybuffer, start, end) {
 
 
 /***/ }),
-/* 64 */
+/* 68 */
 /***/ (function(module, exports) {
 
 module.exports = after
@@ -6273,7 +6277,7 @@ function noop() {}
 
 
 /***/ }),
-/* 65 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/utf8js v2.1.2 by @mathias */
@@ -6531,10 +6535,10 @@ function noop() {}
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(66)(module), __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(70)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 66 */
+/* 70 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -6562,7 +6566,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 67 */
+/* 71 */
 /***/ (function(module, exports) {
 
 /*
@@ -6635,7 +6639,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 68 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -6738,7 +6742,7 @@ module.exports = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 69 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -6976,7 +6980,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 70 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -6993,7 +6997,7 @@ var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(71);
+    NodeWebSocket = __webpack_require__(75);
   } catch (e) { }
 }
 
@@ -7269,13 +7273,13 @@ WS.prototype.check = function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 71 */
+/* 75 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 72 */
+/* 76 */
 /***/ (function(module, exports) {
 
 module.exports = toArray
@@ -7294,7 +7298,7 @@ function toArray(list, index) {
 
 
 /***/ }),
-/* 73 */
+/* 77 */
 /***/ (function(module, exports) {
 
 
@@ -7385,20 +7389,20 @@ Backoff.prototype.setJitter = function(jitter){
 
 
 /***/ }),
-/* 74 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 const XHR = __webpack_require__(1);
-const Template = __webpack_require__(75);
+const Template = __webpack_require__(79);
 
 
 var GridUI = __webpack_require__(24);
 
-__webpack_require__(78);
-var html = __webpack_require__(80);
+__webpack_require__(82);
+var html = __webpack_require__(84);
 
 module.exports = class {
   constructor(div) {
@@ -7472,7 +7476,7 @@ module.exports = class {
 
 
 /***/ }),
-/* 75 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7480,7 +7484,7 @@ module.exports = class {
 
 const XHR = __webpack_require__(1);
 
-var html = __webpack_require__(76);
+var html = __webpack_require__(80);
 
 module.exports = class {
   constructor(name, table) {
@@ -7537,13 +7541,13 @@ module.exports = class {
 
 
 /***/ }),
-/* 76 */
+/* 80 */
 /***/ (function(module, exports) {
 
 module.exports = "<table>\n  <tr>\n    <td class=\"page_name\" colspan=\"2\">\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <button class=\"edit_btn\">/</a>\n    </td>\n    <td>\n      <button class=\"del_btn\">X</a>\n    </td>\n  </tr>\n</table>\n";
 
 /***/ }),
-/* 77 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7578,13 +7582,13 @@ module.exports = class {
 
 
 /***/ }),
-/* 78 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(79);
+var content = __webpack_require__(83);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -7609,7 +7613,7 @@ if(false) {
 }
 
 /***/ }),
-/* 79 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(undefined);
@@ -7623,26 +7627,26 @@ exports.push([module.i, ".color_wrap {\n  background-color: #333;\n  width: 960p
 
 
 /***/ }),
-/* 80 */
+/* 84 */
 /***/ (function(module, exports) {
 
 module.exports = "\n<div class=\"color_wrap\">\n  <h2>Templates</h2>\n</div>\n<div class=\"list_display\">\n</div>\n";
 
 /***/ }),
-/* 81 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 const XHR = __webpack_require__(1);
-const Page = __webpack_require__(82);
+const Page = __webpack_require__(86);
 
 
 var GridUI = __webpack_require__(24);
 
-__webpack_require__(84);
-var html = __webpack_require__(86);
+__webpack_require__(88);
+var html = __webpack_require__(90);
 
 module.exports = class {
   constructor(div, templates) {
@@ -7742,7 +7746,7 @@ module.exports = class {
 
 
 /***/ }),
-/* 82 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7750,7 +7754,7 @@ module.exports = class {
 
 const XHR = __webpack_require__(1);
 
-var html = __webpack_require__(83);
+var html = __webpack_require__(87);
 
 module.exports = class {
   constructor(name, table) {
@@ -7807,19 +7811,19 @@ module.exports = class {
 
 
 /***/ }),
-/* 83 */
+/* 87 */
 /***/ (function(module, exports) {
 
 module.exports = "<table>\n  <tr>\n    <td class=\"page_name\" colspan=\"2\">\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <button class=\"edit_btn\">/</a>\n    </td>\n    <td>\n      <button class=\"del_btn\">X</a>\n    </td>\n  </tr>\n</table>\n";
 
 /***/ }),
-/* 84 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(85);
+var content = __webpack_require__(89);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -7844,7 +7848,7 @@ if(false) {
 }
 
 /***/ }),
-/* 85 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(undefined);
@@ -7858,23 +7862,23 @@ exports.push([module.i, ".pages {\n  margin-top: 40px;\n}\n.color_wrap {\n  back
 
 
 /***/ }),
-/* 86 */
+/* 90 */
 /***/ (function(module, exports) {
 
 module.exports = "\n<div class=\"color_wrap\">\n  <h2>Pages</h2>\n</div>\n<div class=\"list_display\">\n</div>\n";
 
 /***/ }),
-/* 87 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
 const XHR = __webpack_require__(1);
-const Post = __webpack_require__(88);
+const Post = __webpack_require__(92);
 
-__webpack_require__(91);
-var html = __webpack_require__(93);
+__webpack_require__(95);
+var html = __webpack_require__(97);
 
 module.exports = class {
   constructor(div) {
@@ -7961,7 +7965,7 @@ module.exports = class {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 88 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7969,8 +7973,8 @@ module.exports = class {
 
 const XHR = __webpack_require__(1);
 
-var html = __webpack_require__(89);
-var edit_html = __webpack_require__(90);
+var html = __webpack_require__(93);
+var edit_html = __webpack_require__(94);
 
 module.exports = class {
   constructor(obj) {
@@ -8092,25 +8096,25 @@ module.exports = class {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 89 */
+/* 93 */
 /***/ (function(module, exports) {
 
 module.exports = "\n<h3 class=\"post_title\"></h3>\n<button class=\"post_edit_btn\">/</button>\n<button class=\"post_del_btn\">X</button>\n<div class=\"post_content\"></div>\n";
 
 /***/ }),
-/* 90 */
+/* 94 */
 /***/ (function(module, exports) {
 
 module.exports = "<input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n<div id=\"post_summernote\" class=\"cur_sn\"></div>\n<input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n<input type=\"submit\" class=\"post_submit_input\" />\n<input type=\"submit\" value=\"Cancel\" class=\"post_cancel_input\" />\n<div class=\"post_element\">\n  <h3 class=\"post_display_title post_title\"></h3>\n  <div class=\"post_display post_content\"></div>\n</div>\n";
 
 /***/ }),
-/* 91 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(92);
+var content = __webpack_require__(96);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -8135,7 +8139,7 @@ if(false) {
 }
 
 /***/ }),
-/* 92 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(undefined);
@@ -8149,7 +8153,7 @@ exports.push([module.i, ".posts  {\n  background-color: #333;\n  width: 960px;\n
 
 
 /***/ }),
-/* 93 */
+/* 97 */
 /***/ (function(module, exports) {
 
 module.exports = "<h2>Posts</h2>\n\n<div class=\"new_post_button\">\n  Write a new post\n</div>\n\n<div class=\"post_editor\" style=\"display: none\">\n  <input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n  <div class=\"post_summernote\"></div>\n  <input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n  <input type=\"submit\" class=\"post_submit_input\" />\n  <div class=\"post_element\">\n    <h3 class=\"post_display_title post_title\"></h3>\n    <div class=\"post_display post_content\"></div>\n  </div>\n</div>\n\n<div class=\"post_list\">\n\n</div>\n";

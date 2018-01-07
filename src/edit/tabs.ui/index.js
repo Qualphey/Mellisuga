@@ -62,4 +62,8 @@ module.exports = class {
       return this_class.display_div;
     }());
   }
+
+  destroy() {
+    this.element.parentNode.removeChild(this.element);
+  }
 }

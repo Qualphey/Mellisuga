@@ -1,3 +1,8 @@
+CREATE TABLE IF NOT EXISTS {{table}} (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  data JSONB
+);
+
 -- INSERTING
 PREPARE {{table}}_insert(jsonb) AS
   INSERT INTO {{table}}(data) VALUES($1) RETURNING ID;

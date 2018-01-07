@@ -1,6 +1,6 @@
 {
   "name": "cmbird",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Node.js based, highly configurable content management system",
   "main": "index.js",
   "repository": "https://github.com/Qualphey/CMBird.git",
@@ -11,6 +11,7 @@
     "codemirror": "^5.32.0",
     "express": "*",
     "fs-extra": "^5.0.0",
+    "jsonlint": "^1.6.2",
     "jsonwebtoken": "^8.1.0",
     "nunjucks": "^3.0.1",
     "pg": "*",
@@ -27,4 +28,3 @@
     "webpack": "^3.10.0"
   }
 }
-

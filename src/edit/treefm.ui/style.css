@@ -27,6 +27,7 @@
   color: #DDD;
   cursor: default;
   font-size: 15px;
+  z-index: 2;
 }
 
 .treefm_contexmenu div {

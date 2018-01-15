@@ -56,6 +56,17 @@ module.exports = class {
     });
   }
 
+  upload_files(formData, cb) {
+    XHR.post('treefm.io', {
+      formData: formData
+    }, function() {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+
   rm_file(file_path, cb) {
     XHR.get('treefm.io', {
       target: this.target,

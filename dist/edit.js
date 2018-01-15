@@ -111,6 +111,34 @@ module.exports = class {
     console.log(url);
   }
 
+  static post(url, params, callback) {
+    if (params.formData) {
+      console.log("FORM DATA");
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url);
+    //  xhr.setRequestHeader("Content-Type","multipart/form-data");
+      xhr.send(params.formData);
+      xhr.addEventListener("load", callback);
+      console.log(url);
+    } else {
+      var http = new XMLHttpRequest();
+      http.open("POST", url, true);
+
+      //Send the proper header information along with the request
+      http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+      http.onreadystatechange = function() {//Call a function when the state changes.
+        if(http.readyState == 4 && http.status == 200) {
+          callback(http.responseText);
+        }
+      }
+
+      var json = JSON.stringify(params);
+      var param_str = 'data='+encodeURIComponent(json);
+      http.send(param_str);
+    }
+  }
+
   static getParamByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
@@ -119,24 +147,6 @@ module.exports = class {
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
-
-  static post(url, params, callback) {
-    var http = new XMLHttpRequest();
-    http.open("POST", url, true);
-
-    //Send the proper header information along with the request
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-    http.onreadystatechange = function() {//Call a function when the state changes.
-      if(http.readyState == 4 && http.status == 200) {
-        callback(http.responseText);
-      }
-    }
-
-    var json = JSON.stringify(params);
-    var param_str = 'data='+encodeURIComponent(json);
-    http.send(param_str);
   }
 }
 
@@ -851,7 +861,7 @@ if(false) {
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -1564,7 +1574,7 @@ if(false) {
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -1758,7 +1768,7 @@ if(false) {
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -1803,7 +1813,7 @@ if(false) {
 /* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -1942,6 +1952,17 @@ module.exports = class {
       command: "write",
       path: file_path,
       data: content
+    }, function() {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+
+  upload_files(formData, cb) {
+    XHR.post('treefm.io', {
+      formData: formData
     }, function() {
       var response = JSON.parse(this.responseText);
       if (response == "success") {
@@ -2099,6 +2120,55 @@ var Dir = module.exports = class {
             }
           });
         },
+        upload: function() {
+          treefm.contextmenu.hide();
+
+          var form = document.createElement('form');
+          form.enctype = "multipart/form-data";
+          this_class.element.appendChild(form);
+
+          var target_input = document.createElement("input");
+          target_input.type = "hidden";
+          target_input.name = "target";
+          target_input.value = treefm.target;
+          form.appendChild(target_input);
+
+          var path_input = document.createElement("input");
+          path_input.type = "hidden";
+          path_input.name = "path";
+          path_input.value = this_class.path;
+          form.appendChild(path_input);
+
+          var upload_input = document.createElement("input");
+          upload_input.type = "file";
+          upload_input.name = "filei";
+          upload_input.multiple = "multiple";
+          upload_input.style.display = "none";
+          form.appendChild(upload_input);
+
+          upload_input.click();
+          upload_input.addEventListener("change", function(e) {
+            var files = this.files;
+
+            var formData = new FormData(form);
+
+            for (var [key, value] of formData.entries()) {
+              console.log(key, value);
+            }
+
+            treefm.upload_files(formData, function() {
+              for (var f = 0; f < files.length; f++) {
+                var new_file = new File({
+                  name: files[f].name,
+                  rel_path: this_class.path+"/"+files[f].name,
+                  padding_index: this_class.padding_index+1,
+                  type: files[f].type
+                }, treefm);
+                content_div.appendChild(new_file.element);
+              }
+            });
+          }, false);
+        },
         rename: function() {
           treefm.contextmenu.hide();
           var name_input = document.createElement("input");
@@ -2254,6 +2324,7 @@ module.exports = class {
   }
 
   display(x, y, callbacks) {
+    console.log(callbacks);
     this.element.innerHTML = html;
 
     for (let name in callbacks) {
@@ -2282,7 +2353,7 @@ module.exports = class {
 /* 44 */
 /***/ (function(module, exports) {
 
-module.exports = "<div name=\"new_file\">New File</div>\n<div name=\"new_folder\">New Folder</div>\n<div name=\"rename\">Rename</div>\n<div name=\"delete\">Delete</div>\n";
+module.exports = "<div name=\"new_file\">New File</div>\n<div name=\"new_folder\">New Folder</div>\n<div name=\"upload\">Upload</div>\n<div name=\"rename\">Rename</div>\n<div name=\"delete\">Delete</div>\n";
 
 /***/ }),
 /* 45 */
@@ -2319,12 +2390,12 @@ if(false) {
 /* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
 // module
-exports.push([module.i, ".treefm {\n  background-color: #111;\n  font-size: 14px;\n  padding: 2px;\n  user-select: none;\n}\n\n.treefm_dir_content {\n  display: none;\n}\n\n.treefm_item {\n  color: #DDD;\n  padding: 2px 10px;\n  white-space: nowrap;\n}\n\n.treefm_item:hover, .treefm_contexmenu div:hover {\n  background-color: #1C1C1C;\n  cursor: default;\n}\n\n.treefm_contexmenu {\n  display: none;\n  position: fixed;\n  background-color: #090909;\n  color: #DDD;\n  cursor: default;\n  font-size: 15px;\n}\n\n.treefm_contexmenu div {\n  padding: 2px 10px;\n}\n", ""]);
+exports.push([module.i, ".treefm {\n  background-color: #111;\n  font-size: 14px;\n  padding: 2px;\n  user-select: none;\n}\n\n.treefm_dir_content {\n  display: none;\n}\n\n.treefm_item {\n  color: #DDD;\n  padding: 2px 10px;\n  white-space: nowrap;\n}\n\n.treefm_item:hover, .treefm_contexmenu div:hover {\n  background-color: #1C1C1C;\n  cursor: default;\n}\n\n.treefm_contexmenu {\n  display: none;\n  position: fixed;\n  background-color: #090909;\n  color: #DDD;\n  cursor: default;\n  font-size: 15px;\n  z-index: 2;\n}\n\n.treefm_contexmenu div {\n  padding: 2px 10px;\n}\n", ""]);
 
 // exports
 
@@ -2439,7 +2510,7 @@ if(false) {
 /* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 

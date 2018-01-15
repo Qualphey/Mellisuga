@@ -68,6 +68,7 @@
 /***/ 25:
 /***/ (function(module, exports) {
 
+console.log("Test");
 
 
 /***/ })

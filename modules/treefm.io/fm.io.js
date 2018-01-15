@@ -25,6 +25,29 @@ module.exports = class {
       var result = this_class.command(target_dir, data.command, data.path, data.data);
       res.send(JSON.stringify(result));
     });
+
+    var multer  = require('multer');
+    var storage = multer.diskStorage({
+      destination: function (req, file, cb) {
+        var dir_path = path.resolve(req.body.target, req.body.path);
+        cb(null, dir_path)
+      },
+      filename: function (req, file, cb) {
+          cb(null, file.originalname)
+        }
+      }
+    )
+
+    var upload = multer({ storage: storage })
+
+    this.router.post(global.cmb_config.admin_path+'/treefm.io', upload.array('filei'), function(req, res) {
+      var data = req.files;
+      for (var f = 0; f < data.length; f++) {
+        console.log("File uploaded to: ", data[f].path);
+      }
+
+      res.send(JSON.stringify("success"));
+    });
   }
 
   command(root_dir, command, file_path, data) {
@@ -54,6 +77,10 @@ module.exports = class {
         case 'rename':
           var new_path = path.resolve(root_dir, data);
           result = this.rename(file_path, new_path);
+          break;
+        case 'upload':
+          console.log("upload command");
+          console.log(file_path, JSON.stringify(data));
           break;
         default:
           console.log("Unknown command:", command);

@@ -111,6 +111,34 @@ module.exports = class {
     console.log(url);
   }
 
+  static post(url, params, callback) {
+    if (params.formData) {
+      console.log("FORM DATA");
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url);
+    //  xhr.setRequestHeader("Content-Type","multipart/form-data");
+      xhr.send(params.formData);
+      xhr.addEventListener("load", callback);
+      console.log(url);
+    } else {
+      var http = new XMLHttpRequest();
+      http.open("POST", url, true);
+
+      //Send the proper header information along with the request
+      http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+      http.onreadystatechange = function() {//Call a function when the state changes.
+        if(http.readyState == 4 && http.status == 200) {
+          callback(http.responseText);
+        }
+      }
+
+      var json = JSON.stringify(params);
+      var param_str = 'data='+encodeURIComponent(json);
+      http.send(param_str);
+    }
+  }
+
   static getParamByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
@@ -119,24 +147,6 @@ module.exports = class {
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
-
-  static post(url, params, callback) {
-    var http = new XMLHttpRequest();
-    http.open("POST", url, true);
-
-    //Send the proper header information along with the request
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-    http.onreadystatechange = function() {//Call a function when the state changes.
-      if(http.readyState == 4 && http.status == 200) {
-        callback(http.responseText);
-      }
-    }
-
-    var json = JSON.stringify(params);
-    var param_str = 'data='+encodeURIComponent(json);
-    http.send(param_str);
   }
 }
 
@@ -7616,7 +7626,7 @@ if(false) {
 /* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -7851,7 +7861,7 @@ if(false) {
 /* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -8142,7 +8152,7 @@ if(false) {
 /* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 

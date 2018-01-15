@@ -8,6 +8,7 @@ module.exports = class {
   }
 
   display(x, y, callbacks) {
+    console.log(callbacks);
     this.element.innerHTML = html;
 
     for (let name in callbacks) {

@@ -84,6 +84,55 @@ var Dir = module.exports = class {
             }
           });
         },
+        upload: function() {
+          treefm.contextmenu.hide();
+
+          var form = document.createElement('form');
+          form.enctype = "multipart/form-data";
+          this_class.element.appendChild(form);
+
+          var target_input = document.createElement("input");
+          target_input.type = "hidden";
+          target_input.name = "target";
+          target_input.value = treefm.target;
+          form.appendChild(target_input);
+
+          var path_input = document.createElement("input");
+          path_input.type = "hidden";
+          path_input.name = "path";
+          path_input.value = this_class.path;
+          form.appendChild(path_input);
+
+          var upload_input = document.createElement("input");
+          upload_input.type = "file";
+          upload_input.name = "filei";
+          upload_input.multiple = "multiple";
+          upload_input.style.display = "none";
+          form.appendChild(upload_input);
+
+          upload_input.click();
+          upload_input.addEventListener("change", function(e) {
+            var files = this.files;
+
+            var formData = new FormData(form);
+
+            for (var [key, value] of formData.entries()) {
+              console.log(key, value);
+            }
+
+            treefm.upload_files(formData, function() {
+              for (var f = 0; f < files.length; f++) {
+                var new_file = new File({
+                  name: files[f].name,
+                  rel_path: this_class.path+"/"+files[f].name,
+                  padding_index: this_class.padding_index+1,
+                  type: files[f].type
+                }, treefm);
+                content_div.appendChild(new_file.element);
+              }
+            });
+          }, false);
+        },
         rename: function() {
           treefm.contextmenu.hide();
           var name_input = document.createElement("input");

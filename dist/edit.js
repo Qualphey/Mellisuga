@@ -121,21 +121,21 @@ module.exports = class {
       xhr.addEventListener("load", callback);
       console.log(url);
     } else {
-      var http = new XMLHttpRequest();
-      http.open("POST", url, true);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
 
       //Send the proper header information along with the request
-      http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-      http.onreadystatechange = function() {//Call a function when the state changes.
-        if(http.readyState == 4 && http.status == 200) {
-          callback(http.responseText);
+      xhr.onreadystatechange = function() {//Call a function when the state changes.
+        if(xhr.readyState == 4 && xhr.status == 200) {
+          callback(xhr.responseText);
         }
       }
 
       var json = JSON.stringify(params);
       var param_str = 'data='+encodeURIComponent(json);
-      http.send(param_str);
+      xhr.send(param_str);
     }
   }
 

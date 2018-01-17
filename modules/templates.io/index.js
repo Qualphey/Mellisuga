@@ -40,16 +40,28 @@ module.exports = class {
       var data = JSON.parse(req.query.data);
       /*
         {
-          command: "all"|"add"|"get"|"rm",
-          name: "string" - needed on `add` and `rm` commands
+          command: "all"
         }
       */
-
       switch (data.command) {
         case 'all':
           var list = this_class.all();
           res.send(JSON.stringify(list));
           break;
+        default:
+          console.log("TemplatesIO: unknown command", data.command);
+      }
+    });
+
+    app.post(global.cmb_config.admin_path+"/templates.io", function(req, res) {
+      var data = JSON.parse(req.body.data);
+      /*
+        {
+          command: "add"|"rm",
+          name: "string" - needed on `add` and `rm` commands
+        }
+      */
+      switch (data.command) {
         case 'add':
           if (data.name) {
             if (data.name.length > 0) {
@@ -106,7 +118,8 @@ module.exports = class {
     });
 
     list.sort(function(a, b) {
-      return fs.statSync(path.resolve(this_class.template_dir, a)).mtime.getTime() - fs.statSync(path.resolve(this_class.page_dir, b)).mtime.getTime();
+      console.log(a, b);
+      return fs.statSync(path.resolve(this_class.template_dir, a)).mtime.getTime() - fs.statSync(path.resolve(this_class.template_dir, b)).mtime.getTime();
     });
 
     return list;

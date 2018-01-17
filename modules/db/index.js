@@ -189,6 +189,8 @@ module.exports = class {
             }
           }
           var qstr = "EXECUTE "+this.name+"_delete_by_ids(ARRAY["+arr_str+"])";
+          await db_class.client.query(qstr);
+          console.log(qstr);
           return true;
         } catch (e) {
           console.error(e.stack);

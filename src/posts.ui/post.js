@@ -18,6 +18,7 @@ module.exports = class {
 
     div.innerHTML = edit_html;
 
+    var post_editor = div.querySelector(".editor");
     var title_input = div.querySelector(".post_title_input");
     title_input.value = obj.data.title;
     var tags_input = div.querySelector(".post_tags_input");
@@ -57,24 +58,27 @@ module.exports = class {
 
     submit_input.addEventListener("click", function(e) {
       var data = {
-        id: obj.id,
-        title: title_input.value,
-        content: sn.summernote('code'),
-        tags: tags_input.value.split(" ")
+        command: "edit",
+        post: {
+          id: obj.id,
+          title: title_input.value,
+          content: sn.summernote('code'),
+          tags: tags_input.value.split(" ")
+        }
       }
 
-
-      console.log(data.content);
-
-      XHR.get(global.config.admin_path+'/edit_post', data, function() {
-        console.log(this.responseText);
-        if (this.responseText === "success") {
+      console.log("edit post");
+      XHR.post(global.config.admin_path+'/posts.io', data, function(response) {
+        console.log("response", response);
+        if (response === "success") {
           console.log("Post successfuly edited!");
           obj.data.title = title_input.value;
           obj.data.content = sn.summernote('code');
           obj.data.tags = tags_input.value.split(" ");
-          this_class.display(obj);
           this_class.make_first();
+
+          div.innerHTML = html;
+          this_class.display(obj);
         }
       });
     });
@@ -103,8 +107,10 @@ module.exports = class {
 
     var del_btn = this.element.querySelector('.post_del_btn');
     del_btn.addEventListener("click", function(e) {
-      XHR.get('del_post', { id: obj.id }, function() {
-        if (this.responseText == "success") {
+      XHR.post(global.config.admin_path+'/posts.io', {
+        command: "delete", ids: [obj.id]
+      }, function(response) {
+        if (response == "success") {
           this_class.element.parentNode.removeChild(this_class.element);
         }
       });

@@ -2,6 +2,11 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
+    watch: true,
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: 1000
+    },
     entry: {
       './public/test/main': './test/index.js',
       './dist/edit': './src/edit/index.js',

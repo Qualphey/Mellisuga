@@ -121,21 +121,21 @@ module.exports = class {
       xhr.addEventListener("load", callback);
       console.log(url);
     } else {
-      var http = new XMLHttpRequest();
-      http.open("POST", url, true);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
 
       //Send the proper header information along with the request
-      http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-      http.onreadystatechange = function() {//Call a function when the state changes.
-        if(http.readyState == 4 && http.status == 200) {
-          callback(http.responseText);
+      xhr.onreadystatechange = function() {//Call a function when the state changes.
+        if(xhr.readyState == 4 && xhr.status == 200) {
+          callback(xhr.responseText);
         }
       }
 
       var json = JSON.stringify(params);
       var param_str = 'data='+encodeURIComponent(json);
-      http.send(param_str);
+      xhr.send(param_str);
     }
   }
 
@@ -4049,6 +4049,8 @@ module.exports = class {
   admin_path : "/cmb_admin"
 }
 
+__webpack_require__(98);
+
 var socket = global.socket = __webpack_require__(54)('http://localhost:9639');
 
 var templates_div = document.createElement('div');
@@ -7457,12 +7459,11 @@ module.exports = class {
               name: input.value
             }
 
-            XHR.get('templates.io', {
+            XHR.post('templates.io', {
               command: "add",
               name: data.name
-            }, function() {
-              var res = JSON.parse(this.responseText);
-              console.log(res);
+            }, function(response) {
+              var res = JSON.parse(response);
               if (res.err) {
                 console.log(res.err);
               } else {
@@ -7536,14 +7537,58 @@ module.exports = class {
 
     var del_button = page_element.querySelector('.del_btn');
     del_button.addEventListener('click', function(e) {
-      XHR.get('templates.io', {
-        command: 'rm',
-        name: this_class.name
-      }, function() {
-        if (this.responseText == "success") {
-          this_class.table.remove(this_class.element);
+      var popup = document.createElement('div');
+      popup.classList.add("popup_ui");
+      document.body.appendChild(popup);
+
+      var close_btn = document.createElement("button");
+      close_btn.innerHTML = "X";
+      close_btn.addEventListener("click", function() {
+        document.body.removeChild(popup);
+      });
+      popup.appendChild(close_btn);
+
+      var message = document.createElement("p");
+      message.innerHTML = "Confirm DELETION of template `"+this_class.name+"` by entering its title";
+      popup.appendChild(message);
+
+      var submit = document.createElement("input");
+      submit.type = "submit";
+      popup.appendChild(submit);
+
+      var input = document.createElement("input");
+      input.type = "text";
+      popup.appendChild(input);
+      input.focus();
+
+      input.addEventListener('keyup', function (e) {
+        if (e.keyCode == 13) {
+          proceed();
         }
       });
+
+      var err_msg = document.createElement("span");
+      popup.appendChild(err_msg);
+
+      submit.addEventListener("click", function(e) {
+        proceed()
+      });
+
+      function proceed() {
+        if (input.value === this_class.name) {
+          XHR.post('templates.io', {
+            command: 'rm',
+            name: this_class.name
+          }, function(response) {
+            if (response == "success") {
+              this_class.table.remove(this_class.element);
+              document.body.removeChild(popup);
+            }
+          });
+        } else {
+          err_msg.innerHTML = "Incorrect!";
+        }
+      }
     });
     del_button.innerHTML = "X";
   }
@@ -7726,12 +7771,12 @@ module.exports = class {
               name: input.value
             }
 
-            XHR.get('pages.io', {
+            XHR.post('pages.io', {
               command: "add",
               name: data.name,
               template: select.value
-            }, function() {
-              var res = JSON.parse(this.responseText);
+            }, function(response) {
+              var res = JSON.parse(response);
               console.log(res);
               if (res.err) {
                 console.log(res.err);
@@ -7806,14 +7851,48 @@ module.exports = class {
 
     var del_button = page_element.querySelector('.del_btn');
     del_button.addEventListener('click', function(e) {
-      XHR.get('pages.io', {
-        command: 'rm',
-        name: this_class.name
-      }, function() {
-        if (this.responseText == "success") {
-          this_class.table.remove(this_class.element);
+      var popup = document.createElement('div');
+      popup.classList.add("popup_ui");
+      document.body.appendChild(popup);
+
+      var close_btn = document.createElement("button");
+      close_btn.innerHTML = "X";
+      close_btn.addEventListener("click", function() {
+        document.body.removeChild(popup);
+      });
+      popup.appendChild(close_btn);
+
+      var message = document.createElement("p");
+      message.innerHTML = "Confirm DELETION of page `"+this_class.name+"` by entering its title";
+      popup.appendChild(message);
+
+      var submit = document.createElement("input");
+      submit.type = "submit";
+      popup.appendChild(submit);
+
+      var input = document.createElement("input");
+      input.type = "text";
+      popup.appendChild(input);
+
+      var err_msg = document.createElement("span");
+      popup.appendChild(err_msg);
+
+      submit.addEventListener("click", function(e) {
+        if (input.value === this_class.name) {
+          XHR.post('pages.io', {
+            command: 'rm',
+            name: this_class.name
+          }, function(response) {
+            if (response == "success") {
+              this_class.table.remove(this_class.element);
+              document.body.removeChild(popup);
+            }
+          });
+        } else {
+          err_msg.innerHTML = "Incorrect!";
         }
       });
+
     });
     del_button.innerHTML = "X";
   }
@@ -7897,7 +7976,7 @@ module.exports = class {
 
     var post_list = div.querySelector(".post_list");
 
-    XHR.get('/posts', null, function() {
+    XHR.get('/posts.io', { command: "all" }, function() {
       var posts = JSON.parse(this.responseText);
       for (let p = 0; p < posts.length; p++) {
         var post = new Post(posts[p]);
@@ -7938,25 +8017,23 @@ module.exports = class {
       });
       submit_input.addEventListener("click", function(e) {
         var data = {
-          title: title_input.value,
-          content: $('.post_summernote').summernote('code'),
-          tags: tags_input.value.split(" ")
+          command: "create",
+          post: {
+            title: title_input.value,
+            content: $('.post_summernote').summernote('code'),
+            tags: tags_input.value.split(" ")
+          }
         }
 
-        console.log("post", data);
-        XHR.get(global.config.admin_path+'/new_post', data, function() {
-          var res = JSON.parse(this.responseText);
+        XHR.post(global.config.admin_path+'/posts.io', data, function(response) {
+          var res = JSON.parse(response);
 
           if (res.err) {
             console.log(res.err);
           } else {
             var post = new Post({
               id: res.id,
-              data: {
-                title: title_input.value,
-                content: $('.post_summernote').summernote('code'),
-                tags: tags_input.value.split(" ")
-              }
+              data: data.post
             });
             post_list.insertBefore(post.element, post_list.firstChild);
             new_post_button.style.display = "block";
@@ -7999,6 +8076,7 @@ module.exports = class {
 
     div.innerHTML = edit_html;
 
+    var post_editor = div.querySelector(".editor");
     var title_input = div.querySelector(".post_title_input");
     title_input.value = obj.data.title;
     var tags_input = div.querySelector(".post_tags_input");
@@ -8038,24 +8116,27 @@ module.exports = class {
 
     submit_input.addEventListener("click", function(e) {
       var data = {
-        id: obj.id,
-        title: title_input.value,
-        content: sn.summernote('code'),
-        tags: tags_input.value.split(" ")
+        command: "edit",
+        post: {
+          id: obj.id,
+          title: title_input.value,
+          content: sn.summernote('code'),
+          tags: tags_input.value.split(" ")
+        }
       }
 
-
-      console.log(data.content);
-
-      XHR.get(global.config.admin_path+'/edit_post', data, function() {
-        console.log(this.responseText);
-        if (this.responseText === "success") {
+      console.log("edit post");
+      XHR.post(global.config.admin_path+'/posts.io', data, function(response) {
+        console.log("response", response);
+        if (response === "success") {
           console.log("Post successfuly edited!");
           obj.data.title = title_input.value;
           obj.data.content = sn.summernote('code');
           obj.data.tags = tags_input.value.split(" ");
-          this_class.display(obj);
           this_class.make_first();
+
+          div.innerHTML = html;
+          this_class.display(obj);
         }
       });
     });
@@ -8084,8 +8165,10 @@ module.exports = class {
 
     var del_btn = this.element.querySelector('.post_del_btn');
     del_btn.addEventListener("click", function(e) {
-      XHR.get('del_post', { id: obj.id }, function() {
-        if (this.responseText == "success") {
+      XHR.post(global.config.admin_path+'/posts.io', {
+        command: "delete", ids: [obj.id]
+      }, function(response) {
+        if (response == "success") {
           this_class.element.parentNode.removeChild(this_class.element);
         }
       });
@@ -8167,6 +8250,51 @@ exports.push([module.i, ".posts  {\n  background-color: #333;\n  width: 960px;\n
 /***/ (function(module, exports) {
 
 module.exports = "<h2>Posts</h2>\n\n<div class=\"new_post_button\">\n  Write a new post\n</div>\n\n<div class=\"post_editor\" style=\"display: none\">\n  <input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n  <div class=\"post_summernote\"></div>\n  <input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n  <input type=\"submit\" class=\"post_submit_input\" />\n  <div class=\"post_element\">\n    <h3 class=\"post_display_title post_title\"></h3>\n    <div class=\"post_display post_content\"></div>\n  </div>\n</div>\n\n<div class=\"post_list\">\n\n</div>\n";
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(99);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(3)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../node_modules/css-loader/index.js!./style.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js!./style.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.popup_ui {\n  background-color: #090909;\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  padding: 50px;\n}\n.popup_ui p {\n  margin-top: 20px;\n}\n\n.popup_ui input, .popup_ui span{\n  margin-top: 10px;\n  float: right;\n}\n\n.popup_ui span {\n  color: #FF6600;\n  padding: 2px 4px;\n  line-height: 20px;\n}\n\n.popup_ui button {\n  margin-top: -45px;\n  margin-right: -45px;\n  float: right;\n}\n\ninput {\n  background-color: #090909;\n  color: #FFF;\n  border: 1px solid #333;\n  padding: 2px 4px;\n  line-height: 20px;\n}\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);

@@ -52,12 +52,11 @@ module.exports = class {
               name: input.value
             }
 
-            XHR.get('templates.io', {
+            XHR.post('templates.io', {
               command: "add",
               name: data.name
-            }, function() {
-              var res = JSON.parse(this.responseText);
-              console.log(res);
+            }, function(response) {
+              var res = JSON.parse(response);
               if (res.err) {
                 console.log(res.err);
               } else {

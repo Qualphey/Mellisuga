@@ -77,12 +77,12 @@ module.exports = class {
               name: input.value
             }
 
-            XHR.get('pages.io', {
+            XHR.post('pages.io', {
               command: "add",
               name: data.name,
               template: select.value
-            }, function() {
-              var res = JSON.parse(this.responseText);
+            }, function(response) {
+              var res = JSON.parse(response);
               console.log(res);
               if (res.err) {
                 console.log(res.err);

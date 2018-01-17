@@ -42,16 +42,28 @@ module.exports = class {
       var data = JSON.parse(req.query.data);
       /*
         {
-          command: "all"|"add"|"get"|"rm",
-          name: "string" - needed on `add` and `rm` commands
+          command: "all"
         }
       */
-
       switch (data.command) {
         case 'all':
           var list = this_class.all();
           res.send(JSON.stringify(list));
           break;
+        default:
+          console.log("PagesIO: unknown command", data.command);
+      }
+    });
+
+    app.post(global.cmb_config.admin_path+"/pages.io", function(req, res) {
+      var data = JSON.parse(req.body.data);
+      /*
+        {
+          command: "add"|"rm",
+          name: "string" - needed on `add` and `rm` commands
+        }
+      */
+      switch (data.command) {
         case 'add':
           if (data.name) {
             if (data.name.length > 0) {
@@ -104,7 +116,6 @@ module.exports = class {
           console.log("PagesIO: unknown command", data.command);
       }
     });
-
   }
 
   async compile_context(context) {

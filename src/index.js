@@ -2,6 +2,8 @@ var config = global.config = {
   admin_path : "/cmb_admin"
 }
 
+require("./style.css");
+
 var socket = global.socket = require('socket.io-client')('http://localhost:9639');
 
 var templates_div = document.createElement('div');

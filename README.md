@@ -17,10 +17,9 @@ var CMS = require("cmbird");
 var cms = new CMS({
   host : '127.0.0.1',
   port : 9639,
-  db_user : 'postgres', // or any other database user
+  db_user : 'postgres', // or any other database user with super permissions
   db_pwd: 'password',
-  pages_path : __dirname+"/pages",
-  templates_path : __dirname+"/templates"
+  app_path : __dirname
 });
 ```
 

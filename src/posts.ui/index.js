@@ -13,7 +13,7 @@ module.exports = class {
 
     var post_list = div.querySelector(".post_list");
 
-    XHR.get('/posts', null, function() {
+    XHR.get('/posts.io', { command: "all" }, function() {
       var posts = JSON.parse(this.responseText);
       for (let p = 0; p < posts.length; p++) {
         var post = new Post(posts[p]);
@@ -54,25 +54,23 @@ module.exports = class {
       });
       submit_input.addEventListener("click", function(e) {
         var data = {
-          title: title_input.value,
-          content: $('.post_summernote').summernote('code'),
-          tags: tags_input.value.split(" ")
+          command: "create",
+          post: {
+            title: title_input.value,
+            content: $('.post_summernote').summernote('code'),
+            tags: tags_input.value.split(" ")
+          }
         }
 
-        console.log("post", data);
-        XHR.get(global.config.admin_path+'/new_post', data, function() {
-          var res = JSON.parse(this.responseText);
+        XHR.post(global.config.admin_path+'/posts.io', data, function(response) {
+          var res = JSON.parse(response);
 
           if (res.err) {
             console.log(res.err);
           } else {
             var post = new Post({
               id: res.id,
-              data: {
-                title: title_input.value,
-                content: $('.post_summernote').summernote('code'),
-                tags: tags_input.value.split(" ")
-              }
+              data: data.post
             });
             post_list.insertBefore(post.element, post_list.firstChild);
             new_post_button.style.display = "block";

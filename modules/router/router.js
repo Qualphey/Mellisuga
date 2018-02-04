@@ -5,6 +5,7 @@ var path = require('path');
 var bodyParser = require('body-parser')
 
 var express = require('express');
+var cookieParser = require('cookie-parser');
 
 
 module.exports = class {
@@ -41,6 +42,7 @@ module.exports = class {
         server = http.createServer(app);
         io = require('socket.io')(server);
 
+        app.use(cookieParser());
         app.use(bodyParser.json());         // to support JSON-encoded bodies
         app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
           extended: true

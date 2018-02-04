@@ -34,13 +34,21 @@ if (template) {
   target = "pages";
 }
 
+
+iframe.addEventListener("load", firstLoad);
+var floadID = setTimeout(firstLoad, 1000);
 function firstLoad() {
-  var editor = new Editor(target, iframe.contentWindow.location.pathname, iframe);
+  clearTimeout(floadID);
+  var editor = new Editor(target, template || page, iframe, iframe.contentWindow.location.pathname);
   editor_replaced(editor.window);
   iframe.removeEventListener("load", firstLoad);
 
   var last_pathname = iframe.contentWindow.location.pathname;
-  iframe.addEventListener("load", function(e) {
+
+  iframe.addEventListener("load", socondLoad);
+  var sloadID = setTimeout(socondLoad, 1000);
+  function socondLoad(e) {
+    clearTimeout(sloadID);
     var new_pathname = iframe.contentWindow.location.pathname;
     console.log(last_pathname, new_pathname);
     console.log(last_pathname != new_pathname);
@@ -50,9 +58,8 @@ function firstLoad() {
       editor_replaced(editor.window);
     }
     last_pathname = new_pathname;
-  });
+  }
 }
-iframe.addEventListener("load", firstLoad);
 
 /*  var treefm = new TreeFM({
     target: "templates",

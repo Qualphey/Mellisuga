@@ -1,0 +1,11 @@
+{
+  "custom_paths": [
+    { "Home": "/" },
+    { "Game": "/game" }
+  ],
+  "permissions": {
+    "user_only": [
+      "Game"
+    ]
+  }
+}

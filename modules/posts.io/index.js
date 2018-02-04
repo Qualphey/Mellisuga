@@ -1,12 +1,9 @@
 
 module.exports = class {
-  constructor(app, db, config) {
+  constructor(app, table, config) {
     this.app = app;
 
-    this.table = new db.Table('posts', {
-      arrays: ['tags'],
-      props: ['title']
-    });
+    this.table = table;
     this.config = config;
 
     var this_class = this;
@@ -62,6 +59,7 @@ module.exports = class {
           case 'create':
             if (data.post) {
               var json = await this_class.create(data.post);
+              console.log("RESPONSE", json);
               res.send(json);
             }
             break;
@@ -72,6 +70,7 @@ module.exports = class {
             }
             break;
           case 'delete':
+            console.log("DELETE");
             if (data.ids) {
               this_class.delete(data.ids);
               res.send("success");
@@ -87,51 +86,121 @@ module.exports = class {
 
   }
 
-  async init() {
-    await this.table.init();
+  static async init(app, aura, config) {
+    try {
+      var table = await aura.table('posts', {
+        columns: {
+          title: 'text',
+          content: 'text',
+          tags: 'text[]'
+        }
+      });
+      return new module.exports(app, table, config);
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   }
 
 // -- GET
   async all() {
-    return await this.table.all();
+    try {
+      console.log("ALL POST");
+      var posts = await this.table.select('*');
+      return posts;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   }
 
   async select_by_tags(tags) {
-    return await this.table.select_by_array("tags", tags);
+    try {
+    console.log("TAG POST", tags);
+      var found = await this.table.select(
+        "*", "tags && $1", [tags]
+      );
+      console.log("FOUND", found);
+      return found;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   };
 
   async select_by_title(title) {
-    return await this.table.select_by_property('title', title)
+    try {
+    console.log("TITLE POST");
+      return await this.table.select(
+        '*', "title = $1", [title]
+      );
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   }
 
 // -- POST
   async create(data) {
-    // TODO : possibly need -> try {} catch ()
-    var found = await this.select_by_title(data.title);
+    try {
+      // TODO : possibly need -> try {} catch ()
+      console.log("CREATING POST");
+      var found = await this.select_by_title(data.title);
 
-    var json;
-    if (found.length == 0) {
-      var result = await this.table.insert(data);
-      json = JSON.stringify({
-        id: result[0][0]
-      });
-    } else {
-      json = JSON.stringify({
-        err: "Post named `"+data.title+"` already exists!"
-      });
+      console.log("FOUND", found);
+
+      var json;
+      if (found.length == 0) {
+        var result = await this.table.insert(data);
+        json = JSON.stringify({
+          id: result
+        });
+      } else {
+        json = JSON.stringify({
+          err: "Post named `"+data.title+"` already exists!"
+        });
+      }
+      return json;
+    } catch (e) {
+      console.log(e);
+      return false;
     }
-    return json;
+
   }
 
   async edit(data) {
-    var id = data.id;
-    delete data.id;
-    await this.table.update(data, id);
-    return "success";
+    try {
+      var id = data.id;
+      delete data.id;
+      console.log("EDIT POST", data);
+      await this.table.update(data, "id = $1", [id]);
+      return "success";
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   }
 
   async delete(ids) {
-    console.log(ids);
-    await this.table.delete(ids);
+    try {
+      if (ids) {
+        var where = '';
+        for (var i = 0; i < ids.length; i++) {
+          if (i > 0) {
+            where += ' OR id = $'+(i+1);
+          } else {
+            where += 'id = $'+(i+1);
+          }
+        }
+        console.log(where);
+        await this.table.delete(where, ids);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   }
 }

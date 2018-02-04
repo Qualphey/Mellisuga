@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>CMBird Setup</title>
+
     <link rel="stylesheet" type="text/css" href="/res/theme.css">
     <style>
       html, body {
@@ -24,19 +25,34 @@
           width: 300px;
       }
 
+      h1 {
+          margin-bottom: 60px;
+
+          position: absolute;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+
+          top: 10vh;
+      }
+
       .submit {
         margin-top: 10px;
         margin-left: 90px;
       }
     </style>
 	</head>
+  <body>
     <div class="vert_mid_wrapper">
       <div class="vert_mid">
-        <h3>Sign in</h3>
-        <form action="/authenticate" method="post">
+        <h3>Please input credentials for your new account</h3>
+        <form action="/tribes-auth.io" method="post">
           <input name="email" type="text" placeholder="E-mail address" />
-          <input name="pwd" type="password" placeholder="**password**" />
-          <input type="hidden" name="command" value="authenticate" />
+          <span >
+            <input name="pwd" type="password" placeholder="**password**" />
+            <input name="pwdr" type="password" placeholder="***repeat***" /><br />
+          </span>
+          <input type="hidden" name="command" value="register" />
           <input class="submit" type="submit">
         </form>
       </div>

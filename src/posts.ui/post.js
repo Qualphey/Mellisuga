@@ -7,6 +7,7 @@ var edit_html = require('./edit.html');
 
 module.exports = class {
   constructor(obj) {
+    console.log("POST", obj);
     this.element = document.createElement('div');
 
     this.display(obj);
@@ -20,9 +21,9 @@ module.exports = class {
 
     var post_editor = div.querySelector(".editor");
     var title_input = div.querySelector(".post_title_input");
-    title_input.value = obj.data.title;
+    title_input.value = obj.title;
     var tags_input = div.querySelector(".post_tags_input");
-    tags_input.value = obj.data.tags;
+    tags_input.value = obj.tags;
     var submit_input = div.querySelector(".post_submit_input"),
     cancel_input = div.querySelector(".post_cancel_input"),
     post_display_title = div.querySelector(".post_display_title"),
@@ -54,7 +55,7 @@ module.exports = class {
       ]
     //        lang: "lt-LT"
     });
-    sn.summernote("code", obj.data.content);
+    sn.summernote("code", obj.content);
 
     submit_input.addEventListener("click", function(e) {
       var data = {
@@ -72,9 +73,9 @@ module.exports = class {
         console.log("response", response);
         if (response === "success") {
           console.log("Post successfuly edited!");
-          obj.data.title = title_input.value;
-          obj.data.content = sn.summernote('code');
-          obj.data.tags = tags_input.value.split(" ");
+          obj.title = title_input.value;
+          obj.content = sn.summernote('code');
+          obj.tags = tags_input.value.split(" ");
           this_class.make_first();
 
           div.innerHTML = html;
@@ -95,7 +96,7 @@ module.exports = class {
     this.element.classList.add('post_element');
 
     var title = this.element.querySelector('.post_title');
-    title.innerHTML = obj.data.title;
+    title.innerHTML = obj.title;
     title.classList.add('post_display_title');
 
     var edit_btn = this.element.querySelector('.post_edit_btn');
@@ -118,7 +119,7 @@ module.exports = class {
 
     var content = this.element.querySelector('.post_content');
 
-    var content_str = obj.data.content;
+    var content_str = obj.content;
     var max_length = 1024;
     if(content_str.length > max_length) {
       content_str = content_str.substring(0,max_length)+'...';

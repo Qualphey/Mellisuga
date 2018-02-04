@@ -33,10 +33,12 @@
     <div class="vert_mid_wrapper">
       <div class="vert_mid">
         <h3>Sign in</h3>
-        <form action="/authenticate" method="post">
+        <form action="/tribes-auth.io" method="post">
           <input name="email" type="text" placeholder="E-mail address" />
           <input name="pwd" type="password" placeholder="**password**" />
           <input type="hidden" name="command" value="authenticate" />
+          <br />
+          <a href="/signup">Sign Up</a>
           <input class="submit" type="submit">
         </form>
       </div>

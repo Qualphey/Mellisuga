@@ -7,20 +7,10 @@ const template_prefix = "/cmb_admin/t/";
 const page_prefix = "/p/";
 
 module.exports = class {
-  constructor(target, pathname, iframe, refresh_path) {
+  constructor(target, dir, iframe, refresh_path) {
     var tabs = this.tabs = new TabsUI();
 
     var last_save_callback = false;
-
-    var dir = pathname;
-
-    if (dir.startsWith(template_prefix)) {
-      dir = dir.substring(template_prefix.length);
-    } else if (dir.startsWith(page_prefix)) {
-      dir = dir.substring(page_prefix.length);
-    }
-
-
 
     var treefm = this.treefm = new TreeFM({
       target: target,

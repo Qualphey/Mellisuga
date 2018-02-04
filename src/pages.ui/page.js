@@ -5,10 +5,11 @@ const XHR = require('../utils/xhr.js');
 var html = require('./page.html');
 
 module.exports = class {
-  constructor(name, table) {
+  constructor(cfg, table) {
     this.element = document.createElement('div');
     this.element.innerHTML = html;
-    this.name = name;
+    this.name = cfg.file;
+    this.path = cfg.path;
 
     var max_length = 16;
     if(this.name.length > max_length) {
@@ -29,7 +30,7 @@ module.exports = class {
     var link = page_element.querySelector('.page_name');
 
     link.addEventListener('click', function(e) {
-      window.location.href = "/p/"+this_class.name;
+      window.location.href = this_class.path;
     });
 
     link.innerHTML = this.name;

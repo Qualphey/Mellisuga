@@ -92,67 +92,6 @@ module.exports = g;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = class {
-  static get(url, params, callback) {
-    if (params) {
-      url += "?data="+encodeURIComponent(JSON.stringify(params));
-    }
-
-    var xhr = new XMLHttpRequest();
-    xhr.addEventListener("load", callback);
-    xhr.open("GET", url);
-    xhr.send();
-
-    console.log(url);
-  }
-
-  static post(url, params, callback) {
-    if (params.formData) {
-      console.log("FORM DATA");
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", url);
-    //  xhr.setRequestHeader("Content-Type","multipart/form-data");
-      xhr.send(params.formData);
-      xhr.addEventListener("load", callback);
-      console.log(url);
-    } else {
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", url, true);
-
-      //Send the proper header information along with the request
-      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-      xhr.onreadystatechange = function() {//Call a function when the state changes.
-        if(xhr.readyState == 4 && xhr.status == 200) {
-          callback(xhr.responseText);
-        }
-      }
-
-      var json = JSON.stringify(params);
-      var param_str = 'data='+encodeURIComponent(json);
-      xhr.send(param_str);
-    }
-  }
-
-  static getParamByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
-}
-
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports) {
 
 /*
@@ -234,7 +173,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -267,19 +206,9 @@ var getElement = (function (fn) {
 
 	return function(selector) {
 		if (typeof memo[selector] === "undefined") {
-			var styleTarget = fn.call(this, selector);
-			// Special case to return head of iframe instead of iframe itself
-			if (styleTarget instanceof window.HTMLIFrameElement) {
-				try {
-					// This will throw an exception if access to iframe is blocked
-					// due to cross-origin restrictions
-					styleTarget = styleTarget.contentDocument.head;
-				} catch(e) {
-					styleTarget = null;
-				}
-			}
-			memo[selector] = styleTarget;
+			memo[selector] = fn.call(this, selector);
 		}
+
 		return memo[selector]
 	};
 })(function (target) {
@@ -303,7 +232,7 @@ module.exports = function(list, options) {
 
 	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
 	// tags it will allow on a page
-	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
+	if (!options.singleton) options.singleton = isOldIE();
 
 	// By default, add <style> tags to the <head> element
 	if (!options.insertInto) options.insertInto = "head";
@@ -409,11 +338,8 @@ function insertStyleElement (options, style) {
 		stylesInsertedAtTop.push(style);
 	} else if (options.insertAt === "bottom") {
 		target.appendChild(style);
-	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
-		var nextSibling = getElement(options.insertInto + " " + options.insertAt.before);
-		target.insertBefore(style, nextSibling);
 	} else {
-		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
+		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
 	}
 }
 
@@ -606,6 +532,67 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = class {
+  static get(url, params, callback) {
+    if (params) {
+      url += "?data="+encodeURIComponent(JSON.stringify(params));
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("load", callback);
+    xhr.open("GET", url);
+    xhr.send();
+
+    console.log(url);
+  }
+
+  static post(url, params, callback) {
+    if (params.formData) {
+      console.log("FORM DATA");
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url);
+    //  xhr.setRequestHeader("Content-Type","multipart/form-data");
+      xhr.send(params.formData);
+      xhr.addEventListener("load", callback);
+      console.log(url);
+    } else {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+
+      //Send the proper header information along with the request
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+      xhr.onreadystatechange = function() {//Call a function when the state changes.
+        if(xhr.readyState == 4 && xhr.status == 200) {
+          callback(xhr.responseText);
+        }
+      }
+
+      var json = JSON.stringify(params);
+      var param_str = 'data='+encodeURIComponent(json);
+      xhr.send(param_str);
+    }
+  }
+
+  static getParamByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+}
+
+
+/***/ }),
 /* 4 */,
 /* 5 */,
 /* 6 */,
@@ -727,7 +714,7 @@ module.exports = function (css) {
 
 __webpack_require__(27)
 
-const XHR = __webpack_require__(1);
+const XHR = __webpack_require__(3);
 const Editor = __webpack_require__(29);
 
 const template = XHR.getParamByName('template');
@@ -761,13 +748,21 @@ if (template) {
   target = "pages";
 }
 
+
+iframe.addEventListener("load", firstLoad);
+var floadID = setTimeout(firstLoad, 1000);
 function firstLoad() {
-  var editor = new Editor(target, iframe.contentWindow.location.pathname, iframe);
+  clearTimeout(floadID);
+  var editor = new Editor(target, template || page, iframe, iframe.contentWindow.location.pathname);
   editor_replaced(editor.window);
   iframe.removeEventListener("load", firstLoad);
 
   var last_pathname = iframe.contentWindow.location.pathname;
-  iframe.addEventListener("load", function(e) {
+
+  iframe.addEventListener("load", socondLoad);
+  var sloadID = setTimeout(socondLoad, 1000);
+  function socondLoad(e) {
+    clearTimeout(sloadID);
     var new_pathname = iframe.contentWindow.location.pathname;
     console.log(last_pathname, new_pathname);
     console.log(last_pathname != new_pathname);
@@ -777,9 +772,8 @@ function firstLoad() {
       editor_replaced(editor.window);
     }
     last_pathname = new_pathname;
-  });
+  }
 }
-iframe.addEventListener("load", firstLoad);
 
 /*  var treefm = new TreeFM({
     target: "templates",
@@ -838,17 +832,17 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {"hmr":true}
+var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(2)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!./theme.css", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!./theme.css");
+		module.hot.accept("!!../../../css-loader/index.js!./theme.css", function() {
+			var newContent = require("!!../../../css-loader/index.js!./theme.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -861,7 +855,7 @@ if(false) {
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -875,7 +869,7 @@ exports.push([module.i, "body {\n  overflow: hidden;\n}\n\n.tools {\n  position:
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {const XHR = __webpack_require__(1);
+/* WEBPACK VAR INJECTION */(function(global) {const XHR = __webpack_require__(3);
 const WindowUI = __webpack_require__(30);
 const SplitUI = __webpack_require__(34);
 
@@ -884,7 +878,7 @@ __webpack_require__(37)
 const Session = __webpack_require__(39);
 
 module.exports = class {
-  constructor(target, pathname, iframe) {
+  constructor(target, dir, iframe, pathname) {
     this.window = new WindowUI({
       DOM: document.body,
       title: "Editor",
@@ -903,7 +897,7 @@ module.exports = class {
     global_local_switch.classList.add('global_local_switch');
     this.split.list[0].appendChild(global_local_switch);
 
-    var local_session = new Session(target, pathname, iframe, pathname);
+    var local_session = new Session(target, dir, iframe, pathname);
     this.append_session_elements(local_session);
     var global_session = new Session("globals", ".", iframe, pathname);
 
@@ -1551,17 +1545,17 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {"hmr":true}
+var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(2)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./sheet.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./sheet.css");
+		module.hot.accept("!!../../../../css-loader/index.js!./sheet.css", function() {
+			var newContent = require("!!../../../../css-loader/index.js!./sheet.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1574,7 +1568,7 @@ if(false) {
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -1745,17 +1739,17 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {"hmr":true}
+var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(2)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./theme.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./theme.css");
+		module.hot.accept("!!../../../../css-loader/index.js!./theme.css", function() {
+			var newContent = require("!!../../../../css-loader/index.js!./theme.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1768,7 +1762,7 @@ if(false) {
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -1790,17 +1784,17 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {"hmr":true}
+var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(2)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./theme.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./theme.css");
+		module.hot.accept("!!../../../../css-loader/index.js!./theme.css", function() {
+			var newContent = require("!!../../../../css-loader/index.js!./theme.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1813,7 +1807,7 @@ if(false) {
 /* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -1836,20 +1830,10 @@ const template_prefix = "/cmb_admin/t/";
 const page_prefix = "/p/";
 
 module.exports = class {
-  constructor(target, pathname, iframe, refresh_path) {
+  constructor(target, dir, iframe, refresh_path) {
     var tabs = this.tabs = new TabsUI();
 
     var last_save_callback = false;
-
-    var dir = pathname;
-
-    if (dir.startsWith(template_prefix)) {
-      dir = dir.substring(template_prefix.length);
-    } else if (dir.startsWith(page_prefix)) {
-      dir = dir.substring(page_prefix.length);
-    }
-
-
 
     var treefm = this.treefm = new TreeFM({
       target: target,
@@ -1902,7 +1886,7 @@ module.exports = class {
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const XHR = __webpack_require__(1);
+const XHR = __webpack_require__(3);
 const Dir = __webpack_require__(41);
 const ContextMenu = __webpack_require__(43);
 __webpack_require__(45);
@@ -2367,17 +2351,17 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {"hmr":true}
+var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(2)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./style.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./style.css");
+		module.hot.accept("!!../../../../css-loader/index.js!./style.css", function() {
+			var newContent = require("!!../../../../css-loader/index.js!./style.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -2390,7 +2374,7 @@ if(false) {
 /* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -2487,17 +2471,17 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {"hmr":true}
+var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(2)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./horz.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./horz.css");
+		module.hot.accept("!!../../../../css-loader/index.js!./horz.css", function() {
+			var newContent = require("!!../../../../css-loader/index.js!./horz.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -2510,7 +2494,7 @@ if(false) {
 /* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -2569,7 +2553,7 @@ module.exports = class {
 
 //require("./style.css");
 
-var XHR = __webpack_require__(1);
+var XHR = __webpack_require__(3);
 
 module.exports = class {
   constructor(text, mode) {

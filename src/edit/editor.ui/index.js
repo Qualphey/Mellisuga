@@ -7,7 +7,7 @@ require("./theme.css")
 const Session = require("./session.js");
 
 module.exports = class {
-  constructor(target, pathname, iframe) {
+  constructor(target, dir, iframe, pathname) {
     this.window = new WindowUI({
       DOM: document.body,
       title: "Editor",
@@ -26,7 +26,7 @@ module.exports = class {
     global_local_switch.classList.add('global_local_switch');
     this.split.list[0].appendChild(global_local_switch);
 
-    var local_session = new Session(target, pathname, iframe, pathname);
+    var local_session = new Session(target, dir, iframe, pathname);
     this.append_session_elements(local_session);
     var global_session = new Session("globals", ".", iframe, pathname);
 

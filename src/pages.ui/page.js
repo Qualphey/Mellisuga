@@ -67,6 +67,7 @@ module.exports = class {
       var input = document.createElement("input");
       input.type = "text";
       popup.appendChild(input);
+      input.focus();
 
       var err_msg = document.createElement("span");
       popup.appendChild(err_msg);

@@ -111,6 +111,13 @@ module.exports = class {
     app.get(app_path, async function(req, res, next) {
       this_class.terminate(req, res, next);
     });
+
+
+    app.post("/authenticate", function(req, res, next) {
+      this_class.authenticate(req, res, next);
+    });
+
+    app.get("/terminate", this.terminate);
   }
 
   static async init(app, aura, cfg) {

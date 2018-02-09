@@ -27,6 +27,7 @@ var default_js = fs.readFileSync(__dirname+'/default_templates/main.js', 'utf8')
 
 module.exports = class {
   constructor(app, dir, cfg) {
+    console.log("PAGE MANAGER");
     this.app = app;
     this.dir = dir;
     if (!fs.existsSync(this.dir)){
@@ -66,6 +67,7 @@ module.exports = class {
       this.config = JSON.parse(fs.readFileSync(config_path, 'utf8'));
     }
 
+      console.log("permisive", this.config.permissions);
     if (this.config.permissions) {
       var user_only = this.config.permissions.user_only;
       this.all().forEach(function(page) {
@@ -106,14 +108,36 @@ module.exports = class {
         }
 
       });
+    } else {
+      this.all().forEach(function(page) {
+        var custom_path = false;
+
+        if (this_class.config.custom_paths) {
+          this_class.config.custom_paths.forEach(function(cpath) {
+            const cpath_name = Object.keys(cpath)[0];
+            if (page.file == cpath_name) {
+              custom_path = cpath[cpath_name];
+            }
+
+          });
+        }
+
+        console.log("PAGE", page);
+        serve_page({
+          prefix: this_class.path_prefix,
+          name: page.file,
+          custom_path: custom_path
+        });
+      });
     }
 
 
 
+
     function serve_page(cfg) {
-      console.log("SERVE", this_class.dir, cfg.name);
       const page_dir = path.resolve(this_class.dir, cfg.name);
       const page_path = cfg.custom_path || path.resolve(cfg.prefix, cfg.name);
+        console.log("SERVE", page_path);
       if (cfg.custom_path) {
         console.log("SERVE PATH", path.resolve(cfg.prefix, cfg.name));
         app.get(path.resolve(cfg.prefix, cfg.name), function(req, res) {
@@ -124,6 +148,7 @@ module.exports = class {
 
       if (cfg.auth_func) {
         console.log("AUTH FUNC", this_class.auth.orize);
+        console.log("PATH", page_path);
         app.get(page_path, this_class.auth.orize, async function(req, res) {
           try {
             const req_path = req.path;
@@ -149,6 +174,7 @@ module.exports = class {
               res.redirect(req_path+"/");
             } else {
               var result = await this_class.render_page(page_dir);
+              console.log("RESULT", result);
               if (result.err) {
                 console.error(result.err);
               } else {
@@ -282,6 +308,7 @@ module.exports = class {
       if (!page.blacklisted) {
         var lstat = fs.lstatSync(path.resolve(this_class.dir, file));
         if (lstat.isDirectory()) {
+          page.path = '/'+file;
           if (this_class.config.custom_paths) {
             page.path = path.resolve(this_class.path_prefix, file);
             this_class.config.custom_paths.forEach(function(cpath) {
@@ -349,6 +376,8 @@ module.exports = class {
 
   async render_page(page_dir_path) {
     try {
+
+      console.log("RENDER", page_dir_path);
       var index_html = path.resolve(page_dir_path, "index.html");
       var context_json = path.resolve(page_dir_path, "context.json");
       var global_context_json = path.resolve(global.cmb_config.globals_path, "context.json");
@@ -379,10 +408,10 @@ module.exports = class {
 
           result.html = rendered_html;
         } else {
-          result.html = index_html;
+          result.html = fs.readFileSync(index_html, "UTF-8");
         }
       } else {
-        err = "No HTML!";
+        result.err = "No HTML!";
       }
 
       if (result.err) {

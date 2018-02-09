@@ -1,6 +1,6 @@
 {
   "name": "cmbird",
-  "version": "0.0.15",
+  "version": "0.1.0",
   "description": "Node.js based, highly configurable content management system",
   "main": "index.js",
   "repository": "https://github.com/Qualphey/CMBird.git",
@@ -9,16 +9,17 @@
     "bcryptjs": "*",
     "body-parser": "*",
     "codemirror": "^5.32.0",
+    "cookie-parser": "^1.4.3",
     "express": "*",
     "fs-extra": "^5.0.0",
     "jsonlint": "^1.6.2",
     "jsonwebtoken": "^8.1.0",
+    "multer": "^1.3.0",
     "nunjucks": "^3.0.1",
     "pg": "*",
+    "pg-aura": "^0.1.2",
     "socket.io": "^2.0.4",
-    "socket.io-client": "^2.0.4",
-    "socket.io-express-session": "^0.1.3",
-    "pg-aura": "^0.1.2"
+    "socket.io-client": "^2.0.4"
   },
   "devDependencies": {
     "css-loader": "^0.28.7",

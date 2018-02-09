@@ -744,7 +744,7 @@ if (template) {
   iframe.src = 't/'+template;
   target = "templates";
 } else if (page) {
-  iframe.src = '/p/'+page;
+  iframe.src = '/'+page;
   target = "pages";
 }
 

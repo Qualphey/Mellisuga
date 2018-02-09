@@ -38,18 +38,25 @@ module.exports = class {
     var this_class = this;
 
     this.app_parse_token = function(ireq, ires, inext) {
-      console.log("PARSE TOKEN");
+      console.log("PARSE TOKEN", ireq.path);
       function forward(that, req, res, next) {
         if (req.headers.cookie) {
           var cookies = cookie.parse(req.headers.cookie)
           if (cookies[this_class.name+'_access_token']) {
+            console.log("ACCESS TOKEN", cookies[this_class.name+'_access_token']);
             req.access_token = cookies[this_class.name+'_access_token'];
+            next();
+          } else {
+            next();
           }
+        } else {
+          next();
         }
-        next();
       }
       forward(this, ireq, ires, inext);
     }
+
+    app.use(this.app_parse_token);
 
     this.terminate = function(ireq, ires, inext) {
       console.log("TERMINATE SESSION");
@@ -57,9 +64,9 @@ module.exports = class {
         var access_token = req.cookies[this_class.name+'_access_token']
         if (access_token) {
           res.clearCookie(this_class.name+'_access_token');
-          res.redirect('/');
+          res.redirect(this_class.paths.unauthorized);
         } else {
-          res.redirect('/signin');
+          res.redirect(this_class.paths.unauthorized);
         }
       }
       forward(this, ireq, ires, inext);
@@ -125,7 +132,7 @@ module.exports = class {
     }
   }
 
-  async register(data, next) {
+  async register(data) {
     try {
       var found = await this.table.select(
         ['email'],
@@ -133,31 +140,25 @@ module.exports = class {
       );
 
       if (!data.email) {
-        next("FAILED: email address was not defined");
+        return { err: "FAILED: email address was not defined" };
       } else if (!data.pwd) {
-        next("FAILED: password was not defined");
+        return { err: "FAILED: password was not defined" };
       } else if (!data.pwdr) {
-        next("FAILED: you did not repeat the password");
+        return { err: "FAILED: you did not repeat the password" };
       } else if (data.pwd !== data.pwdr) {
-        next("FAILED: passwords don't match");
+        return { err: "FAILED: passwords don't match" };
       } else if (found.length > 0) {
-        next("FAILED: email address already taken");
+        return { err: "FAILED: email address already taken" };
       } else {
         var salt = bcrypt.genSaltSync(10);
-        var user_data = [
-          ,
-          crypto.randomBytes(64).toString('hex'),
-          ''
-        ]
 
-        await this.table.insert(user_data)
         const result = await this.table.insert({
           email: data.email,
           password: bcrypt.hashSync(data.pwd, salt),
           jwt_secret: crypto.randomBytes(64).toString('hex'),
           cookie_secret: crypto.randomBytes(64).toString('hex')
         });
-        next(false);
+        return { err: false };
       }
     } catch (e) {
       console.error(e);
@@ -229,7 +230,7 @@ module.exports = class {
       if (access_token) {
         var found = await this.table.select(
           ['jwt_secret', 'access_token'],
-          "(access_token = $1)", [access_token]
+          "access_token = $1", [access_token]
         );
         console.log("FOUND",found);
         if (found.length > 0) {

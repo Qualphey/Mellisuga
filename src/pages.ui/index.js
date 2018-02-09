@@ -25,6 +25,7 @@ module.exports = class {
     }, function() {
       var pages = JSON.parse(this.responseText);
       for (let t = 0; t < pages.length; t++) {
+        console.log("PAGE", pages[t]);
         var page = new Page(pages[t], table);
         table.add(page.element);
       }
@@ -58,8 +59,8 @@ module.exports = class {
           var templates = JSON.parse(this.responseText);
           for (let t = 0; t < templates.length; t++) {
             var option = document.createElement("option");
-            option.value = templates[t];
-            option.innerHTML = templates[t];
+            option.value = templates[t].file;
+            option.innerHTML = templates[t].file;
             select.appendChild(option);
           }
 
@@ -87,7 +88,7 @@ module.exports = class {
               if (res.err) {
                 console.log(res.err);
               } else {
-                var page = new Page(data.name, table);
+                var page = new Page({ file: data.name, path: '/'+data.name });
 
                 table.remove(add_temp_btn);
                 table.add(page.element);

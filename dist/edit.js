@@ -206,9 +206,19 @@ var getElement = (function (fn) {
 
 	return function(selector) {
 		if (typeof memo[selector] === "undefined") {
-			memo[selector] = fn.call(this, selector);
+			var styleTarget = fn.call(this, selector);
+			// Special case to return head of iframe instead of iframe itself
+			if (styleTarget instanceof window.HTMLIFrameElement) {
+				try {
+					// This will throw an exception if access to iframe is blocked
+					// due to cross-origin restrictions
+					styleTarget = styleTarget.contentDocument.head;
+				} catch(e) {
+					styleTarget = null;
+				}
+			}
+			memo[selector] = styleTarget;
 		}
-
 		return memo[selector]
 	};
 })(function (target) {
@@ -232,7 +242,7 @@ module.exports = function(list, options) {
 
 	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
 	// tags it will allow on a page
-	if (!options.singleton) options.singleton = isOldIE();
+	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
 
 	// By default, add <style> tags to the <head> element
 	if (!options.insertInto) options.insertInto = "head";
@@ -338,8 +348,11 @@ function insertStyleElement (options, style) {
 		stylesInsertedAtTop.push(style);
 	} else if (options.insertAt === "bottom") {
 		target.appendChild(style);
+	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
+		var nextSibling = getElement(options.insertInto + " " + options.insertAt.before);
+		target.insertBefore(style, nextSibling);
 	} else {
-		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
 	}
 }
 
@@ -832,7 +845,7 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {}
+var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
 var update = __webpack_require__(2)(content, options);
@@ -841,8 +854,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../css-loader/index.js!./theme.css", function() {
-			var newContent = require("!!../../../css-loader/index.js!./theme.css");
+		module.hot.accept("!!../../node_modules/css-loader/index.js!./theme.css", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!./theme.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1545,7 +1558,7 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {}
+var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
 var update = __webpack_require__(2)(content, options);
@@ -1554,8 +1567,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../css-loader/index.js!./sheet.css", function() {
-			var newContent = require("!!../../../../css-loader/index.js!./sheet.css");
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./sheet.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./sheet.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1739,7 +1752,7 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {}
+var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
 var update = __webpack_require__(2)(content, options);
@@ -1748,8 +1761,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../css-loader/index.js!./theme.css", function() {
-			var newContent = require("!!../../../../css-loader/index.js!./theme.css");
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./theme.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./theme.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1784,7 +1797,7 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {}
+var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
 var update = __webpack_require__(2)(content, options);
@@ -1793,8 +1806,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../css-loader/index.js!./theme.css", function() {
-			var newContent = require("!!../../../../css-loader/index.js!./theme.css");
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./theme.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./theme.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -2351,7 +2364,7 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {}
+var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
 var update = __webpack_require__(2)(content, options);
@@ -2360,8 +2373,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../css-loader/index.js!./style.css", function() {
-			var newContent = require("!!../../../../css-loader/index.js!./style.css");
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./style.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./style.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -2471,7 +2484,7 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {}
+var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
 var update = __webpack_require__(2)(content, options);
@@ -2480,8 +2493,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../css-loader/index.js!./horz.css", function() {
-			var newContent = require("!!../../../../css-loader/index.js!./horz.css");
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./horz.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./horz.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});

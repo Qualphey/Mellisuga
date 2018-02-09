@@ -86,6 +86,7 @@ module.exports = class {
             permisive = true;
           }
         });
+        console.log("PAGE", page);
         if (permisive) {
           serve_page({
             prefix: this_class.path_prefix,
@@ -109,74 +110,75 @@ module.exports = class {
 
 
 
-    async function serve_page(cfg) {
-      try {
+    function serve_page(cfg) {
+      console.log("SERVE", this_class.dir, cfg.name);
+      const page_dir = path.resolve(this_class.dir, cfg.name);
+      const page_path = cfg.custom_path || path.resolve(cfg.prefix, cfg.name);
+      if (cfg.custom_path) {
+        console.log("SERVE PATH", path.resolve(cfg.prefix, cfg.name));
+        app.get(path.resolve(cfg.prefix, cfg.name), function(req, res) {
+          console.log("REDIRECT", cfg.custom_path);
+          res.redirect(cfg.custom_path);
+        });
+      }
 
-          console.log(cfg);
-
-        const page_dir = path.resolve(this_class.dir, cfg.name);
-        const page_path = cfg.custom_path || path.resolve(cfg.prefix, cfg.name);
-
-        if (cfg.auth_func) {
-          console.log("AUTH FUNC", this_class.auth.orize);
-          app.get(page_path, this_class.auth.orize, async function(req, res) {
-            try {
-              const req_path = req.path;
-              if (req_path.slice(-1) != "/") {
-                res.redirect(req_path+"/");
+      if (cfg.auth_func) {
+        console.log("AUTH FUNC", this_class.auth.orize);
+        app.get(page_path, this_class.auth.orize, async function(req, res) {
+          try {
+            const req_path = req.path;
+            if (req_path.slice(-1) != "/") {
+              res.redirect(req_path+"/");
+            } else {
+              var result = await this_class.render_page(page_dir);
+              if (result.err) {
+                console.error(result.err);
               } else {
-                var result = await this_class.render_page(page_dir);
-                if (result.err) {
-                  console.error(result.err);
-                } else {
-                  res.send(result.html);
-                }
+                res.send(result.html);
               }
-            } catch (e) {
-              console.error(e.stack)
             }
-          });
-        } else {
-          app.get(page_path, async function(req, res) {
-            try {
-              const req_path = req.path;
-              if (req_path.slice(-1) != "/") {
-                res.redirect(req_path+"/");
+          } catch (e) {
+            console.error(e.stack)
+          }
+        });
+      } else {
+        app.get(page_path, async function(req, res) {
+          try {
+            const req_path = req.path;
+            if (req_path.slice(-1) != "/") {
+              res.redirect(req_path+"/");
+            } else {
+              var result = await this_class.render_page(page_dir);
+              if (result.err) {
+                console.error(result.err);
               } else {
-                var result = await this_class.render_page(page_dir);
-                if (result.err) {
-                  console.error(result.err);
-                } else {
-                  res.send(result.html);
-                }
+                res.send(result.html);
               }
-            } catch (e) {
-              console.error(e.stack)
             }
-          });
-        }
+          } catch (e) {
+            console.error(e.stack)
+          }
+        });
+      }
 
-        function serve_dir(dir_path, dir_file_path) {
-          if (fs.existsSync(dir_file_path)) {
-            if (fs.lstatSync(dir_file_path).isDirectory()) {
-              fs.readdirSync(dir_file_path).forEach(function(file) {
-                const sub_path = path.resolve(dir_path, file);
-                const sub_file = path.resolve(dir_file_path, file);
-                if (fs.lstatSync(sub_file).isDirectory()) {
-                  serve_dir(sub_path, sub_file);
-                } else {
-                  app.get(sub_path, function(req, res) {
-                    res.sendFile(sub_file);
-                  });
-                }
-              });
-            }
+      function serve_dir(dir_path, dir_file_path) {
+        if (fs.existsSync(dir_file_path)) {
+          if (fs.lstatSync(dir_file_path).isDirectory()) {
+            fs.readdirSync(dir_file_path).forEach(function(file) {
+              const sub_path = path.resolve(dir_path, file);
+              const sub_file = path.resolve(dir_file_path, file);
+              if (fs.lstatSync(sub_file).isDirectory()) {
+                serve_dir(sub_path, sub_file);
+              } else {
+                app.get(sub_path, function(req, res) {
+                  res.sendFile(sub_file);
+                });
+              }
+            });
           }
         }
-        serve_dir(page_path, page_dir);
-      } catch (e) {
-        console.error(e.stack);
       }
+      serve_dir(page_path, page_dir);
     }
 
     app.get(cfg.command_path, function(req, res) {
@@ -319,7 +321,11 @@ module.exports = class {
         for (var p = 0; p < page_list.length; p++) {
           for (var n = 0; n < names.length; n++) {
             if (page_list[p].file == names[n]) {
-              var item = { name: names[n], path: this.path_prefix + "/" + names[n] };
+              var path_prefix = this.path_prefix;
+              while (path_prefix.slice(-1) === "/") {
+                path_prefix = path_prefix.slice(0, -1);
+              }
+              var item = { name: names[n], path: path_prefix + "/" + names[n] };
               var custom_path = false;
               if (this.config.custom_paths) {
                 this.config.custom_paths.forEach(function(cpath) {

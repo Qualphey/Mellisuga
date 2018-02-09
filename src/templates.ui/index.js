@@ -25,7 +25,7 @@ module.exports = class {
     }, function() {
       var templates = JSON.parse(this.responseText);
       for (let t = 0; t < templates.length; t++) {
-        var template = new Template(templates[t], table);
+        var template = new Template(templates[t].file, table);
         table.add(template.element);
       }
 

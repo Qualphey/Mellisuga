@@ -75,7 +75,15 @@ module.exports = class {
         }
       });
 
-      var builtin_pages = new BuiltinIO(router.app);
+      var builtin_pages = await BuiltinIO.init(
+        path.resolve(config.pages_path, ".builtin"), [
+          path.resolve(__dirname, "setup"),
+          path.resolve(__dirname, "modules/auth.io/pages/signin"),
+          path.resolve(__dirname, "modules/auth.io/pages/signup")
+        ], router.app
+      );
+
+
       if (!config.setup) {
         initialise(config.db_name);
       }
@@ -85,7 +93,7 @@ module.exports = class {
           db_host: "127.0.0.1",
           db_super_usr: cfg.db_user,
           db_super_pwd: cfg.db_pwd,
-          db_name: cfg.db_name
+          db_name: db_name
         });
 
         var posts = await PostsIO.init(router.app, aura, {
@@ -115,17 +123,6 @@ module.exports = class {
         });
 
         var pages = new PagesIO(router.app, posts, auth);
-
-        var auth_pages = Auth.builtin_pages();
-        auth_pages.forEach(async function(full_path) {
-          console.log("ADD BUILTIN", full_path);
-          await builtin_pages.add(full_path);
-        });
-
-        var setup_template_path = path.resolve(__dirname, "setup");
-
-          console.log("ADD BUILTIN", setup_template_path);
-        await builtin_pages.add(setup_template_path);
 
         io.on('connection', function(socket) {
           console.log("SOCKET CONNECTED");
@@ -298,6 +295,7 @@ module.exports = class {
             } else if (data.pwd !== data.pwdr) {
               res.send("FAILED: passwords don't match");
             } else {
+              console.log("DATA", data);
               config.db_name = data.name.replace(/\s+/g, '').toLowerCase();
               config.db_pwd = crypto.randomBytes(20).toString('hex');
               var admin = await initialise(config.db_name);

@@ -62,6 +62,19 @@ module.exports = class {
 
     (async () => {
       const router = await Router.init();
+
+
+
+      router.use(function(req, res, next) {
+//        console.log("REQUEST", req.path);
+
+        if (!req.path.startsWith("/setup") && !req.path.startsWith("/initialise") && config.setup) {
+          res.redirect("/setup");
+        } else {
+          next();
+        }
+      });
+
       var builtin_pages = new BuiltinIO(router.app);
       if (!config.setup) {
         initialise(config.db_name);
@@ -123,11 +136,6 @@ module.exports = class {
         });
 
         router.serve(__dirname+"/public");
-
-        router.use(function(req, res, next) {
-          console.log("REQUEST", req.path);
-          next();
-        });
 
         function authorize(req, res, next) {
           admin.authorize(req, res, next);
@@ -323,7 +331,7 @@ module.exports = class {
           console.error(e.stack)
         }
       });
-      
+
     })().catch(e => console.error(e.stack));
   }
 }

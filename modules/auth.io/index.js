@@ -84,16 +84,14 @@ module.exports = class {
 
         switch (data.command) {
           case 'register':
-            console.log(data);
-            await this_class.register(data, function(err) { //ERROR HANDLER ONLY
-              if (err) {
-                res.send(err);
-                next();
-              } else {
-                res.redirect(this_class.paths.unauthorized);
-                next();
-              }
-            });
+            const err = await this_class.register(data);
+
+            if (err) {
+              res.send(err);
+            } else {
+              console.log("REDIRECT", this_class.paths.unauthorized);
+              res.redirect(this_class.paths.unauthorized);
+            }
             break;
           case 'authenticate':
             this_class.authenticate(req, res, next);
@@ -147,15 +145,15 @@ module.exports = class {
       );
 
       if (!data.email) {
-        return { err: "FAILED: email address was not defined" };
+        return "FAILED: email address was not defined";
       } else if (!data.pwd) {
-        return { err: "FAILED: password was not defined" };
+        return "FAILED: password was not defined";
       } else if (!data.pwdr) {
-        return { err: "FAILED: you did not repeat the password" };
+        return "FAILED: you did not repeat the password";
       } else if (data.pwd !== data.pwdr) {
-        return { err: "FAILED: passwords don't match" };
+        return "FAILED: passwords don't match";
       } else if (found.length > 0) {
-        return { err: "FAILED: email address already taken" };
+        return "FAILED: email address already taken";
       } else {
         var salt = bcrypt.genSaltSync(10);
 
@@ -165,10 +163,11 @@ module.exports = class {
           jwt_secret: crypto.randomBytes(64).toString('hex'),
           cookie_secret: crypto.randomBytes(64).toString('hex')
         });
-        return { err: false };
+        return false;
       }
     } catch (e) {
       console.error(e);
+      return false;
     }
   }
 
@@ -188,7 +187,7 @@ module.exports = class {
 
         if (0 < found.length) {
           found = JSON.parse(JSON.stringify(found[0]));
-          console.log("FOUND", found);
+
           if (bcrypt.compareSync(data.pwd, found.password)) {
             var token = jwt.sign(data.email, found.jwt_secret);
             found.access_token = token;
@@ -197,22 +196,17 @@ module.exports = class {
               access_token: token
             }, "id = $1", [found.id]);
 
-            console.log("TOKEN", token);
-            console.log("SET-COOKIE");
             res.cookie(this.name+'_access_token', token, {
               httpOnly: true,
               maxAge: 1000 * 60 * 15
             });
             if (this.forward_token) {
-              console.log("REDIRECT", nunjucks_env.render('forward_token.html', {
-                target: this.paths.authenticated,
-                token: "abc"
-              }) );
               res.send(nunjucks_env.render('forward_token.html', {
                 target: this.paths.authenticated,
                 token: token
               }));
               console.log("AUTH SUCCESSS");
+              console.log("TOKEN", token);
             } else {
               res.redirect(this.paths.authenticated);
             }
@@ -231,21 +225,21 @@ module.exports = class {
 
   async authorize(req, res, next) {
     try {
-      console.log("authorize attempt", req.cookies);
       var access_token = req.access_token;
-      console.log("token", access_token);
+      console.log("AUTHORIZE");
+      console.log("TOKEN", access_token);
       if (access_token) {
         var found = await this.table.select(
           ['jwt_secret', 'access_token'],
           "access_token = $1", [access_token]
         );
-        console.log("FOUND",found);
+
+        console.log("FOUND", found);
         if (found.length > 0) {
           found = JSON.parse(JSON.stringify(found[0]));
-          console.log("FOUND",found);
+          console.log("FOUND USER", found);
           var decoded = jwt.verify(req.access_token, found.jwt_secret);
-          console.log("authorize next");
-          console.log(req.body);
+          console.log("AUTHORIZATION SUCCESS");
           next();
         } else {
           this.terminate(req, res, next);

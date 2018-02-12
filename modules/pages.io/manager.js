@@ -166,6 +166,7 @@ module.exports = class {
             console.error(e.stack)
           }
         });
+        serve_dir(page_path, page_dir, this_class.auth.orize);
       } else {
         app.get(page_path, async function(req, res) {
           try {
@@ -174,7 +175,7 @@ module.exports = class {
               res.redirect(req_path+"/");
             } else {
               var result = await this_class.render_page(page_dir);
-              console.log("RESULT", result);
+        //      console.log("RESULT", result);
               if (result.err) {
                 console.error(result.err);
               } else {
@@ -185,26 +186,32 @@ module.exports = class {
             console.error(e.stack)
           }
         });
+        serve_dir(page_path, page_dir);
       }
 
-      function serve_dir(dir_path, dir_file_path) {
+      function serve_dir(dir_path, dir_file_path, auth) {
         if (fs.existsSync(dir_file_path)) {
           if (fs.lstatSync(dir_file_path).isDirectory()) {
             fs.readdirSync(dir_file_path).forEach(function(file) {
               const sub_path = path.resolve(dir_path, file);
               const sub_file = path.resolve(dir_file_path, file);
               if (fs.lstatSync(sub_file).isDirectory()) {
-                serve_dir(sub_path, sub_file);
+                serve_dir(sub_path, sub_file, auth);
               } else {
-                app.get(sub_path, function(req, res) {
-                  res.sendFile(sub_file);
-                });
+                if (auth) {
+                  app.get(sub_path, auth, function(req, res) {
+                    res.sendFile(sub_file);
+                  });
+                } else {
+                  app.get(sub_path, function(req, res) {
+                    res.sendFile(sub_file);
+                  });
+                }
               }
             });
           }
         }
       }
-      serve_dir(page_path, page_dir);
     }
 
     app.get(cfg.command_path, function(req, res) {

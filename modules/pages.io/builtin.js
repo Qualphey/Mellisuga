@@ -7,16 +7,12 @@ const Manager = require("./manager.js");
 
 
 module.exports = class extends Manager {
-  constructor(app, posts, auth) {
-    console.log("BUILDTIN");
-    var pages_dir = global.cmb_config.pages_path;
+  constructor(builtin_path, app, posts, auth) {
     var template_dir = global.cmb_config.templates_path;
 
-    if (!fs.existsSync(pages_dir)){
-      fs.mkdirSync(pages_dir);
-    }
 
-    super(app, pages_dir+"/.builtin", {
+
+    super(app, builtin_path, {
       path_prefix: '/',
       command_path: global.cmb_config.admin_path+"/builtin.io",
       posts: posts,
@@ -25,18 +21,42 @@ module.exports = class extends Manager {
     });
   }
 
-  add(full_path) {
+  static async init(builtin_path, paths, app, posts, auth) {
     try {
-      var filename = full_path.replace(/^.*[\\\/]/, '');
-      var builtin_path = path.resolve(this.dir, filename);
-      if (!fs.existsSync(builtin_path)) {
-        fs.copy(full_path, builtin_path, function (err) {
-          if (err) return console.error(err)
-          console.log('Builtin page successfuly added');
+
+      if (!fs.existsSync(global.cmb_config.pages_path)){
+        fs.mkdirSync(global.cmb_config.pages_path); // TODO !!!!!!!!!!!!
+      }
+
+      if (!fs.existsSync(builtin_path)){
+        fs.mkdirSync(builtin_path);
+      }
+
+      for (var p = 0; p < paths.length; p++) {
+        await new Promise(function(resolve) {
+          var filename = paths[p].replace(/^.*[\\\/]/, '');
+          var new_file_path = path.resolve(builtin_path, filename);
+          if (!fs.existsSync(new_file_path)) {
+            fs.copy(paths[p], new_file_path, function (err) {
+              if (err) {
+                console.error(err)
+              } else {
+                console.log('Builtin page successfuly added');
+              }
+              resolve();
+            });
+          } else {
+            resolve();
+          }
         });
       }
+
+
+
+      return new module.exports(builtin_path, app, posts, auth);
     } catch (e) {
       console.error(e);
+      return undefined;
     }
   }
 /*

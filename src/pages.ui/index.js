@@ -11,13 +11,19 @@ var html = require('./body.html');
 
 module.exports = class {
   constructor(div, templates) {
-    div.innerHTML = html;
-    div.classList.add('pages');
+    div.classList.add('pages_ui');
 
-    this.list = div.querySelector(".list_display");
+    var h2 = document.createElement("h2");
+    h2.innerHTML = "Pages"
+    div.appendChild(h2);
 
-    var table = new GridUI();
-    this.list.appendChild(table.element);
+
+    var grid_ui = new GridUI(6, window.innerWidth, 150);
+    div.appendChild(grid_ui.element);
+
+    window.addEventListener('resize', function() {
+      grid_ui.resize(window.innerWidth);
+    });
 
     var this_class = this;
     XHR.get('pages.io', {
@@ -26,15 +32,15 @@ module.exports = class {
       var pages = JSON.parse(this.responseText);
       for (let t = 0; t < pages.length; t++) {
         console.log("PAGE", pages[t]);
-        var page = new Page(pages[t], table);
-        table.add(page.element);
+        var page = new Page(pages[t], grid_ui);
+        grid_ui.add(page.element);
       }
 
       var add_temp_btn = document.createElement("div");
-      add_temp_btn.classList.add("list_item");
-      add_temp_btn.classList.add("add_item");
+      add_temp_btn.classList.add("pages_ui_item");
+      add_temp_btn.classList.add("pages_ui_add");
       add_temp_btn.addEventListener("click", new_page);
-      table.add(add_temp_btn);
+      grid_ui.add(add_temp_btn);
 
       var text = document.createElement("h3");
       text.innerHTML = "++";
@@ -90,9 +96,9 @@ module.exports = class {
               } else {
                 var page = new Page({ file: data.name, path: '/'+data.name });
 
-                table.remove(add_temp_btn);
-                table.add(page.element);
-                table.add(add_temp_btn);
+                grid_ui.remove(add_temp_btn);
+                grid_ui.add(page.element);
+                grid_ui.add(add_temp_btn);
                 input.focus();
                 input.value = '';
               }

@@ -22,7 +22,7 @@ module.exports = class {
   display() {
 
     var page_element = this.element;
-    page_element.classList.add('list_item');
+    page_element.classList.add('templates_ui_item');
 
     var this_class = this;
 

@@ -3948,21 +3948,48 @@ module.exports = function(obj, fn){
 
 var TR = __webpack_require__(83);
 
+__webpack_require__(106);
+
 module.exports = class {
-  constructor() {
+  constructor(items_in_row, width, min_a) {
     this.element = document.createElement('table');
-    this.element.classList.add('dynamic_table');
+    this.element.classList.add('grid_ui');
+
+    this.min_a = min_a;
+    this.items_in_row = items_in_row;
+    this.item_a = width/items_in_row-4;
+    if (this.item_a < this.min_a) {
+      this.item_a = this.min_a;
+    }
 
     this.trs = [];
-    this.cur_tr = new TR();
+    this.tds = [];
+    this.cur_tr = new TR(items_in_row);
     this.element.appendChild(this.cur_tr.element);
     this.trs.push(this.cur_tr);
 
   }
 
+  resize(width) {
+    if (width) {
+      this.item_a = width/this.items_in_row-4;
+      if (this.item_a < this.min_a) {
+        this.item_a = this.min_a;
+      }
+    }
+
+    for (var i = 0; i < this.tds.length; i++) {
+      this.tds[i].style.width = this.item_a+"px";
+      this.tds[i].style.height = this.item_a+"px";
+
+      this.tds[i].style.minWidth = this.min_a+"px";
+    }
+  }
+
   add(item) {
+    console.log(item, this.cur_tr.items, this.cur_tr.max_items);
     if (this.cur_tr.items == this.cur_tr.max_items) {
-      this.cur_tr = new TR();
+      this.cur_tr = new TR(this.items_in_row);
       this.element.appendChild(this.cur_tr.element);
 
       var td = document.createElement('td');
@@ -3970,10 +3997,14 @@ module.exports = class {
       this.cur_tr.add(td);
 
       this.trs.push(this.cur_tr);
+      this.tds.push(td);
+      this.resize();
     } else {
       var td = document.createElement('td');
       td.appendChild(item);
       this.cur_tr.add(td);
+      this.tds.push(td);
+      this.resize()
     }
   }
 
@@ -4051,29 +4082,29 @@ module.exports = class {
 
 __webpack_require__(54);
 
-var socket = global.socket = __webpack_require__(56)('http://localhost:9639');
+window.addEventListener("load", async function(e) {
+  try {
+    var socket = global.socket = __webpack_require__(56)('http://localhost:9639');
 
-var templates_div = document.createElement('div');
-document.body.appendChild(templates_div);
-var TemplatesUI = new (__webpack_require__(80))(templates_div);
+    var templates_div = document.createElement('div');
+    document.body.appendChild(templates_div);
+    var TemplatesUI = new (__webpack_require__(80))(templates_div);
 
-var pages_div = document.createElement('div');
-document.body.appendChild(pages_div);
-var PagesUI = new (__webpack_require__(87))(pages_div);
-/*
-var pages_div = document.createElement('div');
-document.body.appendChild(pages_div);
-var PagesUI = new (require('./pages.ui/index.js'))(pages_div);
-*/
-var posts_div = document.createElement('div');
-document.body.appendChild(posts_div);
-var PostsUI = new (__webpack_require__(93))(posts_div);
-/*
-var ttb = document.getElementById('tt');
-ttb.addEventListener('click', function(e) {
-  socket.emit('token_test', 'testing');
+    var pages_div = document.createElement('div');
+    document.body.appendChild(pages_div);
+    var PagesUI = new (__webpack_require__(87))(pages_div);
+
+    var posts_div = document.createElement('div');
+    document.body.appendChild(posts_div);
+    var PostsUI = new (__webpack_require__(93))(posts_div);
+
+    var gallery_div = document.createElement('div');
+    document.body.appendChild(gallery_div);
+    var GalleryUI = __webpack_require__(100).init(gallery_div);
+  } catch (e) {
+    console.error(e);
+  }
 });
-*/
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
@@ -7463,13 +7494,19 @@ var html = __webpack_require__(86);
 
 module.exports = class {
   constructor(div) {
-    div.innerHTML = html;
-    div.classList.add('templates');
+    div.classList.add('templates_ui');
 
-    this.list = div.querySelector(".list_display");
+    var h2 = document.createElement("h2");
+    h2.innerHTML = "Templates"
+    div.appendChild(h2);
 
-    var table = new GridUI();
-    this.list.appendChild(table.element);
+
+    var grid_ui = new GridUI(6, window.innerWidth, 150);
+    div.appendChild(grid_ui.element);
+
+    window.addEventListener('resize', function() {
+      grid_ui.resize(window.innerWidth);
+    });
 
     var this_class = this;
     XHR.get('templates.io', {
@@ -7477,15 +7514,15 @@ module.exports = class {
     }, function() {
       var templates = JSON.parse(this.responseText);
       for (let t = 0; t < templates.length; t++) {
-        var template = new Template(templates[t].file, table);
-        table.add(template.element);
+        var template = new Template(templates[t].file, grid_ui);
+        grid_ui.add(template.element);
       }
 
       var add_temp_btn = document.createElement("div");
-      add_temp_btn.classList.add("list_item");
-      add_temp_btn.classList.add("add_item");
+      add_temp_btn.classList.add("templates_ui_item");
+      add_temp_btn.classList.add("templates_ui_add");
       add_temp_btn.addEventListener("click", new_template);
-      table.add(add_temp_btn);
+      grid_ui.add(add_temp_btn);
 
       var text = document.createElement("h3");
       text.innerHTML = "++";
@@ -7512,11 +7549,11 @@ module.exports = class {
               if (res.err) {
                 console.log(res.err);
               } else {
-                var template = new Template(data.name, table);
+                var template = new Template(data.name, grid_ui);
 
-                table.remove(add_temp_btn);
-                table.add(template.element);
-                table.add(add_temp_btn);
+                grid_ui.remove(add_temp_btn);
+                grid_ui.add(template.element);
+                grid_ui.add(add_temp_btn);
                 input.focus();
                 input.value = '';
               }
@@ -7560,7 +7597,7 @@ module.exports = class {
   display() {
 
     var page_element = this.element;
-    page_element.classList.add('list_item');
+    page_element.classList.add('templates_ui_item');
 
     var this_class = this;
 
@@ -7654,10 +7691,10 @@ module.exports = "<table>\n  <tr>\n    <td class=\"page_name\" colspan=\"2\">\n 
 
 
 module.exports = class {
-  constructor() {
+  constructor(items_in_row) {
     this.element = document.createElement('tr');
     this.items = 0;
-    this.max_items = 6;
+    this.max_items = items_in_row;
     this.tds = [];
 
   }
@@ -7721,7 +7758,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, ".color_wrap {\n  background-color: #333;\n  width: 960px;\n  padding: 10px;\n  margin: auto;\n}\n.list_display {\n  background-color: #333;\n  height: 308px;\n  width: 960px;\n  margin: auto;\n  padding: 10px;\n  text-align: left;\n  overflow-y: auto;\n  white-space: nowrap;\n}\n.list_display table {\n  table-layout: fixed;\n  width: 100%;\n  height: 100%;\n}\n.list_display tr {\n  height: 150px;\n}\n.list_item {\n  display: inline-block;\n  width: 150px;\n  height: 150px;\n  background-color: #111;\n  color: #FFF;\n  font-size: 18px;\n  text-align: center;\n  margin: 0 auto;\n  text-decoration: none;\n  user-select: none;\n}\n.list_item table {\n  table-layout: fixed;\n  width: 100%;\n  height: 100%;\n}\n.list_item tr {\n  height: 50%;\n}\n.list_item td {\n  word-wrap: break-word;\n  word-break: break-all;\n  white-space: normal;\n}\n.add_item {\n  cursor: pointer;\n}\n.add_item h3 {\n  margin: 0;\n  line-height: 150px;\n}\n.list_item button:hover {\n  background-color: #191919;\n}\n.list_item input {\n  background-color: #090909;\n  color: #FFF;\n  border: 1px solid #333;\n  width: 130px;\n  padding: 2px 4px;\n  height: 20px;\n  line-height: 20px;\n  margin-top: 65px;\n}\n.page_name {\n  cursor: pointer;\n}\n.page_name:hover {\n  background-color: #222;\n}\n.list_item:hover {\n  background-color: #191919;\n}\n", ""]);
+exports.push([module.i, ".templates_ui {\n  background-color: #333;\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n.templates_ui_item {\n  background-color: #111;\n  width: 100%;\n  height: 100%;\n}\n.templates_ui_item:hover {\n  background-color: #191919;\n}\n.templates_ui_item .page_name {\n  cursor: pointer;\n}\n.templates_ui_item .page_name:hover {\n  background-color: #222;\n}\n.templates_ui_item table {\n  width: 100%;\n  height: 100%;\n}\n.templates_ui_item td {\n  width: 50%;\n  height: 50%;\n}\n.templates_ui_add {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n", ""]);
 
 // exports
 
@@ -7750,13 +7787,19 @@ var html = __webpack_require__(92);
 
 module.exports = class {
   constructor(div, templates) {
-    div.innerHTML = html;
-    div.classList.add('pages');
+    div.classList.add('pages_ui');
 
-    this.list = div.querySelector(".list_display");
+    var h2 = document.createElement("h2");
+    h2.innerHTML = "Pages"
+    div.appendChild(h2);
 
-    var table = new GridUI();
-    this.list.appendChild(table.element);
+
+    var grid_ui = new GridUI(6, window.innerWidth, 150);
+    div.appendChild(grid_ui.element);
+
+    window.addEventListener('resize', function() {
+      grid_ui.resize(window.innerWidth);
+    });
 
     var this_class = this;
     XHR.get('pages.io', {
@@ -7765,15 +7808,15 @@ module.exports = class {
       var pages = JSON.parse(this.responseText);
       for (let t = 0; t < pages.length; t++) {
         console.log("PAGE", pages[t]);
-        var page = new Page(pages[t], table);
-        table.add(page.element);
+        var page = new Page(pages[t], grid_ui);
+        grid_ui.add(page.element);
       }
 
       var add_temp_btn = document.createElement("div");
-      add_temp_btn.classList.add("list_item");
-      add_temp_btn.classList.add("add_item");
+      add_temp_btn.classList.add("pages_ui_item");
+      add_temp_btn.classList.add("pages_ui_add");
       add_temp_btn.addEventListener("click", new_page);
-      table.add(add_temp_btn);
+      grid_ui.add(add_temp_btn);
 
       var text = document.createElement("h3");
       text.innerHTML = "++";
@@ -7829,9 +7872,9 @@ module.exports = class {
               } else {
                 var page = new Page({ file: data.name, path: '/'+data.name });
 
-                table.remove(add_temp_btn);
-                table.add(page.element);
-                table.add(add_temp_btn);
+                grid_ui.remove(add_temp_btn);
+                grid_ui.add(page.element);
+                grid_ui.add(add_temp_btn);
                 input.focus();
                 input.value = '';
               }
@@ -7876,7 +7919,7 @@ module.exports = class {
   display() {
 
     var page_element = this.element;
-    page_element.classList.add('list_item');
+    page_element.classList.add('pages_ui_item');
 
     var this_class = this;
 
@@ -7993,7 +8036,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, ".pages {\n  margin-top: 40px;\n}\n.color_wrap {\n  background-color: #333;\n  width: 960px;\n  padding: 10px;\n  margin: auto;\n}\n.list_display {\n  background-color: #333;\n  height: 308px;\n  width: 960px;\n  margin: auto;\n  padding: 10px;\n  text-align: left;\n  overflow-y: auto;\n  white-space: nowrap;\n}\n.list_display table {\n  table-layout: fixed;\n  width: 100%;\n  height: 100%;\n}\n.list_display tr {\n  height: 150px;\n}\n.list_item {\n  display: inline-block;\n  width: 150px;\n  height: 150px;\n  background-color: #111;\n  color: #FFF;\n  font-size: 18px;\n  text-align: center;\n  margin: 0 auto;\n  text-decoration: none;\n  user-select: none;\n}\n.list_item table {\n  table-layout: fixed;\n  width: 100%;\n  height: 100%;\n}\n.list_item tr {\n  height: 50%;\n}\n.list_item td {\n  word-wrap: break-word;\n  word-break: break-all;\n  white-space: normal;\n}\n.add_item {\n  cursor: pointer;\n}\n.add_item h3 {\n  margin: 0;\n  line-height: 150px;\n}\n.list_item button {\n  float: right;\n  margin-top: 7px;\n  margin-right: 15px;\n}\n.list_item input {\n  background-color: #090909;\n  color: #FFF;\n  border: 1px solid #333;\n  width: 130px;\n  padding: 2px 4px;\n  height: 20px;\n  line-height: 20px;\n  margin-top: 45px;\n}\n.list_item select {\n  display: block;\n  margin: 0 auto;\n  margin-top: 3px;\n  background-color: #090909;\n  color: #FFF;\n  border: 1px solid #333;\n  width: 130px;\n  padding: 2px 4px;\n  height: 20px;\n  line-height: 20px;\n}\n.page_name {\n  cursor: pointer;\n}\n.page_name:hover {\n  background-color: #222;\n}\n.list_item:hover {\n  background-color: #191919;\n}\n", ""]);
+exports.push([module.i, ".pages_ui {\n  margin-top: 40px;\n  background-color: #333;\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n.pages_ui_item {\n  background-color: #111;\n  width: 100%;\n  height: 100%;\n}\n.pages_ui_item:hover {\n  background-color: #191919;\n}\n.pages_ui_item .page_name {\n  cursor: pointer;\n}\n.pages_ui_item .page_name:hover {\n  background-color: #222;\n}\n.pages_ui_item table {\n  width: 100%;\n  height: 100%;\n}\n.pages_ui_item td {\n  width: 50%;\n  height: 50%;\n}\n.pages_ui_add {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n", ""]);
 
 // exports
 
@@ -8289,7 +8332,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, ".posts  {\n  background-color: #333;\n  width: 960px;\n  margin: auto;\n  margin-top: 40px;\n  margin-bottom: 40px;\n  padding: 10px;\n}\n\n.post_display, table {\n  width: 100%;\n}\n\n.post_title {\n  display: inline-block;\n  margin: 0;\n  padding: 10px 30px;\n}\n\n.post_element button {\n  float: right;\n}\n\n.post_element {\n  margin-top: 20px;\n}\n\n.post_content {\n  padding: 0px 20px;\n  width: calc(100% - 40px);\n  word-wrap: break-word;\n}\n\n\n.new_post_button {\n  width: 100%;\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n  background-color: #111;\n  color: #FFF;\n  cursor: pointer;\n  user-select: none;\n}\n\n.new_post_button:hover {\n  background-color: #222;\n}\n\n.post_title_input {\n  width: 300px;\n}\n\n.post_tags_input {\n  width: 500px;\n}\n\n.post_submit_input, .post_cancel_input {\n  width: 120px;\n  float: right;\n}\n\n.note-toolbar {\n  z-index: 1;\n}\n", ""]);
+exports.push([module.i, ".posts  {\n  background-color: #333;\n  width: calc(100%-20px);\n  margin: auto;\n  margin-top: 40px;\n  margin-bottom: 40px;\n  padding: 10px;\n}\n\n.post_display, table {\n  width: 100%;\n}\n\n.post_title {\n  display: inline-block;\n  margin: 0;\n  padding: 10px 30px;\n}\n\n.post_element button {\n  float: right;\n}\n\n.post_element {\n  margin-top: 20px;\n}\n\n.post_content {\n  padding: 0px 20px;\n  width: calc(100% - 40px);\n  word-wrap: break-word;\n}\n\n\n.new_post_button {\n  width: 100%;\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n  background-color: #111;\n  color: #FFF;\n  cursor: pointer;\n  user-select: none;\n}\n\n.new_post_button:hover {\n  background-color: #222;\n}\n\n.post_title_input {\n  width: 300px;\n}\n\n.post_tags_input {\n  width: 500px;\n}\n\n.post_submit_input, .post_cancel_input {\n  width: 120px;\n  float: right;\n}\n\n.note-toolbar {\n  z-index: 1;\n}\n", ""]);
 
 // exports
 
@@ -8299,6 +8342,402 @@ exports.push([module.i, ".posts  {\n  background-color: #333;\n  width: 960px;\n
 /***/ (function(module, exports) {
 
 module.exports = "<h2>Posts</h2>\n\n<div class=\"new_post_button\">\n  Write a new post\n</div>\n\n<div class=\"post_editor\" style=\"display: none\">\n  <input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n  <div class=\"post_summernote\"></div>\n  <input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n  <input type=\"submit\" class=\"post_submit_input\" />\n  <div class=\"post_element\">\n    <h3 class=\"post_display_title post_title\"></h3>\n    <div class=\"post_display post_content\"></div>\n  </div>\n</div>\n\n<div class=\"post_list\">\n\n</div>\n";
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+const XHR = __webpack_require__(110);
+const Image = __webpack_require__(111);
+
+
+var GridUI = __webpack_require__(24);
+
+__webpack_require__(103);
+
+module.exports = class {
+  constructor(div) {
+
+  }
+
+  static async init(div) {
+    div.classList.add('gallery_ui');
+
+    var h2 = document.createElement("h2");
+    h2.innerHTML = "Gallery"
+    div.appendChild(h2);
+
+
+    var grid_ui = new GridUI(6, window.innerWidth, 150);
+    div.appendChild(grid_ui.element);
+
+    window.addEventListener('resize', function() {
+      grid_ui.resize(window.innerWidth);
+    });
+
+    var srcs = await XHR.get('/gallery.ui', {
+      command: "all"
+    });
+
+    var images = [];
+
+    for (var i = 0; i < srcs.length; i++) {
+      var src = srcs[i];
+      var image = await Image.init(src, grid_ui);
+      if (image) {
+        images.push(image);
+        grid_ui.add(image.element);
+      }
+    }
+    grid_ui.resize(window.innerWidth);
+
+    var add_temp_btn = document.createElement("div");
+    add_temp_btn.classList.add("gallery_ui_item");
+    add_temp_btn.classList.add("gallery_ui_add");
+    add_temp_btn.addEventListener("click", upload_image);
+    grid_ui.add(add_temp_btn);
+
+    var text = document.createElement("h3");
+    text.innerHTML = "++";
+    add_temp_btn.appendChild(text);
+
+    function upload_image() {
+      var form = document.createElement('form');
+      form.enctype = "multipart/form-data";
+      document.body.appendChild(form);
+
+      var upload_input = document.createElement("input");
+      upload_input.type = "file";
+      upload_input.name = "filei";
+      upload_input.multiple = "multiple";
+      upload_input.style.display = "none";
+      form.appendChild(upload_input);
+
+      upload_input.addEventListener("change", async function(e) {
+        var files = this.files;
+
+        var formData = new FormData(form);
+
+        var nsrcs = await XHR.post('gallery.io-upload', { formData: formData });
+
+        grid_ui.remove(add_temp_btn);
+
+        for (var i = 0; i < nsrcs.length; i++) {
+          var src = nsrcs[i];
+          var existing = undefined;
+          images.forEach(image => {
+            console.log("image", image);
+            if (image.src === src) {
+              existing = image;
+            }
+          });
+
+          console.log("existing", existing);
+
+          if (existing) {
+            grid_ui.remove(existing.element);
+          }
+          var image = await Image.init(src, grid_ui);
+          if (image) {
+            grid_ui.add(image.element);
+          }
+        }
+        grid_ui.add(add_temp_btn);
+      }, false);
+      upload_input.click();
+    }
+
+    return new module.exports(div);
+  }
+}
+
+
+/***/ }),
+/* 101 */,
+/* 102 */,
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(104);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./style.less", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./style.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 104 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, ".gallery_ui {\n  background-color: #333;\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n.gallery_ui_item {\n  background-color: #111;\n  width: 100%;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  cursor: pointer;\n}\n.gallery_ui_item:hover {\n  background-color: #191919;\n}\n.gallery_ui_item img {\n  background-color: #111;\n  max-width: 100%;\n  max-height: 100%;\n}\n.gallery_ui_item button {\n  position: absolute;\n  bottom: 5px;\n  right: 5px;\n}\n.gallery_ui_add {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n.gallery_ui_popup {\n  background-color: #090909;\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  padding: 50px;\n  width: 500px;\n}\n.gallery_ui_popup button {\n  float: right;\n}\n.gallery_ui_display {\n  position: fixed;\n  left: 0;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 998;\n  background-color: #111;\n  cursor: default;\n}\n.gallery_ui_display div {\n  position: fixed;\n  top: 0px;\n  right: 0px;\n  width: 300px;\n  height: 300px;\n  bottom: auto;\n}\n.gallery_ui_display button {\n  top: 5px;\n  right: 5px;\n  bottom: auto;\n}\n.gallery_ui_display:hover {\n  background-color: #111;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 105 */,
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(107);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./theme.less", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./theme.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, ".grid_ui {\n  width: fit-content;\n  margin: 0 auto;\n}\n.grid_ui td {\n  padding: 0;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 108 */,
+/* 109 */,
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = class {
+  static async get(url, params) {
+    try {
+      return await new Promise(function (resolve) {
+        if (params) {
+          url += "?data="+encodeURIComponent(JSON.stringify(params));
+        }
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("load", function() {
+          resolve(JSON.parse(this.responseText));
+        });
+        xhr.open("GET", url);
+        xhr.send();
+      });
+    } catch(e) {
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  static async post(url, params) {
+    try {
+      return await new Promise(function (resolve) {
+        if (params.formData) {
+          console.log("FORM DATA");
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url);
+        //  xhr.setRequestHeader("Content-Type","multipart/form-data");
+          xhr.send(params.formData);
+          xhr.addEventListener("load", function() {
+            resolve(JSON.parse(xhr.responseText));
+          });
+          console.log(url);
+        } else {
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url, true);
+
+          //Send the proper header information along with the request
+          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+          xhr.onreadystatechange = function() {//Call a function when the state changes.
+            if(xhr.readyState == 4 && xhr.status == 200) {
+              resolve(JSON.parse(xhr.responseText));
+            }
+          }
+
+          var json = JSON.stringify(params);
+          var param_str = 'data='+encodeURIComponent(json);
+          xhr.send(param_str);
+        }
+      });
+    } catch(e) {
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  static getParamByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+}
+
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+const XHR = __webpack_require__(3);
+
+module.exports = class {
+  constructor(img, src, grid_ui) {
+    this.element = document.createElement("div");
+    this.element.classList.add("gallery_ui_item");
+    this.element.appendChild(img);
+
+    let this_class = this;
+
+    var xbtn = document.createElement('button');
+    xbtn.innerHTML = "x";
+
+    xbtn.addEventListener("click", e => {
+      var popup = document.createElement('div');
+      popup.classList.add("gallery_ui_popup");
+      document.body.appendChild(popup);
+
+      var message = document.createElement("p");
+      message.innerHTML = "Are you sure you want to delete this image?";
+      popup.appendChild(message);
+
+      var ybtn = document.createElement("button");
+      ybtn.innerHTML = "yes";
+      ybtn.addEventListener("click", async (e) => {
+        await XHR.post("gallery.io", {
+          command: "rm",
+          src: src
+        });
+        grid_ui.remove(this_class.element);
+        document.body.removeChild(popup);
+      });
+      popup.appendChild(ybtn);
+
+      var nbtn = document.createElement("button");
+      nbtn.innerHTML = "no";
+      nbtn.addEventListener("click", (e) => {
+        document.body.removeChild(popup);
+      });
+      popup.appendChild(nbtn);
+    });
+
+    let displayed = false;
+
+    img.addEventListener('click', (e) => {
+      displayed = true;
+      if (this_class.element.contains(xbtn)) {
+        this_class.element.removeChild(xbtn);
+      }
+      this_class.element.classList.add("gallery_ui_display");
+
+      let btn_box = document.createElement("div");
+      this_class.element.appendChild(btn_box);
+
+      let back_btn = document.createElement("button");
+      back_btn.innerHTML = "x";
+
+      btn_box.addEventListener("mouseover", (e) => {
+        btn_box.appendChild(back_btn);
+      });
+
+      btn_box.addEventListener("mouseleave", (e) => {
+        btn_box.removeChild(back_btn);
+      });
+
+      back_btn.addEventListener("click", function(e) {
+        this_class.element.removeChild(btn_box);
+        displayed = false;
+        this_class.element.classList.remove("gallery_ui_display");
+      });
+    });
+
+    this.element.addEventListener('mouseover', e => {
+      if (!displayed) {
+        this.element.appendChild(xbtn);
+      }
+    });
+
+    this.element.addEventListener('mouseleave', e => {
+      if (!displayed) {
+        this.element.removeChild(xbtn);
+      }
+    });
+
+    this.src = src;
+  }
+
+  static async init(src, grid_ui) {
+    return await new Promise(resolve => {
+      var img = document.createElement('img');
+      img.src = src;
+      img.addEventListener("load", e => {
+        resolve(new module.exports(img, src, grid_ui));
+      });
+
+      img.addEventListener("error", e => {
+        console.error(e);
+        resolve(undefined);
+      });
+    });
+  }
+}
+
 
 /***/ })
 /******/ ]);

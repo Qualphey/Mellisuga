@@ -1,10 +1,10 @@
 'use strict'
 
 module.exports = class {
-  constructor() {
+  constructor(items_in_row) {
     this.element = document.createElement('tr');
     this.items = 0;
-    this.max_items = 6;
+    this.max_items = items_in_row;
     this.tds = [];
 
   }

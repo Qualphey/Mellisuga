@@ -1,121 +1,44 @@
 
-@width: 960;
-@width_px: @width*1px;
-
-@height: 308;
-@height_px: @height*1px;
-
-@tile_a: 150;
-@tile_a_px: @tile_a*1px;
-
-.pages {
+.pages_ui {
   margin-top: 40px;
-}
-
-.color_wrap {
   background-color: #333;
-  width: @width_px;
   padding: 10px;
-  margin: auto;
-}
+  width: ~"calc(100% - 20px)";
 
-.list_display  {
-  background-color: #333;
-  height: @height_px;
-  width: @width_px;
-  margin: auto;
-  padding: 10px;
-  text-align: left;
-  overflow-y: auto;
-  white-space: nowrap;
-}
-
-.list_display table {
-  table-layout:fixed;
-  width: 100%;
-  height: 100%;
-}
-
-.list_display tr {
-  height: @tile_a_px;
-}
-
-.list_item {
-  display: inline-block;
-  width: @tile_a_px;
-  height: @tile_a_px;
-  background-color: #111;
-  color: #FFF;
-  font-size: 18px;
-  text-align: center;
-  margin: 0 auto;
-  text-decoration: none;
   user-select: none;
 }
 
-.list_item table {
-  table-layout:fixed;
+.pages_ui_item {
+  background-color: #111;
   width: 100%;
   height: 100%;
 }
 
-.list_item tr {
-  height: 50%;
+.pages_ui_item:hover {
+  background-color: #191919;
 }
 
-.list_item td {
-  word-wrap: break-word;
-  word-break: break-all;
-  white-space: normal;
-}
-
-.add_item {
+.pages_ui_item .page_name {
   cursor: pointer;
 }
 
-.add_item h3 {
-  margin: 0;
-  line-height: @tile_a_px;
-}
-
-.list_item button {
-  float: right;
-  margin-top: 7px;
-  margin-right: 15px;
-}
-
-.list_item input {
-  background-color: #090909;
-  color: #FFF;
-  border: 1px solid #333;
-  width: @tile_a - 20*1px;
-  padding: 2px 4px;
-  height: 20px;
-  line-height: 20px;
-  margin-top: (@tile_a/2-30)*1px
-}
-
-.list_item select {
-  display: block;
-  margin: 0 auto;
-  margin-top: 3px;
-  background-color: #090909;
-  color: #FFF;
-  border: 1px solid #333;
-  width: @tile_a - 20*1px;
-  padding: 2px 4px;
-  height: 20px;
-  line-height: 20px;
-}
-
-.page_name {
-  cursor: pointer;
-}
-
-.page_name:hover {
+.pages_ui_item .page_name:hover {
   background-color: #222;
 }
 
-.list_item:hover {
-  background-color: #191919;
+.pages_ui_item table {
+  width: 100%;
+  height: 100%;
+}
+
+.pages_ui_item td {
+  width: 50%;
+  height: 50%;
+}
+
+.pages_ui_add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }

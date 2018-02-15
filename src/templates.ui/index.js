@@ -11,13 +11,19 @@ var html = require('./body.html');
 
 module.exports = class {
   constructor(div) {
-    div.innerHTML = html;
-    div.classList.add('templates');
+    div.classList.add('templates_ui');
 
-    this.list = div.querySelector(".list_display");
+    var h2 = document.createElement("h2");
+    h2.innerHTML = "Templates"
+    div.appendChild(h2);
 
-    var table = new GridUI();
-    this.list.appendChild(table.element);
+
+    var grid_ui = new GridUI(6, window.innerWidth, 150);
+    div.appendChild(grid_ui.element);
+
+    window.addEventListener('resize', function() {
+      grid_ui.resize(window.innerWidth);
+    });
 
     var this_class = this;
     XHR.get('templates.io', {
@@ -25,15 +31,15 @@ module.exports = class {
     }, function() {
       var templates = JSON.parse(this.responseText);
       for (let t = 0; t < templates.length; t++) {
-        var template = new Template(templates[t].file, table);
-        table.add(template.element);
+        var template = new Template(templates[t].file, grid_ui);
+        grid_ui.add(template.element);
       }
 
       var add_temp_btn = document.createElement("div");
-      add_temp_btn.classList.add("list_item");
-      add_temp_btn.classList.add("add_item");
+      add_temp_btn.classList.add("templates_ui_item");
+      add_temp_btn.classList.add("templates_ui_add");
       add_temp_btn.addEventListener("click", new_template);
-      table.add(add_temp_btn);
+      grid_ui.add(add_temp_btn);
 
       var text = document.createElement("h3");
       text.innerHTML = "++";
@@ -60,11 +66,11 @@ module.exports = class {
               if (res.err) {
                 console.log(res.err);
               } else {
-                var template = new Template(data.name, table);
+                var template = new Template(data.name, grid_ui);
 
-                table.remove(add_temp_btn);
-                table.add(template.element);
-                table.add(add_temp_btn);
+                grid_ui.remove(add_temp_btn);
+                grid_ui.add(template.element);
+                grid_ui.add(add_temp_btn);
                 input.focus();
                 input.value = '';
               }

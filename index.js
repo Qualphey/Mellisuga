@@ -19,6 +19,7 @@ const PagesIO = require("./modules/pages.io/pages.js");
 const BuiltinIO = require("./modules/pages.io/builtin.js");
 const PostsIO = require("./modules/posts.io/index.js");
 const FMIO = require("./modules/treefm.io/fm.io.js");
+const GalleryIO = require("./modules/gallery.io/index.js");
 
 const Aura = require('pg-aura');
 
@@ -273,6 +274,11 @@ module.exports = class {
             globals: config.globals_path
           }
         });
+
+        var gallery_path = path.resolve(config.app_path, 'gallery');
+        var gallery_io = await GalleryIO.init(gallery_path, config.admin_path, router.app);
+
+
 
         return admin;
       };

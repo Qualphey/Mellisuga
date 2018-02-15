@@ -2,21 +2,48 @@
 
 var TR = require('./tr.js');
 
+require('./theme.less');
+
 module.exports = class {
-  constructor() {
+  constructor(items_in_row, width, min_a) {
     this.element = document.createElement('table');
-    this.element.classList.add('dynamic_table');
+    this.element.classList.add('grid_ui');
+
+    this.min_a = min_a;
+    this.items_in_row = items_in_row;
+    this.item_a = width/items_in_row-4;
+    if (this.item_a < this.min_a) {
+      this.item_a = this.min_a;
+    }
 
     this.trs = [];
-    this.cur_tr = new TR();
+    this.tds = [];
+    this.cur_tr = new TR(items_in_row);
     this.element.appendChild(this.cur_tr.element);
     this.trs.push(this.cur_tr);
 
   }
 
+  resize(width) {
+    if (width) {
+      this.item_a = width/this.items_in_row-4;
+      if (this.item_a < this.min_a) {
+        this.item_a = this.min_a;
+      }
+    }
+
+    for (var i = 0; i < this.tds.length; i++) {
+      this.tds[i].style.width = this.item_a+"px";
+      this.tds[i].style.height = this.item_a+"px";
+
+      this.tds[i].style.minWidth = this.min_a+"px";
+    }
+  }
+
   add(item) {
+    console.log(item, this.cur_tr.items, this.cur_tr.max_items);
     if (this.cur_tr.items == this.cur_tr.max_items) {
-      this.cur_tr = new TR();
+      this.cur_tr = new TR(this.items_in_row);
       this.element.appendChild(this.cur_tr.element);
 
       var td = document.createElement('td');
@@ -24,10 +51,14 @@ module.exports = class {
       this.cur_tr.add(td);
 
       this.trs.push(this.cur_tr);
+      this.tds.push(td);
+      this.resize();
     } else {
       var td = document.createElement('td');
       td.appendChild(item);
       this.cur_tr.add(td);
+      this.tds.push(td);
+      this.resize()
     }
   }
 

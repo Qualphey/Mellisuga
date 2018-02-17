@@ -6,3 +6,20 @@
 .global_local_switch {
   height: 30px;
 }
+
+.webpack_button {
+  color: transparent;
+  border: 1px solid #0000;
+  background-color: transparent;
+  background-image: url(/cmbird-res/webpack.png);
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+}
+
+.webpack_button:hover {
+  background-color: transparent;
+  border: 1px solid #BBB;
+}

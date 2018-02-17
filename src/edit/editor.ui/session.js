@@ -6,6 +6,8 @@ const CodeMirror = require("../codemirror.ui/index.js");
 const template_prefix = "/cmb_admin/t/";
 const page_prefix = "/p/";
 
+const XHR = require("../../utils/xhr.js");
+
 module.exports = class {
   constructor(target, dir, iframe, refresh_path) {
     var tabs = this.tabs = new TabsUI();
@@ -42,7 +44,13 @@ module.exports = class {
               if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
                 e.preventDefault();
                 treefm.write_file(file.rel_path, html_editor.cm.getValue(), function() {
-                  iframe.contentWindow.location.replace(refresh_path);
+                  XHR.post("pages.io", {
+                    command: "webpack",
+                    name: dir
+                  }, function(response) {
+                    console.log("WEBPACK RES", response);
+                    iframe.contentWindow.location.replace(refresh_path);
+                  });
                 });
               }
             }

@@ -69,10 +69,20 @@ module.exports = class {
       popup.appendChild(input);
       input.focus();
 
+      input.addEventListener('keyup', function (e) {
+        if (e.keyCode == 13) {
+          proceed();
+        }
+      });
+
       var err_msg = document.createElement("span");
       popup.appendChild(err_msg);
 
       submit.addEventListener("click", function(e) {
+        proceed()
+      });
+
+      function proceed() {
         if (input.value === this_class.name) {
           XHR.post('pages.io', {
             command: 'rm',
@@ -86,8 +96,7 @@ module.exports = class {
         } else {
           err_msg.innerHTML = "Incorrect!";
         }
-      });
-
+      }
     });
     del_button.innerHTML = "X";
   }

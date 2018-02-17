@@ -36,25 +36,28 @@ module.exports = class {
         grid_ui.add(page.element);
       }
 
-      var add_temp_btn = document.createElement("div");
+      let add_temp_btn = document.createElement("div");
       add_temp_btn.classList.add("pages_ui_item");
       add_temp_btn.classList.add("pages_ui_add");
       add_temp_btn.addEventListener("click", new_page);
       grid_ui.add(add_temp_btn);
 
-      var text = document.createElement("h3");
+      let text = document.createElement("h3");
       text.innerHTML = "++";
       add_temp_btn.appendChild(text);
 
       function new_page(e) {
-        var input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = "Name";
-
-        var select = document.createElement("select");
         XHR.get('templates.io', {
           command: "all"
         }, function() {
+          add_temp_btn.style.display = "block";
+
+          var input = document.createElement("input");
+          input.type = "text";
+          input.placeholder = "Name";
+
+          var select = document.createElement("select");
+
           var placeholder = document.createElement("option");
           placeholder.value = "";
           placeholder.innerHTML = "Template";
@@ -98,6 +101,9 @@ module.exports = class {
 
                 grid_ui.remove(add_temp_btn);
                 grid_ui.add(page.element);
+                add_temp_btn.innerHTML = "";
+                add_temp_btn.appendChild(text);
+                add_temp_btn.style.display = "flex";
                 grid_ui.add(add_temp_btn);
                 input.focus();
                 input.value = '';

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 26);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -706,7 +706,84 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 10 */,
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = class {
+  static async get(url, params) {
+    try {
+      return await new Promise(function (resolve) {
+        if (params) {
+          url += "?data="+encodeURIComponent(JSON.stringify(params));
+        }
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("load", function() {
+          resolve(JSON.parse(this.responseText));
+        });
+        xhr.open("GET", url);
+        xhr.send();
+      });
+    } catch(e) {
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  static async post(url, params) {
+    try {
+      return await new Promise(function (resolve) {
+        if (params.formData) {
+          console.log("FORM DATA");
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url);
+        //  xhr.setRequestHeader("Content-Type","multipart/form-data");
+          xhr.send(params.formData);
+          xhr.addEventListener("load", function() {
+            resolve(JSON.parse(xhr.responseText));
+          });
+          console.log(url);
+        } else {
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url, true);
+
+          //Send the proper header information along with the request
+          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+          xhr.onreadystatechange = function() {//Call a function when the state changes.
+            if(xhr.readyState == 4 && xhr.status == 200) {
+              resolve(JSON.parse(xhr.responseText));
+            }
+          }
+
+          var json = JSON.stringify(params);
+          var param_str = 'data='+encodeURIComponent(json);
+          xhr.send(param_str);
+        }
+      });
+    } catch(e) {
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  static getParamByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+}
+
+
+/***/ }),
 /* 11 */,
 /* 12 */,
 /* 13 */,
@@ -722,20 +799,21 @@ module.exports = function (css) {
 /* 23 */,
 /* 24 */,
 /* 25 */,
-/* 26 */
+/* 26 */,
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(27)
+__webpack_require__(28)
 
 const XHR = __webpack_require__(3);
-const Editor = __webpack_require__(29);
+const Editor = __webpack_require__(30);
 
 const template = XHR.getParamByName('template');
 const page = XHR.getParamByName('page');
 
 var tools = document.createElement("div");
 tools.classList.add("tools");
-tools.innerHTML = __webpack_require__(52);
+tools.innerHTML = __webpack_require__(53);
 document.body.appendChild(tools);
 
 var editor_btn = tools.querySelector(".editor_btn");
@@ -834,13 +912,13 @@ function firstLoad() {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(28);
+var content = __webpack_require__(29);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -865,7 +943,7 @@ if(false) {
 }
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -879,16 +957,17 @@ exports.push([module.i, "body {\n  overflow: hidden;\n}\n\n.tools {\n  position:
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {const XHR = __webpack_require__(3);
-const WindowUI = __webpack_require__(30);
-const SplitUI = __webpack_require__(34);
+const XHRA = __webpack_require__(10);
+const WindowUI = __webpack_require__(31);
+const SplitUI = __webpack_require__(35);
 
-__webpack_require__(37)
+__webpack_require__(38)
 
-const Session = __webpack_require__(39);
+const Session = __webpack_require__(40);
 
 module.exports = class {
   constructor(target, dir, iframe, pathname) {
@@ -910,6 +989,28 @@ module.exports = class {
     global_local_switch.classList.add('global_local_switch');
     this.split.list[0].appendChild(global_local_switch);
 
+    var webpack_button = document.createElement("button");
+    webpack_button.innerHTML = ".";
+    webpack_button.classList.add('webpack_button');
+    this.split.list[0].appendChild(webpack_button);
+
+    var state = false;
+    webpack_button.style.border = "solid 1px #FF0000";
+
+    webpack_button.addEventListener('click', async function(e) {
+      var chstate = (state != true);
+      state = await XHRA.post("pages.io", {
+        command: "webpack",
+        on: chstate,
+        name: dir
+      });
+
+      if (state) {
+        webpack_button.style.border = "solid 1px #00FF00";
+      } else {
+        webpack_button.style.border = "solid 1px #FF0000";
+      }
+    })
     var local_session = new Session(target, dir, iframe, pathname);
     this.append_session_elements(local_session);
     var global_session = new Session("globals", ".", iframe, pathname);
@@ -945,13 +1046,13 @@ module.exports = class {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 
-__webpack_require__(31);
-var html = __webpack_require__(33);
+__webpack_require__(32);
+var html = __webpack_require__(34);
 
 
 var min_width = 181;
@@ -1547,13 +1648,13 @@ module.exports = class {
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(32);
+var content = __webpack_require__(33);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -1578,7 +1679,7 @@ if(false) {
 }
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -1592,16 +1693,16 @@ exports.push([module.i, ".window_mod {\n  position: fixed;\n  top: 100px;\n  lef
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = "<header class=\"window_mod_header\">\n  <div class=\"window_mod_titlebar\">New Window</div>\n  <div class=\"window_mod_actions\">\n    <button class=\"window_mod_hide\">-</button>\n    <button class=\"window_mod_min_max_imize\">+</button>\n  </div>\n</header>\n<div class=\"window_mod_content\">\n\n</div>\n\n<div class=\"window_mod_resize_controls\">\n  <div class=\"resizeN resize\"></div>\n  <div class=\"resizeNE resize\"></div>\n  <div class=\"resizeE resize\"></div>\n  <div class=\"resizeSE resize\"></div>\n  <div class=\"resizeS resize\"></div>\n  <div class=\"resizeSW resize\"></div>\n  <div class=\"resizeW resize\"></div>\n  <div class=\"resizeNW resize\"></div>\n</div>\n";
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(35);
+__webpack_require__(36);
 
 module.exports = class {
   constructor(dom, direction) {
@@ -1741,13 +1842,13 @@ module.exports = class {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(36);
+var content = __webpack_require__(37);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -1772,7 +1873,7 @@ if(false) {
 }
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -1786,13 +1887,13 @@ exports.push([module.i, "\n.split_ui {\n  width: 100%;\n  height: 100%;\n}\n\n.s
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(38);
+var content = __webpack_require__(39);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -1817,7 +1918,7 @@ if(false) {
 }
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -1825,22 +1926,24 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.treefm {\n  height: calc(100% - 34px);\n}\n\n.global_local_switch {\n  height: 30px;\n}\n", ""]);
+exports.push([module.i, "\n.treefm {\n  height: calc(100% - 34px);\n}\n\n.global_local_switch {\n  height: 30px;\n}\n\n.webpack_button {\n  color: transparent;\n  border: 1px solid #0000;\n  background-color: transparent;\n  background-image: url(/cmbird-res/webpack.png);\n  width: 30px;\n  height: 30px;\n  background-repeat: no-repeat;\n  background-position: center center;\n  background-size: contain;\n}\n\n.webpack_button:hover {\n  background-color: transparent;\n  border: 1px solid #BBB;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-const TreeFM = __webpack_require__(40);
-const TabsUI = __webpack_require__(47);
-const CodeMirror = __webpack_require__(51);
+const TreeFM = __webpack_require__(41);
+const TabsUI = __webpack_require__(48);
+const CodeMirror = __webpack_require__(52);
 
 const template_prefix = "/cmb_admin/t/";
 const page_prefix = "/p/";
+
+const XHR = __webpack_require__(3);
 
 module.exports = class {
   constructor(target, dir, iframe, refresh_path) {
@@ -1878,7 +1981,13 @@ module.exports = class {
               if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
                 e.preventDefault();
                 treefm.write_file(file.rel_path, html_editor.cm.getValue(), function() {
-                  iframe.contentWindow.location.replace(refresh_path);
+                  XHR.post("pages.io", {
+                    command: "webpack",
+                    name: dir
+                  }, function(response) {
+                    console.log("WEBPACK RES", response);
+                    iframe.contentWindow.location.replace(refresh_path);
+                  });
                 });
               }
             }
@@ -1896,13 +2005,13 @@ module.exports = class {
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const XHR = __webpack_require__(3);
-const Dir = __webpack_require__(41);
-const ContextMenu = __webpack_require__(43);
-__webpack_require__(45);
+const Dir = __webpack_require__(42);
+const ContextMenu = __webpack_require__(44);
+__webpack_require__(46);
 
 
 module.exports = class {
@@ -2028,10 +2137,10 @@ module.exports = class {
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {const File = __webpack_require__(42);
+/* WEBPACK VAR INJECTION */(function(global) {const File = __webpack_require__(43);
 
 var padding_left = 10;
 
@@ -2239,7 +2348,7 @@ var Dir = module.exports = class {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -2308,10 +2417,10 @@ module.exports = class {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var html = __webpack_require__(44);
+var html = __webpack_require__(45);
 
 module.exports = class {
   constructor() {
@@ -2347,19 +2456,19 @@ module.exports = class {
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports) {
 
 module.exports = "<div name=\"new_file\">New File</div>\n<div name=\"new_folder\">New Folder</div>\n<div name=\"upload\">Upload</div>\n<div name=\"rename\">Rename</div>\n<div name=\"delete\">Delete</div>\n";
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(46);
+var content = __webpack_require__(47);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -2384,7 +2493,7 @@ if(false) {
 }
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -2398,12 +2507,12 @@ exports.push([module.i, ".treefm {\n  background-color: #111;\n  font-size: 14px
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(48);
+__webpack_require__(49);
 
-var Tab = __webpack_require__(50);
+var Tab = __webpack_require__(51);
 
 module.exports = class {
   constructor() {
@@ -2473,13 +2582,13 @@ module.exports = class {
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(49);
+var content = __webpack_require__(50);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -2504,7 +2613,7 @@ if(false) {
 }
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -2518,7 +2627,7 @@ exports.push([module.i, ".tabs_ui_container {\n  height: 100%;\n}\n\n.tabs_ui_co
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports) {
 
 
@@ -2558,7 +2667,7 @@ module.exports = class {
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2620,7 +2729,7 @@ module.exports = class {
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports) {
 
 module.exports = "<button class=\"editor_btn\">&lt;&sol;&gt;</button>\n";

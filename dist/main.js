@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 53);
+/******/ 	return __webpack_require__(__webpack_require__.s = 54);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -615,7 +615,7 @@ module.exports = class {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(59);
+exports = module.exports = __webpack_require__(60);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -795,7 +795,7 @@ function localstorage() {
   } catch (e) {}
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(58)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(59)))
 
 /***/ }),
 /* 5 */
@@ -974,15 +974,15 @@ Emitter.prototype.hasListeners = function(event){
  * Module dependencies.
  */
 
-var keys = __webpack_require__(68);
-var hasBinary = __webpack_require__(14);
-var sliceBuffer = __webpack_require__(69);
-var after = __webpack_require__(70);
-var utf8 = __webpack_require__(71);
+var keys = __webpack_require__(69);
+var hasBinary = __webpack_require__(16);
+var sliceBuffer = __webpack_require__(70);
+var after = __webpack_require__(71);
+var utf8 = __webpack_require__(72);
 
 var base64encoder;
 if (global && global.ArrayBuffer) {
-  base64encoder = __webpack_require__(73);
+  base64encoder = __webpack_require__(74);
 }
 
 /**
@@ -1040,7 +1040,7 @@ var err = { type: 'error', data: 'parser error' };
  * Create a blob api even for blob builder when vendor prefixes exist
  */
 
-var Blob = __webpack_require__(74);
+var Blob = __webpack_require__(75);
 
 /**
  * Encodes a packet.
@@ -1733,6 +1733,84 @@ module.exports = function (css) {
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+module.exports = class {
+  static async get(url, params) {
+    try {
+      return await new Promise(function (resolve) {
+        if (params) {
+          url += "?data="+encodeURIComponent(JSON.stringify(params));
+        }
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("load", function() {
+          resolve(JSON.parse(this.responseText));
+        });
+        xhr.open("GET", url);
+        xhr.send();
+      });
+    } catch(e) {
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  static async post(url, params) {
+    try {
+      return await new Promise(function (resolve) {
+        if (params.formData) {
+          console.log("FORM DATA");
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url);
+        //  xhr.setRequestHeader("Content-Type","multipart/form-data");
+          xhr.send(params.formData);
+          xhr.addEventListener("load", function() {
+            resolve(JSON.parse(xhr.responseText));
+          });
+          console.log(url);
+        } else {
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url, true);
+
+          //Send the proper header information along with the request
+          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+          xhr.onreadystatechange = function() {//Call a function when the state changes.
+            if(xhr.readyState == 4 && xhr.status == 200) {
+              resolve(JSON.parse(xhr.responseText));
+            }
+          }
+
+          var json = JSON.stringify(params);
+          var param_str = 'data='+encodeURIComponent(json);
+          xhr.send(param_str);
+        }
+      });
+    } catch(e) {
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  static getParamByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+}
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
 
 /**
  * Module dependencies.
@@ -1740,9 +1818,9 @@ module.exports = function (css) {
 
 var debug = __webpack_require__(4)('socket.io-parser');
 var Emitter = __webpack_require__(5);
-var hasBin = __webpack_require__(14);
-var binary = __webpack_require__(62);
-var isBuf = __webpack_require__(15);
+var hasBin = __webpack_require__(16);
+var binary = __webpack_require__(63);
+var isBuf = __webpack_require__(17);
 
 /**
  * Protocol version.
@@ -2136,12 +2214,12 @@ function error() {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 
-var hasCORS = __webpack_require__(66);
+var hasCORS = __webpack_require__(67);
 
 module.exports = function (opts) {
   var xdomain = opts.xdomain;
@@ -2180,7 +2258,7 @@ module.exports = function (opts) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -2343,7 +2421,112 @@ Transport.prototype.onClose = function () {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var TR = __webpack_require__(84);
+
+__webpack_require__(85);
+
+module.exports = class {
+  constructor(items_in_row, width, min_a) {
+    this.element = document.createElement('table');
+    this.element.classList.add('grid_ui');
+
+    this.min_a = min_a;
+    this.items_in_row = items_in_row;
+    this.item_a = width/items_in_row-4;
+    if (this.item_a < this.min_a) {
+      this.item_a = this.min_a;
+    }
+
+    this.trs = [];
+    this.tds = [];
+    this.cur_tr = new TR(items_in_row);
+    this.element.appendChild(this.cur_tr.element);
+    this.trs.push(this.cur_tr);
+
+  }
+
+  resize(width) {
+    if (width) {
+      this.item_a = width/this.items_in_row-4;
+      if (this.item_a < this.min_a) {
+        this.item_a = this.min_a;
+      }
+    }
+
+    for (var i = 0; i < this.tds.length; i++) {
+      this.tds[i].style.width = this.item_a+"px";
+      this.tds[i].style.height = this.item_a+"px";
+
+      this.tds[i].style.minWidth = this.min_a+"px";
+    }
+  }
+
+  add(item) {
+    console.log(item, this.cur_tr.items, this.cur_tr.max_items);
+    if (this.cur_tr.items == this.cur_tr.max_items) {
+      this.cur_tr = new TR(this.items_in_row);
+      this.element.appendChild(this.cur_tr.element);
+
+      var td = document.createElement('td');
+      td.appendChild(item);
+      this.cur_tr.add(td);
+
+      this.trs.push(this.cur_tr);
+      this.tds.push(td);
+      this.resize();
+    } else {
+      var td = document.createElement('td');
+      td.appendChild(item);
+      this.cur_tr.add(td);
+      this.tds.push(td);
+      this.resize()
+    }
+  }
+
+  remove(item) {
+    for (var t = 0; t < this.trs.length; t++) {
+      var tr = this.trs[t];
+      if (tr.contains(item)) {
+        tr.remove(item.parentNode);
+        if (tr.items == 0 && t > 0) {
+          this.element.removeChild(tr.element);
+          this.trs.splice(t, 1);
+          this.cur_tr = this.trs[t-1];
+        } else if (tr.items == tr.max_items-1) {
+          this.track(t+1);
+        }
+      }
+    }
+  }
+
+  track(t) {
+    if (t < this.trs.length) {
+      var tr = this.trs[t];
+      if (tr.items > 0) {
+        var td = tr.tds[0];
+        tr.remove(td);
+        this.trs[t-1].add(td);
+        if (tr.items == tr.max_items-1) {
+          this.track(t+1);
+        }
+      } else {
+        this.element.removeChild(this.trs[t].element);
+        this.trs.splice(t, 1);
+        this.cur_tr = this.trs[t-1];
+      }
+    }
+  }
+}
+
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports) {
 
 /**
@@ -2388,7 +2571,7 @@ module.exports = function parseuri(str) {
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/* global Blob File */
@@ -2397,7 +2580,7 @@ module.exports = function parseuri(str) {
  * Module requirements.
  */
 
-var isArray = __webpack_require__(61);
+var isArray = __webpack_require__(62);
 
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
@@ -2457,7 +2640,7 @@ function hasBinary (obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -2477,7 +2660,7 @@ function isBuf(obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -2485,15 +2668,15 @@ function isBuf(obj) {
  * Module dependencies.
  */
 
-var eio = __webpack_require__(64);
-var Socket = __webpack_require__(21);
+var eio = __webpack_require__(65);
+var Socket = __webpack_require__(23);
 var Emitter = __webpack_require__(5);
-var parser = __webpack_require__(10);
-var on = __webpack_require__(22);
-var bind = __webpack_require__(23);
+var parser = __webpack_require__(11);
+var on = __webpack_require__(24);
+var bind = __webpack_require__(25);
 var debug = __webpack_require__(4)('socket.io-client:manager');
-var indexOf = __webpack_require__(20);
-var Backoff = __webpack_require__(79);
+var indexOf = __webpack_require__(22);
+var Backoff = __webpack_require__(80);
 
 /**
  * IE6+ hasOwnProperty
@@ -3056,17 +3239,17 @@ Manager.prototype.onreconnect = function () {
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies
  */
 
-var XMLHttpRequest = __webpack_require__(11);
-var XHR = __webpack_require__(67);
-var JSONP = __webpack_require__(75);
-var websocket = __webpack_require__(76);
+var XMLHttpRequest = __webpack_require__(12);
+var XHR = __webpack_require__(68);
+var JSONP = __webpack_require__(76);
+var websocket = __webpack_require__(77);
 
 /**
  * Export transports.
@@ -3116,18 +3299,18 @@ function polling (opts) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Module dependencies.
  */
 
-var Transport = __webpack_require__(12);
+var Transport = __webpack_require__(13);
 var parseqs = __webpack_require__(7);
 var parser = __webpack_require__(6);
 var inherit = __webpack_require__(8);
-var yeast = __webpack_require__(19);
+var yeast = __webpack_require__(21);
 var debug = __webpack_require__(4)('engine.io-client:polling');
 
 /**
@@ -3141,7 +3324,7 @@ module.exports = Polling;
  */
 
 var hasXHR2 = (function () {
-  var XMLHttpRequest = __webpack_require__(11);
+  var XMLHttpRequest = __webpack_require__(12);
   var xhr = new XMLHttpRequest({ xdomain: false });
   return null != xhr.responseType;
 })();
@@ -3367,7 +3550,7 @@ Polling.prototype.uri = function () {
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3442,7 +3625,7 @@ module.exports = yeast;
 
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports) {
 
 
@@ -3457,7 +3640,7 @@ module.exports = function(arr, obj){
 };
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -3465,11 +3648,11 @@ module.exports = function(arr, obj){
  * Module dependencies.
  */
 
-var parser = __webpack_require__(10);
+var parser = __webpack_require__(11);
 var Emitter = __webpack_require__(5);
-var toArray = __webpack_require__(78);
-var on = __webpack_require__(22);
-var bind = __webpack_require__(23);
+var toArray = __webpack_require__(79);
+var on = __webpack_require__(24);
+var bind = __webpack_require__(25);
 var debug = __webpack_require__(4)('socket.io-client:socket');
 var parseqs = __webpack_require__(7);
 
@@ -3881,7 +4064,7 @@ Socket.prototype.compress = function (compress) {
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports) {
 
 
@@ -3911,7 +4094,7 @@ function on (obj, ev, fn) {
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports) {
 
 /**
@@ -3940,112 +4123,6 @@ module.exports = function(obj, fn){
 
 
 /***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var TR = __webpack_require__(83);
-
-__webpack_require__(106);
-
-module.exports = class {
-  constructor(items_in_row, width, min_a) {
-    this.element = document.createElement('table');
-    this.element.classList.add('grid_ui');
-
-    this.min_a = min_a;
-    this.items_in_row = items_in_row;
-    this.item_a = width/items_in_row-4;
-    if (this.item_a < this.min_a) {
-      this.item_a = this.min_a;
-    }
-
-    this.trs = [];
-    this.tds = [];
-    this.cur_tr = new TR(items_in_row);
-    this.element.appendChild(this.cur_tr.element);
-    this.trs.push(this.cur_tr);
-
-  }
-
-  resize(width) {
-    if (width) {
-      this.item_a = width/this.items_in_row-4;
-      if (this.item_a < this.min_a) {
-        this.item_a = this.min_a;
-      }
-    }
-
-    for (var i = 0; i < this.tds.length; i++) {
-      this.tds[i].style.width = this.item_a+"px";
-      this.tds[i].style.height = this.item_a+"px";
-
-      this.tds[i].style.minWidth = this.min_a+"px";
-    }
-  }
-
-  add(item) {
-    console.log(item, this.cur_tr.items, this.cur_tr.max_items);
-    if (this.cur_tr.items == this.cur_tr.max_items) {
-      this.cur_tr = new TR(this.items_in_row);
-      this.element.appendChild(this.cur_tr.element);
-
-      var td = document.createElement('td');
-      td.appendChild(item);
-      this.cur_tr.add(td);
-
-      this.trs.push(this.cur_tr);
-      this.tds.push(td);
-      this.resize();
-    } else {
-      var td = document.createElement('td');
-      td.appendChild(item);
-      this.cur_tr.add(td);
-      this.tds.push(td);
-      this.resize()
-    }
-  }
-
-  remove(item) {
-    for (var t = 0; t < this.trs.length; t++) {
-      var tr = this.trs[t];
-      if (tr.contains(item)) {
-        tr.remove(item.parentNode);
-        if (tr.items == 0 && t > 0) {
-          this.element.removeChild(tr.element);
-          this.trs.splice(t, 1);
-          this.cur_tr = this.trs[t-1];
-        } else if (tr.items == tr.max_items-1) {
-          this.track(t+1);
-        }
-      }
-    }
-  }
-
-  track(t) {
-    if (t < this.trs.length) {
-      var tr = this.trs[t];
-      if (tr.items > 0) {
-        var td = tr.tds[0];
-        tr.remove(td);
-        this.trs[t-1].add(td);
-        if (tr.items == tr.max_items-1) {
-          this.track(t+1);
-        }
-      } else {
-        this.element.removeChild(this.trs[t].element);
-        this.trs.splice(t, 1);
-        this.cur_tr = this.trs[t-1];
-      }
-    }
-  }
-}
-
-
-/***/ }),
-/* 25 */,
 /* 26 */,
 /* 27 */,
 /* 28 */,
@@ -4073,34 +4150,35 @@ module.exports = class {
 /* 50 */,
 /* 51 */,
 /* 52 */,
-/* 53 */
+/* 53 */,
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var config = global.config = {
   admin_path : "/cmb_admin"
 }
 
-__webpack_require__(54);
+__webpack_require__(55);
 
 window.addEventListener("load", async function(e) {
   try {
-    var socket = global.socket = __webpack_require__(56)('http://localhost:9639');
+    var socket = global.socket = __webpack_require__(57)('http://localhost:9639');
 
     var templates_div = document.createElement('div');
     document.body.appendChild(templates_div);
-    var TemplatesUI = new (__webpack_require__(80))(templates_div);
+    var TemplatesUI = new (__webpack_require__(81))(templates_div);
 
     var pages_div = document.createElement('div');
     document.body.appendChild(pages_div);
-    var PagesUI = new (__webpack_require__(87))(pages_div);
+    var PagesUI = new (__webpack_require__(90))(pages_div);
 
     var posts_div = document.createElement('div');
     document.body.appendChild(posts_div);
-    var PostsUI = new (__webpack_require__(93))(posts_div);
+    var PostsUI = new (__webpack_require__(96))(posts_div);
 
     var gallery_div = document.createElement('div');
     document.body.appendChild(gallery_div);
-    var GalleryUI = __webpack_require__(100).init(gallery_div);
+    var GalleryUI = __webpack_require__(103).init(gallery_div);
   } catch (e) {
     console.error(e);
   }
@@ -4109,13 +4187,13 @@ window.addEventListener("load", async function(e) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(55);
+var content = __webpack_require__(56);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -4140,7 +4218,7 @@ if(false) {
 }
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -4154,7 +4232,7 @@ exports.push([module.i, "\n.popup_ui {\n  background-color: #090909;\n  position
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -4162,9 +4240,9 @@ exports.push([module.i, "\n.popup_ui {\n  background-color: #090909;\n  position
  * Module dependencies.
  */
 
-var url = __webpack_require__(57);
-var parser = __webpack_require__(10);
-var Manager = __webpack_require__(16);
+var url = __webpack_require__(58);
+var parser = __webpack_require__(11);
+var Manager = __webpack_require__(18);
 var debug = __webpack_require__(4)('socket.io-client');
 
 /**
@@ -4249,12 +4327,12 @@ exports.connect = lookup;
  * @api public
  */
 
-exports.Manager = __webpack_require__(16);
-exports.Socket = __webpack_require__(21);
+exports.Manager = __webpack_require__(18);
+exports.Socket = __webpack_require__(23);
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -4262,7 +4340,7 @@ exports.Socket = __webpack_require__(21);
  * Module dependencies.
  */
 
-var parseuri = __webpack_require__(13);
+var parseuri = __webpack_require__(15);
 var debug = __webpack_require__(4)('socket.io-client:url');
 
 /**
@@ -4336,7 +4414,7 @@ function url (uri, loc) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -4526,7 +4604,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -4542,7 +4620,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(60);
+exports.humanize = __webpack_require__(61);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -4734,7 +4812,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports) {
 
 /**
@@ -4892,7 +4970,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -4903,7 +4981,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -4912,8 +4990,8 @@ module.exports = Array.isArray || function (arr) {
  * Module requirements
  */
 
-var isArray = __webpack_require__(63);
-var isBuf = __webpack_require__(15);
+var isArray = __webpack_require__(64);
+var isBuf = __webpack_require__(17);
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
 var withNativeFile = typeof global.File === 'function' || toString.call(global.File) === '[object FileConstructor]';
@@ -5051,7 +5129,7 @@ exports.removeBlobs = function(data, callback) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -5062,11 +5140,11 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-module.exports = __webpack_require__(65);
+module.exports = __webpack_require__(66);
 
 /**
  * Exports parser
@@ -5078,19 +5156,19 @@ module.exports.parser = __webpack_require__(6);
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies.
  */
 
-var transports = __webpack_require__(17);
+var transports = __webpack_require__(19);
 var Emitter = __webpack_require__(5);
 var debug = __webpack_require__(4)('engine.io-client:socket');
-var index = __webpack_require__(20);
+var index = __webpack_require__(22);
 var parser = __webpack_require__(6);
-var parseuri = __webpack_require__(13);
+var parseuri = __webpack_require__(15);
 var parseqs = __webpack_require__(7);
 
 /**
@@ -5224,8 +5302,8 @@ Socket.protocol = parser.protocol; // this is an int
  */
 
 Socket.Socket = Socket;
-Socket.Transport = __webpack_require__(12);
-Socket.transports = __webpack_require__(17);
+Socket.Transport = __webpack_require__(13);
+Socket.transports = __webpack_require__(19);
 Socket.parser = __webpack_require__(6);
 
 /**
@@ -5828,7 +5906,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports) {
 
 
@@ -5851,15 +5929,15 @@ try {
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module requirements.
  */
 
-var XMLHttpRequest = __webpack_require__(11);
-var Polling = __webpack_require__(18);
+var XMLHttpRequest = __webpack_require__(12);
+var Polling = __webpack_require__(20);
 var Emitter = __webpack_require__(5);
 var inherit = __webpack_require__(8);
 var debug = __webpack_require__(4)('engine.io-client:polling-xhr');
@@ -6271,7 +6349,7 @@ function unloadHandler () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports) {
 
 
@@ -6296,7 +6374,7 @@ module.exports = Object.keys || function keys (obj){
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports) {
 
 /**
@@ -6331,7 +6409,7 @@ module.exports = function(arraybuffer, start, end) {
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports) {
 
 module.exports = after
@@ -6365,7 +6443,7 @@ function noop() {}
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/utf8js v2.1.2 by @mathias */
@@ -6623,10 +6701,10 @@ function noop() {}
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(72)(module), __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(73)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -6654,7 +6732,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports) {
 
 /*
@@ -6727,7 +6805,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -6830,7 +6908,7 @@ module.exports = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -6838,7 +6916,7 @@ module.exports = (function() {
  * Module requirements.
  */
 
-var Polling = __webpack_require__(18);
+var Polling = __webpack_require__(20);
 var inherit = __webpack_require__(8);
 
 /**
@@ -7068,24 +7146,24 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies.
  */
 
-var Transport = __webpack_require__(12);
+var Transport = __webpack_require__(13);
 var parser = __webpack_require__(6);
 var parseqs = __webpack_require__(7);
 var inherit = __webpack_require__(8);
-var yeast = __webpack_require__(19);
+var yeast = __webpack_require__(21);
 var debug = __webpack_require__(4)('engine.io-client:websocket');
 var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(77);
+    NodeWebSocket = __webpack_require__(78);
   } catch (e) { }
 }
 
@@ -7361,13 +7439,13 @@ WS.prototype.check = function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports) {
 
 module.exports = toArray
@@ -7386,7 +7464,7 @@ function toArray(list, index) {
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports) {
 
 
@@ -7477,20 +7555,20 @@ Backoff.prototype.setJitter = function(jitter){
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 const XHR = __webpack_require__(3);
-const Template = __webpack_require__(81);
+const Template = __webpack_require__(82);
 
 
-var GridUI = __webpack_require__(24);
+var GridUI = __webpack_require__(14);
 
-__webpack_require__(84);
-var html = __webpack_require__(86);
+__webpack_require__(87);
+var html = __webpack_require__(89);
 
 module.exports = class {
   constructor(div) {
@@ -7569,7 +7647,7 @@ module.exports = class {
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7577,7 +7655,7 @@ module.exports = class {
 
 const XHR = __webpack_require__(3);
 
-var html = __webpack_require__(82);
+var html = __webpack_require__(83);
 
 module.exports = class {
   constructor(name, table) {
@@ -7678,13 +7756,13 @@ module.exports = class {
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports) {
 
 module.exports = "<table>\n  <tr>\n    <td class=\"page_name\" colspan=\"2\">\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <button class=\"edit_btn\">/</a>\n    </td>\n    <td>\n      <button class=\"del_btn\">X</a>\n    </td>\n  </tr>\n</table>\n";
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7719,13 +7797,58 @@ module.exports = class {
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(85);
+var content = __webpack_require__(86);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./theme.less", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./theme.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, ".grid_ui {\n  width: fit-content;\n  margin: 0 auto;\n}\n.grid_ui td {\n  padding: 0;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(88);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -7750,7 +7873,7 @@ if(false) {
 }
 
 /***/ }),
-/* 85 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -7764,26 +7887,26 @@ exports.push([module.i, ".templates_ui {\n  background-color: #333;\n  padding: 
 
 
 /***/ }),
-/* 86 */
+/* 89 */
 /***/ (function(module, exports) {
 
 module.exports = "\n<div class=\"color_wrap\">\n  <h2>Templates</h2>\n</div>\n<div class=\"list_display\">\n</div>\n";
 
 /***/ }),
-/* 87 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 const XHR = __webpack_require__(3);
-const Page = __webpack_require__(88);
+const Page = __webpack_require__(91);
 
 
-var GridUI = __webpack_require__(24);
+var GridUI = __webpack_require__(14);
 
-__webpack_require__(90);
-var html = __webpack_require__(92);
+__webpack_require__(93);
+var html = __webpack_require__(95);
 
 module.exports = class {
   constructor(div, templates) {
@@ -7812,25 +7935,28 @@ module.exports = class {
         grid_ui.add(page.element);
       }
 
-      var add_temp_btn = document.createElement("div");
+      let add_temp_btn = document.createElement("div");
       add_temp_btn.classList.add("pages_ui_item");
       add_temp_btn.classList.add("pages_ui_add");
       add_temp_btn.addEventListener("click", new_page);
       grid_ui.add(add_temp_btn);
 
-      var text = document.createElement("h3");
+      let text = document.createElement("h3");
       text.innerHTML = "++";
       add_temp_btn.appendChild(text);
 
       function new_page(e) {
-        var input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = "Name";
-
-        var select = document.createElement("select");
         XHR.get('templates.io', {
           command: "all"
         }, function() {
+          add_temp_btn.style.display = "block";
+
+          var input = document.createElement("input");
+          input.type = "text";
+          input.placeholder = "Name";
+
+          var select = document.createElement("select");
+
           var placeholder = document.createElement("option");
           placeholder.value = "";
           placeholder.innerHTML = "Template";
@@ -7874,6 +8000,9 @@ module.exports = class {
 
                 grid_ui.remove(add_temp_btn);
                 grid_ui.add(page.element);
+                add_temp_btn.innerHTML = "";
+                add_temp_btn.appendChild(text);
+                add_temp_btn.style.display = "flex";
                 grid_ui.add(add_temp_btn);
                 input.focus();
                 input.value = '';
@@ -7890,7 +8019,7 @@ module.exports = class {
 
 
 /***/ }),
-/* 88 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7898,7 +8027,7 @@ module.exports = class {
 
 const XHR = __webpack_require__(3);
 
-var html = __webpack_require__(89);
+var html = __webpack_require__(92);
 
 module.exports = class {
   constructor(cfg, table) {
@@ -7965,10 +8094,20 @@ module.exports = class {
       popup.appendChild(input);
       input.focus();
 
+      input.addEventListener('keyup', function (e) {
+        if (e.keyCode == 13) {
+          proceed();
+        }
+      });
+
       var err_msg = document.createElement("span");
       popup.appendChild(err_msg);
 
       submit.addEventListener("click", function(e) {
+        proceed()
+      });
+
+      function proceed() {
         if (input.value === this_class.name) {
           XHR.post('pages.io', {
             command: 'rm',
@@ -7982,8 +8121,7 @@ module.exports = class {
         } else {
           err_msg.innerHTML = "Incorrect!";
         }
-      });
-
+      }
     });
     del_button.innerHTML = "X";
   }
@@ -7991,19 +8129,19 @@ module.exports = class {
 
 
 /***/ }),
-/* 89 */
+/* 92 */
 /***/ (function(module, exports) {
 
 module.exports = "<table>\n  <tr>\n    <td class=\"page_name\" colspan=\"2\">\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <button class=\"edit_btn\">/</a>\n    </td>\n    <td>\n      <button class=\"del_btn\">X</a>\n    </td>\n  </tr>\n</table>\n";
 
 /***/ }),
-/* 90 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(91);
+var content = __webpack_require__(94);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -8028,7 +8166,7 @@ if(false) {
 }
 
 /***/ }),
-/* 91 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -8036,29 +8174,29 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, ".pages_ui {\n  margin-top: 40px;\n  background-color: #333;\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n.pages_ui_item {\n  background-color: #111;\n  width: 100%;\n  height: 100%;\n}\n.pages_ui_item:hover {\n  background-color: #191919;\n}\n.pages_ui_item .page_name {\n  cursor: pointer;\n}\n.pages_ui_item .page_name:hover {\n  background-color: #222;\n}\n.pages_ui_item table {\n  width: 100%;\n  height: 100%;\n}\n.pages_ui_item td {\n  width: 50%;\n  height: 50%;\n}\n.pages_ui_add {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n", ""]);
+exports.push([module.i, ".pages_ui {\n  margin-top: 40px;\n  background-color: #333;\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n.pages_ui_item {\n  background-color: #111;\n  width: 100%;\n  height: 100%;\n}\n.pages_ui_item:hover {\n  background-color: #191919;\n}\n.pages_ui_item .page_name {\n  cursor: pointer;\n}\n.pages_ui_item .page_name:hover {\n  background-color: #222;\n}\n.pages_ui_item table {\n  width: 100%;\n  height: 100%;\n}\n.pages_ui_item td {\n  width: 50%;\n  height: 50%;\n}\n.pages_ui_add {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n.pages_ui_add select {\n  background-color: #090909;\n  color: #DDD;\n  border: 1px solid #333;\n  padding: 2px 4px;\n}\n.pages_ui_add input {\n  margin-top: 80px;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 92 */
+/* 95 */
 /***/ (function(module, exports) {
 
 module.exports = "\n<div class=\"color_wrap\">\n  <h2>Pages</h2>\n</div>\n<div class=\"list_display\">\n</div>\n";
 
 /***/ }),
-/* 93 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
 const XHR = __webpack_require__(3);
-const Post = __webpack_require__(94);
+const Post = __webpack_require__(97);
 
-__webpack_require__(97);
-var html = __webpack_require__(99);
+__webpack_require__(100);
+var html = __webpack_require__(102);
 
 module.exports = class {
   constructor(div) {
@@ -8143,7 +8281,7 @@ module.exports = class {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 94 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8151,8 +8289,8 @@ module.exports = class {
 
 const XHR = __webpack_require__(3);
 
-var html = __webpack_require__(95);
-var edit_html = __webpack_require__(96);
+var html = __webpack_require__(98);
+var edit_html = __webpack_require__(99);
 
 module.exports = class {
   constructor(obj) {
@@ -8281,25 +8419,25 @@ module.exports = class {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 95 */
+/* 98 */
 /***/ (function(module, exports) {
 
 module.exports = "\n<h3 class=\"post_title\"></h3>\n<button class=\"post_edit_btn\">/</button>\n<button class=\"post_del_btn\">X</button>\n<div class=\"post_content\"></div>\n";
 
 /***/ }),
-/* 96 */
+/* 99 */
 /***/ (function(module, exports) {
 
 module.exports = "<input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n<div id=\"post_summernote\" class=\"cur_sn\"></div>\n<input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n<input type=\"submit\" class=\"post_submit_input\" />\n<input type=\"submit\" value=\"Cancel\" class=\"post_cancel_input\" />\n<div class=\"post_element\">\n  <h3 class=\"post_display_title post_title\"></h3>\n  <div class=\"post_display post_content\"></div>\n</div>\n";
 
 /***/ }),
-/* 97 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(98);
+var content = __webpack_require__(101);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -8324,7 +8462,7 @@ if(false) {
 }
 
 /***/ }),
-/* 98 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -8338,25 +8476,25 @@ exports.push([module.i, ".posts  {\n  background-color: #333;\n  width: calc(100
 
 
 /***/ }),
-/* 99 */
+/* 102 */
 /***/ (function(module, exports) {
 
 module.exports = "<h2>Posts</h2>\n\n<div class=\"new_post_button\">\n  Write a new post\n</div>\n\n<div class=\"post_editor\" style=\"display: none\">\n  <input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n  <div class=\"post_summernote\"></div>\n  <input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n  <input type=\"submit\" class=\"post_submit_input\" />\n  <div class=\"post_element\">\n    <h3 class=\"post_display_title post_title\"></h3>\n    <div class=\"post_display post_content\"></div>\n  </div>\n</div>\n\n<div class=\"post_list\">\n\n</div>\n";
 
 /***/ }),
-/* 100 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-const XHR = __webpack_require__(110);
-const Image = __webpack_require__(111);
+const XHR = __webpack_require__(10);
+const Image = __webpack_require__(104);
 
 
-var GridUI = __webpack_require__(24);
+var GridUI = __webpack_require__(14);
 
-__webpack_require__(103);
+__webpack_require__(105);
 
 module.exports = class {
   constructor(div) {
@@ -8456,180 +8594,7 @@ module.exports = class {
 
 
 /***/ }),
-/* 101 */,
-/* 102 */,
-/* 103 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(104);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {"hmr":true}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(2)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./style.less", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./style.less");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
 /* 104 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, ".gallery_ui {\n  background-color: #333;\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n.gallery_ui_item {\n  background-color: #111;\n  width: 100%;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  cursor: pointer;\n}\n.gallery_ui_item:hover {\n  background-color: #191919;\n}\n.gallery_ui_item img {\n  background-color: #111;\n  max-width: 100%;\n  max-height: 100%;\n}\n.gallery_ui_item button {\n  position: absolute;\n  bottom: 5px;\n  right: 5px;\n}\n.gallery_ui_add {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n.gallery_ui_popup {\n  background-color: #090909;\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  padding: 50px;\n  width: 500px;\n}\n.gallery_ui_popup button {\n  float: right;\n}\n.gallery_ui_display {\n  position: fixed;\n  left: 0;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 998;\n  background-color: #111;\n  cursor: default;\n}\n.gallery_ui_display div {\n  position: fixed;\n  top: 0px;\n  right: 0px;\n  width: 300px;\n  height: 300px;\n  bottom: auto;\n}\n.gallery_ui_display button {\n  top: 5px;\n  right: 5px;\n  bottom: auto;\n}\n.gallery_ui_display:hover {\n  background-color: #111;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 105 */,
-/* 106 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(107);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {"hmr":true}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(2)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./theme.less", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./theme.less");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 107 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, ".grid_ui {\n  width: fit-content;\n  margin: 0 auto;\n}\n.grid_ui td {\n  padding: 0;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 108 */,
-/* 109 */,
-/* 110 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = class {
-  static async get(url, params) {
-    try {
-      return await new Promise(function (resolve) {
-        if (params) {
-          url += "?data="+encodeURIComponent(JSON.stringify(params));
-        }
-
-        var xhr = new XMLHttpRequest();
-
-        xhr.addEventListener("load", function() {
-          resolve(JSON.parse(this.responseText));
-        });
-        xhr.open("GET", url);
-        xhr.send();
-      });
-    } catch(e) {
-      console.error(e);
-      return undefined;
-    }
-  }
-
-  static async post(url, params) {
-    try {
-      return await new Promise(function (resolve) {
-        if (params.formData) {
-          console.log("FORM DATA");
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", url);
-        //  xhr.setRequestHeader("Content-Type","multipart/form-data");
-          xhr.send(params.formData);
-          xhr.addEventListener("load", function() {
-            resolve(JSON.parse(xhr.responseText));
-          });
-          console.log(url);
-        } else {
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", url, true);
-
-          //Send the proper header information along with the request
-          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-          xhr.onreadystatechange = function() {//Call a function when the state changes.
-            if(xhr.readyState == 4 && xhr.status == 200) {
-              resolve(JSON.parse(xhr.responseText));
-            }
-          }
-
-          var json = JSON.stringify(params);
-          var param_str = 'data='+encodeURIComponent(json);
-          xhr.send(param_str);
-        }
-      });
-    } catch(e) {
-      console.error(e);
-      return undefined;
-    }
-  }
-
-  static getParamByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
-}
-
-
-/***/ }),
-/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8737,6 +8702,51 @@ module.exports = class {
     });
   }
 }
+
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(106);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./style.less", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./style.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, ".gallery_ui {\n  background-color: #333;\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n.gallery_ui_item {\n  background-color: #111;\n  width: 100%;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  cursor: pointer;\n}\n.gallery_ui_item:hover {\n  background-color: #191919;\n}\n.gallery_ui_item img {\n  background-color: #111;\n  max-width: 100%;\n  max-height: 100%;\n}\n.gallery_ui_item button {\n  position: absolute;\n  bottom: 5px;\n  right: 5px;\n}\n.gallery_ui_add {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n.gallery_ui_popup {\n  background-color: #090909;\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  padding: 50px;\n  width: 500px;\n}\n.gallery_ui_popup button {\n  float: right;\n}\n.gallery_ui_display {\n  position: fixed;\n  left: 0;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 998;\n  background-color: #111;\n  cursor: default;\n}\n.gallery_ui_display div {\n  position: fixed;\n  top: 0px;\n  right: 0px;\n  width: 300px;\n  height: 300px;\n  bottom: auto;\n}\n.gallery_ui_display button {\n  top: 5px;\n  right: 5px;\n  bottom: auto;\n}\n.gallery_ui_display:hover {\n  background-color: #111;\n}\n", ""]);
+
+// exports
 
 
 /***/ })

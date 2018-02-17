@@ -90,75 +90,121 @@ module.exports = class {
       }
 
       async function initialise(db_name) {
-        var aura = await Aura.connect({
-          db_host: "127.0.0.1",
-          db_super_usr: cfg.db_user,
-          db_super_pwd: cfg.db_pwd,
-          db_name: db_name
-        });
-
-        var posts = await PostsIO.init(router.app, aura, {
-          pages_path: config.pages_path
-        });
-
-        var templates = new TemplatesIO(router.app, posts);
-
-        var io = router.io;
-        var admin = await Auth.init(router.app, aura, {
-          table_name: "admins",
-          auth_paths: {
-            unauthorized: "/login.html",
-            authenticated: config.admin_path
-          },
-          prefix: '/cmb_admin'
-        });
-
-        var auth = await Auth.init(router.app, aura, {
-          table_name: "users",
-          forward_token: true,
-          auth_paths: {
-            unauthorized: "/signin",
-            authenticated: "http://127.0.0.1:9369/set_access_token"
-          },
-          prefix: '/tribes'
-        });
-
-        var pages = new PagesIO(router.app, posts, auth);
-
-        io.on('connection', function(socket) {
-          console.log("SOCKET CONNECTED");
-          console.log(socket.access_token);
-          socket.on("token_test", function(data) {
-            console.log(data, socket.access_token);
+        try {
+          var aura = await Aura.connect({
+            db_host: "127.0.0.1",
+            db_super_usr: cfg.db_user,
+            db_super_pwd: cfg.db_pwd,
+            db_name: db_name
           });
-        });
 
-        router.serve(__dirname+"/public");
+          var posts = await PostsIO.init(router.app, aura, {
+            pages_path: config.pages_path
+          });
 
-        function authorize(req, res, next) {
-          admin.authorize(req, res, next);
-        }
+          var templates = new TemplatesIO(router.app, posts);
 
-        router.use(
-          config.admin_path,
-          authorize,
-          Router.static(__dirname+"/dist")
-        );
+          var io = router.io;
+          var admin = await Auth.init(router.app, aura, {
+            table_name: "admins",
+            auth_paths: {
+              unauthorized: "/login.html",
+              authenticated: config.admin_path
+            },
+            prefix: '/cmb_admin'
+          });
 
-        router.use(
-          '/g',
-          Router.static(config.globals_path)
-        );
+          var auth = await Auth.init(router.app, aura, {
+            table_name: "users",
+            forward_token: true,
+            auth_paths: {
+              unauthorized: "/signin",
+              authenticated: "http://127.0.0.1:9369/set_access_token"
+            },
+            prefix: '/tribes'
+          });
 
-        async function handle_dynamic_page(target_path, resource_path, res) {
-          try {
-            if (fs.lstatSync(target_path+"/"+resource_path).isDirectory()) {
-              if (resource_path.slice(-1) != "/") {
-                res.redirect(resource_path+"/");
-              } else {
-                var index_html = target_path+"/"+resource_path+"/index.html";
-                var context_json = target_path+"/"+resource_path+"/context.json";
+          var pages = new PagesIO(router.app, posts, auth);
+
+          io.on('connection', function(socket) {
+            console.log("SOCKET CONNECTED");
+            console.log(socket.access_token);
+            socket.on("token_test", function(data) {
+              console.log(data, socket.access_token);
+            });
+          });
+
+          router.serve(__dirname+"/public");
+
+          function authorize(req, res, next) {
+            admin.authorize(req, res, next);
+          }
+
+          router.use(
+            config.admin_path,
+            authorize,
+            Router.static(__dirname+"/dist")
+          );
+
+          router.use(
+            '/g',
+            Router.static(config.globals_path)
+          );
+
+          const res_dir_path = path.resolve(__dirname, 'dist/res');
+          router.use('/cmbird-res', Router.static(res_dir_path));
+
+          async function handle_dynamic_page(target_path, resource_path, res) {
+            try {
+              if (fs.lstatSync(target_path+"/"+resource_path).isDirectory()) {
+                if (resource_path.slice(-1) != "/") {
+                  res.redirect(resource_path+"/");
+                } else {
+                  var index_html = target_path+"/"+resource_path+"/index.html";
+                  var context_json = target_path+"/"+resource_path+"/context.json";
+                  var global_context_json = config.globals_path+"/context.json";
+                  if (fs.existsSync(index_html)) {
+                    if (fs.existsSync(context_json) || fs.existsSync(global_context_json)) {
+                      var context, err = false;
+                      if (fs.existsSync(context_json)) {
+                        try {
+                          context = jsonlint.parse(fs.readFileSync(context_json, 'utf8'));
+                        } catch(e) {
+                          var tp_split = target_path.split('/')
+                          var prefix_path = tp_split[tp_split.length-1];
+                          err = e.message+"\n\nat ./"+prefix_path+"/"+resource_path+"context.json";
+                        }
+                      }
+                      if (fs.existsSync(global_context_json)) {
+                        try {
+                          var global_context = jsonlint.parse(fs.readFileSync(global_context_json, 'utf8'));
+                          context = Object.assign(global_context, context);
+                        } catch(e) {
+                          var tp_split = config.globals_path.split('/')
+                          var prefix_path = tp_split[tp_split.length-1];
+                          err = e.message+"\n\nat /"+prefix_path+"/context.json";
+                        }
+                      }
+                      context = await pages.compile_context(context);
+                      var rendered_html = this_class.nunjucks_env.render(index_html, context);
+                      if (err) {
+                        var style = "font-family: monospace;";
+                        var err = "<div style='"+style+"'>"+err.replace(/(?:\r\n|\r|\n)/g, '<br />')+"</div>";
+                        res.send(err);
+                      } else {
+                        res.send(rendered_html);
+                      }
+                    } else {
+                      res.send(index_html);
+                    }
+                  }
+                }
+              } else if (resource_path.endsWith('.html')) {
+                var index_html = target_path+"/"+resource_path;
+                var html_dir_path = index_html.substring(0, index_html.length-10);
+                var context_json = html_dir_path+"context.json";
                 var global_context_json = config.globals_path+"/context.json";
+
                 if (fs.existsSync(index_html)) {
                   if (fs.existsSync(context_json) || fs.existsSync(global_context_json)) {
                     var context, err = false;
@@ -194,93 +240,55 @@ module.exports = class {
                     res.send(index_html);
                   }
                 }
+              } else {
+                res.sendFile(target_path+'/'+resource_path);
               }
-            } else if (resource_path.endsWith('.html')) {
-              var index_html = target_path+"/"+resource_path;
-              var html_dir_path = index_html.substring(0, index_html.length-10);
-              var context_json = html_dir_path+"context.json";
-              var global_context_json = config.globals_path+"/context.json";
-
-              if (fs.existsSync(index_html)) {
-                if (fs.existsSync(context_json) || fs.existsSync(global_context_json)) {
-                  var context, err = false;
-                  if (fs.existsSync(context_json)) {
-                    try {
-                      context = jsonlint.parse(fs.readFileSync(context_json, 'utf8'));
-                    } catch(e) {
-                      var tp_split = target_path.split('/')
-                      var prefix_path = tp_split[tp_split.length-1];
-                      err = e.message+"\n\nat ./"+prefix_path+"/"+resource_path+"context.json";
-                    }
-                  }
-                  if (fs.existsSync(global_context_json)) {
-                    try {
-                      var global_context = jsonlint.parse(fs.readFileSync(global_context_json, 'utf8'));
-                      context = Object.assign(global_context, context);
-                    } catch(e) {
-                      var tp_split = config.globals_path.split('/')
-                      var prefix_path = tp_split[tp_split.length-1];
-                      err = e.message+"\n\nat /"+prefix_path+"/context.json";
-                    }
-                  }
-                  context = await pages.compile_context(context);
-                  var rendered_html = this_class.nunjucks_env.render(index_html, context);
-                  if (err) {
-                    var style = "font-family: monospace;";
-                    var err = "<div style='"+style+"'>"+err.replace(/(?:\r\n|\r|\n)/g, '<br />')+"</div>";
-                    res.send(err);
-                  } else {
-                    res.send(rendered_html);
-                  }
-                } else {
-                  res.send(index_html);
-                }
-              }
-            } else {
-              res.sendFile(target_path+'/'+resource_path);
+            } catch (e) {
+              console.error(e.stack)
             }
-          } catch (e) {
-            console.error(e.stack)
           }
+          /*
+          router.get("/p/*", async function(req, res) {
+            try {
+              var resource_path = req.path.substring(3);
+
+              handle_dynamic_page(config.pages_path, resource_path, res)
+            } catch (e) {
+              console.error(e.stack)
+            }
+          });
+          */
+          router.get(config.admin_path+"/t/*", async function(req, res) {
+            try {
+              var resource_path = req.path.substring(
+                (config.admin_path+"/t/").length
+              );
+
+              handle_dynamic_page(config.templates_path, resource_path, res);
+            } catch (e) {
+              console.error(e.stack)
+            }
+          });
+
+          var fmio_templates = new FMIO({
+            router: router,
+            targets: {
+              templates: config.templates_path,
+              pages: config.pages_path,
+              globals: config.globals_path
+            }
+          });
+
+          var gallery_path = path.resolve(config.app_path, 'gallery');
+          var gallery_io = await GalleryIO.init(gallery_path, config.admin_path, router.app);
+
+
+
+          return admin;
+        } catch (e) {
+          console.error(e);
+          return undefined;
         }
-        /*
-        router.get("/p/*", async function(req, res) {
-          try {
-            var resource_path = req.path.substring(3);
-
-            handle_dynamic_page(config.pages_path, resource_path, res)
-          } catch (e) {
-            console.error(e.stack)
-          }
-        });
-        */
-        router.get(config.admin_path+"/t/*", async function(req, res) {
-          try {
-            var resource_path = req.path.substring(
-              (config.admin_path+"/t/").length
-            );
-
-            handle_dynamic_page(config.templates_path, resource_path, res);
-          } catch (e) {
-            console.error(e.stack)
-          }
-        });
-
-        var fmio_templates = new FMIO({
-          router: router,
-          targets: {
-            templates: config.templates_path,
-            pages: config.pages_path,
-            globals: config.globals_path
-          }
-        });
-
-        var gallery_path = path.resolve(config.app_path, 'gallery');
-        var gallery_io = await GalleryIO.init(gallery_path, config.admin_path, router.app);
-
-
-
-        return admin;
       };
 
       router.post("/initialise", async function(req, res, next) {

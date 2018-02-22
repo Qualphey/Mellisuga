@@ -1,6 +1,6 @@
-# CMBird #
+# cmbird #
 
-CMBird -  Content Management Bird
+## Content Management Bird ##
 
 A lightweight NodeJS based content management system that aims for flexibility, performance, stability and ease of use.
 

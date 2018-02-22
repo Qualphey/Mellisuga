@@ -44,6 +44,7 @@ module.exports = class {
               if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
                 e.preventDefault();
                 treefm.write_file(file.rel_path, html_editor.cm.getValue(), function() {
+                  /*
                   XHR.post("pages.io", {
                     command: "webpack",
                     name: dir
@@ -51,6 +52,7 @@ module.exports = class {
                     console.log("WEBPACK RES", response);
                     iframe.contentWindow.location.replace(refresh_path);
                   });
+                  */
                 });
               }
             }

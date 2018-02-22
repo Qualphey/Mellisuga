@@ -1,18 +1,29 @@
 'use strict'
 
-var http = require('http');
-var path = require('path');
-var bodyParser = require('body-parser')
+const http = require('http');
+const path = require('path');
+const bodyParser = require('body-parser')
 
-var express = require('express');
-var cookieParser = require('cookie-parser');
+const express = require('express');
+const cookieParser = require('cookie-parser');
 
+const Client = require('./client.js');
 
 module.exports = class {
     constructor(app, server, io) {
       this.app = app;
       this.server = server;
       this.io = io;
+      this.clients = [];
+      let this_class = this;
+
+      io.on('connection', function(socket) {
+        console.log("SOCKET CONNECTED");
+        this_class.clients.push(new Client(socket));
+        socket.on("token_test", function(data) {
+          console.log(data, socket.access_token);
+        });
+      });
     }
 
     get(path, ...callbacks) {
@@ -36,33 +47,22 @@ module.exports = class {
     }
 
     static async init() {
-      var app, server, io;
+      let app = express();
+      let server = http.createServer(app);
+      let io = require('socket.io')(server);
+
+
+      app.use(cookieParser());
+      app.use(bodyParser.json());         // to support JSON-encoded bodies
+      app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+        extended: true
+      }));
+
       await new Promise((resolve, reject) => {
-        app = express();
-        server = http.createServer(app);
-        io = require('socket.io')(server);
-
-        app.use(cookieParser());
-        app.use(bodyParser.json());         // to support JSON-encoded bodies
-        app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-          extended: true
-        }));
-
-  /*      app.set('view engine', 'html');
-        app.set('views', global.cmb_config.pages_path)
-        app.engine('html', ejs.renderFile);*/
-
-/*        io.use(function(socket, next) {
-          console.log(socket.handshake.session.usr);
-          next();
-        });*/
-
-        console.log(global.cmb_config.port, global.cmb_config.host);
-
         server.listen(global.cmb_config.port, global.cmb_config.host, function(){
           var addr = server.address();
           console.log("Server running ", addr.address + ":" + addr.port);
-          resolve(app);
+          resolve();
         });
       });
       return new module.exports(app, server, io);

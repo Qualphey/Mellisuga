@@ -81,7 +81,7 @@ module.exports = class {
           path.resolve(__dirname, "setup"),
           path.resolve(__dirname, "modules/auth.io/pages/signin"),
           path.resolve(__dirname, "modules/auth.io/pages/signup")
-        ], router.app
+        ], router
       );
 
 
@@ -102,7 +102,7 @@ module.exports = class {
             pages_path: config.pages_path
           });
 
-          var templates = new TemplatesIO(router.app, posts);
+          var templates = new TemplatesIO(router, posts);
 
           var io = router.io;
           var admin = await Auth.init(router.app, aura, {
@@ -124,15 +124,9 @@ module.exports = class {
             prefix: '/tribes'
           });
 
-          var pages = new PagesIO(router.app, posts, auth);
+          var pages = new PagesIO(router, posts, auth);
 
-          io.on('connection', function(socket) {
-            console.log("SOCKET CONNECTED");
-            console.log(socket.access_token);
-            socket.on("token_test", function(data) {
-              console.log(data, socket.access_token);
-            });
-          });
+
 
           router.serve(__dirname+"/public");
 

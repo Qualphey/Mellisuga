@@ -9,6 +9,25 @@ const Session = require("./session.js");
 
 module.exports = class {
   constructor(target, dir, iframe, pathname) {
+    var socket = require('socket.io-client')('http://127.0.0.1:9639');
+    console.log("CONNECTING TO http://127.0.0.1:9369");
+    socket.on('connect', function(){
+      console.log("CONNECTED");
+    });
+
+    socket.on('webpack-done', function(stats){
+      console.log("WEBPACK DONE", stats);
+      iframe.contentWindow.location.replace(pathname);
+    });
+
+    socket.on('webpack-err', function(err){
+      console.error(err);
+    });
+
+    socket.on('disconnect', function(){
+      console.log("DISCONNETED");
+    });
+
     this.window = new WindowUI({
       DOM: document.body,
       title: "Editor",
@@ -37,9 +56,14 @@ module.exports = class {
 
     webpack_button.addEventListener('click', async function(e) {
       var chstate = (state != true);
+      console.log({
+        command: "webpack-watch",
+        value: chstate,
+        name: dir
+      });
       state = await XHRA.post("pages.io", {
-        command: "webpack",
-        on: chstate,
+        command: "webpack-watch",
+        value: chstate,
         name: dir
       });
 

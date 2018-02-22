@@ -10,7 +10,7 @@ const page_blacklist = [
 ]
 
 module.exports = class extends Manager {
-  constructor(app, posts, auth) {
+  constructor(router, posts, auth) {
     var pages_dir = global.cmb_config.pages_path;
     var template_dir = global.cmb_config.templates_path;
 
@@ -19,7 +19,7 @@ module.exports = class extends Manager {
       fs.mkdirSync(path.resolve(pages_dir, '.builtin'));
     }
 
-    super(app, pages_dir, {
+    super(router, pages_dir, {
       path_prefix: '/',
       command_path: global.cmb_config.admin_path+"/pages.io",
       posts: posts,

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 54);
+/******/ 	return __webpack_require__(__webpack_require__.s = 78);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -92,6 +92,198 @@ module.exports = g;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process) {/**
+ * This is the web browser implementation of `debug()`.
+ *
+ * Expose `debug()` as the module.
+ */
+
+exports = module.exports = __webpack_require__(28);
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = 'undefined' != typeof chrome
+               && 'undefined' != typeof chrome.storage
+                  ? chrome.storage.local
+                  : localstorage();
+
+/**
+ * Colors.
+ */
+
+exports.colors = [
+  'lightseagreen',
+  'forestgreen',
+  'goldenrod',
+  'dodgerblue',
+  'darkorchid',
+  'crimson'
+];
+
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+
+function useColors() {
+  // NB: In an Electron preload script, document will be defined but not fully
+  // initialized. Since we know we're in Chrome, we'll just detect this case
+  // explicitly
+  if (typeof window !== 'undefined' && window.process && window.process.type === 'renderer') {
+    return true;
+  }
+
+  // is webkit? http://stackoverflow.com/a/16459606/376773
+  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+  return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
+    // is firebug? http://stackoverflow.com/a/398120/376773
+    (typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
+    // is firefox >= v31?
+    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
+    // double check webkit in userAgent just in case we are in a worker
+    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
+}
+
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+exports.formatters.j = function(v) {
+  try {
+    return JSON.stringify(v);
+  } catch (err) {
+    return '[UnexpectedJSONParseError]: ' + err.message;
+  }
+};
+
+
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+function formatArgs(args) {
+  var useColors = this.useColors;
+
+  args[0] = (useColors ? '%c' : '')
+    + this.namespace
+    + (useColors ? ' %c' : ' ')
+    + args[0]
+    + (useColors ? '%c ' : ' ')
+    + '+' + exports.humanize(this.diff);
+
+  if (!useColors) return;
+
+  var c = 'color: ' + this.color;
+  args.splice(1, 0, c, 'color: inherit')
+
+  // the final "%c" is somewhat tricky, because there could be other
+  // arguments passed either before or after the %c, so we need to
+  // figure out the correct index to insert the CSS into
+  var index = 0;
+  var lastC = 0;
+  args[0].replace(/%[a-zA-Z%]/g, function(match) {
+    if ('%%' === match) return;
+    index++;
+    if ('%c' === match) {
+      // we only are interested in the *last* %c
+      // (the user may have provided their own)
+      lastC = index;
+    }
+  });
+
+  args.splice(lastC, 0, c);
+}
+
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+
+function log() {
+  // this hackery is required for IE8/9, where
+  // the `console.log` function doesn't have 'apply'
+  return 'object' === typeof console
+    && console.log
+    && Function.prototype.apply.call(console.log, console, arguments);
+}
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+
+function save(namespaces) {
+  try {
+    if (null == namespaces) {
+      exports.storage.removeItem('debug');
+    } else {
+      exports.storage.debug = namespaces;
+    }
+  } catch(e) {}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+
+function load() {
+  var r;
+  try {
+    r = exports.storage.debug;
+  } catch(e) {}
+
+  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+  if (!r && typeof process !== 'undefined' && 'env' in process) {
+    r = process.env.DEBUG;
+  }
+
+  return r;
+}
+
+/**
+ * Enable namespaces listed in `localStorage.debug` initially.
+ */
+
+exports.enable(load());
+
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage() {
+  try {
+    return window.localStorage;
+  } catch (e) {}
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27)))
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports) {
 
 /*
@@ -173,7 +365,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -229,7 +421,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(9);
+var	fixUrls = __webpack_require__(23);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -545,7 +737,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -604,198 +796,6 @@ module.exports = class {
   }
 }
 
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(process) {/**
- * This is the web browser implementation of `debug()`.
- *
- * Expose `debug()` as the module.
- */
-
-exports = module.exports = __webpack_require__(60);
-exports.log = log;
-exports.formatArgs = formatArgs;
-exports.save = save;
-exports.load = load;
-exports.useColors = useColors;
-exports.storage = 'undefined' != typeof chrome
-               && 'undefined' != typeof chrome.storage
-                  ? chrome.storage.local
-                  : localstorage();
-
-/**
- * Colors.
- */
-
-exports.colors = [
-  'lightseagreen',
-  'forestgreen',
-  'goldenrod',
-  'dodgerblue',
-  'darkorchid',
-  'crimson'
-];
-
-/**
- * Currently only WebKit-based Web Inspectors, Firefox >= v31,
- * and the Firebug extension (any Firefox version) are known
- * to support "%c" CSS customizations.
- *
- * TODO: add a `localStorage` variable to explicitly enable/disable colors
- */
-
-function useColors() {
-  // NB: In an Electron preload script, document will be defined but not fully
-  // initialized. Since we know we're in Chrome, we'll just detect this case
-  // explicitly
-  if (typeof window !== 'undefined' && window.process && window.process.type === 'renderer') {
-    return true;
-  }
-
-  // is webkit? http://stackoverflow.com/a/16459606/376773
-  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
-  return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
-    // is firebug? http://stackoverflow.com/a/398120/376773
-    (typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
-    // is firefox >= v31?
-    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
-    // double check webkit in userAgent just in case we are in a worker
-    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
-}
-
-/**
- * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
- */
-
-exports.formatters.j = function(v) {
-  try {
-    return JSON.stringify(v);
-  } catch (err) {
-    return '[UnexpectedJSONParseError]: ' + err.message;
-  }
-};
-
-
-/**
- * Colorize log arguments if enabled.
- *
- * @api public
- */
-
-function formatArgs(args) {
-  var useColors = this.useColors;
-
-  args[0] = (useColors ? '%c' : '')
-    + this.namespace
-    + (useColors ? ' %c' : ' ')
-    + args[0]
-    + (useColors ? '%c ' : ' ')
-    + '+' + exports.humanize(this.diff);
-
-  if (!useColors) return;
-
-  var c = 'color: ' + this.color;
-  args.splice(1, 0, c, 'color: inherit')
-
-  // the final "%c" is somewhat tricky, because there could be other
-  // arguments passed either before or after the %c, so we need to
-  // figure out the correct index to insert the CSS into
-  var index = 0;
-  var lastC = 0;
-  args[0].replace(/%[a-zA-Z%]/g, function(match) {
-    if ('%%' === match) return;
-    index++;
-    if ('%c' === match) {
-      // we only are interested in the *last* %c
-      // (the user may have provided their own)
-      lastC = index;
-    }
-  });
-
-  args.splice(lastC, 0, c);
-}
-
-/**
- * Invokes `console.log()` when available.
- * No-op when `console.log` is not a "function".
- *
- * @api public
- */
-
-function log() {
-  // this hackery is required for IE8/9, where
-  // the `console.log` function doesn't have 'apply'
-  return 'object' === typeof console
-    && console.log
-    && Function.prototype.apply.call(console.log, console, arguments);
-}
-
-/**
- * Save `namespaces`.
- *
- * @param {String} namespaces
- * @api private
- */
-
-function save(namespaces) {
-  try {
-    if (null == namespaces) {
-      exports.storage.removeItem('debug');
-    } else {
-      exports.storage.debug = namespaces;
-    }
-  } catch(e) {}
-}
-
-/**
- * Load `namespaces`.
- *
- * @return {String} returns the previously persisted debug modes
- * @api private
- */
-
-function load() {
-  var r;
-  try {
-    r = exports.storage.debug;
-  } catch(e) {}
-
-  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
-  if (!r && typeof process !== 'undefined' && 'env' in process) {
-    r = process.env.DEBUG;
-  }
-
-  return r;
-}
-
-/**
- * Enable namespaces listed in `localStorage.debug` initially.
- */
-
-exports.enable(load());
-
-/**
- * Localstorage attempts to return the localstorage.
- *
- * This is necessary because safari throws
- * when a user disables cookies/localstorage
- * and you attempt to access it.
- *
- * @return {LocalStorage}
- * @api private
- */
-
-function localstorage() {
-  try {
-    return window.localStorage;
-  } catch (e) {}
-}
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(59)))
 
 /***/ }),
 /* 5 */
@@ -974,15 +974,15 @@ Emitter.prototype.hasListeners = function(event){
  * Module dependencies.
  */
 
-var keys = __webpack_require__(69);
-var hasBinary = __webpack_require__(16);
-var sliceBuffer = __webpack_require__(70);
-var after = __webpack_require__(71);
-var utf8 = __webpack_require__(72);
+var keys = __webpack_require__(37);
+var hasBinary = __webpack_require__(13);
+var sliceBuffer = __webpack_require__(38);
+var after = __webpack_require__(39);
+var utf8 = __webpack_require__(40);
 
 var base64encoder;
 if (global && global.ArrayBuffer) {
-  base64encoder = __webpack_require__(74);
+  base64encoder = __webpack_require__(42);
 }
 
 /**
@@ -1040,7 +1040,7 @@ var err = { type: 'error', data: 'parser error' };
  * Create a blob api even for blob builder when vendor prefixes exist
  */
 
-var Blob = __webpack_require__(75);
+var Blob = __webpack_require__(43);
 
 /**
  * Encodes a packet.
@@ -1636,179 +1636,6 @@ module.exports = function(a, b){
 
 /***/ }),
 /* 9 */
-/***/ (function(module, exports) {
-
-
-/**
- * When source maps are enabled, `style-loader` uses a link element with a data-uri to
- * embed the css on the page. This breaks all relative urls because now they are relative to a
- * bundle instead of the current page.
- *
- * One solution is to only use full urls, but that may be impossible.
- *
- * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
- *
- * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
- *
- */
-
-module.exports = function (css) {
-  // get current location
-  var location = typeof window !== "undefined" && window.location;
-
-  if (!location) {
-    throw new Error("fixUrls requires window.location");
-  }
-
-	// blank or null?
-	if (!css || typeof css !== "string") {
-	  return css;
-  }
-
-  var baseUrl = location.protocol + "//" + location.host;
-  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
-
-	// convert each url(...)
-	/*
-	This regular expression is just a way to recursively match brackets within
-	a string.
-
-	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
-	   (  = Start a capturing group
-	     (?:  = Start a non-capturing group
-	         [^)(]  = Match anything that isn't a parentheses
-	         |  = OR
-	         \(  = Match a start parentheses
-	             (?:  = Start another non-capturing groups
-	                 [^)(]+  = Match anything that isn't a parentheses
-	                 |  = OR
-	                 \(  = Match a start parentheses
-	                     [^)(]*  = Match anything that isn't a parentheses
-	                 \)  = Match a end parentheses
-	             )  = End Group
-              *\) = Match anything and then a close parens
-          )  = Close non-capturing group
-          *  = Match anything
-       )  = Close capturing group
-	 \)  = Match a close parens
-
-	 /gi  = Get all matches, not the first.  Be case insensitive.
-	 */
-	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
-		// strip quotes (if they exist)
-		var unquotedOrigUrl = origUrl
-			.trim()
-			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
-			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
-
-		// already a full url? no change
-		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
-		  return fullMatch;
-		}
-
-		// convert the url to a full url
-		var newUrl;
-
-		if (unquotedOrigUrl.indexOf("//") === 0) {
-		  	//TODO: should we add protocol?
-			newUrl = unquotedOrigUrl;
-		} else if (unquotedOrigUrl.indexOf("/") === 0) {
-			// path should be relative to the base url
-			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
-		} else {
-			// path should be relative to current directory
-			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
-		}
-
-		// send back the fixed url(...)
-		return "url(" + JSON.stringify(newUrl) + ")";
-	});
-
-	// send back the fixed css
-	return fixedCss;
-};
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = class {
-  static async get(url, params) {
-    try {
-      return await new Promise(function (resolve) {
-        if (params) {
-          url += "?data="+encodeURIComponent(JSON.stringify(params));
-        }
-
-        var xhr = new XMLHttpRequest();
-
-        xhr.addEventListener("load", function() {
-          resolve(JSON.parse(this.responseText));
-        });
-        xhr.open("GET", url);
-        xhr.send();
-      });
-    } catch(e) {
-      console.error(e);
-      return undefined;
-    }
-  }
-
-  static async post(url, params) {
-    try {
-      return await new Promise(function (resolve) {
-        if (params.formData) {
-          console.log("FORM DATA");
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", url);
-        //  xhr.setRequestHeader("Content-Type","multipart/form-data");
-          xhr.send(params.formData);
-          xhr.addEventListener("load", function() {
-            resolve(JSON.parse(xhr.responseText));
-          });
-          console.log(url);
-        } else {
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", url, true);
-
-          //Send the proper header information along with the request
-          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-          xhr.onreadystatechange = function() {//Call a function when the state changes.
-            if(xhr.readyState == 4 && xhr.status == 200) {
-              resolve(JSON.parse(xhr.responseText));
-            }
-          }
-
-          var json = JSON.stringify(params);
-          var param_str = 'data='+encodeURIComponent(json);
-          xhr.send(param_str);
-        }
-      });
-    } catch(e) {
-      console.error(e);
-      return undefined;
-    }
-  }
-
-  static getParamByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
-}
-
-
-/***/ }),
-/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -1816,11 +1643,11 @@ module.exports = class {
  * Module dependencies.
  */
 
-var debug = __webpack_require__(4)('socket.io-parser');
+var debug = __webpack_require__(1)('socket.io-parser');
 var Emitter = __webpack_require__(5);
-var hasBin = __webpack_require__(16);
-var binary = __webpack_require__(63);
-var isBuf = __webpack_require__(17);
+var hasBin = __webpack_require__(13);
+var binary = __webpack_require__(31);
+var isBuf = __webpack_require__(14);
 
 /**
  * Protocol version.
@@ -2214,12 +2041,12 @@ function error() {
 
 
 /***/ }),
-/* 12 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 
-var hasCORS = __webpack_require__(67);
+var hasCORS = __webpack_require__(35);
 
 module.exports = function (opts) {
   var xdomain = opts.xdomain;
@@ -2258,7 +2085,7 @@ module.exports = function (opts) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 13 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -2421,112 +2248,7 @@ Transport.prototype.onClose = function () {
 
 
 /***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var TR = __webpack_require__(84);
-
-__webpack_require__(85);
-
-module.exports = class {
-  constructor(items_in_row, width, min_a) {
-    this.element = document.createElement('table');
-    this.element.classList.add('grid_ui');
-
-    this.min_a = min_a;
-    this.items_in_row = items_in_row;
-    this.item_a = width/items_in_row-4;
-    if (this.item_a < this.min_a) {
-      this.item_a = this.min_a;
-    }
-
-    this.trs = [];
-    this.tds = [];
-    this.cur_tr = new TR(items_in_row);
-    this.element.appendChild(this.cur_tr.element);
-    this.trs.push(this.cur_tr);
-
-  }
-
-  resize(width) {
-    if (width) {
-      this.item_a = width/this.items_in_row-4;
-      if (this.item_a < this.min_a) {
-        this.item_a = this.min_a;
-      }
-    }
-
-    for (var i = 0; i < this.tds.length; i++) {
-      this.tds[i].style.width = this.item_a+"px";
-      this.tds[i].style.height = this.item_a+"px";
-
-      this.tds[i].style.minWidth = this.min_a+"px";
-    }
-  }
-
-  add(item) {
-    console.log(item, this.cur_tr.items, this.cur_tr.max_items);
-    if (this.cur_tr.items == this.cur_tr.max_items) {
-      this.cur_tr = new TR(this.items_in_row);
-      this.element.appendChild(this.cur_tr.element);
-
-      var td = document.createElement('td');
-      td.appendChild(item);
-      this.cur_tr.add(td);
-
-      this.trs.push(this.cur_tr);
-      this.tds.push(td);
-      this.resize();
-    } else {
-      var td = document.createElement('td');
-      td.appendChild(item);
-      this.cur_tr.add(td);
-      this.tds.push(td);
-      this.resize()
-    }
-  }
-
-  remove(item) {
-    for (var t = 0; t < this.trs.length; t++) {
-      var tr = this.trs[t];
-      if (tr.contains(item)) {
-        tr.remove(item.parentNode);
-        if (tr.items == 0 && t > 0) {
-          this.element.removeChild(tr.element);
-          this.trs.splice(t, 1);
-          this.cur_tr = this.trs[t-1];
-        } else if (tr.items == tr.max_items-1) {
-          this.track(t+1);
-        }
-      }
-    }
-  }
-
-  track(t) {
-    if (t < this.trs.length) {
-      var tr = this.trs[t];
-      if (tr.items > 0) {
-        var td = tr.tds[0];
-        tr.remove(td);
-        this.trs[t-1].add(td);
-        if (tr.items == tr.max_items-1) {
-          this.track(t+1);
-        }
-      } else {
-        this.element.removeChild(this.trs[t].element);
-        this.trs.splice(t, 1);
-        this.cur_tr = this.trs[t-1];
-      }
-    }
-  }
-}
-
-
-/***/ }),
-/* 15 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /**
@@ -2571,7 +2293,7 @@ module.exports = function parseuri(str) {
 
 
 /***/ }),
-/* 16 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/* global Blob File */
@@ -2580,7 +2302,7 @@ module.exports = function parseuri(str) {
  * Module requirements.
  */
 
-var isArray = __webpack_require__(62);
+var isArray = __webpack_require__(30);
 
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
@@ -2640,7 +2362,7 @@ function hasBinary (obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 17 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -2660,7 +2382,7 @@ function isBuf(obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 18 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -2668,15 +2390,15 @@ function isBuf(obj) {
  * Module dependencies.
  */
 
-var eio = __webpack_require__(65);
-var Socket = __webpack_require__(23);
+var eio = __webpack_require__(33);
+var Socket = __webpack_require__(20);
 var Emitter = __webpack_require__(5);
-var parser = __webpack_require__(11);
-var on = __webpack_require__(24);
-var bind = __webpack_require__(25);
-var debug = __webpack_require__(4)('socket.io-client:manager');
-var indexOf = __webpack_require__(22);
-var Backoff = __webpack_require__(80);
+var parser = __webpack_require__(9);
+var on = __webpack_require__(21);
+var bind = __webpack_require__(22);
+var debug = __webpack_require__(1)('socket.io-client:manager');
+var indexOf = __webpack_require__(19);
+var Backoff = __webpack_require__(48);
 
 /**
  * IE6+ hasOwnProperty
@@ -3239,17 +2961,17 @@ Manager.prototype.onreconnect = function () {
 
 
 /***/ }),
-/* 19 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies
  */
 
-var XMLHttpRequest = __webpack_require__(12);
-var XHR = __webpack_require__(68);
-var JSONP = __webpack_require__(76);
-var websocket = __webpack_require__(77);
+var XMLHttpRequest = __webpack_require__(10);
+var XHR = __webpack_require__(36);
+var JSONP = __webpack_require__(44);
+var websocket = __webpack_require__(45);
 
 /**
  * Export transports.
@@ -3299,19 +3021,19 @@ function polling (opts) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 20 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Module dependencies.
  */
 
-var Transport = __webpack_require__(13);
+var Transport = __webpack_require__(11);
 var parseqs = __webpack_require__(7);
 var parser = __webpack_require__(6);
 var inherit = __webpack_require__(8);
-var yeast = __webpack_require__(21);
-var debug = __webpack_require__(4)('engine.io-client:polling');
+var yeast = __webpack_require__(18);
+var debug = __webpack_require__(1)('engine.io-client:polling');
 
 /**
  * Module exports.
@@ -3324,7 +3046,7 @@ module.exports = Polling;
  */
 
 var hasXHR2 = (function () {
-  var XMLHttpRequest = __webpack_require__(12);
+  var XMLHttpRequest = __webpack_require__(10);
   var xhr = new XMLHttpRequest({ xdomain: false });
   return null != xhr.responseType;
 })();
@@ -3550,7 +3272,7 @@ Polling.prototype.uri = function () {
 
 
 /***/ }),
-/* 21 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3625,7 +3347,7 @@ module.exports = yeast;
 
 
 /***/ }),
-/* 22 */
+/* 19 */
 /***/ (function(module, exports) {
 
 
@@ -3640,7 +3362,7 @@ module.exports = function(arr, obj){
 };
 
 /***/ }),
-/* 23 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -3648,12 +3370,12 @@ module.exports = function(arr, obj){
  * Module dependencies.
  */
 
-var parser = __webpack_require__(11);
+var parser = __webpack_require__(9);
 var Emitter = __webpack_require__(5);
-var toArray = __webpack_require__(79);
-var on = __webpack_require__(24);
-var bind = __webpack_require__(25);
-var debug = __webpack_require__(4)('socket.io-client:socket');
+var toArray = __webpack_require__(47);
+var on = __webpack_require__(21);
+var bind = __webpack_require__(22);
+var debug = __webpack_require__(1)('socket.io-client:socket');
 var parseqs = __webpack_require__(7);
 
 /**
@@ -4064,7 +3786,7 @@ Socket.prototype.compress = function (compress) {
 
 
 /***/ }),
-/* 24 */
+/* 21 */
 /***/ (function(module, exports) {
 
 
@@ -4094,7 +3816,7 @@ function on (obj, ev, fn) {
 
 
 /***/ }),
-/* 25 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /**
@@ -4123,116 +3845,180 @@ module.exports = function(obj, fn){
 
 
 /***/ }),
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 23 */
+/***/ (function(module, exports) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var config = global.config = {
-  admin_path : "/cmb_admin"
-}
 
-__webpack_require__(55);
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
 
-window.addEventListener("load", async function(e) {
-  try {
-    var socket = global.socket = __webpack_require__(57)('http://localhost:9639');
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
 
-    var templates_div = document.createElement('div');
-    document.body.appendChild(templates_div);
-    var TemplatesUI = new (__webpack_require__(81))(templates_div);
-
-    var pages_div = document.createElement('div');
-    document.body.appendChild(pages_div);
-    var PagesUI = new (__webpack_require__(90))(pages_div);
-
-    var posts_div = document.createElement('div');
-    document.body.appendChild(posts_div);
-    var PostsUI = new (__webpack_require__(96))(posts_div);
-
-    var gallery_div = document.createElement('div');
-    document.body.appendChild(gallery_div);
-    var GalleryUI = __webpack_require__(103).init(gallery_div);
-  } catch (e) {
-    console.error(e);
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
   }
-});
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
 
 /***/ }),
-/* 55 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// style-loader: Adds some css to the DOM by adding a <style> tag
+"use strict";
 
-// load the styles
-var content = __webpack_require__(56);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
 
-var options = {"hmr":true}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(2)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js!./style.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js!./style.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
+module.exports = class {
+  static async get(url, params) {
+    try {
+      return await new Promise(function (resolve) {
+        if (params) {
+          url += "?data="+encodeURIComponent(JSON.stringify(params));
+        }
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("load", function() {
+          resolve(JSON.parse(this.responseText));
+        });
+        xhr.open("GET", url);
+        xhr.send();
+      });
+    } catch(e) {
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  static async post(url, params) {
+    try {
+      return await new Promise(function (resolve) {
+        if (params.formData) {
+          console.log("FORM DATA");
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url);
+        //  xhr.setRequestHeader("Content-Type","multipart/form-data");
+          xhr.send(params.formData);
+          xhr.addEventListener("load", function() {
+            resolve(JSON.parse(xhr.responseText));
+          });
+          console.log(url);
+        } else {
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url, true);
+
+          //Send the proper header information along with the request
+          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+          xhr.onreadystatechange = function() {//Call a function when the state changes.
+            if(xhr.readyState == 4 && xhr.status == 200) {
+              resolve(JSON.parse(xhr.responseText));
+            }
+          }
+
+          var json = JSON.stringify(params);
+          var param_str = 'data='+encodeURIComponent(json);
+          xhr.send(param_str);
+        }
+      });
+    } catch(e) {
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  static getParamByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
 }
 
-/***/ }),
-/* 56 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.popup_ui {\n  background-color: #090909;\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  padding: 50px;\n}\n.popup_ui p {\n  margin-top: 20px;\n}\n\n.popup_ui input, .popup_ui span{\n  margin-top: 10px;\n  float: right;\n}\n\n.popup_ui span {\n  color: #FF6600;\n  padding: 2px 4px;\n  line-height: 20px;\n}\n\n.popup_ui button {\n  margin-top: -45px;\n  margin-right: -45px;\n  float: right;\n}\n\ninput {\n  background-color: #090909;\n  color: #FFF;\n  border: 1px solid #333;\n  padding: 2px 4px;\n  line-height: 20px;\n}\n", ""]);
-
-// exports
-
 
 /***/ }),
-/* 57 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -4240,10 +4026,10 @@ exports.push([module.i, "\n.popup_ui {\n  background-color: #090909;\n  position
  * Module dependencies.
  */
 
-var url = __webpack_require__(58);
-var parser = __webpack_require__(11);
-var Manager = __webpack_require__(18);
-var debug = __webpack_require__(4)('socket.io-client');
+var url = __webpack_require__(26);
+var parser = __webpack_require__(9);
+var Manager = __webpack_require__(15);
+var debug = __webpack_require__(1)('socket.io-client');
 
 /**
  * Module exports.
@@ -4327,12 +4113,12 @@ exports.connect = lookup;
  * @api public
  */
 
-exports.Manager = __webpack_require__(18);
-exports.Socket = __webpack_require__(23);
+exports.Manager = __webpack_require__(15);
+exports.Socket = __webpack_require__(20);
 
 
 /***/ }),
-/* 58 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -4340,8 +4126,8 @@ exports.Socket = __webpack_require__(23);
  * Module dependencies.
  */
 
-var parseuri = __webpack_require__(15);
-var debug = __webpack_require__(4)('socket.io-client:url');
+var parseuri = __webpack_require__(12);
+var debug = __webpack_require__(1)('socket.io-client:url');
 
 /**
  * Module exports.
@@ -4414,7 +4200,7 @@ function url (uri, loc) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 59 */
+/* 27 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -4604,7 +4390,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 60 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -4620,7 +4406,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(61);
+exports.humanize = __webpack_require__(29);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -4812,7 +4598,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 61 */
+/* 29 */
 /***/ (function(module, exports) {
 
 /**
@@ -4970,7 +4756,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 62 */
+/* 30 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -4981,7 +4767,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 63 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -4990,8 +4776,8 @@ module.exports = Array.isArray || function (arr) {
  * Module requirements
  */
 
-var isArray = __webpack_require__(64);
-var isBuf = __webpack_require__(17);
+var isArray = __webpack_require__(32);
+var isBuf = __webpack_require__(14);
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
 var withNativeFile = typeof global.File === 'function' || toString.call(global.File) === '[object FileConstructor]';
@@ -5129,7 +4915,7 @@ exports.removeBlobs = function(data, callback) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 64 */
+/* 32 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -5140,11 +4926,11 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 65 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-module.exports = __webpack_require__(66);
+module.exports = __webpack_require__(34);
 
 /**
  * Exports parser
@@ -5156,19 +4942,19 @@ module.exports.parser = __webpack_require__(6);
 
 
 /***/ }),
-/* 66 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies.
  */
 
-var transports = __webpack_require__(19);
+var transports = __webpack_require__(16);
 var Emitter = __webpack_require__(5);
-var debug = __webpack_require__(4)('engine.io-client:socket');
-var index = __webpack_require__(22);
+var debug = __webpack_require__(1)('engine.io-client:socket');
+var index = __webpack_require__(19);
 var parser = __webpack_require__(6);
-var parseuri = __webpack_require__(15);
+var parseuri = __webpack_require__(12);
 var parseqs = __webpack_require__(7);
 
 /**
@@ -5302,8 +5088,8 @@ Socket.protocol = parser.protocol; // this is an int
  */
 
 Socket.Socket = Socket;
-Socket.Transport = __webpack_require__(13);
-Socket.transports = __webpack_require__(19);
+Socket.Transport = __webpack_require__(11);
+Socket.transports = __webpack_require__(16);
 Socket.parser = __webpack_require__(6);
 
 /**
@@ -5906,7 +5692,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 67 */
+/* 35 */
 /***/ (function(module, exports) {
 
 
@@ -5929,18 +5715,18 @@ try {
 
 
 /***/ }),
-/* 68 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module requirements.
  */
 
-var XMLHttpRequest = __webpack_require__(12);
-var Polling = __webpack_require__(20);
+var XMLHttpRequest = __webpack_require__(10);
+var Polling = __webpack_require__(17);
 var Emitter = __webpack_require__(5);
 var inherit = __webpack_require__(8);
-var debug = __webpack_require__(4)('engine.io-client:polling-xhr');
+var debug = __webpack_require__(1)('engine.io-client:polling-xhr');
 
 /**
  * Module exports.
@@ -6349,7 +6135,7 @@ function unloadHandler () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 69 */
+/* 37 */
 /***/ (function(module, exports) {
 
 
@@ -6374,7 +6160,7 @@ module.exports = Object.keys || function keys (obj){
 
 
 /***/ }),
-/* 70 */
+/* 38 */
 /***/ (function(module, exports) {
 
 /**
@@ -6409,7 +6195,7 @@ module.exports = function(arraybuffer, start, end) {
 
 
 /***/ }),
-/* 71 */
+/* 39 */
 /***/ (function(module, exports) {
 
 module.exports = after
@@ -6443,7 +6229,7 @@ function noop() {}
 
 
 /***/ }),
-/* 72 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/utf8js v2.1.2 by @mathias */
@@ -6701,10 +6487,10 @@ function noop() {}
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(73)(module), __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(41)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 73 */
+/* 41 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -6732,7 +6518,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 74 */
+/* 42 */
 /***/ (function(module, exports) {
 
 /*
@@ -6805,7 +6591,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 75 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -6908,7 +6694,7 @@ module.exports = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 76 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -6916,7 +6702,7 @@ module.exports = (function() {
  * Module requirements.
  */
 
-var Polling = __webpack_require__(20);
+var Polling = __webpack_require__(17);
 var inherit = __webpack_require__(8);
 
 /**
@@ -7146,24 +6932,24 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 77 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies.
  */
 
-var Transport = __webpack_require__(13);
+var Transport = __webpack_require__(11);
 var parser = __webpack_require__(6);
 var parseqs = __webpack_require__(7);
 var inherit = __webpack_require__(8);
-var yeast = __webpack_require__(21);
-var debug = __webpack_require__(4)('engine.io-client:websocket');
+var yeast = __webpack_require__(18);
+var debug = __webpack_require__(1)('engine.io-client:websocket');
 var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(78);
+    NodeWebSocket = __webpack_require__(46);
   } catch (e) { }
 }
 
@@ -7439,13 +7225,13 @@ WS.prototype.check = function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 78 */
+/* 46 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 79 */
+/* 47 */
 /***/ (function(module, exports) {
 
 module.exports = toArray
@@ -7464,7 +7250,7 @@ function toArray(list, index) {
 
 
 /***/ }),
-/* 80 */
+/* 48 */
 /***/ (function(module, exports) {
 
 
@@ -7555,17 +7341,231 @@ Backoff.prototype.setJitter = function(jitter){
 
 
 /***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var TR = __webpack_require__(84);
+
+__webpack_require__(85);
+
+module.exports = class {
+  constructor(items_in_row, width, min_a) {
+    this.element = document.createElement('table');
+    this.element.classList.add('grid_ui');
+
+    this.min_a = min_a;
+    this.items_in_row = items_in_row;
+    this.item_a = width/items_in_row-4;
+    if (this.item_a < this.min_a) {
+      this.item_a = this.min_a;
+    }
+
+    this.trs = [];
+    this.tds = [];
+    this.cur_tr = new TR(items_in_row);
+    this.element.appendChild(this.cur_tr.element);
+    this.trs.push(this.cur_tr);
+
+  }
+
+  resize(width) {
+    if (width) {
+      this.item_a = width/this.items_in_row-4;
+      if (this.item_a < this.min_a) {
+        this.item_a = this.min_a;
+      }
+    }
+
+    for (var i = 0; i < this.tds.length; i++) {
+      this.tds[i].style.width = this.item_a+"px";
+      this.tds[i].style.height = this.item_a+"px";
+
+      this.tds[i].style.minWidth = this.min_a+"px";
+    }
+  }
+
+  add(item) {
+    console.log(item, this.cur_tr.items, this.cur_tr.max_items);
+    if (this.cur_tr.items == this.cur_tr.max_items) {
+      this.cur_tr = new TR(this.items_in_row);
+      this.element.appendChild(this.cur_tr.element);
+
+      var td = document.createElement('td');
+      td.appendChild(item);
+      this.cur_tr.add(td);
+
+      this.trs.push(this.cur_tr);
+      this.tds.push(td);
+      this.resize();
+    } else {
+      var td = document.createElement('td');
+      td.appendChild(item);
+      this.cur_tr.add(td);
+      this.tds.push(td);
+      this.resize()
+    }
+  }
+
+  remove(item) {
+    for (var t = 0; t < this.trs.length; t++) {
+      var tr = this.trs[t];
+      if (tr.contains(item)) {
+        tr.remove(item.parentNode);
+        if (tr.items == 0 && t > 0) {
+          this.element.removeChild(tr.element);
+          this.trs.splice(t, 1);
+          this.cur_tr = this.trs[t-1];
+        } else if (tr.items == tr.max_items-1) {
+          this.track(t+1);
+        }
+      }
+    }
+  }
+
+  track(t) {
+    if (t < this.trs.length) {
+      var tr = this.trs[t];
+      if (tr.items > 0) {
+        var td = tr.tds[0];
+        tr.remove(td);
+        this.trs[t-1].add(td);
+        if (tr.items == tr.max_items-1) {
+          this.track(t+1);
+        }
+      } else {
+        this.element.removeChild(this.trs[t].element);
+        this.trs.splice(t, 1);
+        this.cur_tr = this.trs[t-1];
+      }
+    }
+  }
+}
+
+
+/***/ }),
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {var config = global.config = {
+  admin_path : "/cmb_admin"
+}
+
+__webpack_require__(79);
+
+window.addEventListener("load", async function(e) {
+  try {
+    var socket = global.socket = __webpack_require__(25)('http://localhost:9639');
+
+    var templates_div = document.createElement('div');
+    document.body.appendChild(templates_div);
+    var TemplatesUI = new (__webpack_require__(81))(templates_div);
+
+    var pages_div = document.createElement('div');
+    document.body.appendChild(pages_div);
+    var PagesUI = new (__webpack_require__(90))(pages_div);
+
+    var posts_div = document.createElement('div');
+    document.body.appendChild(posts_div);
+    var PostsUI = new (__webpack_require__(96))(posts_div);
+
+    var gallery_div = document.createElement('div');
+    document.body.appendChild(gallery_div);
+    var GalleryUI = __webpack_require__(103).init(gallery_div);
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(80);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(3)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../node_modules/css-loader/index.js!./style.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js!./style.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.popup_ui {\n  background-color: #090909;\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  padding: 50px;\n}\n.popup_ui p {\n  margin-top: 20px;\n}\n\n.popup_ui input, .popup_ui span{\n  margin-top: 10px;\n  float: right;\n}\n\n.popup_ui span {\n  color: #FF6600;\n  padding: 2px 4px;\n  line-height: 20px;\n}\n\n.popup_ui button {\n  margin-top: -45px;\n  margin-right: -45px;\n  float: right;\n}\n\ninput {\n  background-color: #090909;\n  color: #FFF;\n  border: 1px solid #333;\n  padding: 2px 4px;\n  line-height: 20px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
 /* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-const XHR = __webpack_require__(3);
+const XHR = __webpack_require__(4);
 const Template = __webpack_require__(82);
 
 
-var GridUI = __webpack_require__(14);
+var GridUI = __webpack_require__(49);
 
 __webpack_require__(87);
 var html = __webpack_require__(89);
@@ -7653,7 +7653,7 @@ module.exports = class {
 "use strict";
 
 
-const XHR = __webpack_require__(3);
+const XHR = __webpack_require__(4);
 
 var html = __webpack_require__(83);
 
@@ -7811,7 +7811,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(2)(content, options);
+var update = __webpack_require__(3)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -7831,7 +7831,7 @@ if(false) {
 /* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -7856,7 +7856,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(2)(content, options);
+var update = __webpack_require__(3)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -7876,7 +7876,7 @@ if(false) {
 /* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -7899,11 +7899,11 @@ module.exports = "\n<div class=\"color_wrap\">\n  <h2>Templates</h2>\n</div>\n<d
 "use strict";
 
 
-const XHR = __webpack_require__(3);
+const XHR = __webpack_require__(4);
 const Page = __webpack_require__(91);
 
 
-var GridUI = __webpack_require__(14);
+var GridUI = __webpack_require__(49);
 
 __webpack_require__(93);
 var html = __webpack_require__(95);
@@ -8025,7 +8025,7 @@ module.exports = class {
 "use strict";
 
 
-const XHR = __webpack_require__(3);
+const XHR = __webpack_require__(4);
 
 var html = __webpack_require__(92);
 
@@ -8149,7 +8149,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(2)(content, options);
+var update = __webpack_require__(3)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -8169,7 +8169,7 @@ if(false) {
 /* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -8192,7 +8192,7 @@ module.exports = "\n<div class=\"color_wrap\">\n  <h2>Pages</h2>\n</div>\n<div c
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-const XHR = __webpack_require__(3);
+const XHR = __webpack_require__(4);
 const Post = __webpack_require__(97);
 
 __webpack_require__(100);
@@ -8287,7 +8287,7 @@ module.exports = class {
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-const XHR = __webpack_require__(3);
+const XHR = __webpack_require__(4);
 
 var html = __webpack_require__(98);
 var edit_html = __webpack_require__(99);
@@ -8445,7 +8445,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(2)(content, options);
+var update = __webpack_require__(3)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -8465,7 +8465,7 @@ if(false) {
 /* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -8488,11 +8488,11 @@ module.exports = "<h2>Posts</h2>\n\n<div class=\"new_post_button\">\n  Write a n
 "use strict";
 
 
-const XHR = __webpack_require__(10);
+const XHR = __webpack_require__(24);
 const Image = __webpack_require__(104);
 
 
-var GridUI = __webpack_require__(14);
+var GridUI = __webpack_require__(49);
 
 __webpack_require__(105);
 
@@ -8600,7 +8600,7 @@ module.exports = class {
 "use strict";
 
 
-const XHR = __webpack_require__(3);
+const XHR = __webpack_require__(4);
 
 module.exports = class {
   constructor(img, src, grid_ui) {
@@ -8719,7 +8719,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(2)(content, options);
+var update = __webpack_require__(3)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -8739,7 +8739,7 @@ if(false) {
 /* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 

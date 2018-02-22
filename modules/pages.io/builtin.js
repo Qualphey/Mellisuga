@@ -7,12 +7,12 @@ const Manager = require("./manager.js");
 
 
 module.exports = class extends Manager {
-  constructor(builtin_path, app, posts, auth) {
+  constructor(builtin_path, router, posts, auth) {
     var template_dir = global.cmb_config.templates_path;
 
 
 
-    super(app, builtin_path, {
+    super(router, builtin_path, {
       path_prefix: '/',
       command_path: global.cmb_config.admin_path+"/builtin.io",
       posts: posts,

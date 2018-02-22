@@ -25,9 +25,9 @@ var default_css = fs.readFileSync(__dirname+'/default_templates/theme.css', 'utf
 var default_js = fs.readFileSync(__dirname+'/default_templates/main.js', 'utf8');
 
 module.exports = class {
-  constructor(app, dir, cfg) {
+  constructor(router, dir, cfg) {
     console.log("PAGE MANAGER");
-    this.app = app;
+    let app = this.app = router.app;
     this.dir = dir;
     if (!fs.existsSync(this.dir)){
       fs.mkdirSync(this.dir);
@@ -214,6 +214,39 @@ module.exports = class {
               console.log(stats);
               res.send(true);
             });
+          } else {
+            res.send("page name not defined");
+          }
+          break;
+
+        case 'webpack-watch':
+          if (data.name) {
+            let page = this_class.select_by_name(data.name);
+            if (data.value && !page.watching) {
+              page.watching = page.compiler.watch({
+                aggregateTimeout: 300,
+                poll: 1000
+              }, (err, stats) => {
+                if (err) console.error(err);
+                router.clients.forEach(client => {
+                  let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+                  if (ip === client.address) {
+                    if (stats.hasErrors()) {
+                      client.socket.emit("webpack-err", stats.toString());
+                    } else {
+                      client.socket.emit("webpack-done", stats.toString());
+                    }
+                  }
+                });
+              });
+              res.send(true);
+            } else if (page.watching) {
+              page.watching.close(() => {
+                console.log("Watching Ended.");
+                page.watching = false;
+                res.send(false);
+              });
+            }
           } else {
             res.send("page name not defined");
           }

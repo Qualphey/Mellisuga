@@ -38,15 +38,20 @@ module.exports = class {
         cfg.autoCloseBrackets = true;
         cfg.matchBrackets = true;
         break;
+      case 'less':
+        cfg.mode = "text/x-less";
+        cfg.autoCloseBrackets = true;
+        cfg.matchBrackets = true;
+        break;
       case 'js':
         cfg.mode = "javascript";
         cfg.autoCloseBrackets = true;
         cfg.matchBrackets = true;
         break;
       default:
-      cfg.mode = "htmlmixed";
-      cfg.autoCloseTags = true;
-  //  matchTags: true
+        cfg.mode = "htmlmixed";
+        cfg.autoCloseTags = true;
+    //  matchTags: true
     }
     console.log("mode:", cfg.mode);
     this_class.cm = CodeMirror.fromTextArea(textarea, cfg);

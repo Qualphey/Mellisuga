@@ -38,12 +38,12 @@ module.exports = class {
     var this_class = this;
 
     this.app_parse_token = function(ireq, ires, inext) {
-      console.log("PARSE TOKEN", ireq.path);
+    //  console.log("PARSE TOKEN", ireq.path);
       function forward(that, req, res, next) {
         if (req.headers.cookie) {
           var cookies = cookie.parse(req.headers.cookie)
           if (cookies[this_class.name+'_access_token']) {
-            console.log("ACCESS TOKEN", cookies[this_class.name+'_access_token']);
+    //        console.log("ACCESS TOKEN", cookies[this_class.name+'_access_token']);
             req.access_token = cookies[this_class.name+'_access_token'];
             next();
           } else {
@@ -226,20 +226,17 @@ module.exports = class {
   async authorize(req, res, next) {
     try {
       var access_token = req.access_token;
-      console.log("AUTHORIZE");
-      console.log("TOKEN", access_token);
+      console.log("AUTHORIZE... PATH:", req.path);
       if (access_token) {
         var found = await this.table.select(
           ['jwt_secret', 'access_token'],
           "access_token = $1", [access_token]
         );
 
-        console.log("FOUND", found);
         if (found.length > 0) {
           found = JSON.parse(JSON.stringify(found[0]));
-          console.log("FOUND USER", found);
           var decoded = jwt.verify(req.access_token, found.jwt_secret);
-          console.log("AUTHORIZATION SUCCESS");
+          console.log("SUCCESS");
           next();
         } else {
           this.terminate(req, res, next);

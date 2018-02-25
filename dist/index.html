@@ -15,7 +15,12 @@
   <body>
     <header>
       <ul>
-        <li style="float:right"><a href="/terminate">Sign Out</a></li>
+        <li style="float:right">
+          <form action="/cmb_admin-auth.io" method="post">
+            <input type="hidden" name="command" value="terminate" />
+            <input class="submit" type="submit" value="Sign Out" />
+          </form>
+        </li>
       </ul>
     </header>
       <br />

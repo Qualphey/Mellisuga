@@ -12,6 +12,10 @@ module.exports = class {
     this.name = cfg.name;
     this.full_path = path.resolve(cfg.dir_path, cfg.name);
     this.http_path = cfg.custom_path || path.resolve(cfg.prefix, cfg.name);
+    this.path_prefix = cfg.prefix;
+    this.custom_paths = cfg.custom_paths;
+
+    console.log("PAGE", cfg);
 
     this.nunjucks_env = new nunjucks.Environment(new nunjucks.FileSystemLoader([
       cfg.dir_path
@@ -120,7 +124,7 @@ module.exports = class {
           console.error(e.stack)
         }
       });
-      serve_dir(this.http_path, this.full_path, full_path.auth_func);
+      serve_dir(this.http_path, this.full_path, this.auth_func);
     } else {
       app.get(this.http_path, async function(req, res) {
         try {
@@ -189,8 +193,8 @@ module.exports = class {
               }
               var item = { name: names[n], path: path_prefix + "/" + names[n] };
               var custom_path = false;
-              if (this.config.custom_paths) {
-                this.config.custom_paths.forEach(function(cpath) {
+              if (this.custom_paths) {
+                this.custom_paths.forEach(function(cpath) {
                   const cpath_name = Object.keys(cpath)[0];
                   if (item.name == cpath_name) {
                     item.path = cpath[cpath_name];

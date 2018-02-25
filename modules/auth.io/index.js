@@ -1,7 +1,6 @@
 'user strict'
 
 var jwt = require("jsonwebtoken");
-var JWT_SECRET = "3asd5z9hu5f9n4i8p1c8s1r6h1x8a1u4v5fs9c5hdryx5c9";
 
 var cookie = require('cookie');
 var COOKIE_SECRET = "5x4dhyc8s6ag84ngc91d3zx21v4x8c9cv54zd6r8gzx21c"
@@ -30,33 +29,12 @@ module.exports = class {
       }
     */
 
-    this.name = cfg.table_name
+    this.name = cfg.table_name;
     this.table = table;
     this.paths = cfg.auth_paths;
     this.forward_token = cfg.forward_token;
 
     var this_class = this;
-
-    this.app_parse_token = function(ireq, ires, inext) {
-    //  console.log("PARSE TOKEN", ireq.path);
-      function forward(that, req, res, next) {
-        if (req.headers.cookie) {
-          var cookies = cookie.parse(req.headers.cookie)
-          if (cookies[this_class.name+'_access_token']) {
-    //        console.log("ACCESS TOKEN", cookies[this_class.name+'_access_token']);
-            req.access_token = cookies[this_class.name+'_access_token'];
-            next();
-          } else {
-            next();
-          }
-        } else {
-          next();
-        }
-      }
-      forward(this, ireq, ires, inext);
-    }
-
-    app.use(this.app_parse_token);
 
     this.terminate = function(ireq, ires, inext) {
       console.log("TERMINATE SESSION");
@@ -109,13 +87,6 @@ module.exports = class {
     app.get(app_path, async function(req, res, next) {
       this_class.terminate(req, res, next);
     });
-
-
-    app.post("/authenticate", function(req, res, next) {
-      this_class.authenticate(req, res, next);
-    });
-
-    app.get("/terminate", this.terminate);
   }
 
   static async init(app, aura, cfg) {
@@ -159,9 +130,7 @@ module.exports = class {
 
         const result = await this.table.insert({
           email: data.email,
-          password: bcrypt.hashSync(data.pwd, salt),
-          jwt_secret: crypto.randomBytes(64).toString('hex'),
-          cookie_secret: crypto.randomBytes(64).toString('hex')
+          password: bcrypt.hashSync(data.pwd, salt)
         });
         return false;
       }
@@ -181,7 +150,7 @@ module.exports = class {
       } else if (!data.pwd) {
         this.failed_response(res, "FAILED: password was not defined");
       } else {
-        var found = await this.table.select(
+        let found = await this.table.select(
           '*', "(email = $1)", [data.email]
         );
 
@@ -189,24 +158,30 @@ module.exports = class {
           found = JSON.parse(JSON.stringify(found[0]));
 
           if (bcrypt.compareSync(data.pwd, found.password)) {
-            var token = jwt.sign(data.email, found.jwt_secret);
+            let jwt_secret = crypto.randomBytes(64).toString('hex');
+            let token = jwt.sign({
+              exp: Math.floor(Date.now() / 1000) + 60 * 5,
+              email: data.email
+            }, jwt_secret);
             found.access_token = token;
 
             await this.table.update({
-              access_token: token
+              access_token: token,
+              jwt_secret: jwt_secret
             }, "id = $1", [found.id]);
 
             res.cookie(this.name+'_access_token', token, {
               httpOnly: true,
               maxAge: 1000 * 60 * 15
             });
+
+            console.log("AUTH SUCCESSS");
+            console.log("TOKEN", token);
             if (this.forward_token) {
               res.send(nunjucks_env.render('forward_token.html', {
                 target: this.paths.authenticated,
                 token: token
               }));
-              console.log("AUTH SUCCESSS");
-              console.log("TOKEN", token);
             } else {
               res.redirect(this.paths.authenticated);
             }
@@ -225,8 +200,14 @@ module.exports = class {
 
   async authorize(req, res, next) {
     try {
+      var cookies = cookie.parse(req.headers.cookie);
+      if (cookies[this.name+'_access_token']) {
+        req.access_token = cookies[this.name+'_access_token'];
+      } else {
+        res.redirect(this.paths.unauthorized);
+      }
+
       var access_token = req.access_token;
-      console.log("AUTHORIZE... PATH:", req.path);
       if (access_token) {
         var found = await this.table.select(
           ['jwt_secret', 'access_token'],
@@ -235,9 +216,13 @@ module.exports = class {
 
         if (found.length > 0) {
           found = JSON.parse(JSON.stringify(found[0]));
-          var decoded = jwt.verify(req.access_token, found.jwt_secret);
+          try {
+            var decoded = jwt.verify(req.access_token, found.jwt_secret);
+            next();
+          } catch (e) {
+            res.redirect(this.paths.unauthorized);
+          }
           console.log("SUCCESS");
-          next();
         } else {
           this.terminate(req, res, next);
         }

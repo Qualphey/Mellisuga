@@ -88,6 +88,7 @@ module.exports = class {
             prefix: this_class.path_prefix,
             name: page.file,
             custom_path: custom_path,
+            custom_paths: this_class.config.custom_paths,
             auth_func: this_class.auth.orize
           }, app, this_class);
           this_class.hosted_pages.push(npage);

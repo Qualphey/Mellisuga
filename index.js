@@ -78,7 +78,8 @@ module.exports = class {
 
       var builtin_pages = await BuiltinIO.init(
         path.resolve(config.pages_path, ".builtin"), [
-          path.resolve(__dirname, "setup"),
+          path.resolve(__dirname, "builtin_pages/setup"),
+          path.resolve(__dirname, "builtin_pages/admin_auth"),
           path.resolve(__dirname, "modules/auth.io/pages/signin"),
           path.resolve(__dirname, "modules/auth.io/pages/signup")
         ], router
@@ -106,16 +107,16 @@ module.exports = class {
 
           var io = router.io;
           var admin = await Auth.init(router.app, aura, {
-            table_name: "admins",
+            table_name: "cmbird_admins",
             auth_paths: {
-              unauthorized: "/login.html",
+              unauthorized: "/admin_auth",
               authenticated: config.admin_path
             },
             prefix: '/cmb_admin'
           });
 
           var auth = await Auth.init(router.app, aura, {
-            table_name: "users",
+            table_name: "user_accounts",
             forward_token: true,
             auth_paths: {
               unauthorized: "/signin",
@@ -125,8 +126,6 @@ module.exports = class {
           });
 
           var pages = new PagesIO(router, posts, auth);
-
-
 
           router.serve(__dirname+"/public");
 

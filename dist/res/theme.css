@@ -27,15 +27,19 @@ li {
     float: left;
 }
 
-li a {
+li input {
     display: block;
     color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+    margin: 0;
+    border: 0;
+    background-color: #292929;
+    font-size: 16px;
 }
 
-li a:hover:not(.active) {
+li input:hover:not(.active) {
     background-color: #111;
 }
 

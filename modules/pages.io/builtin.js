@@ -7,10 +7,9 @@ const Manager = require("./manager.js");
 
 
 module.exports = class extends Manager {
-  constructor(builtin_path, router, posts, auth) {
+  constructor(builtin_path, router, posts, auth, other_paths) {
+    console.log("BO", other_paths);
     var template_dir = global.cmb_config.templates_path;
-
-
 
     super(router, builtin_path, {
       path_prefix: '/',
@@ -18,10 +17,10 @@ module.exports = class extends Manager {
       posts: posts,
       template_dir: template_dir,
       auth: auth
-    });
+    }, other_paths);
   }
 
-  static async init(builtin_path, paths, app, posts, auth) {
+  static async init(builtin_path, paths, app, posts, auth, other_paths) {
     try {
 
       if (!fs.existsSync(global.cmb_config.pages_path)){
@@ -53,7 +52,7 @@ module.exports = class extends Manager {
 
 
 
-      return new module.exports(builtin_path, app, posts, auth);
+      return new module.exports(builtin_path, app, posts, auth, other_paths);
     } catch (e) {
       console.error(e);
       return undefined;

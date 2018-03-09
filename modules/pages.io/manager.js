@@ -25,7 +25,7 @@ var default_css = fs.readFileSync(__dirname+'/default_templates/theme.css', 'utf
 var default_js = fs.readFileSync(__dirname+'/default_templates/main.js', 'utf8');
 
 module.exports = class {
-  constructor(router, dir, cfg) {
+  constructor(router, dir, cfg, other_paths) {
     console.log("PAGE MANAGER");
     let app = this.app = router.app;
     this.dir = dir;
@@ -33,8 +33,9 @@ module.exports = class {
       fs.mkdirSync(this.dir);
     }
 
+    this.dirs = other_paths;
 
-        console.log(dir);
+        console.log("OTHERS", other_paths);
 
     this.auth = cfg.auth;
 
@@ -63,7 +64,7 @@ module.exports = class {
       console.log("permisive", this.config.permissions);
     if (this.config.permissions) {
       var user_only = this.config.permissions.user_only;
-      this.all().forEach(function(page) {
+      this.local().forEach(function(page) {
         var custom_path = false;
         if (this_class.config.custom_paths) {
           this_class.config.custom_paths.forEach(function(cpath) {
@@ -104,7 +105,7 @@ module.exports = class {
 
       });
     } else {
-      this.all().forEach(function(page) {
+      this.local().forEach(function(page) {
         var custom_path = false;
 
         if (this_class.config.custom_paths) {
@@ -163,13 +164,33 @@ module.exports = class {
         case 'add':
           if (data.name) {
             if (data.name.length > 0) {
-              data.path = path.resolve(this_class.dir, data.name);
+              data.path = path.resolve(this_class.dir, encodeURIComponent(data.name));
               if (data.path.startsWith(this_class.dir)) {
                 if (!fs.existsSync(data.path)){
+                  var custom_path = false;
+                  if (this_class.config.custom_paths) {
+                    this_class.config.custom_paths.forEach(function(cpath) {
+                      const cpath_name = Object.keys(cpath)[0];
+                      if (data.name == cpath_name) {
+                        custom_path = cpath[cpath_name];
+                      }
+
+                    });
+                  }
+
+                  let npage_cfg = {
+                    dir_path: this_class.dir,
+                    prefix: this_class.path_prefix,
+                    name: encodeURIComponent(data.name),
+                    custom_path: custom_path
+                  };
+
                   if (data.template && this_class.tamplate_dir) {
                     var src_path = path.resolve(this_class.tamplate_dir, data.template);
                     fs.copy(src_path, data.path, function (err) {
                       if (err) return console.error(err)
+                      var npage = new Page(npage_cfg, app, this_class);
+                      this_class.hosted_pages.push(npage);
                       res.send(JSON.stringify({ msg: "success" }));
                     });
                   } else {
@@ -178,6 +199,8 @@ module.exports = class {
                     fs.writeFileSync(path.resolve(data.path, "context.json"), default_json);
                     fs.writeFileSync(path.resolve(data.path, "theme.css"), default_css);
                     fs.writeFileSync(path.resolve(data.path, "main.js"), default_js);
+                    var npage = new Page(npage_cfg, app, this_class);
+                    this_class.hosted_pages.push(npage);
                     res.send(JSON.stringify({ msg: "success" }));
                   }
                 } else {
@@ -235,6 +258,7 @@ module.exports = class {
                     if (stats.hasErrors()) {
                       client.socket.emit("webpack-err", stats.toString());
                     } else {
+                      console.log("SEND WEBPACK REFRESH STATE");
                       client.socket.emit("webpack-done", stats.toString());
                     }
                   }
@@ -270,6 +294,7 @@ module.exports = class {
   all() {
     var list = [];
     var this_class = this;
+
     fs.readdirSync(this.dir).forEach(file => {
       var page = {};
 
@@ -286,7 +311,6 @@ module.exports = class {
         if (lstat.isDirectory()) {
           page.path = '/'+file;
           if (this_class.config.custom_paths) {
-            page.path = path.resolve(this_class.path_prefix, file);
             this_class.config.custom_paths.forEach(function(cpath) {
               const cpath_name = Object.keys(cpath)[0];
               const custom_path = cpath[cpath_name];
@@ -297,6 +321,7 @@ module.exports = class {
           }
 
           page.file = file;
+          page.name = decodeURIComponent(file);
           list.push(page);
         }
       }
@@ -306,6 +331,91 @@ module.exports = class {
       return fs.statSync(path.resolve(this_class.dir, a.file)).birthtime.getTime() - fs.statSync(path.resolve(this_class.dir, b.file)).birthtime.getTime();
     });
 
+    if (this.dirs) {
+      let plus_list = [];
+      for (var d = 0; d < this.dirs.length; d++) {
+        fs.readdirSync(this.dirs[d]).forEach(file => {
+          var page = {};
+
+          page.blacklisted = false;
+          if (this_class.blacklist) {
+            for (var b = 0; b < this_class.blacklist.length; b++) {
+              if (file == this_class.blacklist[b]) {
+                page.blacklisted = true;
+              }
+            }
+          }
+          if (!page.blacklisted) {
+            var lstat = fs.lstatSync(path.resolve(this_class.dirs[d], file));
+            if (lstat.isDirectory()) {
+              page.path = '/'+file;
+              if (this_class.config.custom_paths) {
+                this_class.config.custom_paths.forEach(function(cpath) {
+                  const cpath_name = Object.keys(cpath)[0];
+                  const custom_path = cpath[cpath_name];
+                  if (file === cpath_name) {
+                    page.path = custom_path;
+                  }
+                });
+              }
+
+              page.file = file;
+              page.name = decodeURIComponent(file);
+              plus_list.push(page);
+            }
+          }
+        });
+
+        plus_list.sort(function(a, b) {
+          return fs.statSync(path.resolve(this_class.dirs[d], a.file)).birthtime.getTime() - fs.statSync(path.resolve(this_class.dirs[d], b.file)).birthtime.getTime();
+        });
+
+        list.push.apply(list, plus_list);
+      }
+    }
+
+    return list;
+  }
+
+  local() {
+    var list = [];
+    var this_class = this;
+
+    fs.readdirSync(this.dir).forEach(file => {
+      var page = {};
+
+      page.blacklisted = false;
+      if (this_class.blacklist) {
+        for (var b = 0; b < this_class.blacklist.length; b++) {
+          if (file == this_class.blacklist[b]) {
+            page.blacklisted = true;
+          }
+        }
+      }
+      if (!page.blacklisted) {
+        var lstat = fs.lstatSync(path.resolve(this_class.dir, file));
+        if (lstat.isDirectory()) {
+          page.path = '/'+file;
+          if (this_class.config.custom_paths) {
+            this_class.config.custom_paths.forEach(function(cpath) {
+              const cpath_name = Object.keys(cpath)[0];
+              const custom_path = cpath[cpath_name];
+              if (file === cpath_name) {
+                page.path = custom_path;
+              }
+            });
+          }
+
+          page.file = file;
+          page.name = decodeURIComponent(file);
+          list.push(page);
+        }
+      }
+    });
+
+    list.sort(function(a, b) {
+      return fs.statSync(path.resolve(this_class.dir, a.file)).birthtime.getTime() - fs.statSync(path.resolve(this_class.dir, b.file)).birthtime.getTime();
+    });
     return list;
   }
 }

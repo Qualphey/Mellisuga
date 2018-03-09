@@ -8,8 +8,11 @@ module.exports = class {
   constructor(cfg, table) {
     this.element = document.createElement('div');
     this.element.innerHTML = html;
-    this.name = cfg.file;
+    this.name = cfg.name;
+    this.filename = cfg.file;
     this.path = cfg.path;
+
+    console.log("PAGE filename", this.filename);
 
     var max_length = 16;
     if(this.name.length > max_length) {
@@ -36,8 +39,9 @@ module.exports = class {
     link.innerHTML = this.name;
 
     var edit_btn = page_element.querySelector('.edit_btn');
+
     edit_btn.addEventListener('click', function(e) {
-      window.location.href = "edit.html?page="+this_class.name;
+      window.location.href = "edit.html?page="+this_class.filename;
     });
     edit_btn.innerHTML = '/';
 
@@ -86,7 +90,7 @@ module.exports = class {
         if (input.value === this_class.name) {
           XHR.post('pages.io', {
             command: 'rm',
-            name: this_class.name
+            name: this_class.filename
           }, function(response) {
             if (response == "success") {
               this_class.table.remove(this_class.element);

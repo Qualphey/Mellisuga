@@ -1,9 +1,6 @@
 .posts  {
-  background-color: #333;
   width: calc(100%-20px);
   margin: auto;
-  margin-top: 40px;
-  margin-bottom: 40px;
   padding: 10px;
 }
 

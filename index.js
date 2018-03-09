@@ -14,12 +14,14 @@ const Router = require("./modules/router/router.js");
 
 const Auth = require("./modules/auth.io/index.js");
 
-const TemplatesIO = require("./modules/pages.io/templates.js");
-const PagesIO = require("./modules/pages.io/pages.js");
+const PagesIO = require("./modules/pages.io/index.js");
 const BuiltinIO = require("./modules/pages.io/builtin.js");
 const PostsIO = require("./modules/posts.io/index.js");
 const FMIO = require("./modules/treefm.io/fm.io.js");
 const GalleryIO = require("./modules/gallery.io/index.js");
+const AdminAccountsIO = require("./modules/admin_accounts.io/index.js");
+const UserAccountsIO = require("./modules/user_accounts.io/index.js");
+const ModuleManagerIO = require("./modules/module_manager.io/index.js");
 
 const Aura = require('pg-aura');
 
@@ -62,7 +64,8 @@ module.exports = class {
     }
 
     (async () => {
-      const router = await Router.init();
+      let cmbird = {};
+      const router = cmbird.router = await Router.init();
 
 
 
@@ -82,7 +85,9 @@ module.exports = class {
           path.resolve(__dirname, "builtin_pages/admin_auth"),
           path.resolve(__dirname, "modules/auth.io/pages/signin"),
           path.resolve(__dirname, "modules/auth.io/pages/signup")
-        ], router
+        ], router, null, null, [
+          config.pages_path
+        ]
       );
 
 
@@ -92,7 +97,8 @@ module.exports = class {
 
       async function initialise(db_name) {
         try {
-          var aura = await Aura.connect({
+
+          var aura = cmbird.aura = await Aura.connect({
             db_host: "127.0.0.1",
             db_super_usr: cfg.db_user,
             db_super_pwd: cfg.db_pwd,
@@ -103,31 +109,28 @@ module.exports = class {
             pages_path: config.pages_path
           });
 
-          var templates = new TemplatesIO(router, posts);
 
           var io = router.io;
           var admin = await Auth.init(router.app, aura, {
-            table_name: "cmbird_admins",
+            table_name: "admin_accounts",
             auth_paths: {
               unauthorized: "/admin_auth",
               authenticated: config.admin_path
             },
-            prefix: '/cmb_admin'
+            prefix: '/cmb_admin',
+            rights: true
           });
 
-          var auth = await Auth.init(router.app, aura, {
+          var auth = cmbird.auth = await Auth.init(router.app, aura, {
             table_name: "user_accounts",
-            forward_token: true,
             auth_paths: {
               unauthorized: "/signin",
-              authenticated: "http://127.0.0.1:9369/set_access_token"
+              authenticated: "/Paskyra"
             },
-            prefix: '/tribes'
+            prefix: '/users'
           });
 
-          var pages = new PagesIO(router, posts, auth);
-
-          router.serve(__dirname+"/public");
+          var pages_io = cmbird.pages = await PagesIO.init(router, posts, auth, admin);
 
           function authorize(req, res, next) {
             admin.authorize(req, res, next);
@@ -272,6 +275,12 @@ module.exports = class {
             }
           });
 
+          var modules_path = path.resolve(config.app_path, 'cmbird_modules');
+          var module_manager_io = await ModuleManagerIO.init(modules_path, cmbird);
+
+          var admin_accounts_io = await AdminAccountsIO.init(router.app, admin.table);
+          var user_accounts_io = await UserAccountsIO.init(router.app, auth.table);
+
           var gallery_path = path.resolve(config.app_path, 'gallery');
           var gallery_io = await GalleryIO.init(gallery_path, config.admin_path, router.app);
 
@@ -307,6 +316,8 @@ module.exports = class {
               config.db_pwd = crypto.randomBytes(20).toString('hex');
               var admin = await initialise(config.db_name);
 
+              data.super = true;
+              data.creator = true;
               var result = await admin.register(data);
 
               if (result.err) {

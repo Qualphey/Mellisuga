@@ -9,13 +9,47 @@ const jsonlint = require("jsonlint");
 
 module.exports = class {
   constructor(cfg, app, pages) {
-    this.name = cfg.name;
-    this.full_path = path.resolve(cfg.dir_path, cfg.name);
-    this.http_path = cfg.custom_path || path.resolve(cfg.prefix, cfg.name);
+    this.full_path = cfg.full_path || path.resolve(cfg.dir_path, cfg.name);
+    this.http_path = cfg.custom_path || cfg.request_path || path.resolve(cfg.prefix, cfg.name);
+
+
+    let index_path = this.index_path = path.resolve(this.full_path, "index.html");
+    let context_path = this.context_path = path.resolve(this.full_path, "context.json");
+    let global_context_path = this.global_context_path = path.resolve(global.cmb_config.globals_path, "context.json");
+    this.update();
+
+    if (!cfg.name) {
+      cfg.name = cfg.full_path.split('/').pop();
+      console.log("SET NAME", cfg.name);
+    }
+
     this.path_prefix = cfg.prefix;
+
+    if (!this.path_prefix) this.path_prefix = "";
+
     this.custom_paths = cfg.custom_paths;
 
-    console.log("PAGE", cfg);
+    cfg.dir_path = cfg.dir_path || cfg.full_path;
+
+    this.auth = cfg.auth;
+
+    this.auth_func = cfg.auth_func;
+    if (this.context) {
+      if (this.context.required_rights) {
+        this.auth_func = this.auth.orize_gen(this.context.required_rights);
+      }
+    }
+
+    console.log("SERVE", this.http_path);
+
+    this.pages = pages;
+    this.posts = pages.posts;
+
+    if (cfg.custom_path) {
+      app.get("/"+cfg.name, function(req, res) {
+        res.redirect(cfg.custom_path);
+      });
+    }
 
     this.nunjucks_env = new nunjucks.Environment(new nunjucks.FileSystemLoader([
       cfg.dir_path
@@ -87,28 +121,23 @@ module.exports = class {
         devtool: 'source-map'
     });
 
-    this.auth_func = cfg.auth_func;
-    console.log("SERVE", this.http_path);
-
-    this.pages = pages;
-    this.posts = pages.posts;
-
-
-    if (cfg.custom_path) {
-      console.log("SERVE PATH", path.resolve(cfg.prefix, cfg.name));
-      app.get(path.resolve(cfg.prefix, cfg.name), function(req, res) {
-        console.log("REDIRECT", cfg.custom_path);
-        res.redirect(cfg.custom_path);
-      });
-    }
-
     var this_class = this;
 
-    if (cfg.auth_func) {
+
+
+    console.log("PAGE PATH", this.http_path);
+    if (this.auth_func) {
       console.log("AUTH FUNC", this.auth_func);
       console.log("PATH", this.http_path);
       app.get(this.http_path, this.auth_func, async function(req, res) {
         try {
+          this_class.update();
+          this_class.context = await this_class.compile_context(this_class.context);
+
+          if (this_class.context.accept_arguments) {
+            this_class.context.args = req.query;
+          }
+
           const req_path = req.path;
           if (req_path.slice(-1) != "/") {
             res.redirect(req_path+"/");
@@ -128,6 +157,14 @@ module.exports = class {
     } else {
       app.get(this.http_path, async function(req, res) {
         try {
+          this_class.update();
+          this_class.context = await this_class.compile_context(this_class.context);
+
+          if (this_class.context.accept_arguments) {
+            console.log("ACCEPT ARGUMENTS");
+            this_class.context.args = req.query;
+          }
+
           const req_path = req.path;
           if (req_path.slice(-1) != "/") {
             res.redirect(req_path+"/");
@@ -172,27 +209,86 @@ module.exports = class {
     }
   }
 
+  async render_page(page_dir_path) {
+    try {
+
+      var result = {};
+
+      if (this.index_html) {
+        if (this.context) {
+          var rendered_html = this.nunjucks_env.render(this.index_path, this.context);
+          result.html = rendered_html;
+        } else {
+          result.html = fs.readFileSync(this.index_path, "UTF-8");
+        }
+      } else {
+        result.err = "No HTML!";
+      }
+
+      if (result.err) {
+        var style = "font-family: monospace;";
+        result.err = "<div style='"+style+"'>"+result.err.replace(/(?:\r\n|\r|\n)/g, '<br />')+"</div>"
+      }
+
+      return result;
+    } catch (e) {
+      console.error(e.stack)
+    }
+  }
+
+  update() {
+    if (fs.existsSync(this.index_path)) {
+      try {
+        this.index_html = fs.readFileSync(this.index_path, 'utf8');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    this.context = false;
+    if (fs.existsSync(this.context_path)) {
+      try {
+        this.context = JSON.parse(fs.readFileSync(this.context_path, 'utf8'));
+      } catch (e) {
+        this.context = {};
+        console.error(e);
+      }
+    } else {
+      this.context = {};
+    }
+
+    if (fs.existsSync(this.global_context_path)) {
+      try {
+         var global_context = JSON.parse(fs.readFileSync(this.global_context_path, 'utf8'));
+        this.context = Object.assign(this.context, global_context);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+
   async compile_context(context) {
     try {
-      if (context.posts) {
+      if (context.posts && this.posts) {
         var tags = context.posts.split(" ");
         var result = await this.posts.select_by_tags(tags);
 
         context.posts = result;
       }
+
       if (context.menu) {
-        var names = context.menu.split(" ");
+        var names = context.menu;
         context.menu = [];
         var page_list = this.pages.all();
-        for (var p = 0; p < page_list.length; p++) {
-          for (var n = 0; n < names.length; n++) {
-            if (page_list[p].file == names[n]) {
+
+        for (var n = 0; n < names.length; n++) {
+          for (var p = 0; p < page_list.length; p++) {
+            var url_encoded_name = encodeURIComponent(names[n]);
+            if (page_list[p].file == url_encoded_name) {
               var path_prefix = this.path_prefix;
               while (path_prefix.slice(-1) === "/") {
                 path_prefix = path_prefix.slice(0, -1);
               }
-              var item = { name: names[n], path: path_prefix + "/" + names[n] };
-              var custom_path = false;
+              var item = { name: names[n], path: path_prefix + "/" + url_encoded_name };
               if (this.custom_paths) {
                 this.custom_paths.forEach(function(cpath) {
                   const cpath_name = Object.keys(cpath)[0];
@@ -207,62 +303,9 @@ module.exports = class {
           }
         }
       }
+
+
       return context;
-    } catch (e) {
-      console.error(e.stack)
-    }
-  }
-
-  async render_page(page_dir_path) {
-    try {
-
-      console.log("RENDER", page_dir_path);
-      var index_html = path.resolve(page_dir_path, "index.html");
-      var context_json = path.resolve(page_dir_path, "context.json");
-      var global_context_json = path.resolve(global.cmb_config.globals_path, "context.json");
-
-      var result = {};
-
-      if (fs.existsSync(index_html)) {
-        if (fs.existsSync(context_json) || fs.existsSync(global_context_json)) {
-          var context, err = false;
-          if (fs.existsSync(context_json)) {
-            try {
-              context = jsonlint.parse(fs.readFileSync(context_json, 'utf8'));
-              console.log("context", context);
-            } catch(e) {
-              result.err = e.message+"\n\nat "+page_dir_path+"/context.json";
-              console.error(e);
-            }
-          }
-          if (fs.existsSync(global_context_json)) {
-            try {
-              var global_context = jsonlint.parse(fs.readFileSync(global_context_json, 'utf8'));
-              context = Object.assign(global_context, context);
-            } catch(e) {
-              result.err = e.message+"\n\nat global/context.json";
-              console.error(e);
-            }
-          }
-
-          console.log("COMPILE CONTEXT", context);
-          context = await this.compile_context(context);
-          var rendered_html = this.nunjucks_env.render(index_html, context);
-
-          result.html = rendered_html;
-        } else {
-          result.html = fs.readFileSync(index_html, "UTF-8");
-        }
-      } else {
-        result.err = "No HTML!";
-      }
-
-      if (result.err) {
-        var style = "font-family: monospace;";
-        result.err = "<div style='"+style+"'>"+result.err.replace(/(?:\r\n|\r|\n)/g, '<br />')+"</div>"
-      }
-
-      return result;
     } catch (e) {
       console.error(e.stack)
     }

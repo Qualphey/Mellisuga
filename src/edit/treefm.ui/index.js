@@ -17,13 +17,14 @@ module.exports = class {
 
     var this_class = this;
 
-    console.log(cfg.target, cfg.dir);
+    console.log("treefm.io read", cfg.target, cfg.dir);
     XHR.get('treefm.io', {
       target: cfg.target,
       command: "read",
       path: cfg.dir
     }, function() {
       var dir_tree = JSON.parse(this.responseText);
+      console.log("RESPONSE", dir_tree);
       dir_tree.root = true;
       dir_tree.padding_index = 0;
       var root_dir = new Dir(dir_tree, this_class);

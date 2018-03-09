@@ -99,6 +99,8 @@ module.exports = class {
   readFile(file_path, rel_path) {
     var result = false;
 
+    console.log("FMIO READ", file_path);
+
     var lstat = fs.lstatSync(file_path);
     if (lstat.isFile()) {
       result = fs.readFileSync(file_path, 'utf8');
@@ -106,7 +108,7 @@ module.exports = class {
       var file_tree = {
         path: file_path,
         rel_path: rel_path,
-        name: rel_path,
+        name: decodeURIComponent(rel_path),
         type: 'dir',
         content: []
       };
@@ -134,7 +136,7 @@ module.exports = class {
           var lstat = fs.lstatSync(dir.path+'/'+file);
           if (lstat.isFile()) {
             var txt = {
-              name: file,
+              name: decodeURIComponent(file),
               path: dir.path+'/'+file,
               rel_path: dir.rel_path+'/'+file,
               type: 'txt'
@@ -142,7 +144,7 @@ module.exports = class {
             dir.content.push(txt);
           } else if (lstat.isDirectory()) {
             var cdir = {
-              name: file,
+              name: decodeURIComponent(file),
               path: dir.path+'/'+file,
               rel_path: dir.rel_path+'/'+file,
               type: 'dir',

@@ -2,12 +2,34 @@
 
 //require("./style.css");
 
+const CodeMirror = require('codemirror');
+
+require('codemirror/lib/codemirror.css');
+require('codemirror/theme/base16-dark.css');
+
+require('codemirror/mode/javascript/javascript');
+require('codemirror/mode/css/css');
+require('codemirror/addon/edit/closebrackets');
+require('codemirror/addon/edit/matchbrackets');
+
+require('codemirror/mode/xml/xml');
+require('codemirror/mode/htmlmixed/htmlmixed');
+
+require('codemirror/addon/edit/closetag');
+require('codemirror/addon/edit/matchtags');
+
+require('codemirror/addon/scroll/simplescrollbars.css');
+require('codemirror/addon/scroll/simplescrollbars.js');
+
+
 var XHR = require("../../utils/xhr.js");
 
 module.exports = class {
-  constructor(text, mode) {
+  constructor(text, mode, readonly, init_cfg) {
     this.element = document.createElement("div");
     this.element.style.height = "100%";
+
+    console.log("CODEMIRROR INITIALIZED");
 
   //  parent.appendChild(this.element);
 
@@ -23,10 +45,24 @@ module.exports = class {
       theme: "base16-dark",
       indentWithTabs: true,
       tabSize: 2,
-      scrollbarStyle: "null",
-      smartIndent: false
+      scrollbarStyle: "native",
+      smartIndent: false,
+      readOnly: readonly,
+      viewportMargin: Infinity
   //  matchTags: true
     };
+
+    if (init_cfg) {
+      if (init_cfg.disable_scrollbar) {
+        cfg.scrollbarStyle = "null";
+        require('./noscroll.css');
+      }
+    }
+
+    if (readonly) {
+      cfg.cursorBlinkRate = -1;
+    }
+
     switch (mode) {
       case 'html':
         cfg.mode = "htmlmixed";

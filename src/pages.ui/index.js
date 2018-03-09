@@ -7,14 +7,12 @@ const Page = require('./page.js');
 var GridUI = require('../grid.ui/index.js');
 
 require('./style.less');
-var html = require('./body.html');
-
 module.exports = class {
   constructor(div, templates) {
     div.classList.add('pages_ui');
 
     var h2 = document.createElement("h2");
-    h2.innerHTML = "Pages"
+    h2.innerHTML = "Pages";
     div.appendChild(h2);
 
 
@@ -84,6 +82,8 @@ module.exports = class {
 
           submit.addEventListener('click', function (e) {
             var data = {
+              file: encodeURIComponent(input.value),
+              path: '/'+encodeURIComponent(input.value),
               name: input.value
             }
 
@@ -97,13 +97,14 @@ module.exports = class {
               if (res.err) {
                 console.log(res.err);
               } else {
-                var page = new Page({ file: data.name, path: '/'+data.name });
+                var page = new Page(data);
 
                 grid_ui.remove(add_temp_btn);
                 grid_ui.add(page.element);
                 add_temp_btn.innerHTML = "";
                 add_temp_btn.appendChild(text);
                 add_temp_btn.style.display = "flex";
+                add_temp_btn.addEventListener("click", new_page);
                 grid_ui.add(add_temp_btn);
                 input.focus();
                 input.value = '';

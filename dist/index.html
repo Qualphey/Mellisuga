@@ -15,6 +15,12 @@
   <body>
     <header>
       <ul>
+        <li><button id="templates_button" class="navigation_button">Templates</button></li>
+        <li><button id="pages_button" class="navigation_button">Pages</button></li>
+        <li><button id="posts_button" class="navigation_button">Posts</button></li>
+        <li><button id="gallery_button" class="navigation_button">Gallery</button></li>
+        <li><button id="accounts_button" class="navigation_button">Admins</button></li>
+        <li><button id="users_button" class="navigation_button">Users</button></li>
         <li style="float:right">
           <form action="/cmb_admin-auth.io" method="post">
             <input type="hidden" name="command" value="terminate" />
@@ -23,7 +29,9 @@
         </li>
       </ul>
     </header>
-      <br />
+    <div id="display_box">
+
+    </div>
 
   <!--  <button id="tt">
       Token test

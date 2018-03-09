@@ -9,6 +9,7 @@ const Session = require("./session.js");
 
 module.exports = class {
   constructor(target, dir, iframe, pathname) {
+
     var socket = require('socket.io-client')('http://127.0.0.1:9639');
     console.log("CONNECTING TO http://127.0.0.1:9369");
     socket.on('connect', function(){

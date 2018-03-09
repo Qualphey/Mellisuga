@@ -68,20 +68,18 @@ module.exports = class {
           filename: '[name].js'
         },
         module: {
-            loaders: [
-                {
-                    test: /\.js$/,
-                    loader: 'babel-loader',
-                    query: {
-                        presets: ['es2015']
-                    }
-                },
-                {
-                  test: /\.json$/,
-                  loader: 'json-loader'
-                }
-            ],
             rules: [
+              {
+                  test: /\.js$/,
+                  loader: 'babel-loader',
+                  query: {
+                      presets: ['es2015']
+                  }
+              },
+              {
+                test: /\.json$/,
+                loader: 'json-loader'
+              },
               {
                 test: /\.css$/,
                 use: [ 'style-loader', 'css-loader' ]

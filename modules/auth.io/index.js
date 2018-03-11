@@ -20,6 +20,20 @@ var nunjucks_env = new nunjucks.Environment(new nunjucks.FileSystemLoader([
   noCache: true
 }));
 
+function obj_to_qstr(obj, prefix) {
+  var str = [],
+    p;
+  for (p in obj) {
+    if (obj.hasOwnProperty(p)) {
+      var k = prefix ? prefix + "[" + p + "]" : p,
+        v = obj[p];
+      str.push((v !== null && typeof v === "object") ?
+        serialize(v, k) : k + "=" + v);
+    }
+  }
+  return str.join("&");
+}
+
 module.exports = class {
   constructor(app, table, cfg) {
     /*
@@ -62,6 +76,17 @@ module.exports = class {
         this_class.authorize(req, res, next, required_rights)
       }
     }
+
+    app.use(function(req, res, next) {
+      if (req.headers.cookie) {
+        var cookies = cookie.parse(req.headers.cookie);
+        if (cookies[this_class.name+'_access_token']) {
+          if (!req.access_tokens) req.access_tokens = {};
+          req.access_tokens[this_class.name] = cookies[this_class.name+'_access_token'];
+        }
+      }
+      next();
+    });
 
     var app_path = cfg.prefix+'-auth.io';
     app.post(app_path, async function(req, res, next) {
@@ -208,16 +233,19 @@ module.exports = class {
               if (found.cfg) {
                 if (found.cfg.auth_next) {
                   res.redirect(found.cfg.auth_next);
+                } else if (data.next_url) {
+                  res.redirect(data.next_url);
                 } else {
                   res.redirect(this.paths.authenticated);
                 }
+              } else if (data.next_url) {
+                res.redirect(data.next_url);
               } else {
                 res.redirect(this.paths.authenticated);
               }
             }
           } else {
             this_class.failed_response(res, "FAILED: incorect password!");
-            next();
           }
         } else {
           this.failed_response(res, "FAILED: no user registered with such email address!");
@@ -230,62 +258,68 @@ module.exports = class {
 
   async authorize(req, res, next, required_rights) {
     try {
+      var repath = req.path;
+      if (Object.keys(req.query).length != 0 && req.query.constructor === Object) {
+        repath += "?"+obj_to_qstr(req.query)
+      }
+
+      const redirect_path = this.paths.unauthorized+"?next_url="+encodeURIComponent(repath);
+
       if (req.headers.cookie) {
         var cookies = cookie.parse(req.headers.cookie);
         if (cookies[this.name+'_access_token']) {
           req.access_token = cookies[this.name+'_access_token'];
         } else {
-          res.redirect(this.paths.unauthorized);
+          console.log("redirect_path", redirect_path);
+          res.redirect(redirect_path);
         }
 
         var access_token = req.access_token;
 
-        if (!access_token) {
-          this.terminate(req, res, next);
-        }
+        if (access_token) {
+          var found = await this.table.select(
+            ['jwt_secret', 'access_token', 'cfg'],
+            "access_token = $1", [access_token]
+          );
 
-        var found = await this.table.select(
-          ['jwt_secret', 'access_token', 'cfg'],
-          "access_token = $1", [access_token]
-        );
+          if (found.length > 0) {
+            found = JSON.parse(JSON.stringify(found[0]));
+            try {
+              var decoded = jwt.verify(req.access_token, found.jwt_secret);
+              if (required_rights) {
+                console.log("REQ");
+                var access_granted = true;
+                for (var r = 0; r < required_rights.length; r++) {
+                  var required_right = required_rights[r];
 
-        if (found.length > 0) {
-          found = JSON.parse(JSON.stringify(found[0]));
-          try {
-            var decoded = jwt.verify(req.access_token, found.jwt_secret);
-            if (required_rights) {
-              console.log("REQ");
-              var access_granted = true;
-              for (var r = 0; r < required_rights.length; r++) {
-                var required_right = required_rights[r];
-
-                if (!found.cfg.rights.includes(required_right)) {
-                  access_granted = false;
-                  break;
+                  if (!found.cfg.rights.includes(required_right)) {
+                    access_granted = false;
+                    break;
+                  }
                 }
-              }
 
-              console.log("access_granted", access_granted);
+                console.log("access_granted", access_granted);
 
-              if (access_granted) {
-                next();
+                if (access_granted) {
+                  next();
+                } else {
+                  res.redirect(redirect_path);
+                }
               } else {
-                res.redirect(this.paths.unauthorized);
+                console.log("NEXT");
+                next();
               }
-            } else {
-              console.log("NEXT");
-              next();
+            } catch (e) {
+              console.log(e);
+              res.redirect(redirect_path);
             }
-          } catch (e) {
-            console.log(e);
-            res.redirect(this.paths.unauthorized);
+            console.log("SUCCESS");
+          } else {
+            this.terminate(req, res, next);
           }
-          console.log("SUCCESS");
-        } else {
-          this.terminate(req, res, next);
         }
       } else {
-        res.redirect(this.paths.unauthorized);
+        res.redirect(redirect_path);
       }
     } catch (e) {
       console.error(e.stack);

@@ -17,7 +17,7 @@ module.exports = class {
 
     var treefm = this.treefm = new TreeFM({
       target: target,
-      dir: encodeURIComponent(dir),
+      dir: dir,
       file_cb: function(file) {
         var tab = tabs.select(file.rel_path);
         if (tab) {
@@ -51,7 +51,6 @@ module.exports = class {
                     iframe.src = iframe.src;
                   }
 
-                  /*
                   XHR.post("pages.io", {
                     command: "webpack",
                     name: dir
@@ -59,7 +58,6 @@ module.exports = class {
                     console.log("WEBPACK RES", response);
                     iframe.contentWindow.location.replace(refresh_path);
                   });
-                  */
                 });
               }
             }

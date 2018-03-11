@@ -98,7 +98,8 @@ module.exports = class {
             dir_path: this_class.dir,
             prefix: this_class.path_prefix,
             name: page.file,
-            custom_path: custom_path
+            custom_path: custom_path,
+            user_auth: this_class.auth
           }, app, this_class);
           this_class.hosted_pages.push(npage);
         }
@@ -164,7 +165,7 @@ module.exports = class {
         case 'add':
           if (data.name) {
             if (data.name.length > 0) {
-              data.path = path.resolve(this_class.dir, encodeURIComponent(data.name));
+              data.path = path.resolve(this_class.dir, data.name);
               if (data.path.startsWith(this_class.dir)) {
                 if (!fs.existsSync(data.path)){
                   var custom_path = false;
@@ -232,7 +233,8 @@ module.exports = class {
         case 'webpack':
           if (data.name) {
             var page = this_class.select_by_name(data.name);
-            page.watching = page.compiler.run( (err, stats) => {
+            console.log("WEBPACK");
+            page.watching = page.compiler.run((err, stats) => {
               if (err) console.error(err);
               // Print watch/build result here...
               console.log(stats);
@@ -283,6 +285,7 @@ module.exports = class {
   }
 
   select_by_name(name) {
+    name = name;
     for (var p = 0; p < this.hosted_pages.length; p++) {
       if (this.hosted_pages[p].name === name) {
         return this.hosted_pages[p];

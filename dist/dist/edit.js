@@ -66,7 +66,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/edit/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -1324,25 +1324,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
+// load the styles
 var content = __webpack_require__(/*! !../../../css-loader!./simplescrollbars.css */ "./node_modules/css-loader/index.js!./node_modules/codemirror/addon/scroll/simplescrollbars.css");
-
 if(typeof content === 'string') content = [[module.i, content, '']];
-
+// Prepare cssTransformation
 var transform;
-var insertInto;
-
-
 
 var options = {"hmr":true}
-
 options.transform = transform
-options.insertInto = undefined;
-
+// add the styles to the DOM
 var update = __webpack_require__(/*! ../../../style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
 if(content.locals) module.exports = content.locals;
-
+// Hot Module Replacement
 if(false) {}
 
 /***/ }),
@@ -1518,25 +1513,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
+// load the styles
 var content = __webpack_require__(/*! !../../css-loader!./codemirror.css */ "./node_modules/css-loader/index.js!./node_modules/codemirror/lib/codemirror.css");
-
 if(typeof content === 'string') content = [[module.i, content, '']];
-
+// Prepare cssTransformation
 var transform;
-var insertInto;
-
-
 
 var options = {"hmr":true}
-
 options.transform = transform
-options.insertInto = undefined;
-
+// add the styles to the DOM
 var update = __webpack_require__(/*! ../../style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
 if(content.locals) module.exports = content.locals;
-
+// Hot Module Replacement
 if(false) {}
 
 /***/ }),
@@ -15905,25 +15895,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
+// load the styles
 var content = __webpack_require__(/*! !../../css-loader!./base16-dark.css */ "./node_modules/css-loader/index.js!./node_modules/codemirror/theme/base16-dark.css");
-
 if(typeof content === 'string') content = [[module.i, content, '']];
-
+// Prepare cssTransformation
 var transform;
-var insertInto;
-
-
 
 var options = {"hmr":true}
-
 options.transform = transform
-options.insertInto = undefined;
-
+// add the styles to the DOM
 var update = __webpack_require__(/*! ../../style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
 if(content.locals) module.exports = content.locals;
-
+// Hot Module Replacement
 if(false) {}
 
 /***/ }),
@@ -16210,120 +16195,6 @@ exports.push([module.i, "/*\n\n    Name:       Base16 Default Dark\n    Author: 
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/admin_accounts.ui/style.less":
-/*!***********************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/less-loader/dist/cjs.js!./src/admin_accounts.ui/style.less ***!
-  \***********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".admin_accounts_ui {\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n#admin_accounts_ui_cells {\n  line-height: 28px;\n}\n#admin_accounts_ui_cells td {\n  text-align: center;\n  background-color: #222;\n}\n.json_edit {\n  text-align: left;\n  width: 300px;\n}\n.new_json_edit {\n  text-align: left;\n  width: 300px;\n}\n.admin_accounts_ui_item_name {\n  width: 20%;\n  text-align: left;\n  font-size: 14px;\n}\n#admin_accounts_ui_new_item {\n  width: 100%;\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n  background-color: #111;\n  color: #FFF;\n  cursor: pointer;\n  user-select: none;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/gallery.ui/style.less":
-/*!****************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/less-loader/dist/cjs.js!./src/gallery.ui/style.less ***!
-  \****************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".gallery_ui {\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n.gallery_ui_item {\n  background-color: #111;\n  width: 100%;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  cursor: pointer;\n}\n.gallery_ui_item:hover {\n  background-color: #191919;\n}\n.gallery_ui_item img {\n  background-color: #111;\n  max-width: 100%;\n  max-height: 100%;\n}\n.gallery_ui_item button {\n  position: absolute;\n  bottom: 5px;\n  right: 5px;\n}\n.gallery_ui_add {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n.gallery_ui_popup {\n  background-color: #090909;\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  padding: 50px;\n  width: 500px;\n}\n.gallery_ui_popup button {\n  float: right;\n}\n.gallery_ui_display {\n  position: fixed;\n  left: 0;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 998;\n  background-color: #111;\n  cursor: default;\n}\n.gallery_ui_display div {\n  position: fixed;\n  top: 0px;\n  right: 0px;\n  width: 300px;\n  height: 300px;\n  bottom: auto;\n}\n.gallery_ui_display button {\n  top: 5px;\n  right: 5px;\n  bottom: auto;\n}\n.gallery_ui_display:hover {\n  background-color: #111;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/grid.ui/theme.less":
-/*!*************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/less-loader/dist/cjs.js!./src/grid.ui/theme.less ***!
-  \*************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".grid_ui {\n  width: fit-content;\n  margin: 0 auto;\n}\n.grid_ui td {\n  padding: 0;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/pages.ui/style.less":
-/*!**************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/less-loader/dist/cjs.js!./src/pages.ui/style.less ***!
-  \**************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".pages_ui {\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n.pages_ui_item {\n  background-color: #111;\n  width: 100%;\n  height: 100%;\n}\n.pages_ui_item:hover {\n  background-color: #191919;\n}\n.pages_ui_item .page_name {\n  cursor: pointer;\n}\n.pages_ui_item .page_name:hover {\n  background-color: #222;\n}\n.pages_ui_item table {\n  width: 100%;\n  height: 100%;\n}\n.pages_ui_item td {\n  width: 50%;\n  height: 50%;\n}\n.pages_ui_add {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n.pages_ui_add select {\n  background-color: #090909;\n  color: #DDD;\n  border: 1px solid #333;\n  padding: 2px 4px;\n}\n.pages_ui_add input {\n  margin-top: 80px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/templates.ui/style.less":
-/*!******************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/less-loader/dist/cjs.js!./src/templates.ui/style.less ***!
-  \******************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".templates_ui {\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n.templates_ui_item {\n  background-color: #111;\n  width: 100%;\n  height: 100%;\n}\n.templates_ui_item:hover {\n  background-color: #191919;\n}\n.templates_ui_item .page_name {\n  cursor: pointer;\n}\n.templates_ui_item .page_name:hover {\n  background-color: #222;\n}\n.templates_ui_item table {\n  width: 100%;\n  height: 100%;\n}\n.templates_ui_item td {\n  width: 50%;\n  height: 50%;\n}\n.templates_ui_add {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/user_accounts.ui/style.less":
-/*!**********************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/less-loader/dist/cjs.js!./src/user_accounts.ui/style.less ***!
-  \**********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".admin_accounts_ui {\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n#admin_accounts_ui_cells {\n  line-height: 28px;\n}\n#admin_accounts_ui_cells td {\n  text-align: center;\n  background-color: #222;\n}\n.admin_accounts_ui_item_name {\n  width: 20%;\n  text-align: left;\n  font-size: 14px;\n}\n#admin_accounts_ui_new_item {\n  width: 100%;\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n  background-color: #111;\n  color: #FFF;\n  cursor: pointer;\n  user-select: none;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
 /***/ "./node_modules/css-loader/index.js!./src/edit/codemirror.ui/noscroll.css":
 /*!***********************************************************************!*\
   !*** ./node_modules/css-loader!./src/edit/codemirror.ui/noscroll.css ***!
@@ -16343,10 +16214,67 @@ exports.push([module.i, "\n.CodeMirror {\n  /* Set height, width, borders, and g
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/posts.ui/style.css":
-/*!**********************************************************!*\
-  !*** ./node_modules/css-loader!./src/posts.ui/style.css ***!
-  \**********************************************************/
+/***/ "./node_modules/css-loader/index.js!./src/edit/editor.ui/theme.css":
+/*!****************************************************************!*\
+  !*** ./node_modules/css-loader!./src/edit/editor.ui/theme.css ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.treefm {\n  height: calc(100% - 34px);\n}\n\n.global_local_switch {\n  height: 30px;\n}\n\n.webpack_button {\n  color: transparent;\n  border: 1px solid #0000;\n  background-color: transparent;\n  background-image: url(/cmbird-res/webpack.png);\n  width: 30px;\n  height: 30px;\n  background-repeat: no-repeat;\n  background-position: center center;\n  background-size: contain;\n}\n\n.webpack_button:hover {\n  background-color: transparent;\n  border: 1px solid #BBB;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./src/edit/split.ui/theme.css":
+/*!***************************************************************!*\
+  !*** ./node_modules/css-loader!./src/edit/split.ui/theme.css ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.split_ui {\n  width: 100%;\n  height: 100%;\n}\n\n.split_ui_horizontal {\n  display: inline-block;\n  overflow: auto;\n  height: 100%;\n}\n\n.split_ui_horizontal_line {\n  display: inline-block;\n  background-color: #000;\n  width: 3px;\n  height: 100%;\n  cursor: col-resize;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./src/edit/tabs.ui/horz.css":
+/*!*************************************************************!*\
+  !*** ./node_modules/css-loader!./src/edit/tabs.ui/horz.css ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".tabs_ui_container {\n  height: 100%;\n}\n\n.tabs_ui_container .tabs_ui_menu {\n  display: block;\n  margin: 0 auto;\n  list-style-type: none;\n  padding: 0;\n}\n\n.tabs_ui_display {\n  overflow: auto;\n}\n\n.tabs_ui_menu_item {\n  display: inline-block;\n  background-color: #111;\n  color: #DDD;\n\n  cursor: default;\n\n  -webkit-touch-callout: none; /* iOS Safari */\n  -webkit-user-select: none; /* Safari */\n   -khtml-user-select: none; /* Konqueror HTML */\n     -moz-user-select: none; /* Firefox */\n      -ms-user-select: none; /* Internet Explorer/Edge */\n          user-select: none; /* Non-prefixed version, currently\n                                supported by Chrome and Opera */\n}\n\n.tabs_ui_menu_item div {\n  display: inline-block;\n  padding: 3px 10px;\n  font-size: 14px;\n}\n\n.tabs_ui_menu_item button {\n  display: inline-block;\n  padding: 3px 5px;\n  font-size: 14px;\n  border: 0;\n  color: #DDD;\n  background-color: transparent;\n}\n\n.tabs_ui_menu_item div:hover, .tabs_ui_menu_item button:hover {\n  background-color: #222;\n}\n\n.tabs_ui_selected {\n  background-color: #151515;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./src/edit/theme.css":
+/*!******************************************************!*\
+  !*** ./node_modules/css-loader!./src/edit/theme.css ***!
+  \******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16355,26 +16283,45 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, ".posts  {\n  width: calc(100%-20px);\n  margin: auto;\n  padding: 10px;\n}\n\n.post_display, table {\n  width: 100%;\n}\n\n.post_title {\n  display: inline-block;\n  margin: 0;\n  padding: 10px 30px;\n}\n\n.post_element button {\n  float: right;\n}\n\n.post_element {\n  margin-top: 20px;\n}\n\n.post_content {\n  padding: 0px 20px;\n  width: calc(100% - 40px);\n  word-wrap: break-word;\n}\n\n\n.new_post_button {\n  width: 100%;\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n  background-color: #111;\n  color: #FFF;\n  cursor: pointer;\n  user-select: none;\n}\n\n.new_post_button:hover {\n  background-color: #222;\n}\n\n.post_title_input {\n  width: 300px;\n}\n\n.post_tags_input {\n  width: 500px;\n}\n\n.post_submit_input, .post_cancel_input {\n  width: 120px;\n  float: right;\n}\n\n.note-toolbar {\n  z-index: 1;\n}\n", ""]);
+exports.push([module.i, "body {\n  overflow: hidden;\n}\n\n.tools {\n  position: fixed;\n  bottom: 0;\n  right: 100px;\n}\n\n.tools button {\n  width: 64px;\n  height: 32px;\n}\n\nbutton {\n  background-color: #222;\n  color: #FFF;\n  border: 1px solid #444;\n}\n\nbutton:hover {\n  background-color: #111;\n}\n\n.edit_switch {\n  display: inline-block;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/style.css":
-/*!*************************************************!*\
-  !*** ./node_modules/css-loader!./src/style.css ***!
-  \*************************************************/
+/***/ "./node_modules/css-loader/index.js!./src/edit/treefm.ui/style.css":
+/*!****************************************************************!*\
+  !*** ./node_modules/css-loader!./src/edit/treefm.ui/style.css ***!
+  \****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
 // module
-exports.push([module.i, "\n.popup_ui {\n  background-color: #090909;\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  padding: 50px;\n}\n.popup_ui p {\n  margin-top: 20px;\n}\n\n.popup_ui input, .popup_ui span{\n  margin-top: 10px;\n  float: right;\n}\n\n.popup_ui span {\n  color: #FF6600;\n  padding: 2px 4px;\n  line-height: 20px;\n}\n\n.popup_ui button {\n  margin-top: -45px;\n  margin-right: -45px;\n  float: right;\n}\n\ninput {\n  background-color: #090909;\n  color: #FFF;\n  border: 1px solid #333;\n  padding: 2px 4px;\n  line-height: 20px;\n}\n", ""]);
+exports.push([module.i, ".treefm {\n  background-color: #111;\n  font-size: 14px;\n  padding: 2px;\n  user-select: none;\n}\n\n.treefm_dir_content {\n  display: none;\n}\n\n.treefm_item {\n  color: #DDD;\n  padding: 2px 10px;\n  white-space: nowrap;\n}\n\n.treefm_item:hover, .treefm_contexmenu div:hover {\n  background-color: #1C1C1C;\n  cursor: default;\n}\n\n.treefm_contexmenu {\n  display: none;\n  position: fixed;\n  background-color: #090909;\n  color: #DDD;\n  cursor: default;\n  font-size: 15px;\n  z-index: 2;\n}\n\n.treefm_contexmenu div {\n  padding: 2px 10px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./src/edit/window.ui/sheet.css":
+/*!****************************************************************!*\
+  !*** ./node_modules/css-loader!./src/edit/window.ui/sheet.css ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".window_mod {\n  position: fixed;\n  top: 100px;\n  left: 100px;\n  padding: 0;\n\n  background-color: #000000dd;\n  border: 1px solid #333;\n\n  min-height: 150px;\n  min-width: 250px;\n}\n\n.window_mod header {\n  color: rgb(0, 201, 255);\n  height: 25px;\n  cursor: default;\n  -moz-user-select: none;\n  -khtml-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  line-height: 25px;\n}\n\n.window_mod_titlebar {\n  float:left;\n  line-height: 25px;\n  display: inline-block;\n  padding: 0px 10px;\n  height: 100%;\n  width: calc(100% - 72px);\n}\n\n.window_mod header .window_mod_actions {\n  display: inline-block;\n  vertical-align: middle;\n  margin-right: 10px;\n  height: 100%;\n  line-height: 25px;\n  float:right;\n}\n\n.window_mod header button {\n  display: inline-block;\n  background-color: #111;\n  color: #FFF;\n  border: 1px solid #333;\n  margin: 0;\n  padding: 0;\n  width: 18px;\n  height: 18px;\n}\n\n.window_mod header button:hover {\n  background-color: #050505;\n}\n\n.window_mod .window_mod_content {\n  height: calc(100% - 25px);\n  overflow: auto;\n}\n\n/* Resz */\n\n.resizeN {\n  cursor: n-resize;\n  width: calc(100% - 16px);\n  height: 10px;\n  top: -10px;\n  left: 8px;\n}\n\n.resizeNE {\n  cursor: ne-resize;\n  width: 20px;\n  height: 20px;\n  right: -10px;\n  top: -10px;\n}\n\n.resizeE {\n  cursor: e-resize;\n  width: 10px;\n  height: calc(100% - 16px);\n  right: -10px;\n  top: 8px;\n}\n\n.resizeSE {\n  cursor: se-resize;\n  width: 20px;\n  height: 20px;\n  right: -10px;\n  bottom: -10px;\n}\n\n.resizeS {\n  cursor: s-resize;\n  width: calc(100% - 16px);\n  height: 10px;\n  bottom: -10px;\n  left: 8px;\n}\n\n.resizeSW {\n  cursor: sw-resize;\n  width: 20px;\n  height: 20px;\n  left: -10px;\n  bottom: -10px;\n}\n\n.resizeW {\n  cursor: w-resize;\n  width: 10px;\n  height: calc(100% - 16px);\n  left: -10px;\n  top: 8px;\n}\n\n.resizeNW {\n  cursor: nw-resize;\n  width: 20px;\n  height: 20px;\n  left: -10px;\n  top: -10px;\n}\n\n.resize {\n  position: absolute;\n/*  background-color: red;*/\n  z-index: 1;\n}\n\n.mouse_div {\n  position: absolute;\n  left: 0; top: 0; right: 0; bottom: 0;\n  z-index: 99;\n\n  display: none;\n}\n", ""]);
 
 // exports
 
@@ -23414,26 +23361,14 @@ var isOldIE = memoize(function () {
 	return window && document && document.all && !window.atob;
 });
 
-var getTarget = function (target) {
-  return document.querySelector(target);
-};
-
 var getElement = (function (fn) {
 	var memo = {};
 
-	return function(target) {
-                // If passing function in options, then use it for resolve "head" element.
-                // Useful for Shadow Root style i.e
-                // {
-                //   insertInto: function () { return document.querySelector("#foo").shadowRoot }
-                // }
-                if (typeof target === 'function') {
-                        return target();
-                }
-                if (typeof memo[target] === "undefined") {
-			var styleTarget = getTarget.call(this, target);
+	return function(selector) {
+		if (typeof memo[selector] === "undefined") {
+			var styleTarget = fn.call(this, selector);
 			// Special case to return head of iframe instead of iframe itself
-			if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+			if (styleTarget instanceof window.HTMLIFrameElement) {
 				try {
 					// This will throw an exception if access to iframe is blocked
 					// due to cross-origin restrictions
@@ -23442,11 +23377,13 @@ var getElement = (function (fn) {
 					styleTarget = null;
 				}
 			}
-			memo[target] = styleTarget;
+			memo[selector] = styleTarget;
 		}
-		return memo[target]
+		return memo[selector]
 	};
-})();
+})(function (target) {
+	return document.querySelector(target)
+});
 
 var singleton = null;
 var	singletonCounter = 0;
@@ -23468,7 +23405,7 @@ module.exports = function(list, options) {
 	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
 
 	// By default, add <style> tags to the <head> element
-        if (!options.insertInto) options.insertInto = "head";
+	if (!options.insertInto) options.insertInto = "head";
 
 	// By default, add <style> tags to the bottom of the target
 	if (!options.insertAt) options.insertAt = "bottom";
@@ -23841,7 +23778,7 @@ module.exports = function (css) {
 		});
 
 		// already a full url? no change
-		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(unquotedOrigUrl)) {
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
 			return fullMatch;
 		}
 
@@ -24058,322 +23995,14 @@ module.exports = yeast;
 
 /***/ }),
 
-/***/ "./src/admin_accounts.ui/account.html":
-/*!********************************************!*\
-  !*** ./src/admin_accounts.ui/account.html ***!
-  \********************************************/
+/***/ "./src/edit/body.html":
+/*!****************************!*\
+  !*** ./src/edit/body.html ***!
+  \****************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<td class=\"admin_accounts_ui_item_name\"></td>\n<td>\n  <input type=\"checkbox\" name=\"super\" disabled />\n</td>\n<td class=\"json_edit\">\n\n</td>\n<td>\n  <button class=\"admin_accounts_ui_item_edit\">/</button>\n  <button class=\"admin_accounts_ui_item_remove\">X</button>\n  <button class=\"admin_accounts_ui_item_save\" style=\"display: none;\">Save</button>\n</td>\n";
-
-/***/ }),
-
-/***/ "./src/admin_accounts.ui/account.js":
-/*!******************************************!*\
-  !*** ./src/admin_accounts.ui/account.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
-
-var CodeMirror = __webpack_require__(/*! ../edit/codemirror.ui/index.js */ "./src/edit/codemirror.ui/index.js");
-
-var html = __webpack_require__(/*! ./account.html */ "./src/admin_accounts.ui/account.html");
-
-module.exports = function () {
-  function _class(cfg) {
-    _classCallCheck(this, _class);
-
-    this.element = document.createElement("tr");
-    this.element.classList.add("admin_accounts_ui_item");
-    this.element.innerHTML = html;
-
-    this.email = cfg.email;
-
-    var name = this.element.querySelector(".admin_accounts_ui_item_name");
-    name.innerHTML = cfg.email;
-
-    var inputs = this.element.getElementsByTagName("input");
-
-    var this_class = this;
-
-    var json_edit = this.element.querySelector(".json_edit");
-
-    this.cfg_string = JSON.stringify(JSON.parse(cfg.cfg), null, 2);
-
-    this.html_editor = new CodeMirror(this.cfg_string, 'js', true);
-    json_edit.appendChild(this.html_editor.element);
-    this.html_editor.cm.setSize(500, 100);
-
-    setTimeout(function () {
-      this_class.html_editor.cm.refresh();
-    }, 1);
-
-    var edit_btn = this.element.querySelector(".admin_accounts_ui_item_edit");
-    var rm_btn = this.element.querySelector(".admin_accounts_ui_item_remove");
-
-    if (cfg.creator) {
-      console.log("CFG CREATOR");
-      inputs[0].checked = true;
-      edit_btn.parentNode.removeChild(edit_btn);
-      rm_btn.parentNode.removeChild(rm_btn);
-    } else if (cfg.super) {
-      console.log("CFG SUPER");
-      inputs[0].checked = true;
-    } else {
-      inputs[0].checked = false;
-    }
-
-    rm_btn.addEventListener("click", function (e) {
-      console.log("REMOVE");
-      XHR.post('admin_accounts.io', {
-        command: "rm",
-        data: {
-          email: this_class.email
-        }
-      }, function (response) {
-        if (response === "success") {
-          this_class.destroy();
-        } else {
-          console.log(response);
-        }
-      });
-    });
-    var edit_save = this.element.querySelector(".admin_accounts_ui_item_save");
-    edit_btn.addEventListener("click", function (e) {
-      edit_btn.style.display = "none";
-      rm_btn.style.display = "none";
-      edit_save.style.display = "inline-block";
-
-      for (var i = 0; i < inputs.length; i++) {
-        var input = inputs[i];
-        input.disabled = false;
-      }
-
-      json_edit.removeChild(this_class.html_editor.element);
-      json_edit.style.backgroundColor = "#222";
-      this_class.html_editor = new CodeMirror(this_class.cfg_string, 'js', false);
-      json_edit.appendChild(this_class.html_editor.element);
-      this_class.html_editor.cm.setSize(500, 100);
-      this_class.html_editor.cm.refresh();
-    });
-
-    edit_save.addEventListener("click", function (e) {
-      var cfg_json = this_class.html_editor.cm.getValue();
-      this_class.cfg_string = cfg_json;
-
-      XHR.post('admin_accounts.io', {
-        command: "edit",
-        data: {
-          email: this_class.email,
-          super: inputs[0].checked,
-          cfg: cfg_json
-        }
-      }, function (response) {
-        if (response === "success") {
-          edit_btn.style.display = "inline-block";
-          rm_btn.style.display = "inline-block";
-          edit_save.style.display = "none";
-
-          for (var i = 0; i < inputs.length; i++) {
-            var input = inputs[i];
-            input.disabled = true;
-          }
-
-          json_edit.removeChild(this_class.html_editor.element);
-          json_edit.style.backgroundColor = "transparent";
-          this_class.html_editor = new CodeMirror(cfg_json, 'js', true);
-          json_edit.appendChild(this_class.html_editor.element);
-          this_class.html_editor.cm.setSize(500, 100);
-          this_class.html_editor.cm.refresh();
-        } else {
-          alert(response);
-        }
-      });
-    });
-  }
-
-  _createClass(_class, [{
-    key: 'destroy',
-    value: function destroy() {
-      this.element.parentNode.removeChild(this.element);
-    }
-  }]);
-
-  return _class;
-}();
-
-/***/ }),
-
-/***/ "./src/admin_accounts.ui/body.html":
-/*!*****************************************!*\
-  !*** ./src/admin_accounts.ui/body.html ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<h2>Administrator accounts</h2>\n\n<table class=\"admin_accounts_ui_list\">\n  <tr id=\"admin_accounts_ui_cells\">\n    <td class=\"admin_accounts_ui_item_name\">\n      Email\n    </td>\n    <td>\n      Super\n    </td>\n    <td>\n      Configurations\n    </td>\n    <td>\n      Options\n    </td>\n  </tr>\n  <tr id=\"admin_accounts_ui_new_item_input\" style=\"display: none;\">\n    <td class=\"admin_accounts_ui_item_name\">\n      <input type=\"text\" name=\"email\" placeholder=\"email address\" /><br />\n      <input type=\"password\" name=\"password\" placeholder=\"password\" />\n    </td>\n    <td>\n      <input type=\"checkbox\" name=\"super\" />\n    </td>\n    <td class=\"new_json_edit\">\n\n    </td>\n    <td>\n      <button name=\"submit\">Submit</button>\n      <button name=\"cancel\">X</button>\n    </td>\n  </tr>\n</table>\n<div class=\"admin_accounts_ui_item\" id=\"admin_accounts_ui_new_item\">\n  Add administrator account\n</div>\n";
-
-/***/ }),
-
-/***/ "./src/admin_accounts.ui/index.js":
-/*!****************************************!*\
-  !*** ./src/admin_accounts.ui/index.js ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
-var Account = __webpack_require__(/*! ./account.js */ "./src/admin_accounts.ui/account.js");
-
-__webpack_require__(/*! ./style.less */ "./src/admin_accounts.ui/style.less");
-
-var html = __webpack_require__(/*! ./body.html */ "./src/admin_accounts.ui/body.html");
-
-var CodeMirror = __webpack_require__(/*! ../edit/codemirror.ui/index.js */ "./src/edit/codemirror.ui/index.js");
-
-module.exports = function () {
-  function _class(div) {
-    _classCallCheck(this, _class);
-
-    div.classList.add('admin_accounts_ui');
-
-    div.innerHTML = html;
-
-    this.accounts_list = [];
-
-    var accounts_list = div.querySelector(".admin_accounts_ui_list");
-
-    var new_account_form = div.querySelector("#admin_accounts_ui_new_item_input");
-
-    var new_acc_email_input = new_account_form.querySelector('input[name="email"]');
-    var new_acc_password_input = new_account_form.querySelector('input[name="password"]');
-
-    var new_acc_super_input = new_account_form.querySelector('input[name="super"]');
-
-    var json_edit = div.querySelector(".new_json_edit");
-
-    var this_class = this;
-
-    XHR.post('admin_accounts.io', { command: "all" }, function (response) {
-      var accounts = JSON.parse(response);
-      for (var p = 0; p < accounts.length; p++) {
-        accounts[p].cfg = JSON.stringify(accounts[p].cfg);
-        var account = new Account(accounts[p]);
-        new_account_form.parentNode.insertBefore(account.element, new_account_form);
-        this_class.accounts_list.push(account);
-      }
-    });
-
-    var new_account_button = div.querySelector("#admin_accounts_ui_new_item");
-
-    new_account_button.addEventListener("click", function (e) {
-
-      new_account_button.style.display = "none";
-      new_account_form.style.display = "";
-
-      new_acc_email_input.value = "";
-      new_acc_password_input.value = "";
-
-      this_class.html_editor = new CodeMirror('', 'js', false);
-      json_edit.appendChild(this_class.html_editor.element);
-      this_class.html_editor.cm.setSize(500, 100);
-      this_class.html_editor.cm.refresh();
-    });
-
-    var new_acc_submit = new_account_form.querySelector('button[name="submit"]');
-    new_acc_submit.addEventListener("click", function (e) {
-      var data = {
-        email: new_acc_email_input.value,
-        password: new_acc_password_input.value
-      };
-
-      if (new_acc_super_input.checked) {
-        data.super = true;
-      } else {
-        data.cfg = this_class.html_editor.cm.getValue();
-      }
-
-      XHR.post('admin_accounts.io', {
-        command: "add",
-        data: data
-      }, function (response) {
-        if (response === "success") {
-          var account = new Account(data);
-          new_account_form.parentNode.insertBefore(account.element, new_account_form);
-          new_account_button.style.display = "block";
-          new_account_form.style.display = "none";
-        } else {
-          console.log(response);
-        }
-      });
-    });
-
-    var new_acc_cancel = new_account_form.querySelector('button[name="cancel"]');
-    new_acc_cancel.addEventListener("click", function (e) {
-      new_account_button.style.display = "block";
-      new_account_form.style.display = "none";
-    });
-  }
-
-  _createClass(_class, [{
-    key: 'refresh',
-    value: function refresh() {
-      for (var a = 0; a < this.accounts_list.length; a++) {
-        console.log("r", a);
-        this.accounts_list[a].html_editor.cm.refresh();
-      }
-    }
-  }]);
-
-  return _class;
-}();
-
-/***/ }),
-
-/***/ "./src/admin_accounts.ui/style.less":
-/*!******************************************!*\
-  !*** ./src/admin_accounts.ui/style.less ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/less-loader/dist/cjs.js!./style.less */ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/admin_accounts.ui/style.less");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
+module.exports = "<button class=\"editor_btn\">&lt;&sol;&gt;</button>\n";
 
 /***/ }),
 
@@ -24496,424 +24125,247 @@ module.exports = function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
+// load the styles
 var content = __webpack_require__(/*! !../../../node_modules/css-loader!./noscroll.css */ "./node_modules/css-loader/index.js!./src/edit/codemirror.ui/noscroll.css");
-
 if(typeof content === 'string') content = [[module.i, content, '']];
-
+// Prepare cssTransformation
 var transform;
-var insertInto;
-
-
 
 var options = {"hmr":true}
-
 options.transform = transform
-options.insertInto = undefined;
-
+// add the styles to the DOM
 var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
 if(content.locals) module.exports = content.locals;
-
+// Hot Module Replacement
 if(false) {}
 
 /***/ }),
 
-/***/ "./src/gallery.ui/image.js":
-/*!*********************************!*\
-  !*** ./src/gallery.ui/image.js ***!
-  \*********************************/
+/***/ "./src/edit/editor.ui/index.js":
+/*!*************************************!*\
+  !*** ./src/edit/editor.ui/index.js ***!
+  \*************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function(global) {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
+var XHR = __webpack_require__(/*! ../../utils/xhr.js */ "./src/utils/xhr.js");
+var XHRA = __webpack_require__(/*! ../../utils/xhr_async.js */ "./src/utils/xhr_async.js");
+var WindowUI = __webpack_require__(/*! ../window.ui/index.js */ "./src/edit/window.ui/index.js");
+var SplitUI = __webpack_require__(/*! ../split.ui/index.js */ "./src/edit/split.ui/index.js");
+
+__webpack_require__(/*! ./theme.css */ "./src/edit/editor.ui/theme.css");
+
+var Session = __webpack_require__(/*! ./session.js */ "./src/edit/editor.ui/session.js");
 
 module.exports = function () {
-  function _class(img, src, grid_ui) {
-    var _this = this;
-
+  function _class(target, dir, iframe, pathname) {
     _classCallCheck(this, _class);
 
-    this.element = document.createElement("div");
-    this.element.classList.add("gallery_ui_item");
-    this.element.appendChild(img);
+    console.log("SAVE FILE!");
+
+    var socket = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js")('http://127.0.0.1:9639');
+    console.log("CONNECTING TO http://127.0.0.1:9369");
+    socket.on('connect', function () {
+      console.log("CONNECTED");
+    });
+
+    socket.on('webpack-done', function (stats) {
+      console.log("WEBPACK DONE", stats);
+      iframe.contentWindow.location.replace(pathname);
+    });
+
+    socket.on('webpack-err', function (err) {
+      console.error(err);
+    });
+
+    socket.on('disconnect', function () {
+      console.log("DISCONNETED");
+    });
+
+    this.window = new WindowUI({
+      DOM: document.body,
+      title: "Editor",
+      resize_cb: function resize_cb() {
+        split.auto_resize();
+      }
+    });
+    global.editor_window = this.window;
+    this.window.content.style.overflow = "hidden";
+
+    var split = this.split = new SplitUI(this.window.content, "horizontal");
+    split.split(2);
+
+    var global_local_switch = document.createElement("button");
+    global_local_switch.innerHTML = "Global";
+    global_local_switch.classList.add('global_local_switch');
+    this.split.list[0].appendChild(global_local_switch);
+
+    var webpack_button = document.createElement("button");
+    webpack_button.innerHTML = ".";
+    webpack_button.classList.add('webpack_button');
+    this.split.list[0].appendChild(webpack_button);
+
+    var state = false;
+    webpack_button.style.border = "solid 1px #FF0000";
+
+    webpack_button.addEventListener('click', async function (e) {
+      var chstate = state != true;
+      console.log({
+        command: "webpack-watch",
+        value: chstate,
+        name: dir
+      });
+      state = await XHRA.post("pages.io", {
+        command: "webpack-watch",
+        value: chstate,
+        name: dir
+      });
+
+      if (state) {
+        webpack_button.style.border = "solid 1px #00FF00";
+      } else {
+        webpack_button.style.border = "solid 1px #FF0000";
+      }
+    });
+    var local_session = new Session(target, dir, iframe, pathname);
+    this.append_session_elements(local_session);
+    var global_session = new Session("globals", ".", iframe, pathname);
 
     var this_class = this;
-
-    var xbtn = document.createElement('button');
-    xbtn.innerHTML = "x";
-
-    xbtn.addEventListener("click", function (e) {
-      var popup = document.createElement('div');
-      popup.classList.add("gallery_ui_popup");
-      document.body.appendChild(popup);
-
-      var message = document.createElement("p");
-      message.innerHTML = "Are you sure you want to delete this image?";
-      popup.appendChild(message);
-
-      var ybtn = document.createElement("button");
-      ybtn.innerHTML = "yes";
-      ybtn.addEventListener("click", async function (e) {
-        await XHR.post("gallery.io", {
-          command: "rm",
-          src: src
-        });
-        grid_ui.remove(this_class.element);
-        document.body.removeChild(popup);
-      });
-      popup.appendChild(ybtn);
-
-      var nbtn = document.createElement("button");
-      nbtn.innerHTML = "no";
-      nbtn.addEventListener("click", function (e) {
-        document.body.removeChild(popup);
-      });
-      popup.appendChild(nbtn);
-    });
-
-    var displayed = false;
-
-    img.addEventListener('click', function (e) {
-      displayed = true;
-      if (this_class.element.contains(xbtn)) {
-        this_class.element.removeChild(xbtn);
-      }
-      this_class.element.classList.add("gallery_ui_display");
-
-      var btn_box = document.createElement("div");
-      this_class.element.appendChild(btn_box);
-
-      var back_btn = document.createElement("button");
-      back_btn.innerHTML = "x";
-
-      btn_box.addEventListener("mouseover", function (e) {
-        btn_box.appendChild(back_btn);
-      });
-
-      btn_box.addEventListener("mouseleave", function (e) {
-        btn_box.removeChild(back_btn);
-      });
-
-      back_btn.addEventListener("click", function (e) {
-        this_class.element.removeChild(btn_box);
-        displayed = false;
-        this_class.element.classList.remove("gallery_ui_display");
-      });
-    });
-
-    this.element.addEventListener('mouseover', function (e) {
-      if (!displayed) {
-        _this.element.appendChild(xbtn);
+    global_local_switch.addEventListener("click", function (e) {
+      if (global_local_switch.innerHTML == "Global") {
+        local_session.destroy();
+        this_class.append_session_elements(global_session);
+        global_local_switch.innerHTML = "Local";
+      } else {
+        global_session.destroy();
+        this_class.append_session_elements(local_session);
+        global_local_switch.innerHTML = "Global";
       }
     });
-
-    this.element.addEventListener('mouseleave', function (e) {
-      if (!displayed) {
-        _this.element.removeChild(xbtn);
-      }
-    });
-
-    this.src = src;
-  }
-
-  _createClass(_class, null, [{
-    key: 'init',
-    value: async function init(src, grid_ui) {
-      return await new Promise(function (resolve) {
-        var img = document.createElement('img');
-        img.src = src;
-        img.addEventListener("load", function (e) {
-          resolve(new module.exports(img, src, grid_ui));
-        });
-
-        img.addEventListener("error", function (e) {
-          console.error(e);
-          resolve(undefined);
-        });
-      });
-    }
-  }]);
-
-  return _class;
-}();
-
-/***/ }),
-
-/***/ "./src/gallery.ui/index.js":
-/*!*********************************!*\
-  !*** ./src/gallery.ui/index.js ***!
-  \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var XHR = __webpack_require__(/*! ../utils/xhr_async.js */ "./src/utils/xhr_async.js");
-var Image = __webpack_require__(/*! ./image.js */ "./src/gallery.ui/image.js");
-
-var GridUI = __webpack_require__(/*! ../grid.ui/index.js */ "./src/grid.ui/index.js");
-
-__webpack_require__(/*! ./style.less */ "./src/gallery.ui/style.less");
-
-module.exports = function () {
-  function _class(div) {
-    _classCallCheck(this, _class);
-  }
-
-  _createClass(_class, null, [{
-    key: 'init',
-    value: async function init(div) {
-      div.classList.add('gallery_ui');
-
-      var h2 = document.createElement("h2");
-      h2.innerHTML = "Gallery";
-      div.appendChild(h2);
-
-      var grid_ui = new GridUI(6, window.innerWidth, 150);
-      div.appendChild(grid_ui.element);
-
-      window.addEventListener('resize', function () {
-        grid_ui.resize(window.innerWidth);
-      });
-
-      var srcs = await XHR.get('/gallery.ui', {
-        command: "all"
-      });
-
-      var images = [];
-
-      for (var i = 0; i < srcs.length; i++) {
-        var src = srcs[i];
-        var image = await Image.init(src, grid_ui);
-        if (image) {
-          images.push(image);
-          grid_ui.add(image.element);
-        }
-      }
-      grid_ui.resize(window.innerWidth);
-
-      var add_temp_btn = document.createElement("div");
-      add_temp_btn.classList.add("gallery_ui_item");
-      add_temp_btn.classList.add("gallery_ui_add");
-      add_temp_btn.addEventListener("click", upload_image);
-      grid_ui.add(add_temp_btn);
-
-      var text = document.createElement("h3");
-      text.innerHTML = "++";
-      add_temp_btn.appendChild(text);
-
-      function upload_image() {
-        var form = document.createElement('form');
-        form.enctype = "multipart/form-data";
-        document.body.appendChild(form);
-
-        var upload_input = document.createElement("input");
-        upload_input.type = "file";
-        upload_input.name = "filei";
-        upload_input.multiple = "multiple";
-        upload_input.style.display = "none";
-        form.appendChild(upload_input);
-
-        upload_input.addEventListener("change", async function (e) {
-          var files = this.files;
-
-          var formData = new FormData(form);
-
-          var nsrcs = await XHR.post('gallery.io-upload', { formData: formData });
-
-          grid_ui.remove(add_temp_btn);
-
-          for (var i = 0; i < nsrcs.length; i++) {
-            var src = nsrcs[i];
-            var existing = undefined;
-            images.forEach(function (image) {
-              console.log("image", image);
-              if (image.src === src) {
-                existing = image;
-              }
-            });
-
-            console.log("existing", existing);
-
-            if (existing) {
-              grid_ui.remove(existing.element);
-            }
-            var image = await Image.init(src, grid_ui);
-            if (image) {
-              grid_ui.add(image.element);
-            }
-          }
-          grid_ui.add(add_temp_btn);
-        }, false);
-        upload_input.click();
-      }
-
-      return new module.exports(div);
-    }
-  }]);
-
-  return _class;
-}();
-
-/***/ }),
-
-/***/ "./src/gallery.ui/style.less":
-/*!***********************************!*\
-  !*** ./src/gallery.ui/style.less ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/less-loader/dist/cjs.js!./style.less */ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/gallery.ui/style.less");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
-/***/ "./src/grid.ui/index.js":
-/*!******************************!*\
-  !*** ./src/grid.ui/index.js ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var TR = __webpack_require__(/*! ./tr.js */ "./src/grid.ui/tr.js");
-
-__webpack_require__(/*! ./theme.less */ "./src/grid.ui/theme.less");
-
-module.exports = function () {
-  function _class(items_in_row, width, min_a) {
-    _classCallCheck(this, _class);
-
-    this.element = document.createElement('table');
-    this.element.classList.add('grid_ui');
-
-    this.min_a = min_a;
-    this.items_in_row = items_in_row;
-    this.item_a = width / items_in_row - 4;
-    if (this.item_a < this.min_a) {
-      this.item_a = this.min_a;
-    }
-
-    this.trs = [];
-    this.tds = [];
-    this.cur_tr = new TR(items_in_row);
-    this.element.appendChild(this.cur_tr.element);
-    this.trs.push(this.cur_tr);
   }
 
   _createClass(_class, [{
-    key: 'resize',
-    value: function resize(width) {
-      if (width) {
-        this.item_a = width / this.items_in_row - 4;
-        if (this.item_a < this.min_a) {
-          this.item_a = this.min_a;
-        }
-      }
+    key: "append_session_elements",
+    value: function append_session_elements(session) {
+      var treefm = session.treefm;
+      var tabs = session.tabs;
 
-      for (var i = 0; i < this.tds.length; i++) {
-        this.tds[i].style.width = this.item_a + "px";
-        this.tds[i].style.height = this.item_a + "px";
-
-        this.tds[i].style.minWidth = this.min_a + "px";
-      }
+      this.split.list[0].appendChild(treefm.element);
+      this.split.list[1].style.overflow = "hidden";
+      this.split.list[1].appendChild(tabs.element);
     }
   }, {
-    key: 'add',
-    value: function add(item) {
-      console.log(item, this.cur_tr.items, this.cur_tr.max_items);
-      if (this.cur_tr.items == this.cur_tr.max_items) {
-        this.cur_tr = new TR(this.items_in_row);
-        this.element.appendChild(this.cur_tr.element);
-
-        var td = document.createElement('td');
-        td.appendChild(item);
-        this.cur_tr.add(td);
-
-        this.trs.push(this.cur_tr);
-        this.tds.push(td);
-        this.resize();
-      } else {
-        var td = document.createElement('td');
-        td.appendChild(item);
-        this.cur_tr.add(td);
-        this.tds.push(td);
-        this.resize();
-      }
+    key: "destroy",
+    value: function destroy() {
+      this.window.destroy();
     }
-  }, {
-    key: 'remove',
-    value: function remove(item) {
-      for (var t = 0; t < this.trs.length; t++) {
-        var tr = this.trs[t];
-        if (tr.contains(item)) {
-          tr.remove(item.parentNode);
-          if (tr.items == 0 && t > 0) {
-            this.element.removeChild(tr.element);
-            this.trs.splice(t, 1);
-            this.cur_tr = this.trs[t - 1];
-          } else if (tr.items == tr.max_items - 1) {
-            this.track(t + 1);
-          }
-        }
-      }
-    }
-  }, {
-    key: 'track',
-    value: function track(t) {
-      if (t < this.trs.length) {
-        var tr = this.trs[t];
-        if (tr.items > 0) {
-          var td = tr.tds[0];
-          tr.remove(td);
-          this.trs[t - 1].add(td);
-          if (tr.items == tr.max_items - 1) {
-            this.track(t + 1);
-          }
+  }]);
+
+  return _class;
+}();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./src/edit/editor.ui/session.js":
+/*!***************************************!*\
+  !*** ./src/edit/editor.ui/session.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var TreeFM = __webpack_require__(/*! ../treefm.ui */ "./src/edit/treefm.ui/index.js");
+var TabsUI = __webpack_require__(/*! ../tabs.ui/index.js */ "./src/edit/tabs.ui/index.js");
+var CodeMirror = __webpack_require__(/*! ../codemirror.ui/index.js */ "./src/edit/codemirror.ui/index.js");
+
+var template_prefix = "/cmb_admin/t/";
+var page_prefix = "/p/";
+
+var XHR = __webpack_require__(/*! ../../utils/xhr.js */ "./src/utils/xhr.js");
+
+module.exports = function () {
+  function _class(target, dir, iframe, refresh_path) {
+    _classCallCheck(this, _class);
+
+    var tabs = this.tabs = new TabsUI();
+
+    var last_save_callback = false;
+
+    var treefm = this.treefm = new TreeFM({
+      target: target,
+      dir: encodeURIComponent(dir),
+      file_cb: function file_cb(file) {
+        var tab = tabs.select(file.rel_path);
+        if (tab) {
+          tab.display();
         } else {
-          this.element.removeChild(this.trs[t].element);
-          this.trs.splice(t, 1);
-          this.cur_tr = this.trs[t - 1];
+          treefm.read_file(file.rel_path, function (file_content) {
+            var extension = file.rel_path.substr(file.rel_path.lastIndexOf('.') + 1);
+            var original_extension = extension;
+            if (extension == "json") extension = "js";
+            var html_editor = new CodeMirror(file_content, extension, false, {
+              disable_scrollbar: true
+            });
+            tabs.add({
+              text: file.name,
+              cb: function cb(display) {
+                display.appendChild(html_editor.element);
+                html_editor.cm.refresh();
+                if (last_save_callback) {
+                  document.body.removeEventListener("keydown", last_save_callback);
+                }
+                document.body.addEventListener("keydown", save_cur_file);
+                last_save_callback = save_cur_file;
+              },
+              id: file.rel_path
+            });
+            function save_cur_file(e) {
+              console.log("SAVE");
+              if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+                e.preventDefault();
+                treefm.write_file(file.rel_path, html_editor.cm.getValue(), function () {
+                  if (original_extension != "js") {
+                    iframe.src = iframe.src;
+                  }
+
+                  XHR.post("pages.io", {
+                    command: "webpack",
+                    name: dir
+                  }, function (response) {
+                    console.log("WEBPACK RES", response);
+                    iframe.contentWindow.location.replace(refresh_path);
+                  });
+                });
+              }
+            }
+          });
         }
       }
+    });
+  }
+
+  _createClass(_class, [{
+    key: "destroy",
+    value: function destroy() {
+      this.tabs.destroy();
+      this.treefm.destroy();
     }
   }]);
 
@@ -24922,39 +24374,34 @@ module.exports = function () {
 
 /***/ }),
 
-/***/ "./src/grid.ui/theme.less":
-/*!********************************!*\
-  !*** ./src/grid.ui/theme.less ***!
-  \********************************/
+/***/ "./src/edit/editor.ui/theme.css":
+/*!**************************************!*\
+  !*** ./src/edit/editor.ui/theme.css ***!
+  \**************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
-var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/less-loader/dist/cjs.js!./theme.less */ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/grid.ui/theme.less");
-
+// load the styles
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!./theme.css */ "./node_modules/css-loader/index.js!./src/edit/editor.ui/theme.css");
 if(typeof content === 'string') content = [[module.i, content, '']];
-
+// Prepare cssTransformation
 var transform;
-var insertInto;
-
-
 
 var options = {"hmr":true}
-
 options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
+// add the styles to the DOM
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
 if(content.locals) module.exports = content.locals;
-
+// Hot Module Replacement
 if(false) {}
 
 /***/ }),
 
-/***/ "./src/grid.ui/tr.js":
+/***/ "./src/edit/index.js":
 /*!***************************!*\
-  !*** ./src/grid.ui/tr.js ***!
+  !*** ./src/edit/index.js ***!
   \***************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -24962,800 +24409,297 @@ if(false) {}
 "use strict";
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-module.exports = function () {
-  function _class(items_in_row) {
-    _classCallCheck(this, _class);
-
-    this.element = document.createElement('tr');
-    this.items = 0;
-    this.max_items = items_in_row;
-    this.tds = [];
-  }
-
-  _createClass(_class, [{
-    key: 'add',
-    value: function add(td) {
-      this.tds.push(td);
-      this.items++;
-      this.element.appendChild(td);
-    }
-  }, {
-    key: 'remove',
-    value: function remove(td) {
-      var td_index = this.tds.indexOf(td);
-      this.tds.splice(td_index, 1);
-      this.items--;
-      this.element.removeChild(td);
-    }
-  }, {
-    key: 'contains',
-    value: function contains(td) {
-      return this.element.contains(td);
-    }
-  }]);
-
-  return _class;
-}();
-
-/***/ }),
-
-/***/ "./src/index.js":
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-var config = global.config = {
-  admin_path: "/cmb_admin"
-};
-
-__webpack_require__(/*! ./style.css */ "./src/style.css");
-
-window.addEventListener("load", async function (e) {
-  try {
-    var view_selection = function view_selection(div) {
-      if (div === cur_viewed) {
-        return false;
-      }
-
-      if (cur_viewed) {
-        cur_viewed.button.classList.remove("selected_navigation_button");
-        display_box.removeChild(cur_viewed);
-      }
-
-      cur_viewed = div;
-      cur_viewed.button.classList.add("selected_navigation_button");
-      display_box.appendChild(cur_viewed);
-    };
-
-    var socket = global.socket = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js")('http://localhost:9639');
-
-    var cur_viewed = void 0;
-    var display_box = document.getElementById("display_box");
-
-
-    var templates_div = document.createElement('div');
-    templates_div.button = document.getElementById('templates_button');
-    templates_div.button.addEventListener('click', function (e) {
-      view_selection(templates_div);
-    });
-    var TemplatesUI = new (__webpack_require__(/*! ./templates.ui/index.js */ "./src/templates.ui/index.js"))(templates_div);
-
-    var pages_div = document.createElement('div');
-    pages_div.button = document.getElementById('pages_button');
-    pages_div.button.addEventListener('click', function (e) {
-      view_selection(pages_div);
-    });
-    var PagesUI = new (__webpack_require__(/*! ./pages.ui/index.js */ "./src/pages.ui/index.js"))(pages_div);
-
-    var posts_div = document.createElement('div');
-    posts_div.button = document.getElementById('posts_button');
-    posts_div.button.addEventListener('click', function (e) {
-      view_selection(posts_div);
-    });
-    var PostsUI = new (__webpack_require__(/*! ./posts.ui/index.js */ "./src/posts.ui/index.js"))(posts_div);
-
-    var gallery_div = document.createElement('div');
-    gallery_div.button = document.getElementById('gallery_button');
-    gallery_div.button.addEventListener('click', function (e) {
-      view_selection(gallery_div);
-    });
-    var GalleryUI = __webpack_require__(/*! ./gallery.ui/index.js */ "./src/gallery.ui/index.js").init(gallery_div);
-
-    var admin_accounts_div = document.createElement('div');
-    admin_accounts_div.button = document.getElementById('accounts_button');
-    var AdminAccountsUI = new (__webpack_require__(/*! ./admin_accounts.ui/index.js */ "./src/admin_accounts.ui/index.js"))(admin_accounts_div);
-    admin_accounts_div.button.addEventListener('click', function (e) {
-      view_selection(admin_accounts_div);
-      AdminAccountsUI.refresh();
-    });
-
-    var user_accounts_div = document.createElement('div');
-    user_accounts_div.button = document.getElementById('users_button');
-    view_selection(user_accounts_div);
-    user_accounts_div.button.addEventListener('click', function (e) {
-      view_selection(user_accounts_div);
-    });
-    var UserAccountsUI = new (__webpack_require__(/*! ./user_accounts.ui/index.js */ "./src/user_accounts.ui/index.js"))(user_accounts_div);
-
-    view_selection(pages_div);
-  } catch (e) {
-    console.error(e);
-  }
-});
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
-
-/***/ }),
-
-/***/ "./src/pages.ui/index.js":
-/*!*******************************!*\
-  !*** ./src/pages.ui/index.js ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+__webpack_require__(/*! ./theme.css */ "./src/edit/theme.css");
 
 var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
-var Page = __webpack_require__(/*! ./page.js */ "./src/pages.ui/page.js");
+var Editor = __webpack_require__(/*! ./editor.ui/index.js */ "./src/edit/editor.ui/index.js");
 
-var GridUI = __webpack_require__(/*! ../grid.ui/index.js */ "./src/grid.ui/index.js");
+var template = XHR.getParamByName('template');
+var page = XHR.getParamByName('page');
 
-__webpack_require__(/*! ./style.less */ "./src/pages.ui/style.less");
-module.exports = function () {
-  function _class(div, templates) {
-    _classCallCheck(this, _class);
+var target_name = encodeURIComponent(template || page);
 
-    div.classList.add('pages_ui');
+console.log(page);
 
-    var h2 = document.createElement("h2");
-    h2.innerHTML = "Pages";
-    div.appendChild(h2);
+var tools = document.createElement("div");
+tools.classList.add("tools");
+tools.innerHTML = __webpack_require__(/*! ./body.html */ "./src/edit/body.html");
+document.body.appendChild(tools);
 
-    var grid_ui = new GridUI(6, window.innerWidth, 150);
-    div.appendChild(grid_ui.element);
-
-    window.addEventListener('resize', function () {
-      grid_ui.resize(window.innerWidth);
-    });
-
-    var this_class = this;
-    XHR.get('pages.io', {
-      command: "all"
-    }, function () {
-      var pages = JSON.parse(this.responseText);
-      for (var t = 0; t < pages.length; t++) {
-        console.log("PAGE", pages[t]);
-        var page = new Page(pages[t], grid_ui);
-        grid_ui.add(page.element);
-      }
-
-      var add_temp_btn = document.createElement("div");
-      add_temp_btn.classList.add("pages_ui_item");
-      add_temp_btn.classList.add("pages_ui_add");
-      add_temp_btn.addEventListener("click", new_page);
-      grid_ui.add(add_temp_btn);
-
-      var text = document.createElement("h3");
-      text.innerHTML = "++";
-      add_temp_btn.appendChild(text);
-
-      function new_page(e) {
-        XHR.get('templates.io', {
-          command: "all"
-        }, function () {
-          add_temp_btn.style.display = "block";
-
-          var input = document.createElement("input");
-          input.type = "text";
-          input.placeholder = "Name";
-
-          var select = document.createElement("select");
-
-          var placeholder = document.createElement("option");
-          placeholder.value = "";
-          placeholder.innerHTML = "Template";
-          placeholder.disabled = true;
-          placeholder.selected = true;
-          select.appendChild(placeholder);
-
-          var templates = JSON.parse(this.responseText);
-          for (var _t = 0; _t < templates.length; _t++) {
-            var option = document.createElement("option");
-            option.value = templates[_t].file;
-            option.innerHTML = templates[_t].file;
-            select.appendChild(option);
-          }
-
-          add_temp_btn.innerHTML = "";
-          add_temp_btn.appendChild(input);
-          input.focus();
-          add_temp_btn.appendChild(select);
-
-          var submit = document.createElement("button");
-          submit.innerHTML = "Submit";
-          add_temp_btn.appendChild(submit);
-
-          submit.addEventListener('click', function (e) {
-            var data = {
-              file: encodeURIComponent(input.value),
-              path: '/' + encodeURIComponent(input.value),
-              name: input.value
-            };
-
-            XHR.post('pages.io', {
-              command: "add",
-              name: data.name,
-              template: select.value
-            }, function (response) {
-              var res = JSON.parse(response);
-              console.log(res);
-              if (res.err) {
-                console.log(res.err);
-              } else {
-                var page = new Page(data);
-
-                grid_ui.remove(add_temp_btn);
-                grid_ui.add(page.element);
-                add_temp_btn.innerHTML = "";
-                add_temp_btn.appendChild(text);
-                add_temp_btn.style.display = "flex";
-                add_temp_btn.addEventListener("click", new_page);
-                grid_ui.add(add_temp_btn);
-                input.focus();
-                input.value = '';
-              }
-            });
-          });
-        });
-        add_temp_btn.removeEventListener("click", new_page);
-      }
-    });
+var editor_btn = tools.querySelector(".editor_btn");
+function editor_replaced(n_window) {
+  editor_btn.removeEventListener("click", listener);
+  editor_btn.addEventListener("click", listener);
+  function listener(e) {
+    if (n_window.visible) {
+      n_window.hide();
+    } else {
+      n_window.dipslay();
+    }
   }
+}
 
-  return _class;
-}();
+var iframe = document.getElementById("cmb_page_display");
+var target;
+if (template) {
+  iframe.src = 't/' + target_name;
+  target = "templates";
+} else if (page) {
+  iframe.src = '/' + target_name;
+  target = "pages";
+}
 
-/***/ }),
+iframe.addEventListener("load", firstLoad);
+var floadID = setTimeout(firstLoad, 1000);
+function firstLoad() {
+  clearTimeout(floadID);
+  var editor = new Editor(target, template || page, iframe, iframe.contentWindow.location.pathname);
+  editor_replaced(editor.window);
+  iframe.removeEventListener("load", firstLoad);
 
-/***/ "./src/pages.ui/page.html":
-/*!********************************!*\
-  !*** ./src/pages.ui/page.html ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+  var last_pathname = iframe.contentWindow.location.pathname;
 
-module.exports = "<table>\n  <tr>\n    <td class=\"page_name\" colspan=\"2\">\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <button class=\"edit_btn\">/</a>\n    </td>\n    <td>\n      <button class=\"del_btn\">X</a>\n    </td>\n  </tr>\n</table>\n";
-
-/***/ }),
-
-/***/ "./src/pages.ui/page.js":
-/*!******************************!*\
-  !*** ./src/pages.ui/page.js ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
-
-var html = __webpack_require__(/*! ./page.html */ "./src/pages.ui/page.html");
-
-module.exports = function () {
-  function _class(cfg, table) {
-    _classCallCheck(this, _class);
-
-    this.element = document.createElement('div');
-    this.element.innerHTML = html;
-    this.name = cfg.name;
-    this.filename = cfg.file;
-    this.path = cfg.path;
-
-    console.log("PAGE filename", this.filename);
-
-    var max_length = 16;
-    if (this.name.length > max_length) {
-      this.name = this.name.substring(0, max_length) + '...';
+  iframe.addEventListener("load", socondLoad);
+  var sloadID = setTimeout(socondLoad, 1000);
+  function socondLoad(e) {
+    clearTimeout(sloadID);
+    var new_pathname = iframe.contentWindow.location.pathname;
+    console.log(last_pathname, new_pathname);
+    console.log(last_pathname != new_pathname);
+    if (last_pathname != new_pathname) {
+      editor.destroy();
+      var new_root_dir = decodeURIComponent(iframe.contentWindow.location.pathname).substr(1).slice(0, -1);
+      console.log("NEDITOR", new_root_dir, iframe.contentWindow.location.pathname);
+      editor = new Editor(target, new_root_dir, iframe);
+      editor_replaced(editor.window);
     }
-
-    this.display();
-    this.table = table;
+    last_pathname = new_pathname;
   }
-
-  _createClass(_class, [{
-    key: 'display',
-    value: function display() {
-
-      var page_element = this.element;
-      page_element.classList.add('pages_ui_item');
-
-      var this_class = this;
-
-      var link = page_element.querySelector('.page_name');
-
-      link.addEventListener('click', function (e) {
-        window.location.href = this_class.path;
-      });
-
-      link.innerHTML = this.name;
-
-      var edit_btn = page_element.querySelector('.edit_btn');
-
-      edit_btn.addEventListener('click', function (e) {
-        window.location.href = "edit.html?page=" + this_class.filename;
-      });
-      edit_btn.innerHTML = '/';
-
-      var this_class = this;
-
-      var del_button = page_element.querySelector('.del_btn');
-      del_button.addEventListener('click', function (e) {
-        var popup = document.createElement('div');
-        popup.classList.add("popup_ui");
-        document.body.appendChild(popup);
-
-        var close_btn = document.createElement("button");
-        close_btn.innerHTML = "X";
-        close_btn.addEventListener("click", function () {
-          document.body.removeChild(popup);
-        });
-        popup.appendChild(close_btn);
-
-        var message = document.createElement("p");
-        message.innerHTML = "Confirm DELETION of page `" + this_class.name + "` by entering its title";
-        popup.appendChild(message);
-
-        var submit = document.createElement("input");
-        submit.type = "submit";
-        popup.appendChild(submit);
-
-        var input = document.createElement("input");
-        input.type = "text";
-        popup.appendChild(input);
-        input.focus();
-
-        input.addEventListener('keyup', function (e) {
-          if (e.keyCode == 13) {
-            proceed();
-          }
-        });
-
-        var err_msg = document.createElement("span");
-        popup.appendChild(err_msg);
-
-        submit.addEventListener("click", function (e) {
-          proceed();
-        });
-
-        function proceed() {
-          if (input.value === this_class.name) {
-            XHR.post('pages.io', {
-              command: 'rm',
-              name: this_class.filename
-            }, function (response) {
-              if (response == "success") {
-                this_class.table.remove(this_class.element);
-                document.body.removeChild(popup);
-              }
-            });
-          } else {
-            err_msg.innerHTML = "Incorrect!";
-          }
-        }
-      });
-      del_button.innerHTML = "X";
-    }
-  }]);
-
-  return _class;
-}();
+}
 
 /***/ }),
 
-/***/ "./src/pages.ui/style.less":
-/*!*********************************!*\
-  !*** ./src/pages.ui/style.less ***!
-  \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/less-loader/dist/cjs.js!./style.less */ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/pages.ui/style.less");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
-/***/ "./src/posts.ui/body.html":
-/*!********************************!*\
-  !*** ./src/posts.ui/body.html ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<h2>Posts</h2>\n\n<div class=\"new_post_button\">\n  Write a new post\n</div>\n\n<div class=\"post_editor\" style=\"display: none\">\n  <input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n  <div class=\"post_summernote\"></div>\n  <input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n  <input type=\"submit\" class=\"post_submit_input\" />\n  <div class=\"post_element\">\n    <h3 class=\"post_display_title post_title\"></h3>\n    <div class=\"post_display post_content\"></div>\n  </div>\n</div>\n\n<div class=\"post_list\">\n\n</div>\n";
-
-/***/ }),
-
-/***/ "./src/posts.ui/edit.html":
-/*!********************************!*\
-  !*** ./src/posts.ui/edit.html ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n<div id=\"post_summernote\" class=\"cur_sn\"></div>\n<input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n<input type=\"submit\" class=\"post_submit_input\" />\n<input type=\"submit\" value=\"Cancel\" class=\"post_cancel_input\" />\n<div class=\"post_element\">\n  <h3 class=\"post_display_title post_title\"></h3>\n  <div class=\"post_display post_content\"></div>\n</div>\n";
-
-/***/ }),
-
-/***/ "./src/posts.ui/index.js":
-/*!*******************************!*\
-  !*** ./src/posts.ui/index.js ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
-var Post = __webpack_require__(/*! ./post.js */ "./src/posts.ui/post.js");
-
-__webpack_require__(/*! ./style.css */ "./src/posts.ui/style.css");
-var html = __webpack_require__(/*! ./body.html */ "./src/posts.ui/body.html");
-
-module.exports = function () {
-  function _class(div) {
-    _classCallCheck(this, _class);
-
-    div.innerHTML = html;
-    div.classList.add('posts');
-
-    var post_list = div.querySelector(".post_list");
-
-    XHR.get('/posts.io', { command: "all" }, function () {
-      var posts = JSON.parse(this.responseText);
-      for (var p = 0; p < posts.length; p++) {
-        var post = new Post(posts[p]);
-        post_list.insertBefore(post.element, post_list.firstChild);
-      }
-    });
-
-    var post_editor = div.querySelector(".post_editor"),
-        title_input = div.querySelector(".post_title_input"),
-        tags_input = div.querySelector(".post_tags_input"),
-        submit_input = div.querySelector(".post_submit_input"),
-        post_display_title = div.querySelector(".post_display_title"),
-        post_display = div.querySelector(".post_display");
-
-    title_input.addEventListener("input", function (e) {
-      post_display_title.innerHTML = title_input.value;
-    });
-
-    $('.post_summernote').summernote({
-      minHeight: 300,
-      callbacks: {
-        onChange: function onChange(contents) {
-          post_display.innerHTML = contents;
-        }
-      },
-      fontSizes: ['8', '10', '12', '14', '16', '18', '20', '24', '36', '48', '64', '82', '150']
-      //        lang: "lt-LT"
-    });
-    submit_input.addEventListener("click", function (e) {
-      var data = {
-        command: "create",
-        post: {
-          title: title_input.value,
-          content: $('.post_summernote').summernote('code'),
-          tags: tags_input.value.split(" ")
-        }
-      };
-
-      console.log("CREATE ONE POST");
-
-      XHR.post(global.config.admin_path + '/posts.io', data, function (response) {
-        var res = JSON.parse(response);
-
-        if (res.err) {
-          console.log(res.err);
-        } else {
-          data.post.id = res.id;
-          var post = new Post(data.post);
-          post_list.insertBefore(post.element, post_list.firstChild);
-          new_post_button.style.display = "block";
-          post_editor.style.display = "none";
-
-          title_input.value = '';
-          $('.post_summernote').summernote("code", '');
-          tags_input.value = '';
-        }
-      });
-    });
-
-    var new_post_button = div.querySelector(".new_post_button");
-    new_post_button.addEventListener("click", function (e) {
-      new_post_button.style.display = "none";
-      post_editor.style.display = "block";
-    });
-  }
-
-  return _class;
-}();
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
-
-/***/ }),
-
-/***/ "./src/posts.ui/post.html":
-/*!********************************!*\
-  !*** ./src/posts.ui/post.html ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "\n<h3 class=\"post_title\"></h3>\n<button class=\"post_edit_btn\">/</button>\n<button class=\"post_del_btn\">X</button>\n<div class=\"post_content\"></div>\n";
-
-/***/ }),
-
-/***/ "./src/posts.ui/post.js":
-/*!******************************!*\
-  !*** ./src/posts.ui/post.js ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
-
-var html = __webpack_require__(/*! ./post.html */ "./src/posts.ui/post.html");
-var edit_html = __webpack_require__(/*! ./edit.html */ "./src/posts.ui/edit.html");
-
-module.exports = function () {
-  function _class(obj) {
-    _classCallCheck(this, _class);
-
-    console.log("POST", obj);
-    this.element = document.createElement('div');
-
-    this.display(obj);
-  }
-
-  _createClass(_class, [{
-    key: 'edit',
-    value: function edit(obj) {
-      var div = this.element;
-
-      div.innerHTML = edit_html;
-
-      var post_editor = div.querySelector(".editor");
-      var title_input = div.querySelector(".post_title_input");
-      title_input.value = obj.title;
-      var tags_input = div.querySelector(".post_tags_input");
-      tags_input.value = obj.tags;
-      var submit_input = div.querySelector(".post_submit_input"),
-          cancel_input = div.querySelector(".post_cancel_input"),
-          post_display_title = div.querySelector(".post_display_title"),
-          post_display = div.querySelector(".post_display");
-
-      var this_class = this;
-      cancel_input.addEventListener("click", function (e) {
-        this_class.display(obj);
-      });
-
-      title_input.addEventListener("input", function (e) {
-        post_display_title.innerHTML = title_input.value;
-      });
-
-      var sn = $('.cur_sn');
-      sn.removeClass('cur_sn');
-
-      sn.summernote({
-        minHeight: 300,
-        callbacks: {
-          onChange: function onChange(contents) {
-            post_display.innerHTML = contents;
-          }
-        },
-        fontSizes: ['8', '10', '12', '14', '16', '18', '20', '24', '36', '48', '64', '82', '150']
-        //        lang: "lt-LT"
-      });
-      sn.summernote("code", obj.content);
-
-      submit_input.addEventListener("click", function (e) {
-        var data = {
-          command: "edit",
-          post: {
-            id: obj.id,
-            title: title_input.value,
-            content: sn.summernote('code'),
-            tags: tags_input.value.split(" ")
-          }
-        };
-
-        console.log("edit post");
-        XHR.post(global.config.admin_path + '/posts.io', data, function (response) {
-          console.log("response", response);
-          if (response === "success") {
-            console.log("Post successfuly edited!");
-            obj.title = title_input.value;
-            obj.content = sn.summernote('code');
-            obj.tags = tags_input.value.split(" ");
-            this_class.make_first();
-
-            div.innerHTML = html;
-            this_class.display(obj);
-          }
-        });
-      });
-    }
-  }, {
-    key: 'make_first',
-    value: function make_first() {
-      var parent = this.element.parentNode;
-      parent.removeChild(this.element);
-      parent.insertBefore(this.element, parent.firstChild);
-    }
-  }, {
-    key: 'display',
-    value: function display(obj) {
-      this.element.innerHTML = html;
-      this.element.classList.add('post_element');
-
-      var title = this.element.querySelector('.post_title');
-      title.innerHTML = obj.title;
-      title.classList.add('post_display_title');
-
-      var edit_btn = this.element.querySelector('.post_edit_btn');
-
-      var this_class = this;
-      edit_btn.addEventListener("click", function (e) {
-        this_class.edit(obj);
-      });
-
-      var del_btn = this.element.querySelector('.post_del_btn');
-      del_btn.addEventListener("click", function (e) {
-        XHR.post(global.config.admin_path + '/posts.io', {
-          command: "delete", ids: [obj.id]
-        }, function (response) {
-          if (response == "success") {
-            this_class.element.parentNode.removeChild(this_class.element);
-          }
-        });
-      });
-
-      var content = this.element.querySelector('.post_content');
-
-      var content_str = obj.content;
-      var max_length = 1024;
-      if (content_str.length > max_length) {
-        content_str = content_str.substring(0, max_length) + '...';
-      }
-      content.innerHTML = content_str;
-      content.classList.add('post_display');
-    }
-  }]);
-
-  return _class;
-}();
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
-
-/***/ }),
-
-/***/ "./src/posts.ui/style.css":
-/*!********************************!*\
-  !*** ./src/posts.ui/style.css ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../node_modules/css-loader!./style.css */ "./node_modules/css-loader/index.js!./src/posts.ui/style.css");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
-/***/ "./src/style.css":
-/*!***********************!*\
-  !*** ./src/style.css ***!
-  \***********************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../node_modules/css-loader!./style.css */ "./node_modules/css-loader/index.js!./src/style.css");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
-/***/ "./src/templates.ui/body.html":
+/***/ "./src/edit/split.ui/index.js":
 /*!************************************!*\
-  !*** ./src/templates.ui/body.html ***!
+  !*** ./src/edit/split.ui/index.js ***!
   \************************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = "\n<div class=\"color_wrap\">\n  <h2>Templates</h2>\n</div>\n<div class=\"list_display\">\n</div>\n";
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+__webpack_require__(/*! ./theme.css */ "./src/edit/split.ui/theme.css");
+
+module.exports = function () {
+  function _class(dom, direction) {
+    _classCallCheck(this, _class);
+
+    this.element = document.createElement("div");
+    this.element.classList.add("split_ui");
+    dom.appendChild(this.element);
+
+    this.width = this.element.offsetWidth;
+    this.height = this.element.offsetHeight;
+
+    this.min_piece_width = 50;
+    this.min_piece_height = 50;
+
+    this.list = [];
+    this.direction = direction;
+  }
+
+  _createClass(_class, [{
+    key: "split",
+    value: function split(pieces) {
+      var _this = this;
+
+      if (this.direction == "horizontal") {
+        this.pieces = pieces;
+        var split_div_width = Math.floor(this.width / pieces);
+        for (var p = 0; p < pieces; p++) {
+          var piece_width = split_div_width;
+          if (p > 0) {
+            var startX;
+            var this_class;
+
+            (function () {
+              var resize_drag = function resize_drag(e) {
+                var deltaX = e.clientX - startX;
+                startX = e.clientX;
+
+                var target_left = resize_line.previousSibling;
+                var target_right = resize_line.nextSibling;
+                if (target_left.offsetWidth + deltaX > 0 && target_right.offsetWidth - deltaX > 0) {
+                  var left_width = target_left.offsetWidth + deltaX;
+                  var right_width_dec = 0;
+                  if (left_width < this_class.min_piece_width) {
+                    right_width_dec = this_class.min_piece_width - left_width;
+                    left_width = this_class.min_piece_width;
+                  }
+
+                  var right_width = target_right.offsetWidth - deltaX;
+                  var left_width_dec = 0;
+                  if (right_width < this_class.min_piece_width) {
+                    left_width_dec = this_class.min_piece_width - right_width;
+                    right_width = this_class.min_piece_width;
+                  }
+
+                  target_left.style.width = left_width - left_width_dec + "px";
+                  target_right.style.width = right_width - right_width_dec + "px";
+                } else {
+                  startX -= deltaX;
+                }
+              };
+
+              var resize_line = document.createElement("div");
+              resize_line.classList.add("split_ui_horizontal_line");
+              _this.element.appendChild(resize_line);
+              piece_width -= 3;
+
+              this_class = _this;
+
+
+              resize_line.addEventListener("mousedown", function (e) {
+                startX = e.clientX;
+                this_class.element.addEventListener('mousemove', resize_drag);
+              });
+
+              _this.element.addEventListener('mouseup', function (e) {
+                this_class.element.removeEventListener('mousemove', resize_drag);
+              });
+            })();
+          }
+          var split_div = document.createElement("div");
+          split_div.classList.add("split_ui_horizontal");
+          split_div.style.width = piece_width + "px";
+          this.element.appendChild(split_div);
+          this.list.push(split_div);
+        }
+      }
+    }
+  }, {
+    key: "auto_resize",
+    value: function auto_resize() {
+      var old_width = this.width;
+      this.width = this.element.offsetWidth;
+      var delta_width = this.width - old_width;
+      this.height = this.element.offsetHeight;
+
+      if (this.direction == "horizontal") {
+        var piece_delta_width = delta_width / this.pieces;
+        var next_delta = 0;
+        for (var p = 0; p < this.pieces; p++) {
+          var new_width;
+          if (piece_delta_width > 0) {
+            if (p == this.pieces - 1) {
+              new_width = this.list[p].offsetWidth + Math.ceil(piece_delta_width);
+            } else {
+              new_width = this.list[p].offsetWidth + Math.floor(piece_delta_width);
+            }
+          } else if (piece_delta_width < 0) {
+            if (p == this.pieces - 1) {
+              new_width = this.list[p].offsetWidth + Math.floor(piece_delta_width);
+            } else {
+              new_width = this.list[p].offsetWidth + Math.ceil(piece_delta_width);
+            }
+          } else {
+            new_width = this.list[p].offsetWidth;
+          }
+
+          this.list[p].style.width = new_width + "px";
+
+          if (new_width < this.min_piece_width) {
+            next_delta = this.min_piece_width - new_width;
+            new_width = this.min_piece_width;
+            this.list[p].style.width = new_width + "px";
+          } else {
+            this.list[p].style.width = new_width - next_delta + "px";
+            next_delta = 0;
+          }
+        }
+
+        if (next_delta > 0) {
+          for (var p = 0; p < this.pieces; p++) {
+            var new_width = this.list[p].offsetWidth - next_delta;
+
+            if (new_width < this.min_piece_width) {
+              next_delta = this.min_piece_width - new_width;
+              new_width = this.min_piece_width;
+              this.list[p].style.width = new_width + "px";
+            } else {
+              this.list[p].style.width = new_width + "px";
+              next_delta = 0;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }]);
+
+  return _class;
+}();
 
 /***/ }),
 
-/***/ "./src/templates.ui/index.js":
+/***/ "./src/edit/split.ui/theme.css":
+/*!*************************************!*\
+  !*** ./src/edit/split.ui/theme.css ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!./theme.css */ "./node_modules/css-loader/index.js!./src/edit/split.ui/theme.css");
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {}
+
+/***/ }),
+
+/***/ "./src/edit/tabs.ui/horz.css":
 /*!***********************************!*\
-  !*** ./src/templates.ui/index.js ***!
+  !*** ./src/edit/tabs.ui/horz.css ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!./horz.css */ "./node_modules/css-loader/index.js!./src/edit/tabs.ui/horz.css");
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {}
+
+/***/ }),
+
+/***/ "./src/edit/tabs.ui/index.js":
+/*!***********************************!*\
+  !*** ./src/edit/tabs.ui/index.js ***!
   \***********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -25763,371 +24707,82 @@ module.exports = "\n<div class=\"color_wrap\">\n  <h2>Templates</h2>\n</div>\n<d
 "use strict";
 
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
-var Template = __webpack_require__(/*! ./template.js */ "./src/templates.ui/template.js");
-
-var GridUI = __webpack_require__(/*! ../grid.ui/index.js */ "./src/grid.ui/index.js");
-
-__webpack_require__(/*! ./style.less */ "./src/templates.ui/style.less");
-var html = __webpack_require__(/*! ./body.html */ "./src/templates.ui/body.html");
-
-module.exports = function () {
-  function _class(div) {
-    _classCallCheck(this, _class);
-
-    div.classList.add('templates_ui');
-
-    var h2 = document.createElement("h2");
-    h2.innerHTML = "Templates";
-    div.appendChild(h2);
-
-    var grid_ui = new GridUI(6, window.innerWidth, 150);
-    div.appendChild(grid_ui.element);
-
-    window.addEventListener('resize', function () {
-      grid_ui.resize(window.innerWidth);
-    });
-
-    var this_class = this;
-    XHR.get('templates.io', {
-      command: "all"
-    }, function () {
-      var templates = JSON.parse(this.responseText);
-      for (var t = 0; t < templates.length; t++) {
-        var template = new Template(templates[t].file, grid_ui);
-        grid_ui.add(template.element);
-      }
-
-      var add_temp_btn = document.createElement("div");
-      add_temp_btn.classList.add("templates_ui_item");
-      add_temp_btn.classList.add("templates_ui_add");
-      add_temp_btn.addEventListener("click", new_template);
-      grid_ui.add(add_temp_btn);
-
-      var text = document.createElement("h3");
-      text.innerHTML = "++";
-      add_temp_btn.appendChild(text);
-
-      function new_template(e) {
-        var input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = "Name";
-        add_temp_btn.innerHTML = "";
-        add_temp_btn.appendChild(input);
-        input.focus();
-        input.addEventListener('keyup', function (e) {
-          if (e.keyCode == 13) {
-            var data = {
-              name: input.value
-            };
-
-            XHR.post('templates.io', {
-              command: "add",
-              name: data.name
-            }, function (response) {
-              var res = JSON.parse(response);
-              if (res.err) {
-                console.log(res.err);
-              } else {
-                var template = new Template(data.name, grid_ui);
-
-                grid_ui.remove(add_temp_btn);
-                grid_ui.add(template.element);
-                grid_ui.add(add_temp_btn);
-                input.focus();
-                input.value = '';
-              }
-            });
-          }
-        });
-        add_temp_btn.removeEventListener("click", new_template);
-      }
-    });
-  }
-
-  return _class;
-}();
-
-/***/ }),
-
-/***/ "./src/templates.ui/style.less":
-/*!*************************************!*\
-  !*** ./src/templates.ui/style.less ***!
-  \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/less-loader/dist/cjs.js!./style.less */ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/templates.ui/style.less");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
-/***/ "./src/templates.ui/template.html":
-/*!****************************************!*\
-  !*** ./src/templates.ui/template.html ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<table>\n  <tr>\n    <td class=\"page_name\" colspan=\"2\">\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <button class=\"edit_btn\">/</a>\n    </td>\n    <td>\n      <button class=\"del_btn\">X</a>\n    </td>\n  </tr>\n</table>\n";
-
-/***/ }),
-
-/***/ "./src/templates.ui/template.js":
-/*!**************************************!*\
-  !*** ./src/templates.ui/template.js ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
+__webpack_require__(/*! ./horz.css */ "./src/edit/tabs.ui/horz.css");
 
-var html = __webpack_require__(/*! ./template.html */ "./src/templates.ui/template.html");
+var Tab = __webpack_require__(/*! ./tab.js */ "./src/edit/tabs.ui/tab.js");
 
 module.exports = function () {
-  function _class(name, table) {
+  function _class() {
     _classCallCheck(this, _class);
 
     this.element = document.createElement('div');
-    this.element.innerHTML = html;
-    this.name = name;
+    this.element.classList.add('tabs_ui_container');
 
-    var max_length = 16;
-    if (this.name.length > max_length) {
-      this.name = this.name.substring(0, max_length) + '...';
-    }
+    this.menu = document.createElement('div');
+    this.menu.classList.add('tabs_ui_menu');
+    this.element.appendChild(this.menu);
 
-    this.display();
-    this.table = table;
+    this.display_div = document.createElement('div');
+    this.display_div.classList.add('tabs_ui_display');
+    this.display_div.style.height = "calc(100% - 21px)";
+    this.element.appendChild(this.display_div);
+
+    this.list = [];
   }
 
   _createClass(_class, [{
-    key: 'display',
-    value: function display() {
-
-      var page_element = this.element;
-      page_element.classList.add('templates_ui_item');
-
-      var this_class = this;
-
-      var link = page_element.querySelector('.page_name');
-
-      link.addEventListener('click', function (e) {
-        window.location.href = "t/" + this_class.name;
-      });
-
-      link.innerHTML = this.name;
-
-      var edit_btn = page_element.querySelector('.edit_btn');
-      edit_btn.addEventListener('click', function (e) {
-        window.location.href = "edit.html?template=" + this_class.name;
-      });
-      edit_btn.innerHTML = '/';
-
-      var this_class = this;
-
-      var del_button = page_element.querySelector('.del_btn');
-      del_button.addEventListener('click', function (e) {
-        var popup = document.createElement('div');
-        popup.classList.add("popup_ui");
-        document.body.appendChild(popup);
-
-        var close_btn = document.createElement("button");
-        close_btn.innerHTML = "X";
-        close_btn.addEventListener("click", function () {
-          document.body.removeChild(popup);
-        });
-        popup.appendChild(close_btn);
-
-        var message = document.createElement("p");
-        message.innerHTML = "Confirm DELETION of template `" + this_class.name + "` by entering its title";
-        popup.appendChild(message);
-
-        var submit = document.createElement("input");
-        submit.type = "submit";
-        popup.appendChild(submit);
-
-        var input = document.createElement("input");
-        input.type = "text";
-        popup.appendChild(input);
-        input.focus();
-
-        input.addEventListener('keyup', function (e) {
-          if (e.keyCode == 13) {
-            proceed();
-          }
-        });
-
-        var err_msg = document.createElement("span");
-        popup.appendChild(err_msg);
-
-        submit.addEventListener("click", function (e) {
-          proceed();
-        });
-
-        function proceed() {
-          if (input.value === this_class.name) {
-            XHR.post('templates.io', {
-              command: 'rm',
-              name: this_class.name
-            }, function (response) {
-              if (response == "success") {
-                this_class.table.remove(this_class.element);
-                document.body.removeChild(popup);
-              }
-            });
-          } else {
-            err_msg.innerHTML = "Incorrect!";
-          }
-        }
-      });
-      del_button.innerHTML = "X";
+    key: 'add',
+    value: function add(data) {
+      var tab = new Tab(data, this);
+      this.menu.appendChild(tab.element);
+      this.list.push(tab);
+      tab.display();
     }
-  }]);
-
-  return _class;
-}();
-
-/***/ }),
-
-/***/ "./src/user_accounts.ui/account.html":
-/*!*******************************************!*\
-  !*** ./src/user_accounts.ui/account.html ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "\n<td class=\"admin_accounts_ui_item_name\"></td>\n<td>\n  <input type=\"checkbox\" name=\"super\" disabled />\n</td>\n<td>\n  <input type=\"checkbox\" name=\"templates\" disabled />\n</td>\n<td>\n  <input type=\"checkbox\" name=\"pages\" disabled />\n</td>\n<td>\n  <input type=\"checkbox\" name=\"posts\" disabled />\n</td>\n<td>\n  <input type=\"checkbox\" name=\"gallery\" disabled />\n</td>\n<td>\n  <button class=\"admin_accounts_ui_item_edit\">/</button>\n  <button class=\"admin_accounts_ui_item_remove\">X</button>\n  <button class=\"admin_accounts_ui_item_save\" style=\"display: none;\">Save</button>\n</td>\n";
-
-/***/ }),
-
-/***/ "./src/user_accounts.ui/account.js":
-/*!*****************************************!*\
-  !*** ./src/user_accounts.ui/account.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
-
-var html = __webpack_require__(/*! ./account.html */ "./src/user_accounts.ui/account.html");
-
-module.exports = function () {
-  function _class(cfg) {
-    _classCallCheck(this, _class);
-
-    this.element = document.createElement("tr");
-    this.element.classList.add("admin_accounts_ui_item");
-    this.element.innerHTML = html;
-
-    this.email = cfg.email;
-
-    var name = this.element.querySelector(".admin_accounts_ui_item_name");
-    name.innerHTML = cfg.email;
-
-    var inputs = this.element.getElementsByTagName("input");
-
-    console.log("CFG", cfg);
-
-    var edit_btn = this.element.querySelector(".admin_accounts_ui_item_edit");
-    var rm_btn = this.element.querySelector(".admin_accounts_ui_item_remove");
-
-    if (cfg.creator) {
-      console.log("CFG CREATOR");
-      inputs[0].checked = true;
-      inputs[1].checked = true;
-      inputs[2].checked = true;
-      inputs[3].checked = true;
-      inputs[4].checked = true;
-
-      edit_btn.parentNode.removeChild(edit_btn);
-      rm_btn.parentNode.removeChild(rm_btn);
-    } else if (cfg.super) {
-      console.log("CFG SUPER");
-      inputs[0].checked = true;
-      inputs[1].checked = true;
-      inputs[2].checked = true;
-      inputs[3].checked = true;
-      inputs[4].checked = true;
-    } else {
-      inputs[0].checked = false;
-      if (cfg.rights) {
-        inputs[1].checked = cfg.rights.templates;
-        inputs[2].checked = cfg.rights.pages;
-        inputs[3].checked = cfg.rights.posts;
-        inputs[4].checked = cfg.rights.gallery;
-      } else {
-        inputs[1].checked = false;
-        inputs[2].checked = false;
-        inputs[3].checked = false;
-        inputs[4].checked = false;
-      }
-    }
-
-    var this_class = this;
-    rm_btn.addEventListener("click", function (e) {
-      console.log("REMOVE");
-      XHR.post('admin_accounts.io', {
-        command: "rm",
-        data: {
-          email: this_class.email
-        }
-      }, function (response) {
-        if (response === "success") {
-          this_class.destroy();
+  }, {
+    key: 'remove',
+    value: function remove(tab) {
+      this.menu.removeChild(tab.element);
+      this.list.splice(this.list.indexOf(tab), 1);
+      if (tab.element == this.displayed_tab) {
+        if (this.list.length > 0) {
+          this.display(this.list[this.list.length - 1]);
         } else {
-          console.log(response);
+          this.display_div.innerHTML = "";
         }
-      });
-    });
-    var edit_save = this.element.querySelector(".admin_accounts_ui_item_save");
-    edit_btn.addEventListener("click", function (e) {
-      edit_btn.style.display = "none";
-      rm_btn.style.display = "none";
-      edit_save.style.display = "inline-block";
-
-      for (var i = 0; i < inputs.length; i++) {
-        var input = inputs[i];
-        input.disabled = false;
       }
-    });
-  }
+    }
+  }, {
+    key: 'select',
+    value: function select(id) {
+      var result = false;
+      for (var t = 0; t < this.list.length; t++) {
+        if (this.list[t].id == id) {
+          result = this.list[t];
+          break;
+        }
+      }
+      return result;
+    }
+  }, {
+    key: 'display',
+    value: function display(tab) {
+      var this_class = this;
+      tab.cb(function () {
+        if (this_class.displayed_tab) {
+          this_class.displayed_tab.classList.remove("tabs_ui_selected");
+        }
+        this_class.displayed_tab = tab.element;
+        this_class.displayed_tab.classList.add("tabs_ui_selected");
 
-  _createClass(_class, [{
+        this_class.display_div.innerHTML = "";
+        return this_class.display_div;
+      }());
+    }
+  }, {
     key: 'destroy',
     value: function destroy() {
       this.element.parentNode.removeChild(this.element);
@@ -26139,151 +24794,1325 @@ module.exports = function () {
 
 /***/ }),
 
-/***/ "./src/user_accounts.ui/body.html":
-/*!****************************************!*\
-  !*** ./src/user_accounts.ui/body.html ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<h2>Administrator accounts</h2>\n\n<table class=\"admin_accounts_ui_list\">\n  <tr id=\"admin_accounts_ui_cells\">\n    <td class=\"admin_accounts_ui_item_name\">\n      Email\n    </td>\n    <td>\n      Super\n    </td>\n    <td>\n      Templates\n    </td>\n    <td>\n      Pages\n    </td>\n    <td>\n      Posts\n    </td>\n    <td>\n      Gallery\n    </td>\n    <td>\n      Options\n    </td>\n  </tr>\n  <tr id=\"admin_accounts_ui_new_item_input\" style=\"display: none;\">\n    <td class=\"admin_accounts_ui_item_name\">\n      <input type=\"text\" name=\"email\" placeholder=\"email address\" /><br />\n      <input type=\"password\" name=\"password\" placeholder=\"password\" />\n    </td>\n    <td>\n      <input type=\"checkbox\" name=\"super\" />\n    </td>\n    <td>\n      <input type=\"checkbox\" name=\"templates\" />\n    </td>\n    <td>\n      <input type=\"checkbox\" name=\"pages\" />\n    </td>\n    <td>\n      <input type=\"checkbox\" name=\"posts\" />\n    </td>\n    <td>\n      <input type=\"checkbox\" name=\"gallery\" />\n    </td>\n    <td>\n      <button name=\"submit\">Submit</button>\n      <button name=\"cancel\">X</button>\n    </td>\n  </tr>\n</table>\n<div class=\"admin_accounts_ui_item\" id=\"admin_accounts_ui_new_item\">\n  Add administrator account\n</div>\n";
-
-/***/ }),
-
-/***/ "./src/user_accounts.ui/index.js":
-/*!***************************************!*\
-  !*** ./src/user_accounts.ui/index.js ***!
-  \***************************************/
+/***/ "./src/edit/tabs.ui/tab.js":
+/*!*********************************!*\
+  !*** ./src/edit/tabs.ui/tab.js ***!
+  \*********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
-var Account = __webpack_require__(/*! ./account.js */ "./src/user_accounts.ui/account.js");
-
-__webpack_require__(/*! ./style.less */ "./src/user_accounts.ui/style.less");
-
-var html = __webpack_require__(/*! ./body.html */ "./src/user_accounts.ui/body.html");
-
 module.exports = function () {
-  function _class(div) {
+  function _class(data, tabs) {
     _classCallCheck(this, _class);
 
-    div.classList.add('admin_accounts_ui');
+    this.id = data.id;
+    this.cb = data.cb;
+    this.tabs = tabs;
 
-    div.innerHTML = html;
+    this.element = document.createElement('div');
+    this.element.classList.add("tabs_ui_menu_item");
 
-    var accounts_list = div.querySelector(".admin_accounts_ui_list");
+    var text = document.createElement('div');
+    text.innerHTML = data.text;
+    this.element.appendChild(text);
 
-    var new_account_form = div.querySelector("#admin_accounts_ui_new_item_input");
+    var this_class = this;
 
-    var new_acc_email_input = new_account_form.querySelector('input[name="email"]');
-    var new_acc_password_input = new_account_form.querySelector('input[name="password"]');
-
-    var new_acc_super_input = new_account_form.querySelector('input[name="super"]');
-    var new_acc_templates_input = new_account_form.querySelector('input[name="templates"]');
-    var new_acc_pages_input = new_account_form.querySelector('input[name="pages"]');
-    var new_acc_posts_input = new_account_form.querySelector('input[name="posts"]');
-    var new_acc_gallery_input = new_account_form.querySelector('input[name="gallery"]');
-
-    XHR.post('user_accounts.io', { command: "all" }, function (response) {
-      var accounts = JSON.parse(response);
-      for (var p = 0; p < accounts.length; p++) {
-        var account = new Account(accounts[p]);
-        new_account_form.parentNode.insertBefore(account.element, new_account_form);
-      }
+    text.addEventListener("click", function (e) {
+      this_class.display();
     });
 
-    var new_account_button = div.querySelector("#admin_accounts_ui_new_item");
+    var close = document.createElement('button');
+    close.innerHTML = "⨯";
+    this.element.appendChild(close);
 
-    new_account_button.addEventListener("click", function (e) {
-      new_account_button.style.display = "none";
-      new_account_form.style.display = "";
-
-      new_acc_email_input.value = "";
-      new_acc_password_input.value = "";
-
-      new_acc_templates_input.value = "";
-      new_acc_pages_input.value = "";
-      new_acc_posts_input.value = "";
-      new_acc_gallery_input.value = "";
-    });
-
-    var new_acc_submit = new_account_form.querySelector('button[name="submit"]');
-    new_acc_submit.addEventListener("click", function (e) {
-      var data = {
-        email: new_acc_email_input.value,
-        password: new_acc_password_input.value
-      };
-
-      if (new_acc_super_input.checked) {
-        data.super = true;
-      } else {
-        data.rights = {
-          templates: new_acc_templates_input.checked,
-          pages: new_acc_pages_input.checked,
-          posts: new_acc_posts_input.checked,
-          gallery: new_acc_gallery_input.checked
-        };
-      }
-
-      XHR.post('user_accounts.io', {
-        command: "add",
-        data: data
-      }, function (response) {
-        if (response === "success") {
-          var account = new Account(data);
-          new_account_form.parentNode.insertBefore(account.element, new_account_form);
-          new_account_button.style.display = "block";
-          new_account_form.style.display = "none";
-        } else {
-          console.log(response);
-        }
-      });
-    });
-
-    var new_acc_cancel = new_account_form.querySelector('button[name="cancel"]');
-    new_acc_cancel.addEventListener("click", function (e) {
-      new_account_button.style.display = "block";
-      new_account_form.style.display = "none";
+    close.addEventListener("click", function (e) {
+      this_class.tabs.remove(this_class);
     });
   }
+
+  _createClass(_class, [{
+    key: 'display',
+    value: function display() {
+      this.tabs.display(this);
+    }
+  }]);
 
   return _class;
 }();
 
 /***/ }),
 
-/***/ "./src/user_accounts.ui/style.less":
-/*!*****************************************!*\
-  !*** ./src/user_accounts.ui/style.less ***!
-  \*****************************************/
+/***/ "./src/edit/theme.css":
+/*!****************************!*\
+  !*** ./src/edit/theme.css ***!
+  \****************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
-var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/less-loader/dist/cjs.js!./style.less */ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/user_accounts.ui/style.less");
-
+// load the styles
+var content = __webpack_require__(/*! !../../node_modules/css-loader!./theme.css */ "./node_modules/css-loader/index.js!./src/edit/theme.css");
 if(typeof content === 'string') content = [[module.i, content, '']];
-
+// Prepare cssTransformation
 var transform;
-var insertInto;
-
-
 
 var options = {"hmr":true}
-
 options.transform = transform
-options.insertInto = undefined;
-
+// add the styles to the DOM
 var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
 if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {}
 
+/***/ }),
+
+/***/ "./src/edit/treefm.ui/contextmenu.html":
+/*!*********************************************!*\
+  !*** ./src/edit/treefm.ui/contextmenu.html ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div name=\"new_file\">New File</div>\n<div name=\"new_folder\">New Folder</div>\n<div name=\"upload\">Upload</div>\n<div name=\"rename\">Rename</div>\n<div name=\"delete\">Delete</div>\n";
+
+/***/ }),
+
+/***/ "./src/edit/treefm.ui/contextmenu.js":
+/*!*******************************************!*\
+  !*** ./src/edit/treefm.ui/contextmenu.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var html = __webpack_require__(/*! ./contextmenu.html */ "./src/edit/treefm.ui/contextmenu.html");
+
+module.exports = function () {
+  function _class() {
+    _classCallCheck(this, _class);
+
+    this.element = document.createElement('div');
+    this.element.classList.add("treefm_contexmenu");
+    document.body.appendChild(this.element);
+  }
+
+  _createClass(_class, [{
+    key: "display",
+    value: function display(x, y, callbacks) {
+      var _this = this;
+
+      console.log(callbacks);
+      this.element.innerHTML = html;
+
+      var _loop = function _loop(name) {
+        item = _this.element.querySelector('div[name="' + name + '"]');
+
+        if (!callbacks[name]) {
+          item.style.display = "none";
+        } else {
+          item.addEventListener("click", function (e) {
+            callbacks[name]();
+          });
+        }
+      };
+
+      for (var name in callbacks) {
+        var item;
+
+        _loop(name);
+      }
+
+      this.element.style.display = "block";
+      this.element.style.left = x + "px";
+      this.element.style.top = y + "px";
+    }
+  }, {
+    key: "hide",
+    value: function hide() {
+      this.element.style.display = "none";
+    }
+  }]);
+
+  return _class;
+}();
+
+/***/ }),
+
+/***/ "./src/edit/treefm.ui/dir.js":
+/*!***********************************!*\
+  !*** ./src/edit/treefm.ui/dir.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var File = __webpack_require__(/*! ./file.js */ "./src/edit/treefm.ui/file.js");
+
+var padding_left = 10;
+
+var Dir = module.exports = function () {
+  function _class(data, treefm) {
+    _classCallCheck(this, _class);
+
+    this.element = document.createElement('div');
+    this.path = data.rel_path;
+    this.name = data.name;
+    this.padding_index = data.padding_index;
+
+    var this_class = this;
+
+    var name_div = document.createElement("div");
+    name_div.classList.add("treefm_item");
+    name_div.innerHTML = "▹ " + data.name;
+    name_div.style.paddingLeft = this.padding_index * padding_left + padding_left + "px";
+
+    name_div.addEventListener("click", function (e) {
+      if (content_div.displayed) {
+        var str = name_div.innerHTML;
+        name_div.innerHTML = "▹ " + str.substring(2);
+        content_div.style.display = "none";
+        content_div.displayed = false;
+      } else {
+        var str = name_div.innerHTML;
+        name_div.innerHTML = "▿ " + str.substring(2);
+        content_div.style.display = "block";
+        content_div.displayed = true;
+      }
+    });
+
+    name_div.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+      var callbacks = {
+        new_file: function new_file() {
+          content_div.style.display = "block";
+          content_div.displayed = true;
+
+          var name_input = document.createElement("input");
+          name_input.type = "text";
+          name_input.placeholder = "new file name";
+          content_div.appendChild(name_input);
+          name_input.focus();
+          treefm.contextmenu.hide();
+          name_input.addEventListener('keyup', function (e) {
+            if (e.keyCode == 13) {
+              var file_path = this_class.path + "/" + name_input.value;
+              treefm.write_file(file_path, "", function () {
+                var new_file = new File({
+                  name: name_input.value,
+                  rel_path: this_class.path + "/" + name_input.value,
+                  padding_index: this_class.padding_index + 1,
+                  type: "txt"
+                }, treefm);
+                content_div.replaceChild(new_file.element, name_input);
+              });
+            }
+          });
+        },
+        new_folder: function new_folder() {
+          content_div.style.display = "block";
+          content_div.displayed = true;
+
+          var name_input = document.createElement("input");
+          name_input.type = "text";
+          name_input.placeholder = "new folder name";
+          content_div.appendChild(name_input);
+          name_input.focus();
+          treefm.contextmenu.hide();
+          name_input.addEventListener('keyup', function (e) {
+            if (e.keyCode == 13) {
+              var file_path = this_class.path + "/" + name_input.value;
+              treefm.mkdir(file_path, function () {
+                var new_file = new Dir({
+                  name: name_input.value,
+                  rel_path: this_class.path + "/" + name_input.value,
+                  type: "dir",
+                  padding_index: this_class.padding_index + 1,
+                  content: []
+                }, treefm);
+                content_div.replaceChild(new_file.element, name_input);
+              });
+            }
+          });
+        },
+        upload: function upload() {
+          treefm.contextmenu.hide();
+
+          var form = document.createElement('form');
+          form.enctype = "multipart/form-data";
+          this_class.element.appendChild(form);
+
+          var target_input = document.createElement("input");
+          target_input.type = "hidden";
+          target_input.name = "target";
+          target_input.value = treefm.target;
+          form.appendChild(target_input);
+
+          var path_input = document.createElement("input");
+          path_input.type = "hidden";
+          path_input.name = "path";
+          path_input.value = this_class.path;
+          form.appendChild(path_input);
+
+          var upload_input = document.createElement("input");
+          upload_input.type = "file";
+          upload_input.name = "filei";
+          upload_input.multiple = "multiple";
+          upload_input.style.display = "none";
+          form.appendChild(upload_input);
+
+          upload_input.click();
+          upload_input.addEventListener("change", function (e) {
+            var files = this.files;
+
+            var formData = new FormData(form);
+
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+              for (var _iterator = formData.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var _step$value = _slicedToArray(_step.value, 2),
+                    key = _step$value[0],
+                    value = _step$value[1];
+
+                console.log(key, value);
+              }
+            } catch (err) {
+              _didIteratorError = true;
+              _iteratorError = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                  _iterator.return();
+                }
+              } finally {
+                if (_didIteratorError) {
+                  throw _iteratorError;
+                }
+              }
+            }
+
+            treefm.upload_files(formData, function () {
+              for (var f = 0; f < files.length; f++) {
+                var new_file = new File({
+                  name: files[f].name,
+                  rel_path: this_class.path + "/" + files[f].name,
+                  padding_index: this_class.padding_index + 1,
+                  type: files[f].type
+                }, treefm);
+                content_div.appendChild(new_file.element);
+              }
+            });
+          }, false);
+        },
+        rename: function rename() {
+          treefm.contextmenu.hide();
+          var name_input = document.createElement("input");
+          name_input.type = "text";
+          name_input.value = this_class.name;
+          this_class.element.replaceChild(name_input, name_div);
+          name_input.focus();
+          name_input.addEventListener('keyup', function (e) {
+            if (e.keyCode == 13) {
+              var dir_arr = this_class.path.split('/');
+              dir_arr.pop();
+              var file_path = dir_arr.join('/') + "/" + name_input.value;
+              treefm.rename(this_class.path, file_path, function () {
+                name_div.innerHTML = name_input.value;
+                this_class.element.replaceChild(name_div, name_input);
+              });
+            }
+          });
+        },
+        delete: function _delete() {
+          treefm.contextmenu.hide();
+          treefm.rm_dir(this_class.path, function () {
+            this_class.element.parentNode.removeChild(this_class.element);
+          });
+        }
+      };
+      if (data.root) {
+        callbacks["rename"] = false;
+        callbacks["delete"] = false;
+      }
+      treefm.contextmenu.display(e.clientX, e.clientY, callbacks);
+
+      global.editor_window.element.addEventListener("click", hide_contextmenu);
+
+      function hide_contextmenu(e) {
+        treefm.contextmenu.hide();
+        global.editor_window.element.removeEventListener("click", hide_contextmenu);
+      }
+    });
+    this.element.appendChild(name_div);
+
+    var content_div = document.createElement("div");
+    content_div.displayed = false;
+    content_div.classList.add("treefm_dir_content");
+    for (var f = 0; f < data.content.length; f++) {
+      var child_file = data.content[f];
+      if (child_file.type == "dir") {
+        child_file.padding_index = this_class.padding_index + 1;
+        var child_dir = new Dir(child_file, treefm);
+        content_div.appendChild(child_dir.element);
+      } else if (child_file.type == "txt") {
+        child_file.padding_index = this_class.padding_index + 1;
+        var file = new File(child_file, treefm);
+        content_div.appendChild(file.element);
+      } else {
+        console.error("TreeFM: Unknown file type", child_file.type);
+      }
+    }
+
+    if (data.root) {
+      var str = name_div.innerHTML;
+      name_div.innerHTML = "▿ " + str.substring(2);
+      content_div.style.display = "block";
+      content_div.displayed = true;
+    }
+
+    this.element.appendChild(content_div);
+  }
+
+  return _class;
+}();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./src/edit/treefm.ui/file.js":
+/*!************************************!*\
+  !*** ./src/edit/treefm.ui/file.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var padding_left = 10;
+
+module.exports = function () {
+  function _class(data, treefm) {
+    _classCallCheck(this, _class);
+
+    this.path = data.rel_path;
+    this.name = data.name;
+    this.padding_index = data.padding_index;
+
+    this.element = document.createElement("div");
+    this.element.innerHTML = "⋄ " + data.name;
+    this.element.style.paddingLeft = this.padding_index * padding_left + padding_left + "px";
+    this.element.classList.add("treefm_item");
+    this.element.addEventListener("click", function (e) {
+      treefm.file_cb(data);
+    });
+
+    var this_class = this;
+    this.element.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+
+      var callbacks = {
+        new_file: false,
+        new_folder: false,
+        rename: function rename() {
+          treefm.contextmenu.hide();
+          var name_input = document.createElement("input");
+          name_input.type = "text";
+          name_input.value = this_class.name;
+          this_class.element.parentNode.replaceChild(name_input, this_class.element);
+          name_input.focus();
+          name_input.addEventListener('keyup', function (e) {
+            if (e.keyCode == 13) {
+              var dir_arr = this_class.path.split('/');
+              dir_arr.pop();
+              var file_path = dir_arr.join('/') + "/" + name_input.value;
+              treefm.rename(this_class.path, file_path, function () {
+                this_class.element.innerHTML = name_input.value;
+                name_input.parentNode.replaceChild(this_class.element, name_input);
+              });
+            }
+          });
+        },
+        delete: function _delete() {
+          treefm.contextmenu.hide();
+          treefm.rm_file(this_class.path, function () {
+            this_class.element.parentNode.removeChild(this_class.element);
+          });
+        }
+      };
+
+      treefm.contextmenu.display(e.clientX, e.clientY, callbacks);
+
+      global.editor_window.element.addEventListener("click", hide_contextmenu);
+
+      function hide_contextmenu(e) {
+        treefm.contextmenu.hide();
+        global.editor_window.element.removeEventListener("click", hide_contextmenu);
+      }
+    });
+  }
+
+  return _class;
+}();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./src/edit/treefm.ui/index.js":
+/*!*************************************!*\
+  !*** ./src/edit/treefm.ui/index.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var XHR = __webpack_require__(/*! ../../utils/xhr.js */ "./src/utils/xhr.js");
+var Dir = __webpack_require__(/*! ./dir.js */ "./src/edit/treefm.ui/dir.js");
+var ContextMenu = __webpack_require__(/*! ./contextmenu.js */ "./src/edit/treefm.ui/contextmenu.js");
+__webpack_require__(/*! ./style.css */ "./src/edit/treefm.ui/style.css");
+
+module.exports = function () {
+  function _class(cfg) {
+    _classCallCheck(this, _class);
+
+    this.element = document.createElement("div");
+    this.element.classList.add("treefm");
+    this.file_cb = cfg.file_cb;
+
+    this.target = cfg.target;
+    this.dir = cfg.dir;
+
+    this.contextmenu = new ContextMenu();
+
+    var this_class = this;
+
+    console.log("treefm.io read", cfg.target, cfg.dir);
+    XHR.get('treefm.io', {
+      target: cfg.target,
+      command: "read",
+      path: cfg.dir
+    }, function () {
+      var dir_tree = JSON.parse(this.responseText);
+      console.log("RESPONSE", dir_tree);
+      dir_tree.root = true;
+      dir_tree.padding_index = 0;
+      var root_dir = new Dir(dir_tree, this_class);
+      this_class.element.appendChild(root_dir.element);
+    });
+  }
+
+  _createClass(_class, [{
+    key: "read_file",
+    value: function read_file(file_path, cb) {
+      XHR.get('treefm.io', {
+        target: this.target,
+        command: "read",
+        path: file_path
+      }, function () {
+        var file_content = JSON.parse(this.responseText);
+        cb(file_content);
+      });
+    }
+  }, {
+    key: "write_file",
+    value: function write_file(file_path, content, cb) {
+      XHR.get('treefm.io', {
+        target: this.target,
+        command: "write",
+        path: file_path,
+        data: content
+      }, function () {
+        var response = JSON.parse(this.responseText);
+        if (response == "success") {
+          cb();
+        };
+      });
+    }
+  }, {
+    key: "upload_files",
+    value: function upload_files(formData, cb) {
+      XHR.post('treefm.io', {
+        formData: formData
+      }, function () {
+        var response = JSON.parse(this.responseText);
+        if (response == "success") {
+          cb();
+        };
+      });
+    }
+  }, {
+    key: "rm_file",
+    value: function rm_file(file_path, cb) {
+      XHR.get('treefm.io', {
+        target: this.target,
+        command: "rm",
+        path: file_path
+      }, function () {
+        var response = JSON.parse(this.responseText);
+        if (response == "success") {
+          cb();
+        };
+      });
+    }
+  }, {
+    key: "mkdir",
+    value: function mkdir(file_path, cb) {
+      XHR.get('treefm.io', {
+        target: this.target,
+        command: "mkdir",
+        path: file_path
+      }, function () {
+        var response = JSON.parse(this.responseText);
+        if (response == "success") {
+          cb();
+        };
+      });
+    }
+  }, {
+    key: "rm_dir",
+    value: function rm_dir(file_path, cb) {
+      XHR.get('treefm.io', {
+        target: this.target,
+        command: "rmdir",
+        path: file_path
+      }, function () {
+        var response = JSON.parse(this.responseText);
+        if (response == "success") {
+          cb();
+        };
+      });
+    }
+  }, {
+    key: "rename",
+    value: function rename(file_path, new_path, cb) {
+      XHR.get('treefm.io', {
+        target: this.target,
+        command: "rename",
+        path: file_path,
+        data: new_path
+      }, function () {
+        var response = JSON.parse(this.responseText);
+        if (response == "success") {
+          cb();
+        };
+      });
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.element.parentNode.removeChild(this.element);
+    }
+  }]);
+
+  return _class;
+}();
+
+/***/ }),
+
+/***/ "./src/edit/treefm.ui/style.css":
+/*!**************************************!*\
+  !*** ./src/edit/treefm.ui/style.css ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!./style.css */ "./node_modules/css-loader/index.js!./src/edit/treefm.ui/style.css");
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {}
+
+/***/ }),
+
+/***/ "./src/edit/window.ui/body.html":
+/*!**************************************!*\
+  !*** ./src/edit/window.ui/body.html ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<header class=\"window_mod_header\">\n  <div class=\"window_mod_titlebar\">New Window</div>\n  <div class=\"window_mod_actions\">\n    <button class=\"window_mod_hide\">-</button>\n    <button class=\"window_mod_min_max_imize\">+</button>\n  </div>\n</header>\n<div class=\"window_mod_content\">\n\n</div>\n\n<div class=\"window_mod_resize_controls\">\n  <div class=\"resizeN resize\"></div>\n  <div class=\"resizeNE resize\"></div>\n  <div class=\"resizeE resize\"></div>\n  <div class=\"resizeSE resize\"></div>\n  <div class=\"resizeS resize\"></div>\n  <div class=\"resizeSW resize\"></div>\n  <div class=\"resizeW resize\"></div>\n  <div class=\"resizeNW resize\"></div>\n</div>\n";
+
+/***/ }),
+
+/***/ "./src/edit/window.ui/index.js":
+/*!*************************************!*\
+  !*** ./src/edit/window.ui/index.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+__webpack_require__(/*! ./sheet.css */ "./src/edit/window.ui/sheet.css");
+var html = __webpack_require__(/*! ./src/edit/window.ui/body.html */ "./src/edit/window.ui/body.html");
+
+var min_width = 181;
+var min_height = 65;
+
+var init_width = 680;
+var init_height = 360;
+
+module.exports = function () {
+  function _class(cfg) {
+    _classCallCheck(this, _class);
+
+    this.element = document.createElement("div");
+    this.element.innerHTML = html;
+    this.element.style.minWidth = min_width + "px";
+    this.element.style.minHeight = min_height + "px";
+    this.element.style.width = init_width + "px";
+    this.element.style.height = init_height + "px";
+    this.element.classList.add('window_mod');
+    this.element.classList.add('container_rgb');
+    cfg.DOM.appendChild(this.element);
+
+    this.visible = true;
+    this.DOM = cfg.DOM;
+    this.resize_cb = cfg.resize_cb;
+
+    var this_class = this;
+
+    this.titlebar = this.element.querySelector('.window_mod_titlebar');
+    this.titlebar.innerHTML = cfg.title;
+    this.titlebar.addEventListener('mousedown', function (e) {
+      if (!this_class.maximized) {
+        window_mod_move(e);
+      }
+    });
+
+    var minimize = this.element.querySelector('.window_mod_hide');
+    minimize.addEventListener("click", function (e) {
+      this_class.hide();
+    });
+
+    var maximize = this.element.querySelector('.window_mod_min_max_imize');
+    maximize.addEventListener("click", function (e) {
+      if (this_class.maximized) {
+        this_class.minimize();
+      } else {
+        this_class.maximize();
+      }
+    });
+
+    this.content = this.element.querySelector('.window_mod_content');
+
+    this.resize_controls = this.element.querySelector('.window_mod_resize_controls');
+
+    this.element.N = this.element.querySelector('.resizeN');
+    this.element.NE = this.element.querySelector('.resizeNE');
+    this.element.E = this.element.querySelector('.resizeE');
+    this.element.SE = this.element.querySelector('.resizeSE');
+    this.element.S = this.element.querySelector('.resizeS');
+    this.element.SW = this.element.querySelector('.resizeSW');
+    this.element.W = this.element.querySelector('.resizeW');
+    this.element.NW = this.element.querySelector('.resizeNW');
+
+    this.mouse_div = document.createElement('div');
+    this.mouse_div.classList.add('mouse_div');
+
+    cfg.DOM.appendChild(this.mouse_div);
+
+    var fresh = true;
+    function window_mod_init(win) {
+      if (fresh) {
+        this_class.element = win;
+
+        fresh = false;
+      }
+    }
+
+    function div_up(next) {
+      var up_cb = function up_cb(e) {
+        this_class.mouse_div.style.display = "none";
+        next();
+        this_class.mouse_div.removeEventListener('mouseup', up_cb);
+      };
+
+      this_class.mouse_div.addEventListener('mouseup', up_cb);
+    }
+
+    function window_mod_move(event) {
+      var title = event.target;
+
+      this_class.element.startX = event.clientX - this_class.element.offsetLeft;
+      this_class.element.startY = event.clientY - this_class.element.offsetTop;
+      document.documentElement.addEventListener('mousemove', drag);
+      this_class.mouse_div.style.display = "block";
+      div_up(stopDrag);
+
+      function drag(e) {
+        var eClientX = e.clientX;
+        var eClientY = e.clientY;
+
+        var nX = eClientX - this_class.element.startX;
+        var nX2 = nX + this_class.element.offsetWidth;
+
+        if (nX < 0) nX = 0;
+        if (nX2 > window.innerWidth) {
+          nX = window.innerWidth - this_class.element.offsetWidth;
+        }
+
+        this_class.element.style.left = nX + 'px';
+
+        var nY = eClientY - this_class.element.startY;
+        var nY2 = nY + this_class.element.offsetHeight;
+
+        if (nY < 0) nY = 0;
+        if (nY2 > window.innerHeight) {
+          nY = window.innerHeight - this_class.element.offsetHeight;
+        }
+
+        this_class.element.style.top = nY + 'px';
+      }
+
+      function stopDrag(e) {
+        console.log('stop');
+        document.documentElement.removeEventListener('mousemove', drag);
+      }
+    }
+
+    // RESZ
+
+    var startX, startY, startWidth, startHeight, curTarget, curFollower;
+    var make = function make(target, directions, cb) {
+      if (directions == '*') {
+        makeN(target);
+        makeNE(target);
+        makeE(target);
+        makeSE(target);
+        makeS(target);
+        makeSW(target);
+        makeW(target);
+        makeNW(target);
+      } else if (Array.isArray(directions)) {
+        directions.forEach(function (d) {
+          switch (d) {
+            case 'N':
+              makeN(target);
+              break;
+            case 'NE':
+              makeNE(target);
+              break;
+            case 'E':
+              makeE(target);
+              break;
+            case 'SE':
+              makeSE(target);
+              break;
+            case 'S':
+              makeS(target);
+              break;
+            case 'SW':
+              makeSW(target);
+              break;
+            case 'W':
+              makeW(target);
+              break;
+            case 'NW':
+              makeNW(target);
+              break;
+            default:
+              console.log('cmResizable: Invalid direction: "' + d + '"');
+              console.log('NW N NE');
+              console.log('W  +  E');
+              console.log('SW S SE');
+          }
+        });
+      }
+
+      var screen_padding = 10;
+
+      //.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'
+      function makeN(target) {
+        var element = this_class.element.N;
+
+        element.addEventListener('mousedown', function (e) {
+          curTarget = target;
+          startY = target.offsetTop;
+          startHeight = target.offsetHeight;
+          document.documentElement.addEventListener('mousemove', dragN);
+          this_class.mouse_div.style.display = "block";
+          div_up(stopDragN);
+        });
+
+        function dragN(e) {
+          var eClientY = e.clientY;
+          if (eClientY < screen_padding) eClientY = 0;
+
+          var nHeight = startHeight + startY - eClientY;
+          if (nHeight > min_height) {
+            curTarget.style.top = startY + eClientY - startY + 'px';
+            curTarget.style.height = nHeight + 'px';
+            if (curFollower) {
+              curFollower.style.top = startY + eClientY - startY + 'px';
+              curFollower.style.height = startHeight + startY - eClientY + 'px';
+            }
+          }
+
+          cb();
+        }
+
+        function stopDragN(e) {
+          document.documentElement.removeEventListener('mousemove', dragN);
+          curFollower = 0;
+        }
+      }
+
+      //.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'
+      function makeNE(target) {
+        var element = this_class.element.NE;
+
+        element.addEventListener('mousedown', function (e) {
+          curTarget = target;
+          startY = target.offsetTop;
+          startX = target.offsetLeft + target.offsetWidth;
+          startHeight = target.offsetHeight;
+          startWidth = target.offsetWidth;
+          document.documentElement.addEventListener('mousemove', dragNE);
+          this_class.mouse_div.style.display = "block";
+          div_up(stopDragNE);
+        });
+
+        function dragNE(e) {
+          var eClientX = e.clientX;
+          if (eClientX < screen_padding) eClientX = 0;
+          if (eClientX > window.innerWidth - screen_padding) {
+            eClientX = window.innerWidth;
+          };
+          var eClientY = e.clientY;
+          if (eClientY < screen_padding) eClientY = 0;
+
+          var nHeight = startHeight + startY - eClientY;
+          if (nHeight > min_height) {
+            curTarget.style.top = startY + eClientY - startY + 'px';
+            curTarget.style.height = startHeight + startY - eClientY + 'px';
+            if (curFollower) {
+              curFollower.style.top = startY + eClientY - startY + 'px';
+              curFollower.style.height = startHeight + startY - eClientY + 'px';
+            }
+          }
+
+          curTarget.style.width = startWidth + eClientX - startX + 'px';
+          if (curFollower) {
+            curFollower.style.width = startWidth + eClientX - startX + 'px';
+          }
+
+          cb();
+        }
+
+        function stopDragNE(e) {
+          document.documentElement.removeEventListener('mousemove', dragNE);
+          curFollower = 0;
+        }
+      }
+
+      //.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'
+      function makeE(target) {
+        var element = this_class.element.E;
+
+        element.addEventListener('mousedown', function (e) {
+          curTarget = target;
+          startX = target.offsetLeft + target.offsetWidth;
+          startWidth = target.offsetWidth;
+          document.documentElement.addEventListener('mousemove', dragE);
+          this_class.mouse_div.style.display = "block";
+          div_up(stopDragE);
+        });
+
+        function dragE(e) {
+          var eClientX = e.clientX;
+          if (eClientX < screen_padding) eClientX = 0;
+          if (eClientX > window.innerWidth - screen_padding) {
+            eClientX = window.innerWidth;
+          };
+
+          curTarget.style.width = startWidth + eClientX - startX + 'px';
+          if (curFollower) {
+            curFollower.style.width = startWidth + eClientX - startX + 'px';
+          }
+          cb();
+        }
+
+        function stopDragE(e) {
+          document.documentElement.removeEventListener('mousemove', dragE);
+          curFollower = 0;
+        }
+      }
+
+      //.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'
+      function makeSE(target) {
+        var element = this_class.element.SE;
+
+        element.addEventListener('mousedown', function (e) {
+          curTarget = target;
+          startY = target.offsetTop + target.offsetHeight;
+          startX = target.offsetLeft + target.offsetWidth;
+          startHeight = target.offsetHeight;
+          startWidth = target.offsetWidth;
+          document.documentElement.addEventListener('mousemove', dragSE);
+          this_class.mouse_div.style.display = "block";
+          div_up(stopDragSE);
+        });
+
+        function dragSE(e) {
+          var eClientX = e.clientX;
+          if (eClientX < screen_padding) eClientX = 0;
+          if (eClientX > window.innerWidth - screen_padding) {
+            eClientX = window.innerWidth;
+          };
+          var eClientY = e.clientY;
+          if (eClientY < screen_padding) eClientY = 0;
+          if (eClientY > window.innerHeight - screen_padding) {
+            eClientY = window.innerHeight;
+          };
+
+          curTarget.style.height = startHeight + eClientY - startY + 'px';
+          curTarget.style.width = startWidth + eClientX - startX + 'px';
+          if (curFollower) {
+            curFollower.style.height = startHeight + eClientY - startY + 'px';
+            curFollower.style.width = startWidth + eClientX - startX + 'px';
+          }
+          cb();
+        }
+
+        function stopDragSE(e) {
+          document.documentElement.removeEventListener('mousemove', dragSE);
+          curFollower = 0;
+        }
+      }
+
+      //.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'
+      function makeS(target) {
+        var element = this_class.element.S;
+
+        element.addEventListener('mousedown', function (e) {
+          curTarget = target;
+          startY = target.offsetTop + target.offsetHeight;
+          startHeight = target.offsetHeight;
+          document.documentElement.addEventListener('mousemove', dragS);
+          this_class.mouse_div.style.display = "block";
+          div_up(stopDragS);
+        });
+
+        function dragS(e) {
+          var eClientY = e.clientY;
+          if (eClientY < screen_padding) eClientY = 0;
+          if (eClientY > window.innerHeight - screen_padding) {
+            eClientY = window.innerHeight;
+          };
+
+          curTarget.style.height = startHeight + eClientY - startY + 'px';
+          if (curFollower) {
+            curFollower.style.height = startHeight + eClientY - startY + 'px';
+          }
+
+          cb();
+        }
+
+        function stopDragS(e) {
+          document.documentElement.removeEventListener('mousemove', dragS);
+          curFollower = 0;
+        }
+      }
+
+      //.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'
+      function makeSW(target) {
+        var element = this_class.element.SW;
+
+        element.addEventListener('mousedown', function (e) {
+          curTarget = target;
+          startY = target.offsetTop + target.offsetHeight;
+          startX = target.offsetLeft;
+          startHeight = target.offsetHeight;
+          startWidth = target.offsetWidth;
+          document.documentElement.addEventListener('mousemove', dragSW);
+          this_class.mouse_div.style.display = "block";
+          div_up(stopDragSW);
+        });
+
+        function dragSW(e) {
+          var eClientX = e.clientX;
+          if (eClientX < screen_padding) eClientX = 0;
+          var eClientY = e.clientY;
+          if (eClientY < screen_padding) eClientY = 0;
+          if (eClientY > window.innerHeight - screen_padding) {
+            eClientY = window.innerHeight;
+          };
+
+          curTarget.style.height = startHeight + eClientY - startY + 'px';
+          if (curFollower) {
+            curFollower.style.height = startHeight + eClientY - startY + 'px';
+          }
+
+          var nWidth = startWidth + startX - eClientX;
+          if (nWidth > min_width) {
+            curTarget.style.width = startWidth + startX - eClientX + 'px';
+            curTarget.style.left = startX + eClientX - startX + 'px';
+            if (curFollower) {
+              curFollower.style.width = startWidth + startX - eClientX + 'px';
+              curFollower.style.left = startX + eClientX - startX + 'px';
+            }
+          }
+
+          cb();
+        }
+
+        function stopDragSW(e) {
+          document.documentElement.removeEventListener('mousemove', dragSW);
+          curFollower = 0;
+        }
+      }
+
+      //.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'
+      function makeW(target) {
+        var element = this_class.element.W;
+
+        element.addEventListener('mousedown', function (e) {
+          curTarget = target;
+          startX = target.offsetLeft;
+          startWidth = target.offsetWidth;
+          document.documentElement.addEventListener('mousemove', dragW);
+          this_class.mouse_div.style.display = "block";
+          div_up(stopDragW);
+        });
+
+        function dragW(e) {
+          var eClientX = e.clientX;
+          if (eClientX < screen_padding) eClientX = 0;
+
+          var nWidth = startWidth + startX - eClientX;
+          if (nWidth > min_width) {
+            curTarget.style.width = startWidth + startX - eClientX + 'px';
+            curTarget.style.left = startX + eClientX - startX + 'px';
+            if (curFollower) {
+              curFollower.style.width = startWidth + startX - eClientX + 'px';
+              curFollower.style.left = startX + eClientX - startX + 'px';
+            }
+          }
+          cb();
+        }
+
+        function stopDragW(e) {
+          document.documentElement.removeEventListener('mousemove', dragW);
+          curFollower = 0;
+        }
+      }
+
+      //.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'
+      function makeNW(target) {
+        var element = this_class.element.NW;
+
+        element.addEventListener('mousedown', function (e) {
+          curTarget = target;
+          startY = target.offsetTop;
+          startHeight = target.offsetHeight;
+          startX = target.offsetLeft;
+          startWidth = target.offsetWidth;
+          document.documentElement.addEventListener('mousemove', dragNW);
+          this_class.mouse_div.style.display = "block";
+          div_up(stopDragNW);
+        });
+
+        function dragNW(e) {
+          var eClientX = e.clientX;
+          if (eClientX < screen_padding) eClientX = 0;
+          var eClientY = e.clientY;
+          if (eClientY < screen_padding) eClientY = 0;
+
+          var nHeight = startHeight + startY - eClientY;
+          if (nHeight > min_height) {
+            curTarget.style.top = startY + eClientY - startY + 'px';
+            curTarget.style.height = startHeight + startY - eClientY + 'px';
+            if (curFollower) {
+              curFollower.style.top = startY + eClientY - startY + 'px';
+              curFollower.style.height = startHeight + startY - eClientY + 'px';
+            }
+          }
+
+          var nWidth = startWidth + startX - eClientX;
+          if (nWidth > min_width) {
+            curTarget.style.width = startWidth + startX - eClientX + 'px';
+            curTarget.style.left = startX + eClientX - startX + 'px';
+            if (curFollower) {
+              curFollower.style.width = startWidth + startX - eClientX + 'px';
+              curFollower.style.left = startX + eClientX - startX + 'px';
+            }
+          }
+
+          cb();
+        }
+
+        function stopDragNW(e) {
+          document.documentElement.removeEventListener('mousemove', dragNW);
+          curFollower = 0;
+        }
+      }
+    };
+
+    //+++ NodeList forEach hack.
+    var arrayMethods = Object.getOwnPropertyNames(Array.prototype);
+
+    arrayMethods.forEach(attachArrayMethodsToNodeList);
+
+    function attachArrayMethodsToNodeList(methodName) {
+      if (methodName !== 'length') {
+        NodeList.prototype[methodName] = Array.prototype[methodName];
+      }
+    };
+
+    //+++ isArray Check
+    if (!Array.isArray) {
+      Array.isArray = function (arg) {
+        return Object.prototype.toString.call(arg) === '[object Array]';
+      };
+    }
+
+    make(this_class.element, '*', cfg.resize_cb);
+  }
+
+  _createClass(_class, [{
+    key: "maximize",
+    value: function maximize() {
+      if (!this.maximized) {
+        this.mem_layout = {
+          width: this.element.offsetWidth,
+          height: this.element.offsetHeight,
+          top: this.element.offsetTop,
+          left: this.element.offsetLeft
+        };
+        console.log(this.mem_layout);
+
+        this.element.style.width = "auto";
+        this.element.style.height = "auto";
+        this.element.style.top = 0;
+        this.element.style.left = 0;
+        this.element.style.right = 0;
+        this.element.style.bottom = 0;
+
+        this.element.removeChild(this.resize_controls);
+
+        this.maximized = true;
+
+        this.resize_cb();
+      }
+    }
+  }, {
+    key: "minimize",
+    value: function minimize() {
+      if (this.maximized) {
+        console.log(this.mem_layout);
+        this.element.style.width = this.mem_layout.width + "px";
+        this.element.style.height = this.mem_layout.height + "px";
+        this.element.style.top = this.mem_layout.top + "px";
+        this.element.style.left = this.mem_layout.left + "px";
+        this.element.style.right = "auto";
+        this.element.style.bottom = "auto";
+
+        this.element.appendChild(this.resize_controls);
+
+        this.resize_controls.style.display = "auto";
+
+        this.maximized = false;
+
+        this.resize_cb();
+      }
+    }
+  }, {
+    key: "dipslay",
+    value: function dipslay() {
+      if (!this.visible) {
+        this.DOM.appendChild(this.element);
+        this.visible = true;
+      }
+    }
+  }, {
+    key: "hide",
+    value: function hide() {
+      if (this.visible) {
+        this.DOM.removeChild(this.element);
+        this.visible = false;
+      }
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.element.parentNode.removeChild(this.element);
+    }
+  }]);
+
+  return _class;
+}();
+
+/***/ }),
+
+/***/ "./src/edit/window.ui/sheet.css":
+/*!**************************************!*\
+  !*** ./src/edit/window.ui/sheet.css ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!./sheet.css */ "./node_modules/css-loader/index.js!./src/edit/window.ui/sheet.css");
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
 if(false) {}
 
 /***/ }),
@@ -26479,4 +26308,4 @@ module.exports = function () {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=edit.js.map

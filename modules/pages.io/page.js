@@ -10,7 +10,9 @@ const jsonlint = require("jsonlint");
 module.exports = class {
   constructor(cfg, app, pages) {
     this.full_path = cfg.full_path || path.resolve(cfg.dir_path, cfg.name);
-    this.http_path = cfg.custom_path || cfg.request_path || path.resolve(cfg.prefix, cfg.name);
+    this.http_path = cfg.custom_path || cfg.request_path || path.resolve(cfg.prefix, encodeURIComponent(cfg.name));
+
+    this.name = cfg.name;
 
 
     let index_path = this.index_path = path.resolve(this.full_path, "index.html");
@@ -32,11 +34,16 @@ module.exports = class {
     cfg.dir_path = cfg.dir_path || cfg.full_path;
 
     this.auth = cfg.auth;
+    this.user_auth = cfg.user_auth;
 
     this.auth_func = cfg.auth_func;
     if (this.context) {
       if (this.context.required_rights) {
         this.auth_func = this.auth.orize_gen(this.context.required_rights);
+      }
+
+      if (this.context.users_only) {
+        this.auth_func = this.user_auth.orize;
       }
     }
 
@@ -52,7 +59,8 @@ module.exports = class {
     }
 
     this.nunjucks_env = new nunjucks.Environment(new nunjucks.FileSystemLoader([
-      cfg.dir_path
+      cfg.dir_path,
+      global.cmb_config.globals_path
     ], {
       autoescape: true,
     //      watch: true,
@@ -61,20 +69,27 @@ module.exports = class {
 
     this.compiler = webpack({
         entry: {
-          'main': path.resolve(this.full_path, 'src/index.js'),
+          './main': path.resolve(this.full_path, 'src/index.js'),
         },
         output: {
           path: this.full_path,
           filename: '[name].js'
         },
+        mode: 'development',
+        resolveLoader: {
+          modules: [ 'cmbird/node_modules' ]
+        },
         module: {
             rules: [
               {
-                  test: /\.js$/,
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
                   loader: 'babel-loader',
-                  query: {
-                      presets: ['es2015']
+                  options: {
+                    presets: [require.resolve('babel-preset-es2017')]
                   }
+                }
               },
               {
                 test: /\.json$/,
@@ -121,7 +136,19 @@ module.exports = class {
 
     var this_class = this;
 
-
+    function obj_to_qstr(obj, prefix) {
+      var str = [],
+        p;
+      for (p in obj) {
+        if (obj.hasOwnProperty(p)) {
+          var k = prefix ? prefix + "[" + p + "]" : p,
+            v = obj[p];
+          str.push((v !== null && typeof v === "object") ?
+            serialize(v, k) : k + "=" + v);
+        }
+      }
+      return str.join("&");
+    }
 
     console.log("PAGE PATH", this.http_path);
     if (this.auth_func) {
@@ -131,6 +158,11 @@ module.exports = class {
         try {
           this_class.update();
           this_class.context = await this_class.compile_context(this_class.context);
+          this_class.context.sessions = [];
+
+          for (var sess_key in req.access_tokens) {
+            this_class.context.sessions.push(sess_key);
+          }
 
           if (this_class.context.accept_arguments) {
             this_class.context.args = req.query;
@@ -138,7 +170,11 @@ module.exports = class {
 
           const req_path = req.path;
           if (req_path.slice(-1) != "/") {
-            res.redirect(req_path+"/");
+            var repath = req_path+"/";
+            if (Object.keys(req.query).length != 0 && req.query.constructor === Object) {
+              repath += "?"+obj_to_qstr(req.query);
+            }
+            res.redirect(repath);
           } else {
             var result = await this_class.render_page(this_class.full_path);
             if (result.err) {
@@ -157,6 +193,11 @@ module.exports = class {
         try {
           this_class.update();
           this_class.context = await this_class.compile_context(this_class.context);
+          this_class.context.sessions = [];
+
+          for (var sess_key in req.access_tokens) {
+            this_class.context.sessions.push(sess_key);
+          }
 
           if (this_class.context.accept_arguments) {
             console.log("ACCEPT ARGUMENTS");
@@ -165,7 +206,11 @@ module.exports = class {
 
           const req_path = req.path;
           if (req_path.slice(-1) != "/") {
-            res.redirect(req_path+"/");
+            var repath = req_path+"/";
+            if (Object.keys(req.query).length != 0 && req.query.constructor === Object) {
+              repath += "?"+obj_to_qstr(req.query);
+            }
+            res.redirect(repath);
           } else {
             var result = await this_class.render_page(this_class.full_path);
       //      console.log("RESULT", result);
@@ -254,6 +299,8 @@ module.exports = class {
       this.context = {};
     }
 
+    this.context.page_name = this.name;
+
     if (fs.existsSync(this.global_context_path)) {
       try {
          var global_context = JSON.parse(fs.readFileSync(this.global_context_path, 'utf8'));
@@ -280,13 +327,12 @@ module.exports = class {
 
         for (var n = 0; n < names.length; n++) {
           for (var p = 0; p < page_list.length; p++) {
-            var url_encoded_name = encodeURIComponent(names[n]);
-            if (page_list[p].file == url_encoded_name) {
+            if (page_list[p].file == names[n]) {
               var path_prefix = this.path_prefix;
               while (path_prefix.slice(-1) === "/") {
                 path_prefix = path_prefix.slice(0, -1);
               }
-              var item = { name: names[n], path: path_prefix + "/" + url_encoded_name };
+              var item = { name: names[n], path: path_prefix + "/" + names[n] };
               if (this.custom_paths) {
                 this.custom_paths.forEach(function(cpath) {
                   const cpath_name = Object.keys(cpath)[0];
@@ -301,8 +347,6 @@ module.exports = class {
           }
         }
       }
-
-
       return context;
     } catch (e) {
       console.error(e.stack)

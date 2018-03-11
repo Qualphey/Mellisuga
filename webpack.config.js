@@ -7,29 +7,27 @@ module.exports = {
       aggregateTimeout: 300,
       poll: 1000
     },
+    mode: 'development',
     entry: {
-      './public/test/main': './test/index.js',
-      './dist/edit': './src/edit/index.js',
-      './dist/main': './src/index.js'
+      'edit': './src/edit/index.js',
+      'main': './src/index.js'
     },
     output: {
       filename: '[name].js'
     },
     module: {
-        loaders: [
-            {
-                test: /\.js$/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['es2015']
-                }
-            },
-            {
-              test: /\.json$/,
-              loader: 'json-loader'
-            }
-        ],
         rules: [
+          {
+              test: /\.js$/,
+              loader: 'babel-loader',
+              query: {
+                  presets: ['es2015']
+              }
+          },
+          {
+            test: /\.json$/,
+            loader: 'json-loader'
+          },
           {
             test: /\.css$/,
             use: [ 'style-loader', 'css-loader' ]

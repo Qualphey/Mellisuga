@@ -19,11 +19,14 @@ module.exports = class {
     return new module.exports(router, posts, auth, admin_auth);
   }
 
-  serve_dir(dir_full_path, request_path, admin) {
-    var auth = this.auth;
-    if (admin) {
+  serve_dir(dir_full_path, request_path, cfg) {
+    var auth = false;
+    if (cfg.auth === 'admin') {
       auth = this.admin_auth;
+    } else if (cfg.auth === 'user') {
+      auth = this.auth;;
     }
+    
     var npage = new Page({
       full_path: dir_full_path,
       request_path: request_path,

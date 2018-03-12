@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">cmbird/index.js | cmbird</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Node.js based, highly configurable content management system"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="cmbird"><meta property="twitter:description" content="Node.js based, highly configurable content management system"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/Qualphey/CMBird.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/cmbird/index.js~CMBird.html">CMBird</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">cmbird/index.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">&apos;use strict&apos;
+
+const fs = require(&apos;fs&apos;);
+const path = require(&apos;path&apos;);
+
+const bcrypt = require(&apos;bcryptjs&apos;);
+const crypto = require(&quot;crypto&quot;);
+
+const nunjucks = require(&apos;nunjucks&apos;);
+
+const jsonlint = require(&quot;jsonlint&quot;);
+
+const Router = require(&quot;./modules/router/router.js&quot;);
+
+const Auth = require(&quot;./modules/auth.io/index.js&quot;);
+
+const PagesIO = require(&quot;./modules/pages.io/index.js&quot;);
+const BuiltinIO = require(&quot;./modules/pages.io/builtin.js&quot;);
+const PostsIO = require(&quot;./modules/posts.io/index.js&quot;);
+const FMIO = require(&quot;./modules/treefm.io/fm.io.js&quot;);
+const GalleryIO = require(&quot;./modules/gallery.io/index.js&quot;);
+const AdminAccountsIO = require(&quot;./modules/admin_accounts.io/index.js&quot;);
+const UserAccountsIO = require(&quot;./modules/user_accounts.io/index.js&quot;);
+const ModuleManagerIO = require(&quot;./modules/module_manager.io/index.js&quot;);
+
+const Aura = require(&apos;pg-aura&apos;);
+
+/**
+ * The main class of this cms.
+ */
+module.exports = class CMBird {
+
+  /**
+   * constructor.
+   * @param {Object} cfg - configuration object
+   * @param {string} cfg.host - hostname i.e. `localhost`
+   * @param {integer} cfg.port - port i.e. `8080`
+   * @param {string} cfg.db_user - postgresql super user name i.e. `postgres`
+   * @param {string} cfg.db_pwd - postgresql super user password i.e. `postgres`
+   * @param {string} cfg.app_path - path to app top level directory i.e. `__dirname`
+   * @param {function(router: Router)} callback - this is function param.
+   */
+  constructor(cfg) {
+    const config_path = path.resolve(cfg.app_path, &apos;config.json&apos;);
+    var config = undefined;
+    if (fs.existsSync(config_path)) {
+      config = JSON.parse(fs.readFileSync(config_path, &apos;utf8&apos;));
+    } else {
+      config = {
+        setup: true,
+        admin_path: &quot;/cmb_admin&quot;
+      }
+    }
+    global.cmb_config = config;
+
+    config.app_path = cfg.app_path;
+    config.pages_path = path.resolve(cfg.app_path, &apos;pages&apos;);
+    config.templates_path = path.resolve(cfg.app_path, &apos;templates&apos;);
+    config.globals_path = path.resolve(cfg.app_path, &apos;globals&apos;);
+    config.host = cfg.host;
+    config.port = cfg.port;
+    config.db_super_user = cfg.db_user;
+    config.db_super_pwd = cfg.db_pwd;
+
+    var this_class = this;
+
+    this.nunjucks_env = new nunjucks.Environment(new nunjucks.FileSystemLoader([
+      config.pages_path,
+      config.templates_path
+    ], {
+      autoescape: true,
+//      watch: true,
+      noCache: true
+    }));
+
+    if (!fs.existsSync(config.globals_path)){
+      fs.mkdirSync(config.globals_path);
+    }
+
+    (async () =&gt; {
+      let cmbird = {};
+      const router = cmbird.router = await Router.init();
+
+
+
+      router.use(function(req, res, next) {
+//        console.log(&quot;REQUEST&quot;, req.path);
+
+        if (!req.path.startsWith(&quot;/setup&quot;) &amp;&amp; !req.path.startsWith(&quot;/initialise&quot;) &amp;&amp; config.setup) {
+          res.redirect(&quot;/setup&quot;);
+        } else {
+          next();
+        }
+      });
+
+      var builtin_pages = await BuiltinIO.init(
+        path.resolve(config.pages_path, &quot;.builtin&quot;), [
+          path.resolve(__dirname, &quot;builtin_pages/setup&quot;),
+          path.resolve(__dirname, &quot;builtin_pages/admin_auth&quot;),
+          path.resolve(__dirname, &quot;modules/auth.io/pages/signin&quot;),
+          path.resolve(__dirname, &quot;modules/auth.io/pages/signup&quot;)
+        ], router, null, null, [
+          config.pages_path
+        ]
+      );
+
+
+      if (!config.setup) {
+        initialise(config.db_name);
+      }
+
+      async function initialise(db_name) {
+        try {
+
+          var aura = cmbird.aura = await Aura.connect({
+            db_host: &quot;127.0.0.1&quot;,
+            db_super_usr: cfg.db_user,
+            db_super_pwd: cfg.db_pwd,
+            db_name: db_name
+          });
+
+          var posts = await PostsIO.init(router.app, aura, {
+            pages_path: config.pages_path
+          });
+
+
+          var io = router.io;
+          var admin = await Auth.init(router.app, aura, {
+            table_name: &quot;admin_accounts&quot;,
+            auth_paths: {
+              unauthorized: &quot;/admin_auth&quot;,
+              authenticated: config.admin_path
+            },
+            prefix: &apos;/cmb_admin&apos;,
+            rights: true
+          });
+
+          var auth = cmbird.auth = await Auth.init(router.app, aura, {
+            table_name: &quot;user_accounts&quot;,
+            auth_paths: {
+              unauthorized: &quot;/signin&quot;,
+              authenticated: &quot;/Paskyra&quot;
+            },
+            prefix: &apos;/users&apos;
+          });
+
+          var pages_io = cmbird.pages = await PagesIO.init(router, posts, auth, admin);
+
+          function authorize(req, res, next) {
+            admin.authorize(req, res, next);
+          }
+
+          router.use(
+            config.admin_path,
+            authorize,
+            Router.static(__dirname+&quot;/dist&quot;)
+          );
+
+          router.use(
+            &apos;/g&apos;,
+            Router.static(config.globals_path)
+          );
+
+          const res_dir_path = path.resolve(__dirname, &apos;dist/res&apos;);
+          router.use(&apos;/cmbird-res&apos;, Router.static(res_dir_path));
+
+          var fmio_templates = new FMIO({
+            router: router,
+            targets: {
+              templates: config.templates_path,
+              pages: config.pages_path,
+              globals: config.globals_path
+            }
+          });
+
+          var modules_path = path.resolve(config.app_path, &apos;cmbird_modules&apos;);
+          var module_manager_io = await ModuleManagerIO.init(modules_path, cmbird);
+
+          var admin_accounts_io = await AdminAccountsIO.init(router.app, admin.table);
+          var user_accounts_io = await UserAccountsIO.init(router.app, auth.table);
+
+          var gallery_path = path.resolve(config.app_path, &apos;gallery&apos;);
+          var gallery_io = await GalleryIO.init(gallery_path, config.admin_path, router.app);
+
+
+
+          return admin;
+        } catch (e) {
+          console.error(e);
+          return undefined;
+        }
+      };
+
+      router.post(&quot;/initialise&quot;, async function(req, res, next) {
+        try {
+          if (!config.setup) {
+            res.redirect(&apos;/&apos;);
+          } else {
+            var data = req.body;
+
+            if (!data.name) {
+              res.send(&quot;FAILED: name was not defined&quot;);
+            } else if (!data.email) {
+              res.send(&quot;FAILED: email address was not defined&quot;);
+            } else if (!data.pwd) {
+              res.send(&quot;FAILED: password was not defined&quot;);
+            } else if (!data.pwdr) {
+              res.send(&quot;FAILED: you did not repeat the password&quot;);
+            } else if (data.pwd !== data.pwdr) {
+              res.send(&quot;FAILED: passwords don&apos;t match&quot;);
+            } else {
+              console.log(&quot;DATA&quot;, data);
+              config.db_name = data.name.replace(/\s+/g, &apos;&apos;).toLowerCase();
+              config.db_pwd = crypto.randomBytes(20).toString(&apos;hex&apos;);
+              var admin = await initialise(config.db_name);
+
+              data.super = true;
+              data.creator = true;
+              var result = await admin.register(data);
+
+              if (result.err) {
+                res.send(result.err);
+              } else {
+                config.name = data.name;
+
+                config.setup = false;
+
+                var oConfig = {};
+                Object.assign(oConfig, config);
+                delete oConfig.pages_path;
+
+                fs.writeFile(config_path, JSON.stringify(oConfig, null, 4), &apos;utf8&apos;, function (err) {
+                  if (err) {
+                    res.send(&quot;Failed to write config file: &quot;+err);
+                    return false;
+                  } else {
+                    res.redirect(config.admin_path);
+                    return true;
+                  }
+                });
+              }
+            }
+          }
+        } catch (e) {
+          console.error(e.stack)
+        }
+      });
+
+    })().catch(e =&gt; console.error(e.stack));
+  }
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

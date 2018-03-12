@@ -5,7 +5,7 @@ const path = require('path');
 
 const Manager = require("./manager.js");
 
-module.exports = class extends Manager {
+module.exports = class Templates extends Manager {
   constructor(router, posts) {
     var pages_dir = global.cmb_config.templates_path;
 

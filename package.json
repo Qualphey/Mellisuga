@@ -1,6 +1,6 @@
 {
   "name": "cmbird",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Node.js based, highly configurable content management system",
   "main": "index.js",
   "repository": "https://github.com/Qualphey/CMBird.git",
@@ -14,6 +14,7 @@
     "codemirror": "^5.32.0",
     "cookie-parser": "^1.4.3",
     "css-loader": "*",
+    "esdoc-node": "^1.0.3",
     "express": "*",
     "fs-extra": "^5.0.0",
     "html-loader": "*",
@@ -31,5 +32,9 @@
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.10"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "esdoc": "^1.0.4",
+    "esdoc-standard-plugin": "^1.0.0",
+    "webpack-bundle-analyzer": "^2.11.1"
+  }
 }

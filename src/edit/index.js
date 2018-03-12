@@ -31,7 +31,7 @@ function editor_replaced(n_window) {
 var iframe = document.getElementById("cmb_page_display");
 var target;
 if (template) {
-  iframe.src = 't/'+target_name;
+  iframe.src = '/t/'+target_name;
   target = "templates";
 } else if (page) {
   iframe.src = '/'+target_name;

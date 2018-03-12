@@ -2,8 +2,6 @@ var config = global.config = {
   admin_path : "/cmb_admin"
 }
 
-
-
 require("./style.css");
 
 window.addEventListener("load", async function(e) {
@@ -62,7 +60,7 @@ window.addEventListener("load", async function(e) {
       view_selection(admin_accounts_div);
       AdminAccountsUI.refresh();
     })
-
+/*
     var user_accounts_div = document.createElement('div');
     user_accounts_div.button = document.getElementById('users_button');
     view_selection(user_accounts_div);
@@ -70,7 +68,7 @@ window.addEventListener("load", async function(e) {
       view_selection(user_accounts_div);
     })
     var UserAccountsUI = new (require('./user_accounts.ui/index.js'))(user_accounts_div);
-
+*/
     view_selection(pages_div);
 
 

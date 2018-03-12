@@ -22,7 +22,6 @@ module.exports = class {
 
     if (!cfg.name) {
       cfg.name = cfg.full_path.split('/').pop();
-      console.log("SET NAME", cfg.name);
     }
 
     this.path_prefix = cfg.prefix;
@@ -46,8 +45,6 @@ module.exports = class {
         this.auth_func = this.user_auth.orize;
       }
     }
-
-    console.log("SERVE", this.http_path);
 
     this.pages = pages;
     this.posts = pages.posts;
@@ -150,10 +147,7 @@ module.exports = class {
       return str.join("&");
     }
 
-    console.log("PAGE PATH", this.http_path);
     if (this.auth_func) {
-      console.log("AUTH FUNC", this.auth_func);
-      console.log("PATH", this.http_path);
       app.get(this.http_path, this.auth_func, async function(req, res) {
         try {
           this_class.update();
@@ -200,7 +194,6 @@ module.exports = class {
           }
 
           if (this_class.context.accept_arguments) {
-            console.log("ACCEPT ARGUMENTS");
             this_class.context.args = req.query;
           }
 

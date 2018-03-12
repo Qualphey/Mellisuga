@@ -3,7 +3,15 @@ const Templates = require("./templates.js");
 const Pages = require("./pages.js");
 const Page = require("./page.js");
 
-module.exports = class {
+/**
+ * this is MyClass.
+ */
+
+module.exports = class PagesIO {
+  /**
+   * creates a instance of MyClass.
+   * @param {number} value - initial value.
+   */
   constructor(router, posts, auth, admin_auth) {
     this.router = router;
     this.auth = auth;
@@ -26,7 +34,7 @@ module.exports = class {
     } else if (cfg.auth === 'user') {
       auth = this.auth;;
     }
-    
+
     var npage = new Page({
       full_path: dir_full_path,
       request_path: request_path,

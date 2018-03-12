@@ -13,8 +13,6 @@ module.exports = class {
 
     this.path = gallery_path;
 
-    console.log("HOSTING GALLERY");
-
     app.get("/gallery.ui", function(req, res) {
       var data = JSON.parse(req.query.data);
 

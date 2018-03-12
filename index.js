@@ -25,7 +25,21 @@ const ModuleManagerIO = require("./modules/module_manager.io/index.js");
 
 const Aura = require('pg-aura');
 
-module.exports = class {
+/**
+ * The main class of this cms.
+ */
+module.exports = class CMBird {
+
+  /**
+   * constructor.
+   * @param {Object} cfg - configuration object
+   * @param {string} cfg.host - hostname i.e. `localhost`
+   * @param {integer} cfg.port - port i.e. `8080`
+   * @param {string} cfg.db_user - postgresql super user name i.e. `postgres`
+   * @param {string} cfg.db_pwd - postgresql super user password i.e. `postgres`
+   * @param {string} cfg.app_path - path to app top level directory i.e. `__dirname`
+   * @param {function(router: Router)} callback - this is function param.
+   */
   constructor(cfg) {
     const config_path = path.resolve(cfg.app_path, 'config.json');
     var config = undefined;
@@ -50,15 +64,6 @@ module.exports = class {
 
     var this_class = this;
 
-    this.nunjucks_env = new nunjucks.Environment(new nunjucks.FileSystemLoader([
-      config.pages_path,
-      config.templates_path
-    ], {
-      autoescape: true,
-//      watch: true,
-      noCache: true
-    }));
-
     if (!fs.existsSync(config.globals_path)){
       fs.mkdirSync(config.globals_path);
     }
@@ -69,9 +74,8 @@ module.exports = class {
 
 
 
+//    redirect to setup page, if project is not initialized
       router.use(function(req, res, next) {
-//        console.log("REQUEST", req.path);
-
         if (!req.path.startsWith("/setup") && !req.path.startsWith("/initialise") && config.setup) {
           res.redirect("/setup");
         } else {
@@ -132,13 +136,9 @@ module.exports = class {
 
           var pages_io = cmbird.pages = await PagesIO.init(router, posts, auth, admin);
 
-          function authorize(req, res, next) {
-            admin.authorize(req, res, next);
-          }
-
           router.use(
             config.admin_path,
-            authorize,
+            admin.authorize,
             Router.static(__dirname+"/dist")
           );
 
@@ -148,123 +148,6 @@ module.exports = class {
           );
 
           const res_dir_path = path.resolve(__dirname, 'dist/res');
-          router.use('/cmbird-res', Router.static(res_dir_path));
-
-          async function handle_dynamic_page(target_path, resource_path, res) {
-            try {
-              if (fs.lstatSync(target_path+"/"+resource_path).isDirectory()) {
-                if (resource_path.slice(-1) != "/") {
-                  res.redirect(resource_path+"/");
-                } else {
-                  var index_html = target_path+"/"+resource_path+"/index.html";
-                  var context_json = target_path+"/"+resource_path+"/context.json";
-                  var global_context_json = config.globals_path+"/context.json";
-                  if (fs.existsSync(index_html)) {
-                    if (fs.existsSync(context_json) || fs.existsSync(global_context_json)) {
-                      var context, err = false;
-                      if (fs.existsSync(context_json)) {
-                        try {
-                          context = jsonlint.parse(fs.readFileSync(context_json, 'utf8'));
-                        } catch(e) {
-                          var tp_split = target_path.split('/')
-                          var prefix_path = tp_split[tp_split.length-1];
-                          err = e.message+"\n\nat ./"+prefix_path+"/"+resource_path+"context.json";
-                        }
-                      }
-                      if (fs.existsSync(global_context_json)) {
-                        try {
-                          var global_context = jsonlint.parse(fs.readFileSync(global_context_json, 'utf8'));
-                          context = Object.assign(global_context, context);
-                        } catch(e) {
-                          var tp_split = config.globals_path.split('/')
-                          var prefix_path = tp_split[tp_split.length-1];
-                          err = e.message+"\n\nat /"+prefix_path+"/context.json";
-                        }
-                      }
-                      context = await pages.compile_context(context);
-                      var rendered_html = this_class.nunjucks_env.render(index_html, context);
-                      if (err) {
-                        var style = "font-family: monospace;";
-                        var err = "<div style='"+style+"'>"+err.replace(/(?:\r\n|\r|\n)/g, '<br />')+"</div>";
-                        res.send(err);
-                      } else {
-                        res.send(rendered_html);
-                      }
-                    } else {
-                      res.send(index_html);
-                    }
-                  }
-                }
-              } else if (resource_path.endsWith('.html')) {
-                var index_html = target_path+"/"+resource_path;
-                var html_dir_path = index_html.substring(0, index_html.length-10);
-                var context_json = html_dir_path+"context.json";
-                var global_context_json = config.globals_path+"/context.json";
-
-                if (fs.existsSync(index_html)) {
-                  if (fs.existsSync(context_json) || fs.existsSync(global_context_json)) {
-                    var context, err = false;
-                    if (fs.existsSync(context_json)) {
-                      try {
-                        context = jsonlint.parse(fs.readFileSync(context_json, 'utf8'));
-                      } catch(e) {
-                        var tp_split = target_path.split('/')
-                        var prefix_path = tp_split[tp_split.length-1];
-                        err = e.message+"\n\nat ./"+prefix_path+"/"+resource_path+"context.json";
-                      }
-                    }
-                    if (fs.existsSync(global_context_json)) {
-                      try {
-                        var global_context = jsonlint.parse(fs.readFileSync(global_context_json, 'utf8'));
-                        context = Object.assign(global_context, context);
-                      } catch(e) {
-                        var tp_split = config.globals_path.split('/')
-                        var prefix_path = tp_split[tp_split.length-1];
-                        err = e.message+"\n\nat /"+prefix_path+"/context.json";
-                      }
-                    }
-                    context = await pages.compile_context(context);
-                    var rendered_html = this_class.nunjucks_env.render(index_html, context);
-                    if (err) {
-                      var style = "font-family: monospace;";
-                      var err = "<div style='"+style+"'>"+err.replace(/(?:\r\n|\r|\n)/g, '<br />')+"</div>";
-                      res.send(err);
-                    } else {
-                      res.send(rendered_html);
-                    }
-                  } else {
-                    res.send(index_html);
-                  }
-                }
-              } else {
-                res.sendFile(target_path+'/'+resource_path);
-              }
-            } catch (e) {
-              console.error(e.stack)
-            }
-          }
-          /*
-          router.get("/p/*", async function(req, res) {
-            try {
-              var resource_path = req.path.substring(3);
-
-              handle_dynamic_page(config.pages_path, resource_path, res)
-            } catch (e) {
-              console.error(e.stack)
-            }
-          });
-          */
-          router.get(config.admin_path+"/t/*", async function(req, res) {
-            try {
-              var resource_path = req.path.substring(
-                (config.admin_path+"/t/").length
-              );
-
-              handle_dynamic_page(config.templates_path, resource_path, res);
-            } catch (e) {
-              console.error(e.stack)
-            }
-          });
 
           var fmio_templates = new FMIO({
             router: router,

@@ -29,7 +29,7 @@ module.exports = class {
     var link = page_element.querySelector('.page_name');
 
     link.addEventListener('click', function(e) {
-      window.location.href = "t/"+this_class.name;
+      window.location.href = "/t/"+this_class.name;
     });
 
     link.innerHTML = this.name;

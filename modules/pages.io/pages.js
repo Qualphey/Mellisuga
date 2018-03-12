@@ -9,7 +9,7 @@ const page_blacklist = [
   ".builtin"
 ]
 
-module.exports = class extends Manager {
+module.exports = class Pages extends Manager {
   constructor(router, posts, auth) {
     var pages_dir = global.cmb_config.pages_path;
     var template_dir = global.cmb_config.templates_path;

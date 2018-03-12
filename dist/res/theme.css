@@ -20,6 +20,10 @@ header {
   font-size: 15px;
 }
 
+.navigation_button:disabled {
+  background-color: #1b2317;
+}
+
 .navigation_button:not(.selected_navigation_button):hover {
   background-color: #15230e;
   color: #DDD;

@@ -16305,25 +16305,6 @@ exports.push([module.i, ".templates_ui {\n  padding: 10px;\n  width: calc(100% -
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/user_accounts.ui/style.less":
-/*!**********************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/less-loader/dist/cjs.js!./src/user_accounts.ui/style.less ***!
-  \**********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".admin_accounts_ui {\n  padding: 10px;\n  width: calc(100% - 20px);\n  user-select: none;\n}\n#admin_accounts_ui_cells {\n  line-height: 28px;\n}\n#admin_accounts_ui_cells td {\n  text-align: center;\n  background-color: #222;\n}\n.admin_accounts_ui_item_name {\n  width: 20%;\n  text-align: left;\n  font-size: 14px;\n}\n#admin_accounts_ui_new_item {\n  width: 100%;\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n  background-color: #111;\n  color: #FFF;\n  cursor: pointer;\n  user-select: none;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
 /***/ "./node_modules/css-loader/index.js!./src/edit/codemirror.ui/noscroll.css":
 /*!***********************************************************************!*\
   !*** ./node_modules/css-loader!./src/edit/codemirror.ui/noscroll.css ***!
@@ -25077,15 +25058,15 @@ window.addEventListener("load", async function (e) {
       view_selection(admin_accounts_div);
       AdminAccountsUI.refresh();
     });
-
-    var user_accounts_div = document.createElement('div');
-    user_accounts_div.button = document.getElementById('users_button');
-    view_selection(user_accounts_div);
-    user_accounts_div.button.addEventListener('click', function (e) {
-      view_selection(user_accounts_div);
-    });
-    var UserAccountsUI = new (__webpack_require__(/*! ./user_accounts.ui/index.js */ "./src/user_accounts.ui/index.js"))(user_accounts_div);
-
+    /*
+        var user_accounts_div = document.createElement('div');
+        user_accounts_div.button = document.getElementById('users_button');
+        view_selection(user_accounts_div);
+        user_accounts_div.button.addEventListener('click', function(e) {
+          view_selection(user_accounts_div);
+        })
+        var UserAccountsUI = new (require('./user_accounts.ui/index.js'))(user_accounts_div);
+    */
     view_selection(pages_div);
   } catch (e) {
     console.error(e);
@@ -25940,7 +25921,7 @@ module.exports = function () {
       var link = page_element.querySelector('.page_name');
 
       link.addEventListener('click', function (e) {
-        window.location.href = "t/" + this_class.name;
+        window.location.href = "/t/" + this_class.name;
       });
 
       link.innerHTML = this.name;
@@ -26014,277 +25995,6 @@ module.exports = function () {
 
   return _class;
 }();
-
-/***/ }),
-
-/***/ "./src/user_accounts.ui/account.html":
-/*!*******************************************!*\
-  !*** ./src/user_accounts.ui/account.html ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "\n<td class=\"admin_accounts_ui_item_name\"></td>\n<td>\n  <input type=\"checkbox\" name=\"super\" disabled />\n</td>\n<td>\n  <input type=\"checkbox\" name=\"templates\" disabled />\n</td>\n<td>\n  <input type=\"checkbox\" name=\"pages\" disabled />\n</td>\n<td>\n  <input type=\"checkbox\" name=\"posts\" disabled />\n</td>\n<td>\n  <input type=\"checkbox\" name=\"gallery\" disabled />\n</td>\n<td>\n  <button class=\"admin_accounts_ui_item_edit\">/</button>\n  <button class=\"admin_accounts_ui_item_remove\">X</button>\n  <button class=\"admin_accounts_ui_item_save\" style=\"display: none;\">Save</button>\n</td>\n";
-
-/***/ }),
-
-/***/ "./src/user_accounts.ui/account.js":
-/*!*****************************************!*\
-  !*** ./src/user_accounts.ui/account.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
-
-var html = __webpack_require__(/*! ./account.html */ "./src/user_accounts.ui/account.html");
-
-module.exports = function () {
-  function _class(cfg) {
-    _classCallCheck(this, _class);
-
-    this.element = document.createElement("tr");
-    this.element.classList.add("admin_accounts_ui_item");
-    this.element.innerHTML = html;
-
-    this.email = cfg.email;
-
-    var name = this.element.querySelector(".admin_accounts_ui_item_name");
-    name.innerHTML = cfg.email;
-
-    var inputs = this.element.getElementsByTagName("input");
-
-    console.log("CFG", cfg);
-
-    var edit_btn = this.element.querySelector(".admin_accounts_ui_item_edit");
-    var rm_btn = this.element.querySelector(".admin_accounts_ui_item_remove");
-
-    if (cfg.creator) {
-      console.log("CFG CREATOR");
-      inputs[0].checked = true;
-      inputs[1].checked = true;
-      inputs[2].checked = true;
-      inputs[3].checked = true;
-      inputs[4].checked = true;
-
-      edit_btn.parentNode.removeChild(edit_btn);
-      rm_btn.parentNode.removeChild(rm_btn);
-    } else if (cfg.super) {
-      console.log("CFG SUPER");
-      inputs[0].checked = true;
-      inputs[1].checked = true;
-      inputs[2].checked = true;
-      inputs[3].checked = true;
-      inputs[4].checked = true;
-    } else {
-      inputs[0].checked = false;
-      if (cfg.rights) {
-        inputs[1].checked = cfg.rights.templates;
-        inputs[2].checked = cfg.rights.pages;
-        inputs[3].checked = cfg.rights.posts;
-        inputs[4].checked = cfg.rights.gallery;
-      } else {
-        inputs[1].checked = false;
-        inputs[2].checked = false;
-        inputs[3].checked = false;
-        inputs[4].checked = false;
-      }
-    }
-
-    var this_class = this;
-    rm_btn.addEventListener("click", function (e) {
-      console.log("REMOVE");
-      XHR.post('admin_accounts.io', {
-        command: "rm",
-        data: {
-          email: this_class.email
-        }
-      }, function (response) {
-        if (response === "success") {
-          this_class.destroy();
-        } else {
-          console.log(response);
-        }
-      });
-    });
-    var edit_save = this.element.querySelector(".admin_accounts_ui_item_save");
-    edit_btn.addEventListener("click", function (e) {
-      edit_btn.style.display = "none";
-      rm_btn.style.display = "none";
-      edit_save.style.display = "inline-block";
-
-      for (var i = 0; i < inputs.length; i++) {
-        var input = inputs[i];
-        input.disabled = false;
-      }
-    });
-  }
-
-  _createClass(_class, [{
-    key: 'destroy',
-    value: function destroy() {
-      this.element.parentNode.removeChild(this.element);
-    }
-  }]);
-
-  return _class;
-}();
-
-/***/ }),
-
-/***/ "./src/user_accounts.ui/body.html":
-/*!****************************************!*\
-  !*** ./src/user_accounts.ui/body.html ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<h2>Administrator accounts</h2>\n\n<table class=\"admin_accounts_ui_list\">\n  <tr id=\"admin_accounts_ui_cells\">\n    <td class=\"admin_accounts_ui_item_name\">\n      Email\n    </td>\n    <td>\n      Super\n    </td>\n    <td>\n      Templates\n    </td>\n    <td>\n      Pages\n    </td>\n    <td>\n      Posts\n    </td>\n    <td>\n      Gallery\n    </td>\n    <td>\n      Options\n    </td>\n  </tr>\n  <tr id=\"admin_accounts_ui_new_item_input\" style=\"display: none;\">\n    <td class=\"admin_accounts_ui_item_name\">\n      <input type=\"text\" name=\"email\" placeholder=\"email address\" /><br />\n      <input type=\"password\" name=\"password\" placeholder=\"password\" />\n    </td>\n    <td>\n      <input type=\"checkbox\" name=\"super\" />\n    </td>\n    <td>\n      <input type=\"checkbox\" name=\"templates\" />\n    </td>\n    <td>\n      <input type=\"checkbox\" name=\"pages\" />\n    </td>\n    <td>\n      <input type=\"checkbox\" name=\"posts\" />\n    </td>\n    <td>\n      <input type=\"checkbox\" name=\"gallery\" />\n    </td>\n    <td>\n      <button name=\"submit\">Submit</button>\n      <button name=\"cancel\">X</button>\n    </td>\n  </tr>\n</table>\n<div class=\"admin_accounts_ui_item\" id=\"admin_accounts_ui_new_item\">\n  Add administrator account\n</div>\n";
-
-/***/ }),
-
-/***/ "./src/user_accounts.ui/index.js":
-/*!***************************************!*\
-  !*** ./src/user_accounts.ui/index.js ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
-var Account = __webpack_require__(/*! ./account.js */ "./src/user_accounts.ui/account.js");
-
-__webpack_require__(/*! ./style.less */ "./src/user_accounts.ui/style.less");
-
-var html = __webpack_require__(/*! ./body.html */ "./src/user_accounts.ui/body.html");
-
-module.exports = function () {
-  function _class(div) {
-    _classCallCheck(this, _class);
-
-    div.classList.add('admin_accounts_ui');
-
-    div.innerHTML = html;
-
-    var accounts_list = div.querySelector(".admin_accounts_ui_list");
-
-    var new_account_form = div.querySelector("#admin_accounts_ui_new_item_input");
-
-    var new_acc_email_input = new_account_form.querySelector('input[name="email"]');
-    var new_acc_password_input = new_account_form.querySelector('input[name="password"]');
-
-    var new_acc_super_input = new_account_form.querySelector('input[name="super"]');
-    var new_acc_templates_input = new_account_form.querySelector('input[name="templates"]');
-    var new_acc_pages_input = new_account_form.querySelector('input[name="pages"]');
-    var new_acc_posts_input = new_account_form.querySelector('input[name="posts"]');
-    var new_acc_gallery_input = new_account_form.querySelector('input[name="gallery"]');
-
-    XHR.post('user_accounts.io', { command: "all" }, function (response) {
-      var accounts = JSON.parse(response);
-      for (var p = 0; p < accounts.length; p++) {
-        var account = new Account(accounts[p]);
-        new_account_form.parentNode.insertBefore(account.element, new_account_form);
-      }
-    });
-
-    var new_account_button = div.querySelector("#admin_accounts_ui_new_item");
-
-    new_account_button.addEventListener("click", function (e) {
-      new_account_button.style.display = "none";
-      new_account_form.style.display = "";
-
-      new_acc_email_input.value = "";
-      new_acc_password_input.value = "";
-
-      new_acc_templates_input.value = "";
-      new_acc_pages_input.value = "";
-      new_acc_posts_input.value = "";
-      new_acc_gallery_input.value = "";
-    });
-
-    var new_acc_submit = new_account_form.querySelector('button[name="submit"]');
-    new_acc_submit.addEventListener("click", function (e) {
-      var data = {
-        email: new_acc_email_input.value,
-        password: new_acc_password_input.value
-      };
-
-      if (new_acc_super_input.checked) {
-        data.super = true;
-      } else {
-        data.rights = {
-          templates: new_acc_templates_input.checked,
-          pages: new_acc_pages_input.checked,
-          posts: new_acc_posts_input.checked,
-          gallery: new_acc_gallery_input.checked
-        };
-      }
-
-      XHR.post('user_accounts.io', {
-        command: "add",
-        data: data
-      }, function (response) {
-        if (response === "success") {
-          var account = new Account(data);
-          new_account_form.parentNode.insertBefore(account.element, new_account_form);
-          new_account_button.style.display = "block";
-          new_account_form.style.display = "none";
-        } else {
-          console.log(response);
-        }
-      });
-    });
-
-    var new_acc_cancel = new_account_form.querySelector('button[name="cancel"]');
-    new_acc_cancel.addEventListener("click", function (e) {
-      new_account_button.style.display = "block";
-      new_account_form.style.display = "none";
-    });
-  }
-
-  return _class;
-}();
-
-/***/ }),
-
-/***/ "./src/user_accounts.ui/style.less":
-/*!*****************************************!*\
-  !*** ./src/user_accounts.ui/style.less ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/less-loader/dist/cjs.js!./style.less */ "./node_modules/css-loader/index.js!./node_modules/less-loader/dist/cjs.js!./src/user_accounts.ui/style.less");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
 
 /***/ }),
 

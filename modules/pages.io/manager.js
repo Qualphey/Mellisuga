@@ -26,7 +26,6 @@ var default_js = fs.readFileSync(__dirname+'/default_templates/main.js', 'utf8')
 
 module.exports = class {
   constructor(router, dir, cfg, other_paths) {
-    console.log("PAGE MANAGER");
     let app = this.app = router.app;
     this.dir = dir;
     if (!fs.existsSync(this.dir)){
@@ -35,13 +34,10 @@ module.exports = class {
 
     this.dirs = other_paths;
 
-        console.log("OTHERS", other_paths);
-
     this.auth = cfg.auth;
 
 
     this.path_prefix = cfg.path_prefix;
-    console.log("PATH PREFIX", this.path_prefix);
     while (this.path_prefix.slice(-1) === "/" && this.path_prefix.length > 1) {
       this.path_prefix = this.path_prefix.slice(0, -1);
     }
@@ -61,7 +57,6 @@ module.exports = class {
       this.config = JSON.parse(fs.readFileSync(config_path, 'utf8'));
     }
 
-      console.log("permisive", this.config.permissions);
     if (this.config.permissions) {
       var user_only = this.config.permissions.user_only;
       this.local().forEach(function(page) {
@@ -82,7 +77,6 @@ module.exports = class {
             permisive = true;
           }
         });
-        console.log("PAGE", page);
         if (permisive) {
           let npage = new Page({
             dir_path: this_class.dir,
@@ -119,7 +113,6 @@ module.exports = class {
           });
         }
 
-        console.log("PAGE", page);
         let npage = new Page({
           dir_path: this_class.dir,
           prefix: this_class.path_prefix,

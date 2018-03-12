@@ -8,7 +8,6 @@ const Manager = require("./manager.js");
 
 module.exports = class extends Manager {
   constructor(builtin_path, router, posts, auth, other_paths) {
-    console.log("BO", other_paths);
     var template_dir = global.cmb_config.templates_path;
 
     super(router, builtin_path, {

@@ -53,7 +53,6 @@ module.exports = class {
     var this_class = this;
 
     this.terminate = function(ireq, ires, inext) {
-      console.log("TERMINATE SESSION");
       function forward(that, req, res, next) {
         var access_token = req.cookies[this_class.name+'_access_token']
         if (access_token) {
@@ -199,8 +198,6 @@ module.exports = class {
           '*', "(email = $1)", [data.email]
         );
 
-        console.log('AUTH FOUND', found);
-
         if (0 < found.length) {
           found = JSON.parse(JSON.stringify(found[0]));
 
@@ -222,8 +219,6 @@ module.exports = class {
               maxAge: 1000 * 60 * 15
             });
 
-            console.log("AUTH SUCCESSS");
-            console.log("TOKEN", token);
             if (this.forward_token) {
               res.send(nunjucks_env.render('forward_token.html', {
                 target: this.paths.authenticated,
@@ -270,7 +265,6 @@ module.exports = class {
         if (cookies[this.name+'_access_token']) {
           req.access_token = cookies[this.name+'_access_token'];
         } else {
-          console.log("redirect_path", redirect_path);
           res.redirect(redirect_path);
         }
 
@@ -287,7 +281,6 @@ module.exports = class {
             try {
               var decoded = jwt.verify(req.access_token, found.jwt_secret);
               if (required_rights) {
-                console.log("REQ");
                 var access_granted = true;
                 for (var r = 0; r < required_rights.length; r++) {
                   var required_right = required_rights[r];
@@ -298,22 +291,18 @@ module.exports = class {
                   }
                 }
 
-                console.log("access_granted", access_granted);
-
                 if (access_granted) {
                   next();
                 } else {
                   res.redirect(redirect_path);
                 }
               } else {
-                console.log("NEXT");
                 next();
               }
             } catch (e) {
               console.log(e);
               res.redirect(redirect_path);
             }
-            console.log("SUCCESS");
           } else {
             this.terminate(req, res, next);
           }

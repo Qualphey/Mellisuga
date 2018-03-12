@@ -59,7 +59,6 @@ module.exports = class {
           case 'create':
             if (data.post) {
               var json = await this_class.create(data.post);
-              console.log("RESPONSE", json);
               res.send(json);
             }
             break;
@@ -70,7 +69,6 @@ module.exports = class {
             }
             break;
           case 'delete':
-            console.log("DELETE");
             if (data.ids) {
               this_class.delete(data.ids);
               res.send("success");
@@ -105,7 +103,6 @@ module.exports = class {
 // -- GET
   async all() {
     try {
-      console.log("ALL POST");
       var posts = await this.table.select('*');
       return posts;
     } catch (e) {
@@ -116,11 +113,9 @@ module.exports = class {
 
   async select_by_tags(tags) {
     try {
-    console.log("TAG POST", tags);
       var found = await this.table.select(
         "*", "tags && $1", [tags]
       );
-      console.log("FOUND", found);
       return found;
     } catch (e) {
       console.log(e);
@@ -130,7 +125,6 @@ module.exports = class {
 
   async select_by_title(title) {
     try {
-    console.log("TITLE POST");
       return await this.table.select(
         '*', "title = $1", [title]
       );
@@ -143,11 +137,7 @@ module.exports = class {
 // -- POST
   async create(data) {
     try {
-      // TODO : possibly need -> try {} catch ()
-      console.log("CREATING POST");
       var found = await this.select_by_title(data.title);
-
-      console.log("FOUND", found);
 
       var json;
       if (found.length == 0) {
@@ -172,7 +162,6 @@ module.exports = class {
     try {
       var id = data.id;
       delete data.id;
-      console.log("EDIT POST", data);
       await this.table.update(data, "id = $1", [id]);
       return "success";
     } catch (e) {
@@ -192,7 +181,6 @@ module.exports = class {
             where += 'id = $'+(i+1);
           }
         }
-        console.log(where);
         await this.table.delete(where, ids);
         return true;
       } else {

@@ -136,7 +136,7 @@ module.exports = class {
           res.send(JSON.stringify(list));
           break;
         default:
-          console.log("PagesIO: unknown command", data.command);
+          console.error("PagesIO: unknown command", data.command);
       }
     });
 
@@ -226,11 +226,9 @@ module.exports = class {
         case 'webpack':
           if (data.name) {
             var page = this_class.select_by_name(data.name);
-            console.log("WEBPACK");
             page.watching = page.compiler.run((err, stats) => {
               if (err) console.error(err);
               // Print watch/build result here...
-              console.log(stats);
               res.send(true);
             });
           } else {
@@ -253,7 +251,6 @@ module.exports = class {
                     if (stats.hasErrors()) {
                       client.socket.emit("webpack-err", stats.toString());
                     } else {
-                      console.log("SEND WEBPACK REFRESH STATE");
                       client.socket.emit("webpack-done", stats.toString());
                     }
                   }
@@ -262,7 +259,6 @@ module.exports = class {
               res.send(true);
             } else if (page.watching) {
               page.watching.close(() => {
-                console.log("Watching Ended.");
                 page.watching = false;
                 res.send(false);
               });
@@ -272,7 +268,7 @@ module.exports = class {
           }
           break;
         default:
-          console.log("PagesIO: unknown command", data.command);
+          console.error("PagesIO: unknown command", data.command);
       }
     });
   }

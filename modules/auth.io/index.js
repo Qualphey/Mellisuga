@@ -48,6 +48,9 @@ module.exports = class {
     this.paths = cfg.auth_paths;
     this.forward_token = cfg.forward_token;
 
+    this.required_custom_columns = cfg.required_custom_columns;
+    this.unique_custom_columns = cfg.unique_custom_columns;
+
     this.rights = cfg.rights;
 
     var this_class = this;
@@ -92,15 +95,22 @@ module.exports = class {
       try {
         var data = req.body;
 
+        if (data.data) {
+          if (typeof data.data === 'string' || data.data instanceof String) {
+            data = JSON.parse(data.data);
+          }
+        }
+
         switch (data.command) {
           case 'register':
-            const err = await this_class.register(data);
+            const result = await this_class.register(data);
 
-            if (err) {
-              res.send(err);
+            if (result.err) {
+              res.send(result);
             } else {
-              console.log("REDIRECT", this_class.paths.unauthorized);
-              res.redirect(this_class.paths.unauthorized);
+              res.send(result);
+            //  console.log("REDIRECT", this_class.paths.unauthorized);
+            //  res.redirect(this_class.paths.unauthorized);
             }
             break;
           case 'authenticate':
@@ -124,10 +134,10 @@ module.exports = class {
   static async init(app, aura, cfg) {
     try {
       let columns = {
+        id: 'uuid',
         email: 'varchar(256)',
         password: 'varchar(256)',
         jwt_secret: 'varchar(256)',
-        cookie_secret: 'varchar(256)',
         access_token: 'varchar(256)',
         cfg: 'jsonb'
       };
@@ -137,35 +147,77 @@ module.exports = class {
         columns.creator = 'boolean';
       }
 
+      if (cfg.custom_columns) {
+        for (var key in cfg.custom_columns) {
+          columns[key] = cfg.custom_columns[key];
+        }
+      }
+
       var table = await aura.table(cfg.table_name, {
         columns: columns
       });
 
       return new module.exports(app, table, cfg);
     } catch (e) {
-      console.error(e);
+      console.error(e.stack);
       return null;
     }
   }
 
   async register(data) {
     try {
-      var found = await this.table.select(
+      let err = false;
+
+      let empty_fields = [];
+      if (!data.email) {
+        err = true;
+        empty_fields.push('email');
+      }
+      if (!data.pwd) {
+        err = true;
+        empty_fields.push('pwd');
+      }
+      if (!data.pwdr) {
+        err = true;
+        empty_fields.push('pwdr');
+      }
+      for (var r = 0; r < this.required_custom_columns.length; r++) {
+        const reqcol_name = this.required_custom_columns[r];
+        if (!data[reqcol_name]) {
+          err = true;
+          empty_fields.push(reqcol_name);
+        }
+      }
+
+      let values_in_use = [];
+      var found_email = await this.table.select(
         ['email'],
         "(email = $1)", [data.email]
       );
+      if (found_email.length > 0) {
+        err = true;
+        values_in_use.push('email');
+      }
+      for (var r = 0; r < this.unique_custom_columns.length; r++) {
+        const unicol_name = this.unique_custom_columns[r];
+        var found_unicol = await this.table.select(
+          [unicol_name],
+          "("+unicol_name+" = $1)", [data[unicol_name]]
+        );
+        if (found_unicol.length > 0) {
+          err = true;
+          values_in_use.push(unicol_name);
+        }
+      }
 
-      if (!data.email) {
-        return "FAILED: email address was not defined";
-      } else if (!data.pwd) {
-        return "FAILED: password was not defined";
-      } else if (!data.pwdr) {
-        return "FAILED: you did not repeat the password";
-      } else if (data.pwd !== data.pwdr) {
-        return "FAILED: passwords don't match";
-      } else if (found.length > 0) {
-        return "FAILED: email address already taken";
-      } else {
+      let pwds_dont_match = false;
+      if (data.pwd !== data.pwdr) {
+        pwds_dont_match = true;
+      }
+
+      let result = {};
+
+      if (!err) {
         var salt = bcrypt.genSaltSync(10);
         var acc_data = {
           email: data.email,
@@ -175,9 +227,28 @@ module.exports = class {
           acc_data.super = (data.super == true);
           acc_data.creator = (data.creator == true);
         }
-        const result = await this.table.insert(acc_data);
-        return false;
+
+        let undefined_cols = [];
+        for (var r = 0; r < this.required_custom_columns.length; r++) {
+          const reqcol_name = this.required_custom_columns[r];
+          acc_data[reqcol_name] = data[reqcol_name];
+        }
+
+        result.success = true;
+        result.id = await this.table.insert(acc_data);
+      } else {
+        result.err = {}
+        if (empty_fields.length > 0) {
+          result.err.empty_fields = empty_fields;
+        }
+        if (values_in_use.length > 0) {
+          result.err.values_in_use = values_in_use;
+        }
+        if (pwds_dont_match) {
+          result.err.pwds_dont_match = pwds_dont_match;
+        }
       }
+      return JSON.stringify(result);
     } catch (e) {
       console.error(e);
       return false;
@@ -253,7 +324,7 @@ module.exports = class {
 
   async authorize(req, res, next, required_rights) {
     try {
-      var repath = req.path;
+      var repath = req.originalUrl;
       if (Object.keys(req.query).length != 0 && req.query.constructor === Object) {
         repath += "?"+obj_to_qstr(req.query)
       }
@@ -272,12 +343,13 @@ module.exports = class {
 
         if (access_token) {
           var found = await this.table.select(
-            ['jwt_secret', 'access_token', 'cfg'],
+            ['id', 'jwt_secret', 'access_token', 'super', 'cfg'],
             "access_token = $1", [access_token]
           );
 
           if (found.length > 0) {
             found = JSON.parse(JSON.stringify(found[0]));
+            req.customer_id = found.id;
             try {
               var decoded = jwt.verify(req.access_token, found.jwt_secret);
               if (required_rights) {
@@ -285,16 +357,27 @@ module.exports = class {
                 for (var r = 0; r < required_rights.length; r++) {
                   var required_right = required_rights[r];
 
-                  if (!found.cfg.rights.includes(required_right)) {
-                    access_granted = false;
-                    break;
+                  if (required_right === 'super_admin') {
+                    if (!found.super) {
+                      access_granted = false;
+                      break;
+                    }
+                  } else {
+                    if (!found.cfg.rights.includes(required_right)) {
+                      access_granted = false;
+                      break;
+                    }
                   }
                 }
 
                 if (access_granted) {
                   next();
                 } else {
-                  res.redirect(redirect_path);
+                  if (found.cfg.auth_next) {
+                    res.redirect(found.cfg.auth_next);
+                  } else {
+                    res.redirect(redirect_path);
+                  }
                 }
               } else {
                 next();

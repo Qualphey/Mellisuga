@@ -2,8 +2,12 @@
 
 const XHR = require('../utils/xhr.js');
 const Page = require('./page.js');
-
-
+/*
+require.ensure(["test"], function() {
+  const Test = require("./test.js");
+  new Test("123456789");
+});
+*/
 var GridUI = require('../grid.ui/index.js');
 
 require('./style.less');

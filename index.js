@@ -10,7 +10,11 @@ const nunjucks = require('nunjucks');
 
 const jsonlint = require("jsonlint");
 
+
+
 const Router = require("./modules/router/router.js");
+
+
 
 const Auth = require("./modules/auth.io/index.js");
 
@@ -21,9 +25,15 @@ const FMIO = require("./modules/treefm.io/fm.io.js");
 const GalleryIO = require("./modules/gallery.io/index.js");
 const AdminAccountsIO = require("./modules/admin_accounts.io/index.js");
 const UserAccountsIO = require("./modules/user_accounts.io/index.js");
-const ModuleManagerIO = require("./modules/module_manager.io/index.js");
+
+
+
+
 
 const Aura = require('pg-aura');
+
+
+const ModulesIO = require("./modules/modules.io/index.js");
 
 /**
  * The main class of this cms.
@@ -41,40 +51,40 @@ module.exports = class CMBird {
    * @param {function(router: Router)} callback - this is function param.
    */
   constructor(cfg) {
-    const config_path = path.resolve(cfg.app_path, 'config.json');
-    var config = undefined;
-    if (fs.existsSync(config_path)) {
-      config = JSON.parse(fs.readFileSync(config_path, 'utf8'));
-    } else {
-      config = {
-        setup: true,
-        admin_path: "/cmb_admin"
+    this.app_path = cfg.app_path;
+
+  }
+
+  static async init(cfg) {
+    try {
+      let this_class = new module.exports(cfg);
+
+
+      const config_path = path.resolve(cfg.app_path, 'config.json');
+      var config = undefined;
+      if (fs.existsSync(config_path)) {
+        config = JSON.parse(fs.readFileSync(config_path, 'utf8'));
+      } else {
+        config = {
+          setup: true,
+          admin_path: "/cmb_admin"
+        }
       }
-    }
-    global.cmb_config = config;
 
-    config.app_path = cfg.app_path;
-    config.pages_path = path.resolve(cfg.app_path, 'pages');
-    config.templates_path = path.resolve(cfg.app_path, 'templates');
-    config.globals_path = path.resolve(cfg.app_path, 'globals');
-    config.host = cfg.host;
-    config.port = cfg.port;
-    config.db_super_user = cfg.db_user;
-    config.db_super_pwd = cfg.db_pwd;
+      config.app_path = cfg.app_path;
+      config.pages_path = path.resolve(cfg.app_path, 'pages');
+      config.templates_path = path.resolve(cfg.app_path, 'templates');
+      config.globals_path = path.resolve(cfg.app_path, 'globals');
+      config.host = cfg.host;
+      config.port = cfg.port;
+      config.db_super_user = cfg.db_user;
+      config.db_super_pwd = cfg.db_pwd;
 
-    var this_class = this;
+      global.cmb_config = config;
 
-    if (!fs.existsSync(config.globals_path)){
-      fs.mkdirSync(config.globals_path);
-    }
+      let router = this_class.router = await Router.init();
+      this_class.app = router.app;
 
-    (async () => {
-      let cmbird = {};
-      const router = cmbird.router = await Router.init();
-
-
-
-//    redirect to setup page, if project is not initialized
       router.use(function(req, res, next) {
         if (!req.path.startsWith("/setup") && !req.path.startsWith("/initialise") && config.setup) {
           res.redirect("/setup");
@@ -82,6 +92,12 @@ module.exports = class CMBird {
           next();
         }
       });
+
+      const Auth = require("./modules/auth.io/index.js");
+
+      if (!fs.existsSync(config.globals_path)){
+        fs.mkdirSync(config.globals_path);
+      }
 
       var builtin_pages = await BuiltinIO.init(
         path.resolve(config.pages_path, ".builtin"), [
@@ -94,15 +110,10 @@ module.exports = class CMBird {
         ]
       );
 
-
-      if (!config.setup) {
-        initialise(config.db_name);
-      }
-
       async function initialise(db_name) {
         try {
 
-          var aura = cmbird.aura = await Aura.connect({
+          var aura = this_class.aura = await Aura.connect({
             db_host: "127.0.0.1",
             db_super_usr: cfg.db_user,
             db_super_pwd: cfg.db_pwd,
@@ -125,20 +136,29 @@ module.exports = class CMBird {
             rights: true
           });
 
-          var auth = cmbird.auth = await Auth.init(router.app, aura, {
+          var auth = this_class.auth = await Auth.init(router.app, aura, {
             table_name: "user_accounts",
             auth_paths: {
               unauthorized: "/signin",
               authenticated: "/Paskyra"
             },
-            prefix: '/users'
+            prefix: '/users',
+            custom_columns: {
+              vardas: "varchar(256)",
+              pavarde: "varchar(256)",
+              tel_nr: "varchar(32)",
+              planas: "smallint",
+              sumoketa: "boolean"
+            },
+            required_custom_columns: ['vardas', 'pavarde', 'tel_nr', 'planas'],
+            unique_custom_columns: ['tel_nr']
           });
 
-          var pages_io = cmbird.pages = await PagesIO.init(router, posts, auth, admin);
+          var pages_io = this_class.pages = await PagesIO.init(router, posts, auth, admin);
 
           router.use(
             config.admin_path,
-            admin.authorize,
+            admin.orize_gen(["super_admin"]),
             Router.static(__dirname+"/dist")
           );
 
@@ -159,7 +179,6 @@ module.exports = class CMBird {
           });
 
           var modules_path = path.resolve(config.app_path, 'cmbird_modules');
-          var module_manager_io = await ModuleManagerIO.init(modules_path, cmbird);
 
           var admin_accounts_io = await AdminAccountsIO.init(router.app, admin.table);
           var user_accounts_io = await UserAccountsIO.init(router.app, auth.table);
@@ -169,6 +188,8 @@ module.exports = class CMBird {
 
 
 
+          let modules = await ModulesIO.init(this_class);
+
           return admin;
         } catch (e) {
           console.error(e);
@@ -176,61 +197,70 @@ module.exports = class CMBird {
         }
       };
 
-      router.post("/initialise", async function(req, res, next) {
-        try {
-          if (!config.setup) {
-            res.redirect('/');
-          } else {
-            var data = req.body;
-
-            if (!data.name) {
-              res.send("FAILED: name was not defined");
-            } else if (!data.email) {
-              res.send("FAILED: email address was not defined");
-            } else if (!data.pwd) {
-              res.send("FAILED: password was not defined");
-            } else if (!data.pwdr) {
-              res.send("FAILED: you did not repeat the password");
-            } else if (data.pwd !== data.pwdr) {
-              res.send("FAILED: passwords don't match");
-            } else {
-              console.log("DATA", data);
-              config.db_name = data.name.replace(/\s+/g, '').toLowerCase();
-              config.db_pwd = crypto.randomBytes(20).toString('hex');
-              var admin = await initialise(config.db_name);
-
-              data.super = true;
-              data.creator = true;
-              var result = await admin.register(data);
-
-              if (result.err) {
-                res.send(result.err);
+      if (!config.setup) {
+        await initialise(config.db_name);
+        return this_class;
+      } else {
+        return await new Promise(function(resolve) {
+          router.post("/initialise", async function(req, res, next) {
+            try {
+              if (!config.setup) {
+                res.redirect('/');
               } else {
-                config.name = data.name;
+                var data = req.body;
 
-                config.setup = false;
+                if (!data.name) {
+                  res.send("FAILED: name was not defined");
+                } else if (!data.email) {
+                  res.send("FAILED: email address was not defined");
+                } else if (!data.pwd) {
+                  res.send("FAILED: password was not defined");
+                } else if (!data.pwdr) {
+                  res.send("FAILED: you did not repeat the password");
+                } else if (data.pwd !== data.pwdr) {
+                  res.send("FAILED: passwords don't match");
+                } else {
+                  console.log("DATA", data);
+                  config.db_name = data.name.replace(/\s+/g, '').toLowerCase();
+                  config.db_pwd = crypto.randomBytes(20).toString('hex');
+                  var admin = await initialise(config.db_name);
 
-                var oConfig = {};
-                Object.assign(oConfig, config);
-                delete oConfig.pages_path;
+                  data.super = true;
+                  data.creator = true;
+                  var result = await admin.register(data);
 
-                fs.writeFile(config_path, JSON.stringify(oConfig, null, 4), 'utf8', function (err) {
-                  if (err) {
-                    res.send("Failed to write config file: "+err);
-                    return false;
+                  if (result.err) {
+                    res.send(result.err);
                   } else {
-                    res.redirect(config.admin_path);
-                    return true;
-                  }
-                });
-              }
-            }
-          }
-        } catch (e) {
-          console.error(e.stack)
-        }
-      });
+                    config.name = data.name;
 
-    })().catch(e => console.error(e.stack));
+                    config.setup = false;
+
+                    var oConfig = {};
+                    Object.assign(oConfig, config);
+                    delete oConfig.pages_path;
+
+                    fs.writeFile(config_path, JSON.stringify(oConfig, null, 4), 'utf8', function (err) {
+                      if (err) {
+                        res.send("Failed to write config file: "+err);
+                        return false;
+                      } else {
+                        resolve();
+                        res.redirect(config.admin_path);
+                        return true;
+                      }
+                    });
+                  }
+                }
+              }
+            } catch (e) {
+              console.error(e.stack)
+            }
+          });
+        });
+      }
+    } catch (e) {
+      console.error(e.stack);
+    }
   }
 }

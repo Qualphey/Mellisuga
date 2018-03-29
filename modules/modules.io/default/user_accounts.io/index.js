@@ -1,15 +1,16 @@
 const bcrypt = require('bcryptjs');
 
 module.exports = class {
-  constructor(app, table) {
+  constructor(app, table, config) {
     this.app = app;
 
     this.table = table;
+    this.config = config;
 
     var this_class = this;
-    console.log("ADMINS");
+    console.log("USERS");
 
-    app.post(global.cmb_config.admin_path+"/admin_accounts.io", async function(req, res) {
+    app.post(global.cmb_config.admin_path+"/user_accounts.io", async function(req, res) {
       try {
         let data;
         try {
@@ -34,7 +35,7 @@ module.exports = class {
         */
         switch (command) {
           case "all":
-            var auras = await table.select(['email', 'super', 'cfg', 'creator']);
+            var auras = await table.select(['email', 'super', 'rights', 'creator']);
             res.send(JSON.stringify(auras));
             break;
           case "add":
@@ -62,20 +63,7 @@ module.exports = class {
               [data.email]
             );
             res.send("success");
-            break;
-          case "edit":
-            try {
-              JSON.parse(data.cfg);
-              await table.update(
-                { super: data.super, cfg: data.cfg },
-                "email = $1",
-                [data.email]
-              );
-              res.send("success");
-            } catch (e) {
-              res.send(e.message);
-            }
-            break;
+            break
           default:
             console.error("Unknown command:", data.command);
         }
@@ -86,10 +74,9 @@ module.exports = class {
 
   }
 
-  static async init(app, table) {
+  static async init(app, table, config) {
     try {
-
-      return new module.exports(app, table);
+      return new module.exports(app, table, config);
     } catch (e) {
       console.log(e);
       return false;

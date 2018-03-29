@@ -4,6 +4,8 @@ var config = global.config = {
 
 require("./style.css");
 
+
+
 window.addEventListener("load", async function(e) {
   try {
     var socket = global.socket = require('socket.io-client')('http://localhost:9639');

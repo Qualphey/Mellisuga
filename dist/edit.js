@@ -76,10 +76,7 @@
   !*** ./node_modules/after/index.js ***!
   \*************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 module.exports = after;
 
@@ -117,10 +114,7 @@ function noop() {}
   !*** ./node_modules/arraybuffer.slice/index.js ***!
   \*************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 /**
  * An abstraction for slicing an arraybuffer even when
@@ -167,9 +161,7 @@ module.exports = function (arraybuffer, start, end) {
   !*** ./node_modules/backo2/index.js ***!
   \**************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 
 /**
@@ -263,10 +255,7 @@ Backoff.prototype.setJitter = function (jitter) {
   !*** ./node_modules/base64-arraybuffer/lib/base64-arraybuffer.js ***!
   \*******************************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 /*
  * base64-arraybuffer
@@ -352,10 +341,7 @@ Backoff.prototype.setJitter = function (jitter) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-/**
+/* WEBPACK VAR INJECTION */(function(global) {/**
  * Create a blob builder even when vendor prefixes exist
  */
 
@@ -457,22 +443,12 @@ module.exports = function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
 (function (mod) {
-  if (( false ? undefined : _typeof(exports)) == "object" && ( false ? undefined : _typeof(module)) == "object") // CommonJS
-    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else if (true) // AMD
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (mod),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else // Plain browser env
-    {}
+  if (true) // CommonJS
+    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else {}
 })(function (CodeMirror) {
   var defaults = {
     pairs: "()[]{}''\"\"",
@@ -496,7 +472,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   function getOption(conf, name) {
     if (name == "pairs" && typeof conf == "string") return conf;
-    if ((typeof conf === "undefined" ? "undefined" : _typeof(conf)) == "object" && conf[name] != null) return conf[name];
+    if (typeof conf == "object" && conf[name] != null) return conf[name];
     return defaults[name];
   }
 
@@ -613,18 +589,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       if (type == "skip") {
         cm.execCommand("goCharRight");
       } else if (type == "skipThree") {
-        for (var i = 0; i < 3; i++) {
-          cm.execCommand("goCharRight");
-        }
+        for (var i = 0; i < 3; i++) cm.execCommand("goCharRight");
       } else if (type == "surround") {
         var sels = cm.getSelections();
-        for (var i = 0; i < sels.length; i++) {
-          sels[i] = left + sels[i] + right;
-        }cm.replaceSelections(sels, "around");
+        for (var i = 0; i < sels.length; i++) sels[i] = left + sels[i] + right;
+        cm.replaceSelections(sels, "around");
         sels = cm.listSelections().slice();
-        for (var i = 0; i < sels.length; i++) {
-          sels[i] = contractSelection(sels[i]);
-        }cm.setSelections(sels);
+        for (var i = 0; i < sels.length; i++) sels[i] = contractSelection(sels[i]);
+        cm.setSelections(sels);
       } else if (type == "both") {
         cm.replaceSelection(left + right, null);
         cm.triggerElectric(left + right);
@@ -652,7 +624,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     );
   }
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -662,11 +633,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   \********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
@@ -696,22 +662,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  */
 
 (function (mod) {
-  if (( false ? undefined : _typeof(exports)) == "object" && ( false ? undefined : _typeof(module)) == "object") // CommonJS
-    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"), __webpack_require__(/*! ../fold/xml-fold */ "./node_modules/codemirror/addon/fold/xml-fold.js"));else if (true) // AMD
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"), __webpack_require__(/*! ../fold/xml-fold */ "./node_modules/codemirror/addon/fold/xml-fold.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (mod),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else // Plain browser env
-    {}
+  if (true) // CommonJS
+    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"), __webpack_require__(/*! ../fold/xml-fold */ "./node_modules/codemirror/addon/fold/xml-fold.js"));else {}
 })(function (CodeMirror) {
   CodeMirror.defineOption("autoCloseTags", false, function (cm, val, old) {
     if (old != CodeMirror.Init && old) cm.removeKeyMap("autoCloseTags");
     if (!val) return;
     var map = { name: "autoCloseTags" };
-    if ((typeof val === "undefined" ? "undefined" : _typeof(val)) != "object" || val.whenClosing) map["'/'"] = function (cm) {
+    if (typeof val != "object" || val.whenClosing) map["'/'"] = function (cm) {
       return autoCloseSlash(cm);
     };
-    if ((typeof val === "undefined" ? "undefined" : _typeof(val)) != "object" || val.whenOpening) map["'>'"] = function (cm) {
+    if (typeof val != "object" || val.whenOpening) map["'>'"] = function (cm) {
       return autoCloseGT(cm);
     };
     cm.addKeyMap(map);
@@ -734,8 +695,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       if (inner.mode.name != "xml" || !state.tagName) return CodeMirror.Pass;
 
       var html = inner.mode.configuration == "html";
-      var dontCloseTags = (typeof opt === "undefined" ? "undefined" : _typeof(opt)) == "object" && opt.dontCloseTags || html && htmlDontClose;
-      var indentTags = (typeof opt === "undefined" ? "undefined" : _typeof(opt)) == "object" && opt.indentTags || html && htmlIndent;
+      var dontCloseTags = typeof opt == "object" && opt.dontCloseTags || html && htmlDontClose;
+      var indentTags = typeof opt == "object" && opt.indentTags || html && htmlIndent;
 
       var tagName = state.tagName;
       if (tok.end > pos.ch) tagName = tagName.slice(0, tagName.length - tok.end + pos.ch);
@@ -750,7 +711,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         newPos: indent ? CodeMirror.Pos(pos.line + 1, 0) : CodeMirror.Pos(pos.line, pos.ch + 1) };
     }
 
-    var dontIndentOnAutoClose = (typeof opt === "undefined" ? "undefined" : _typeof(opt)) == "object" && opt.dontIndentOnAutoClose;
+    var dontIndentOnAutoClose = typeof opt == "object" && opt.dontIndentOnAutoClose;
     for (var i = ranges.length - 1; i >= 0; i--) {
       var info = replacements[i];
       cm.replaceRange(info.text, ranges[i].head, ranges[i].anchor, "+insert");
@@ -769,7 +730,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         replacements = [];
     var head = typingSlash ? "/" : "</";
     var opt = cm.getOption("autoCloseTags");
-    var dontIndentOnAutoClose = (typeof opt === "undefined" ? "undefined" : _typeof(opt)) == "object" && opt.dontIndentOnSlash;
+    var dontIndentOnAutoClose = typeof opt == "object" && opt.dontIndentOnSlash;
     for (var i = 0; i < ranges.length; i++) {
       if (!ranges[i].empty()) return CodeMirror.Pass;
       var pos = ranges[i].head,
@@ -794,9 +755,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     cm.replaceSelections(replacements);
     ranges = cm.listSelections();
     if (!dontIndentOnAutoClose) {
-      for (var i = 0; i < ranges.length; i++) {
-        if (i == ranges.length - 1 || ranges[i].head.line < ranges[i + 1].head.line) cm.indentLine(ranges[i].head.line);
-      }
+      for (var i = 0; i < ranges.length; i++) if (i == ranges.length - 1 || ranges[i].head.line < ranges[i + 1].head.line) cm.indentLine(ranges[i].head.line);
     }
   }
 
@@ -811,9 +770,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   function indexOf(collection, elt) {
     if (collection.indexOf) return collection.indexOf(elt);
-    for (var i = 0, e = collection.length; i < e; ++i) {
-      if (collection[i] == elt) return i;
-    }return -1;
+    for (var i = 0, e = collection.length; i < e; ++i) if (collection[i] == elt) return i;
+    return -1;
   }
 
   // If xml-fold is loaded, we use its functionality to try and verify
@@ -827,9 +785,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // If the immediate wrapping context contains onCx instances of
     // the same tag, a closing tag only exists if there are at least
     // that many closing tags of that type following.
-    for (var onCx = newTag ? 1 : 0; cx && cx.tagName == tagName; cx = cx.prev) {
-      ++onCx;
-    }pos = nextClose.to;
+    for (var onCx = newTag ? 1 : 0; cx && cx.tagName == tagName; cx = cx.prev) ++onCx;
+    pos = nextClose.to;
     for (var i = 1; i < onCx; i++) {
       var next = CodeMirror.scanForClosingTag(cm, pos, null, end);
       if (!next || next.tag != tagName) return false;
@@ -838,7 +795,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return true;
   }
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -849,22 +805,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
 (function (mod) {
-  if (( false ? undefined : _typeof(exports)) == "object" && ( false ? undefined : _typeof(module)) == "object") // CommonJS
-    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else if (true) // AMD
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (mod),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else // Plain browser env
-    {}
+  if (true) // CommonJS
+    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else {}
 })(function (CodeMirror) {
   var ie_lt8 = /MSIE \d/.test(navigator.userAgent) && (document.documentMode == null || document.documentMode < 8);
 
@@ -945,11 +891,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       // input stops going to the textare whever this fires.
       if (ie_lt8 && cm.state.focused) cm.focus();
 
-      var clear = function clear() {
+      var clear = function () {
         cm.operation(function () {
-          for (var i = 0; i < marks.length; i++) {
-            marks[i].clear();
-          }
+          for (var i = 0; i < marks.length; i++) marks[i].clear();
         });
       };
       if (autoclear) setTimeout(clear, 800);else return clear;
@@ -975,7 +919,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
     }
     if (val) {
-      cm.state.matchBrackets = (typeof val === "undefined" ? "undefined" : _typeof(val)) == "object" ? val : {};
+      cm.state.matchBrackets = typeof val == "object" ? val : {};
       cm.on("cursorActivity", doMatchBrackets);
     }
   });
@@ -999,7 +943,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return scanForBracket(this, pos, dir, style, config);
   });
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -1010,22 +953,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
 (function (mod) {
-  if (( false ? undefined : _typeof(exports)) == "object" && ( false ? undefined : _typeof(module)) == "object") // CommonJS
-    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"), __webpack_require__(/*! ../fold/xml-fold */ "./node_modules/codemirror/addon/fold/xml-fold.js"));else if (true) // AMD
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"), __webpack_require__(/*! ../fold/xml-fold */ "./node_modules/codemirror/addon/fold/xml-fold.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (mod),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else // Plain browser env
-    {}
+  if (true) // CommonJS
+    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"), __webpack_require__(/*! ../fold/xml-fold */ "./node_modules/codemirror/addon/fold/xml-fold.js"));else {}
 })(function (CodeMirror) {
   "use strict";
 
@@ -1036,7 +969,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       clear(cm);
     }
     if (val) {
-      cm.state.matchBothTags = (typeof val === "undefined" ? "undefined" : _typeof(val)) == "object" && val.bothTags;
+      cm.state.matchBothTags = typeof val == "object" && val.bothTags;
       cm.on("cursorActivity", doMatchTags);
       cm.on("viewportChange", maybeUpdateMatch);
       doMatchTags(cm);
@@ -1080,7 +1013,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
   };
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -1091,22 +1023,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
 (function (mod) {
-  if (( false ? undefined : _typeof(exports)) == "object" && ( false ? undefined : _typeof(module)) == "object") // CommonJS
-    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else if (true) // AMD
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (mod),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else // Plain browser env
-    {}
+  if (true) // CommonJS
+    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else {}
 })(function (CodeMirror) {
   "use strict";
 
@@ -1116,7 +1038,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   }
 
   var nameStartChar = "A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD";
-  var nameChar = nameStartChar + "-:.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040";
+  var nameChar = nameStartChar + "\-\:\.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040";
   var xmlTagStart = new RegExp("<(/?)([" + nameStartChar + "][" + nameChar + "]*)", "g");
 
   function Iter(cm, line, ch, range) {
@@ -1216,12 +1138,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       if (end == "selfClose") continue;
       if (next[1]) {
         // closing tag
-        for (var i = stack.length - 1; i >= 0; --i) {
-          if (stack[i] == next[2]) {
-            stack.length = i;
-            break;
-          }
-        }if (i < 0 && (!tag || tag == next[2])) return {
+        for (var i = stack.length - 1; i >= 0; --i) if (stack[i] == next[2]) {
+          stack.length = i;
+          break;
+        }
+        if (i < 0 && (!tag || tag == next[2])) return {
           tag: next[2],
           from: Pos(startLine, startCh),
           to: Pos(iter.line, iter.ch)
@@ -1249,12 +1170,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         stack.push(start[2]);
       } else {
         // opening tag
-        for (var i = stack.length - 1; i >= 0; --i) {
-          if (stack[i] == start[2]) {
-            stack.length = i;
-            break;
-          }
-        }if (i < 0 && (!tag || tag == start[2])) return {
+        for (var i = stack.length - 1; i >= 0; --i) if (stack[i] == start[2]) {
+          stack.length = i;
+          break;
+        }
+        if (i < 0 && (!tag || tag == start[2])) return {
           tag: start[2],
           from: Pos(iter.line, iter.ch),
           to: Pos(endLine, endCh)
@@ -1313,7 +1233,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return findMatchingClose(iter, name);
   };
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -1325,7 +1244,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../css-loader!./simplescrollbars.css */ "./node_modules/css-loader/index.js!./node_modules/codemirror/addon/scroll/simplescrollbars.css");
+var content = __webpack_require__(/*! !../../../css-loader??ref--6-1!./simplescrollbars.css */ "./node_modules/css-loader/index.js??ref--6-1!./node_modules/codemirror/addon/scroll/simplescrollbars.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -1354,22 +1273,12 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
 (function (mod) {
-  if (( false ? undefined : _typeof(exports)) == "object" && ( false ? undefined : _typeof(module)) == "object") // CommonJS
-    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else if (true) // AMD
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (mod),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else // Plain browser env
-    {}
+  if (true) // CommonJS
+    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else {}
 })(function (CodeMirror) {
   "use strict";
 
@@ -1507,7 +1416,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return new SimpleScrollbars("CodeMirror-overlayscroll", place, scroll);
   };
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -1519,7 +1427,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../css-loader!./codemirror.css */ "./node_modules/css-loader/index.js!./node_modules/codemirror/lib/codemirror.css");
+var content = __webpack_require__(/*! !../../css-loader??ref--6-1!./codemirror.css */ "./node_modules/css-loader/index.js??ref--6-1!./node_modules/codemirror/lib/codemirror.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -1548,11 +1456,6 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -1563,12 +1466,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 // at http://marijnhaverbeke.nl/blog/#cm-internals .
 
 (function (global, factory) {
-  ( false ? undefined : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory() :  true ? !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : undefined;
-})(undefined, function () {
+   true ? module.exports = factory() : undefined;
+})(this, function () {
   'use strict';
 
   // Kludges for bugs and behavior differences that can't be feature
@@ -1614,7 +1513,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return new RegExp("(^|\\s)" + cls + "(?:$|\\s)\\s*");
   }
 
-  var rmClass = function rmClass(node, cls) {
+  var rmClass = function (node, cls) {
     var current = node.className;
     var match = classTest(cls).exec(current);
     if (match) {
@@ -1660,14 +1559,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   var range;
   if (document.createRange) {
-    range = function range(node, start, end, endNode) {
+    range = function (node, start, end, endNode) {
       var r = document.createRange();
       r.setEnd(endNode || node, end);
       r.setStart(node, start);
       return r;
     };
   } else {
-    range = function range(node, start, end) {
+    range = function (node, start, end) {
       var r = document.body.createTextRange();
       try {
         r.moveToElementText(node.parentNode);
@@ -1731,17 +1630,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return b;
   }
 
-  var selectInput = function selectInput(node) {
+  var selectInput = function (node) {
     node.select();
   };
   if (ios) // Mobile Safari apparently has a bug where select() is broken.
     {
-      selectInput = function selectInput(node) {
+      selectInput = function (node) {
         node.selectionStart = 0;node.selectionEnd = node.value.length;
       };
     } else if (ie) // Suppress mysterious IE10 errors
     {
-      selectInput = function selectInput(node) {
+      selectInput = function (node) {
         try {
           node.select();
         } catch (_e) {}
@@ -1787,7 +1686,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
   }
 
-  var Delayed = function Delayed() {
+  var Delayed = function () {
     this.id = null;
   };
   Delayed.prototype.set = function (ms, f) {
@@ -1809,7 +1708,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // Returned or thrown by various protocols to signal 'I'm not
   // handling this'.
-  var Pass = { toString: function toString() {
+  var Pass = { toString: function () {
       return "CodeMirror.Pass";
     } };
 
@@ -2138,7 +2037,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // Find the line at the given vertical position, using the height
   // information in the document tree.
-  function _lineAtHeight(chunk, h) {
+  function lineAtHeight(chunk, h) {
     var n = chunk.first;
     outer: do {
       for (var i$1 = 0; i$1 < chunk.children.length; ++i$1) {
@@ -2209,7 +2108,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   function clipLine(doc, n) {
     return Math.max(doc.first, Math.min(n, doc.first + doc.size - 1));
   }
-  function _clipPos(doc, pos) {
+  function clipPos(doc, pos) {
     if (pos.line < doc.first) {
       return Pos(doc.first, 0);
     }
@@ -2232,7 +2131,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   function clipPosArray(doc, array) {
     var out = [];
     for (var i = 0; i < array.length; i++) {
-      out[i] = _clipPos(doc, array[i]);
+      out[i] = clipPos(doc, array[i]);
     }
     return out;
   }
@@ -2660,7 +2559,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   }
 
   // Find the height above the given line.
-  function _heightAtLine(lineObj) {
+  function heightAtLine(lineObj) {
     lineObj = visualLine(lineObj);
 
     var h = 0,
@@ -3002,7 +2901,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   var noHandlers = [];
 
-  var on = function on(emitter, type, f) {
+  var on = function (emitter, type, f) {
     if (emitter.addEventListener) {
       emitter.addEventListener(type, f, false);
     } else if (emitter.attachEvent) {
@@ -3050,7 +2949,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // and preventDefault-ing the event in that handler.
   function signalDOMEvent(cm, e, override) {
     if (typeof e == "string") {
-      e = { type: e, preventDefault: function preventDefault() {
+      e = { type: e, preventDefault: function () {
           this.defaultPrevented = true;
         } };
     }
@@ -3144,13 +3043,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   var zwspSupported;
   function zeroWidthElement(measure) {
     if (zwspSupported == null) {
-      var test = elt("span", '\u200B');
+      var test = elt("span", "\u200b");
       removeChildrenAndAdd(measure, elt("span", [test, document.createTextNode("x")]));
       if (measure.firstChild.offsetHeight != 0) {
         zwspSupported = test.offsetWidth <= 1 && test.offsetHeight > 2 && !(ie && ie_version < 8);
       }
     }
-    var node = zwspSupported ? elt("span", '\u200B') : elt("span", '\xA0', null, "display: inline-block; width: 1px; margin-right: -1px");
+    var node = zwspSupported ? elt("span", "\u200b") : elt("span", "\u00a0", null, "display: inline-block; width: 1px; margin-right: -1px");
     node.setAttribute("cm-text", "");
     return node;
   }
@@ -3161,7 +3060,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     if (badBidiRects != null) {
       return badBidiRects;
     }
-    var txt = removeChildrenAndAdd(measure, document.createTextNode('A\u062EA'));
+    var txt = removeChildrenAndAdd(measure, document.createTextNode("A\u062eA"));
     var r0 = range(txt, 0, 1).getBoundingClientRect();
     var r1 = range(txt, 1, 2).getBoundingClientRect();
     removeChildren(measure);
@@ -3360,7 +3259,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // Fed to the mode parsers, provides helper functions to make
   // parsers more succinct.
 
-  var StringStream = function StringStream(string, tabSize, lineOracle) {
+  var StringStream = function (string, tabSize, lineOracle) {
     this.pos = this.start = 0;
     this.string = string;
     this.tabSize = tabSize || 8;
@@ -3433,7 +3332,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   };
   StringStream.prototype.match = function (pattern, consume, caseInsensitive) {
     if (typeof pattern == "string") {
-      var cased = function cased(str) {
+      var cased = function (str) {
         return caseInsensitive ? str.toLowerCase() : str;
       };
       var substr = this.string.substr(this.pos, pattern.length);
@@ -3474,12 +3373,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return oracle && oracle.baseToken(this.pos);
   };
 
-  var SavedContext = function SavedContext(state, lookAhead) {
+  var SavedContext = function (state, lookAhead) {
     this.state = state;
     this.lookAhead = lookAhead;
   };
 
-  var Context = function Context(doc, state, line, lookAhead) {
+  var Context = function (doc, state, line, lookAhead) {
     this.state = state;
     this.doc = doc;
     this.line = line;
@@ -3546,7 +3445,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var state = context.state;
 
     // Run overlays, adjust style array.
-    var loop = function loop(o) {
+    var loop = function (o) {
       context.baseTokens = st;
       var overlay = cm.state.overlays[o],
           i = 1,
@@ -3581,9 +3480,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       context.baseTokenPos = 1;
     };
 
-    for (var o = 0; o < cm.state.overlays.length; ++o) {
-      loop(o);
-    }return { styles: st, classes: lineClasses.bgClass || lineClasses.textClass ? lineClasses : null };
+    for (var o = 0; o < cm.state.overlays.length; ++o) loop(o);
+
+    return { styles: st, classes: lineClasses.bgClass || lineClasses.textClass ? lineClasses : null };
   }
 
   function getLineStyles(cm, line, updateFrontier) {
@@ -3672,7 +3571,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     throw new Error("Mode " + mode.name + " failed to advance stream.");
   }
 
-  var Token = function Token(stream, type, state) {
+  var Token = function (stream, type, state) {
     this.start = stream.start;this.end = stream.pos;
     this.string = stream.current();
     this.type = type || null;
@@ -3684,7 +3583,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var doc = cm.doc,
         mode = doc.mode,
         style;
-    pos = _clipPos(doc, pos);
+    pos = clipPos(doc, pos);
     var line = getLine(doc, pos.line),
         context = getContextBefore(cm, pos.line, precise);
     var stream = new StringStream(line.text, cm.options.tabSize, context),
@@ -3822,7 +3721,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // Line objects. These hold state related to a line, including
   // highlighting info (the styles array).
-  var Line = function Line(text, markedSpans, estimateHeight) {
+  var Line = function (text, markedSpans, estimateHeight) {
     this.text = text;
     attachMarkedSpans(this, markedSpans);
     this.height = estimateHeight ? estimateHeight(this) : 1;
@@ -3944,8 +3843,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   }
 
   function defaultSpecialCharPlaceholder(ch) {
-    var token = elt("span", '\u2022', "cm-invalidchar");
-    token.title = '\\u' + ch.charCodeAt(0).toString(16);
+    var token = elt("span", "\u2022", "cm-invalidchar");
+    token.title = "\\u" + ch.charCodeAt(0).toString(16);
     token.setAttribute("aria-label", token.title);
     return token;
   }
@@ -3999,7 +3898,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           txt$1.setAttribute("cm-text", "\t");
           builder.col += tabWidth;
         } else if (m[0] == "\r" || m[0] == "\n") {
-          txt$1 = content.appendChild(elt("span", m[0] == "\r" ? '\u240D' : '\u2424', "cm-invalidchar"));
+          txt$1 = content.appendChild(elt("span", m[0] == "\r" ? "\u240d" : "\u2424", "cm-invalidchar"));
           txt$1.setAttribute("cm-text", m[0]);
           builder.col += 1;
         } else {
@@ -4043,7 +3942,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     for (var i = 0; i < text.length; i++) {
       var ch = text.charAt(i);
       if (ch == " " && spaceBefore && (i == text.length - 1 || text.charCodeAt(i + 1) == 32)) {
-        ch = '\xA0';
+        ch = "\u00a0";
       }
       result += ch;
       spaceBefore = ch == " ";
@@ -4305,15 +4204,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       list = orphanDelayedCallbacks = [];
       setTimeout(fireOrphanDelayed, 0);
     }
-    var loop = function loop(i) {
+    var loop = function (i) {
       list.push(function () {
         return arr[i].apply(null, args);
       });
     };
 
-    for (var i = 0; i < arr.length; ++i) {
-      loop(i);
-    }
+    for (var i = 0; i < arr.length; ++i) loop(i);
   }
 
   function fireOrphanDelayed() {
@@ -4956,7 +4853,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     if (!context) {
       context = "local";
     }
-    var yOff = _heightAtLine(lineObj);
+    var yOff = heightAtLine(lineObj);
     if (context == "local") {
       yOff += paddingTop(cm.display);
     } else {
@@ -4994,7 +4891,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return { left: left - lineSpaceBox.left, top: top - lineSpaceBox.top };
   }
 
-  function _charCoords(cm, pos, context, lineObj, bias) {
+  function charCoords(cm, pos, context, lineObj, bias) {
     if (!lineObj) {
       lineObj = getLine(cm.doc, pos.line);
     }
@@ -5017,7 +4914,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // AB     B|A     B|A
   // Every position after the last character on a line is considered to stick
   // to the last character on the line.
-  function _cursorCoords(cm, pos, context, lineObj, preparedMeasure, varHeight) {
+  function cursorCoords(cm, pos, context, lineObj, preparedMeasure, varHeight) {
     lineObj = lineObj || getLine(cm.doc, pos.line);
     if (!preparedMeasure) {
       preparedMeasure = prepareMeasureForLine(cm, lineObj);
@@ -5063,12 +4960,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // intermediate scroll updates.
   function estimateCoords(cm, pos) {
     var left = 0;
-    pos = _clipPos(cm.doc, pos);
+    pos = clipPos(cm.doc, pos);
     if (!cm.options.lineWrapping) {
       left = charWidth(cm.display) * pos.ch;
     }
     var lineObj = getLine(cm.doc, pos.line);
-    var top = _heightAtLine(lineObj) + paddingTop(cm.display);
+    var top = heightAtLine(lineObj) + paddingTop(cm.display);
     return { left: left, right: left, top: top, bottom: top + lineObj.height };
   }
 
@@ -5089,13 +4986,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // Compute the character position closest to the given coordinates.
   // Input must be lineSpace-local ("div" coordinate system).
-  function _coordsChar(cm, x, y) {
+  function coordsChar(cm, x, y) {
     var doc = cm.doc;
     y += cm.display.viewOffset;
     if (y < 0) {
       return PosWithInfo(doc.first, 0, null, true, -1);
     }
-    var lineN = _lineAtHeight(doc, y),
+    var lineN = lineAtHeight(doc, y),
         last = doc.first + doc.size - 1;
     if (lineN > last) {
       return PosWithInfo(doc.first + doc.size - 1, getLine(doc, last).text.length, null, true, 1);
@@ -5145,7 +5042,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   function coordsCharInner(cm, lineObj, lineNo$$1, x, y) {
     // Move y into line-local coordinate space
-    y -= _heightAtLine(lineObj);
+    y -= heightAtLine(lineObj);
     var preparedMeasure = prepareMeasureForLine(cm, lineObj);
     // When directly calling `measureCharPrepared`, we have to adjust
     // for the widgets at this line.
@@ -5208,7 +5105,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       sticky = ch == 0 ? "after" : ch == lineObj.text.length ? "before" : measureCharPrepared(cm, preparedMeasure, ch - (ltr ? 1 : 0)).bottom + widgetHeight$$1 <= y == ltr ? "after" : "before";
       // Now get accurate coordinates for this place, in order to get a
       // base X position
-      var coords = _cursorCoords(cm, Pos(lineNo$$1, ch, sticky), "line", lineObj, preparedMeasure);
+      var coords = cursorCoords(cm, Pos(lineNo$$1, ch, sticky), "line", lineObj, preparedMeasure);
       baseX = coords.left;
       outside = y < coords.top || y >= coords.bottom;
     }
@@ -5225,7 +5122,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var index = findFirst(function (i) {
       var part = order[i],
           ltr = part.level != 1;
-      return boxIsAfter(_cursorCoords(cm, Pos(lineNo$$1, ltr ? part.to : part.from, ltr ? "before" : "after"), "line", lineObj, preparedMeasure), x, y, true);
+      return boxIsAfter(cursorCoords(cm, Pos(lineNo$$1, ltr ? part.to : part.from, ltr ? "before" : "after"), "line", lineObj, preparedMeasure), x, y, true);
     }, 0, order.length - 1);
     var part = order[index];
     // If this isn't the first part, the part's start is also after
@@ -5233,7 +5130,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // that start, move one part back.
     if (index > 0) {
       var ltr = part.level != 1;
-      var start = _cursorCoords(cm, Pos(lineNo$$1, ltr ? part.from : part.to, ltr ? "after" : "before"), "line", lineObj, preparedMeasure);
+      var start = cursorCoords(cm, Pos(lineNo$$1, ltr ? part.from : part.to, ltr ? "after" : "before"), "line", lineObj, preparedMeasure);
       if (boxIsAfter(start, x, y, true) && start.top > y) {
         part = order[index - 1];
       }
@@ -5411,7 +5308,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     } catch (e) {
       return null;
     }
-    var coords = _coordsChar(cm, x, y),
+    var coords = coordsChar(cm, x, y),
         line;
     if (forRect && coords.xRel == 1 && (line = getLine(cm.doc, coords.line).text).length == coords.ch) {
       var colDiff = countColumn(line, line.length, cm.options.tabSize) - line.length;
@@ -5472,16 +5369,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // Draws a cursor for the given range
   function drawSelectionCursor(cm, head, output) {
-    var pos = _cursorCoords(cm, head, "div", null, null, !cm.options.singleCursorHeightPerLine);
+    var pos = cursorCoords(cm, head, "div", null, null, !cm.options.singleCursorHeightPerLine);
 
-    var cursor = output.appendChild(elt("div", '\xA0', "CodeMirror-cursor"));
+    var cursor = output.appendChild(elt("div", "\u00a0", "CodeMirror-cursor"));
     cursor.style.left = pos.left + "px";
     cursor.style.top = pos.top + "px";
     cursor.style.height = Math.max(0, pos.bottom - pos.top) * cm.options.cursorHeight + "px";
 
     if (pos.other) {
       // Secondary cursor, shown when on a 'jump' in bi-directional text
-      var otherCursor = output.appendChild(elt("div", '\xA0', "CodeMirror-cursor CodeMirror-secondarycursor"));
+      var otherCursor = output.appendChild(elt("div", "\u00a0", "CodeMirror-cursor CodeMirror-secondarycursor"));
       otherCursor.style.display = "";
       otherCursor.style.left = pos.other.left + "px";
       otherCursor.style.top = pos.other.top + "px";
@@ -5517,7 +5414,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       var lineLen = lineObj.text.length;
       var start, end;
       function coords(ch, bias) {
-        return _charCoords(cm, Pos(line, ch), "div", lineObj, bias);
+        return charCoords(cm, Pos(line, ch), "div", lineObj, bias);
       }
 
       function wrapX(pos, dir, side) {
@@ -5743,8 +5640,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     top = Math.floor(top - paddingTop(display));
     var bottom = viewport && viewport.bottom != null ? viewport.bottom : top + display.wrapper.clientHeight;
 
-    var from = _lineAtHeight(doc, top),
-        to = _lineAtHeight(doc, bottom);
+    var from = lineAtHeight(doc, top),
+        to = lineAtHeight(doc, bottom);
     // Ensure is a {from: {line, ch}, to: {line, ch}} object, and
     // forces those lines into the viewport (if possible).
     if (viewport && viewport.ensure) {
@@ -5752,9 +5649,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           ensureTo = viewport.ensure.to.line;
       if (ensureFrom < from) {
         from = ensureFrom;
-        to = _lineAtHeight(doc, _heightAtLine(getLine(doc, ensureFrom)) + display.wrapper.clientHeight);
+        to = lineAtHeight(doc, heightAtLine(getLine(doc, ensureFrom)) + display.wrapper.clientHeight);
       } else if (Math.min(ensureTo, doc.lastLine()) >= to) {
-        from = _lineAtHeight(doc, _heightAtLine(getLine(doc, ensureTo)) - display.wrapper.clientHeight);
+        from = lineAtHeight(doc, heightAtLine(getLine(doc, ensureTo)) - display.wrapper.clientHeight);
         to = ensureTo;
       }
     }
@@ -5838,7 +5735,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       doScroll = false;
     }
     if (doScroll != null && !phantom) {
-      var scrollNode = elt("div", '\u200B', null, "position: absolute;\n                         top: " + (rect.top - display.viewOffset - paddingTop(cm.display)) + "px;\n                         height: " + (rect.bottom - rect.top + scrollGap(cm) + display.barHeight) + "px;\n                         left: " + rect.left + "px; width: " + Math.max(2, rect.right - rect.left) + "px;");
+      var scrollNode = elt("div", "\u200b", null, "position: absolute;\n                         top: " + (rect.top - display.viewOffset - paddingTop(cm.display)) + "px;\n                         height: " + (rect.bottom - rect.top + scrollGap(cm) + display.barHeight) + "px;\n                         left: " + rect.left + "px; width: " + Math.max(2, rect.right - rect.left) + "px;");
       cm.display.lineSpace.appendChild(scrollNode);
       scrollNode.scrollIntoView(doScroll);
       cm.display.lineSpace.removeChild(scrollNode);
@@ -5862,8 +5759,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
     for (var limit = 0; limit < 5; limit++) {
       var changed = false;
-      var coords = _cursorCoords(cm, pos);
-      var endCoords = !end || end == pos ? coords : _cursorCoords(cm, end);
+      var coords = cursorCoords(cm, pos);
+      var endCoords = !end || end == pos ? coords : cursorCoords(cm, end);
       rect = { left: Math.min(coords.left, endCoords.left),
         top: Math.min(coords.top, endCoords.top) - margin,
         right: Math.max(coords.left, endCoords.left),
@@ -6068,7 +5965,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
   }
 
-  var NativeScrollbars = function NativeScrollbars(place, scroll, cm) {
+  var NativeScrollbars = function (place, scroll, cm) {
     this.cm = cm;
     var vert = this.vert = elt("div", [elt("div", null, null, "min-width: 1px")], "CodeMirror-vscrollbar");
     var horiz = this.horiz = elt("div", [elt("div", null, null, "height: 100%; min-height: 1px")], "CodeMirror-hscrollbar");
@@ -6181,7 +6078,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     parent.removeChild(this.vert);
   };
 
-  var NullScrollbars = function NullScrollbars() {};
+  var NullScrollbars = function () {};
 
   NullScrollbars.prototype.update = function () {
     return { bottom: 0, right: 0 };
@@ -6273,7 +6170,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   var nextOpId = 0;
   // Start a new operation.
-  function _startOperation(cm) {
+  function startOperation(cm) {
     cm.curOp = {
       cm: cm,
       viewChanged: false, // Flag that indicates that lines might need to be redrawn
@@ -6295,7 +6192,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   }
 
   // Finish an operation, updating the display and signalling delayed events
-  function _endOperation(cm) {
+  function endOperation(cm) {
     var op = cm.curOp;
     finishOperation(op, function (group) {
       for (var i = 0; i < group.ops.length; i++) {
@@ -6429,7 +6326,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
     // If we need to scroll a specific position into view, do so.
     if (op.scrollToPos) {
-      var rect = scrollPosIntoView(cm, _clipPos(doc, op.scrollToPos.from), _clipPos(doc, op.scrollToPos.to), op.scrollToPos.margin);
+      var rect = scrollPosIntoView(cm, clipPos(doc, op.scrollToPos.from), clipPos(doc, op.scrollToPos.to), op.scrollToPos.margin);
       maybeScrollWindow(cm, rect);
     }
 
@@ -6470,11 +6367,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     if (cm.curOp) {
       return f();
     }
-    _startOperation(cm);
+    startOperation(cm);
     try {
       return f();
     } finally {
-      _endOperation(cm);
+      endOperation(cm);
     }
   }
   // Wraps a function in an operation. Returns the wrapped function.
@@ -6483,11 +6380,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       if (cm.curOp) {
         return f.apply(cm, arguments);
       }
-      _startOperation(cm);
+      startOperation(cm);
       try {
         return f.apply(cm, arguments);
       } finally {
-        _endOperation(cm);
+        endOperation(cm);
       }
     };
   }
@@ -6498,11 +6395,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       if (this.curOp) {
         return f.apply(this, arguments);
       }
-      _startOperation(this);
+      startOperation(this);
       try {
         return f.apply(this, arguments);
       } finally {
-        _endOperation(this);
+        endOperation(this);
       }
     };
   }
@@ -6512,11 +6409,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       if (!cm || cm.curOp) {
         return f.apply(this, arguments);
       }
-      _startOperation(cm);
+      startOperation(cm);
       try {
         return f.apply(this, arguments);
       } finally {
-        _endOperation(cm);
+        endOperation(cm);
       }
     };
   }
@@ -6771,7 +6668,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // DISPLAY DRAWING
 
-  var DisplayUpdate = function DisplayUpdate(cm, viewport, force) {
+  var DisplayUpdate = function (cm, viewport, force) {
     var display = cm.display;
 
     this.viewport = viewport;
@@ -6887,7 +6784,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var different = from != display.viewFrom || to != display.viewTo || display.lastWrapHeight != update.wrapperHeight || display.lastWrapWidth != update.wrapperWidth;
     adjustView(cm, from, to);
 
-    display.viewOffset = _heightAtLine(getLine(cm.doc, display.viewFrom));
+    display.viewOffset = heightAtLine(getLine(cm.doc, display.viewFrom));
     // Position the mover div to align with the current scroll position
     cm.display.mover.style.top = display.viewOffset + "px";
 
@@ -7214,7 +7111,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // (and non-touching) ranges, sorted, and an integer that indicates
   // which one is the primary selection (the one that's scrolled into
   // view, that getCursor returns, etc).
-  var Selection = function Selection(ranges, primIndex) {
+  var Selection = function (ranges, primIndex) {
     this.ranges = ranges;
     this.primIndex = primIndex;
   };
@@ -7278,7 +7175,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return -1;
   };
 
-  var Range = function Range(anchor, head) {
+  var Range = function (anchor, head) {
     this.anchor = anchor;this.head = head;
   };
 
@@ -7848,12 +7745,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   function filterSelectionChange(doc, sel, options) {
     var obj = {
       ranges: sel.ranges,
-      update: function update(ranges) {
+      update: function (ranges) {
         var this$1 = this;
 
         this.ranges = [];
         for (var i = 0; i < ranges.length; i++) {
-          this$1.ranges[i] = new Range(_clipPos(doc, ranges[i].anchor), _clipPos(doc, ranges[i].head));
+          this$1.ranges[i] = new Range(clipPos(doc, ranges[i].anchor), clipPos(doc, ranges[i].head));
         }
       },
       origin: options && options.origin
@@ -7995,7 +7892,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   function movePos(doc, pos, dir, line) {
     if (dir < 0 && pos.ch == 0) {
       if (pos.line > doc.first) {
-        return _clipPos(doc, Pos(pos.line - 1));
+        return clipPos(doc, Pos(pos.line - 1));
       } else {
         return null;
       }
@@ -8024,17 +7921,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       to: change.to,
       text: change.text,
       origin: change.origin,
-      cancel: function cancel() {
+      cancel: function () {
         return obj.canceled = true;
       }
     };
     if (update) {
       obj.update = function (from, to, text, origin) {
         if (from) {
-          obj.from = _clipPos(doc, from);
+          obj.from = clipPos(doc, from);
         }
         if (to) {
-          obj.to = _clipPos(doc, to);
+          obj.to = clipPos(doc, to);
         }
         if (text) {
           obj.text = text;
@@ -8158,7 +8055,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     var filter = hasHandler(doc, "beforeChange") || doc.cm && hasHandler(doc.cm, "beforeChange");
 
-    var loop = function loop(i) {
+    var loop = function (i) {
       var change = event.changes[i];
       change.origin = type;
       if (filter && !filterChange(doc, change, false)) {
@@ -8324,7 +8221,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     cm.display.selForContextMenu = null;
   }
 
-  function _replaceRange(doc, code, from, to, origin) {
+  function replaceRange(doc, code, from, to, origin) {
     if (!to) {
       to = from;
     }
@@ -8629,7 +8526,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // Line widgets are block elements displayed above or below a line.
 
-  var LineWidget = function LineWidget(doc, node, options) {
+  var LineWidget = function (doc, node, options) {
     var this$1 = this;
 
     if (options) {
@@ -8695,7 +8592,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   eventMixin(LineWidget);
 
   function adjustScrollWhenAboveVisible(cm, line, diff) {
-    if (_heightAtLine(line) < (cm.curOp && cm.curOp.scrollTop || cm.doc.scrollTop)) {
+    if (heightAtLine(line) < (cm.curOp && cm.curOp.scrollTop || cm.doc.scrollTop)) {
       addToScrollTop(cm, diff);
     }
   }
@@ -8715,7 +8612,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
       widget.line = line;
       if (cm && !lineIsHidden(doc, line)) {
-        var aboveVisible = _heightAtLine(line) < doc.scrollTop;
+        var aboveVisible = heightAtLine(line) < doc.scrollTop;
         updateLineHeight(line, line.height + widgetHeight(widget));
         if (aboveVisible) {
           addToScrollTop(cm, widget.height);
@@ -8747,7 +8644,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // when they overlap (they may nest, but not partially overlap).
   var nextMarkerId = 0;
 
-  var TextMarker = function TextMarker(doc, type) {
+  var TextMarker = function (doc, type) {
     this.lines = [];
     this.type = type;
     this.doc = doc;
@@ -8764,7 +8661,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var cm = this.doc.cm,
         withOp = cm && !cm.curOp;
     if (withOp) {
-      _startOperation(cm);
+      startOperation(cm);
     }
     if (hasHandler(this, "clear")) {
       var found = this.find();
@@ -8819,7 +8716,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       signalLater(cm, "markerCleared", cm, this, min, max);
     }
     if (withOp) {
-      _endOperation(cm);
+      endOperation(cm);
     }
     if (this.parent) {
       this.parent.clear();
@@ -8908,7 +8805,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   eventMixin(TextMarker);
 
   // Create a marker, wire it up to the right lines, and
-  function _markText(doc, from, to, options, type) {
+  function markText(doc, from, to, options, type) {
     // Shared markers (across linked documents) are handled separately
     // (markTextShared will call out to this again, once per
     // document).
@@ -8917,7 +8814,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
     // Ensure we are in an operation.
     if (doc.cm && !doc.cm.curOp) {
-      return operation(doc.cm, _markText)(doc, from, to, options, type);
+      return operation(doc.cm, markText)(doc, from, to, options, type);
     }
 
     var marker = new TextMarker(doc, type),
@@ -9014,7 +8911,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // A shared marker spans multiple linked documents. It is
   // implemented as a meta-marker-object controlling multiple normal
   // markers.
-  var SharedTextMarker = function SharedTextMarker(markers, primary) {
+  var SharedTextMarker = function (markers, primary) {
     var this$1 = this;
 
     this.markers = markers;
@@ -9045,14 +8942,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   function markTextShared(doc, from, to, options, type) {
     options = copyObj(options);
     options.shared = false;
-    var markers = [_markText(doc, from, to, options, type)],
+    var markers = [markText(doc, from, to, options, type)],
         primary = markers[0];
     var widget = options.widgetNode;
     linkedDocs(doc, function (doc) {
       if (widget) {
         options.widgetNode = widget.cloneNode(true);
       }
-      markers.push(_markText(doc, _clipPos(doc, from), _clipPos(doc, to), options, type));
+      markers.push(markText(doc, clipPos(doc, from), clipPos(doc, to), options, type));
       for (var i = 0; i < doc.linked.length; ++i) {
         if (doc.linked[i].isParent) {
           return;
@@ -9076,7 +8973,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       var mFrom = doc.clipPos(pos.from),
           mTo = doc.clipPos(pos.to);
       if (cmp(mFrom, mTo)) {
-        var subMark = _markText(doc, mFrom, mTo, marker.primary, marker.primary.type);
+        var subMark = markText(doc, mFrom, mTo, marker.primary, marker.primary.type);
         marker.markers.push(subMark);
         subMark.parent = marker;
       }
@@ -9084,7 +8981,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   }
 
   function detachSharedMarkers(markers) {
-    var loop = function loop(i) {
+    var loop = function (i) {
       var marker = markers[i],
           linked = [marker.primary.doc];
       linkedDocs(marker.primary.doc, function (d) {
@@ -9099,13 +8996,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
     };
 
-    for (var i = 0; i < markers.length; i++) {
-      loop(i);
-    }
+    for (var i = 0; i < markers.length; i++) loop(i);
   }
 
   var nextDocId = 0;
-  var Doc = function Doc(text, mode, firstLine, lineSep, direction) {
+  var Doc = function (text, mode, firstLine, lineSep, direction) {
     if (!(this instanceof Doc)) {
       return new Doc(text, mode, firstLine, lineSep, direction);
     }
@@ -9141,7 +9036,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // argument, it calls that for each line in the document. With
     // three, it iterates over the range given by the first two (with
     // the second being non-inclusive).
-    iter: function iter(from, to, op) {
+    iter: function (from, to, op) {
       if (op) {
         this.iterN(from - this.first, to - from, op);
       } else {
@@ -9150,21 +9045,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // Non-public interface for adding and removing lines.
-    insert: function insert(at, lines) {
+    insert: function (at, lines) {
       var height = 0;
       for (var i = 0; i < lines.length; ++i) {
         height += lines[i].height;
       }
       this.insertInner(at - this.first, lines, height);
     },
-    remove: function remove(at, n) {
+    remove: function (at, n) {
       this.removeInner(at - this.first, n);
     },
 
     // From here, the methods are part of the public interface. Most
     // are also available from CodeMirror (editor) instances.
 
-    getValue: function getValue(lineSep) {
+    getValue: function (lineSep) {
       var lines = getLines(this, this.first, this.first + this.size);
       if (lineSep === false) {
         return lines;
@@ -9181,54 +9076,54 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
       setSelection(this, simpleSelection(top), sel_dontScroll);
     }),
-    replaceRange: function replaceRange(code, from, to, origin) {
-      from = _clipPos(this, from);
-      to = to ? _clipPos(this, to) : from;
-      _replaceRange(this, code, from, to, origin);
+    replaceRange: function (code, from, to, origin) {
+      from = clipPos(this, from);
+      to = to ? clipPos(this, to) : from;
+      replaceRange(this, code, from, to, origin);
     },
-    getRange: function getRange(from, to, lineSep) {
-      var lines = getBetween(this, _clipPos(this, from), _clipPos(this, to));
+    getRange: function (from, to, lineSep) {
+      var lines = getBetween(this, clipPos(this, from), clipPos(this, to));
       if (lineSep === false) {
         return lines;
       }
       return lines.join(lineSep || this.lineSeparator());
     },
 
-    getLine: function getLine(line) {
+    getLine: function (line) {
       var l = this.getLineHandle(line);return l && l.text;
     },
 
-    getLineHandle: function getLineHandle(line) {
+    getLineHandle: function (line) {
       if (isLine(this, line)) {
         return getLine(this, line);
       }
     },
-    getLineNumber: function getLineNumber(line) {
+    getLineNumber: function (line) {
       return lineNo(line);
     },
 
-    getLineHandleVisualStart: function getLineHandleVisualStart(line) {
+    getLineHandleVisualStart: function (line) {
       if (typeof line == "number") {
         line = getLine(this, line);
       }
       return visualLine(line);
     },
 
-    lineCount: function lineCount() {
+    lineCount: function () {
       return this.size;
     },
-    firstLine: function firstLine() {
+    firstLine: function () {
       return this.first;
     },
-    lastLine: function lastLine() {
+    lastLine: function () {
       return this.first + this.size - 1;
     },
 
-    clipPos: function clipPos(pos) {
-      return _clipPos(this, pos);
+    clipPos: function (pos) {
+      return clipPos(this, pos);
     },
 
-    getCursor: function getCursor(start) {
+    getCursor: function (start) {
       var range$$1 = this.sel.primary(),
           pos;
       if (start == null || start == "head") {
@@ -9242,21 +9137,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
       return pos;
     },
-    listSelections: function listSelections() {
+    listSelections: function () {
       return this.sel.ranges;
     },
-    somethingSelected: function somethingSelected() {
+    somethingSelected: function () {
       return this.sel.somethingSelected();
     },
 
     setCursor: docMethodOp(function (line, ch, options) {
-      setSimpleSelection(this, _clipPos(this, typeof line == "number" ? Pos(line, ch || 0) : line), null, options);
+      setSimpleSelection(this, clipPos(this, typeof line == "number" ? Pos(line, ch || 0) : line), null, options);
     }),
     setSelection: docMethodOp(function (anchor, head, options) {
-      setSimpleSelection(this, _clipPos(this, anchor), _clipPos(this, head || anchor), options);
+      setSimpleSelection(this, clipPos(this, anchor), clipPos(this, head || anchor), options);
     }),
     extendSelection: docMethodOp(function (head, other, options) {
-      extendSelection(this, _clipPos(this, head), other && _clipPos(this, other), options);
+      extendSelection(this, clipPos(this, head), other && clipPos(this, other), options);
     }),
     extendSelections: docMethodOp(function (heads, options) {
       extendSelections(this, clipPosArray(this, heads), options);
@@ -9273,7 +9168,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
       var out = [];
       for (var i = 0; i < ranges.length; i++) {
-        out[i] = new Range(_clipPos(this$1, ranges[i].anchor), _clipPos(this$1, ranges[i].head));
+        out[i] = new Range(clipPos(this$1, ranges[i].anchor), clipPos(this$1, ranges[i].head));
       }
       if (primary == null) {
         primary = Math.min(ranges.length - 1, this.sel.primIndex);
@@ -9282,11 +9177,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }),
     addSelection: docMethodOp(function (anchor, head, options) {
       var ranges = this.sel.ranges.slice(0);
-      ranges.push(new Range(_clipPos(this, anchor), _clipPos(this, head || anchor)));
+      ranges.push(new Range(clipPos(this, anchor), clipPos(this, head || anchor)));
       setSelection(this, normalizeSelection(ranges, ranges.length - 1), options);
     }),
 
-    getSelection: function getSelection(lineSep) {
+    getSelection: function (lineSep) {
       var this$1 = this;
 
       var ranges = this.sel.ranges,
@@ -9301,7 +9196,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return lines.join(lineSep || this.lineSeparator());
       }
     },
-    getSelections: function getSelections(lineSep) {
+    getSelections: function (lineSep) {
       var this$1 = this;
 
       var parts = [],
@@ -9315,7 +9210,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
       return parts;
     },
-    replaceSelection: function replaceSelection(code, collapse, origin) {
+    replaceSelection: function (code, collapse, origin) {
       var dup = [];
       for (var i = 0; i < this.sel.ranges.length; i++) {
         dup[i] = code;
@@ -9354,14 +9249,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       makeChangeFromHistory(this, "redo", true);
     }),
 
-    setExtending: function setExtending(val) {
+    setExtending: function (val) {
       this.extend = val;
     },
-    getExtending: function getExtending() {
+    getExtending: function () {
       return this.extend;
     },
 
-    historySize: function historySize() {
+    historySize: function () {
       var hist = this.history,
           done = 0,
           undone = 0;
@@ -9377,28 +9272,28 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
       return { undo: done, redo: undone };
     },
-    clearHistory: function clearHistory() {
+    clearHistory: function () {
       this.history = new History(this.history.maxGeneration);
     },
 
-    markClean: function markClean() {
+    markClean: function () {
       this.cleanGeneration = this.changeGeneration(true);
     },
-    changeGeneration: function changeGeneration(forceSplit) {
+    changeGeneration: function (forceSplit) {
       if (forceSplit) {
         this.history.lastOp = this.history.lastSelOp = this.history.lastOrigin = null;
       }
       return this.history.generation;
     },
-    isClean: function isClean(gen) {
+    isClean: function (gen) {
       return this.history.generation == (gen || this.cleanGeneration);
     },
 
-    getHistory: function getHistory() {
+    getHistory: function () {
       return { done: copyHistoryArray(this.history.done),
         undone: copyHistoryArray(this.history.undone) };
     },
-    setHistory: function setHistory(histData) {
+    setHistory: function (histData) {
       var hist = this.history = new History(this.history.maxGeneration);
       hist.done = copyHistoryArray(histData.done.slice(0), null, true);
       hist.undone = copyHistoryArray(histData.undone.slice(0), null, true);
@@ -9431,7 +9326,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       });
     }),
 
-    lineInfo: function lineInfo(line) {
+    lineInfo: function (line) {
       var n;
       if (typeof line == "number") {
         if (!isLine(this, line)) {
@@ -9489,23 +9384,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     addLineWidget: docMethodOp(function (handle, node, options) {
       return addLineWidget(this, handle, node, options);
     }),
-    removeLineWidget: function removeLineWidget(widget) {
+    removeLineWidget: function (widget) {
       widget.clear();
     },
 
-    markText: function markText(from, to, options) {
-      return _markText(this, _clipPos(this, from), _clipPos(this, to), options, options && options.type || "range");
+    markText: function (from, to, options) {
+      return markText(this, clipPos(this, from), clipPos(this, to), options, options && options.type || "range");
     },
-    setBookmark: function setBookmark(pos, options) {
+    setBookmark: function (pos, options) {
       var realOpts = { replacedWith: options && (options.nodeType == null ? options.widget : options),
         insertLeft: options && options.insertLeft,
         clearWhenEmpty: false, shared: options && options.shared,
         handleMouseEvents: options && options.handleMouseEvents };
-      pos = _clipPos(this, pos);
-      return _markText(this, pos, pos, realOpts, "bookmark");
+      pos = clipPos(this, pos);
+      return markText(this, pos, pos, realOpts, "bookmark");
     },
-    findMarksAt: function findMarksAt(pos) {
-      pos = _clipPos(this, pos);
+    findMarksAt: function (pos) {
+      pos = clipPos(this, pos);
       var markers = [],
           spans = getLine(this, pos.line).markedSpans;
       if (spans) {
@@ -9518,8 +9413,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
       return markers;
     },
-    findMarks: function findMarks(from, to, filter) {
-      from = _clipPos(this, from);to = _clipPos(this, to);
+    findMarks: function (from, to, filter) {
+      from = clipPos(this, from);to = clipPos(this, to);
       var found = [],
           lineNo$$1 = from.line;
       this.iter(from.line, to.line + 1, function (line) {
@@ -9536,7 +9431,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       });
       return found;
     },
-    getAllMarks: function getAllMarks() {
+    getAllMarks: function () {
       var markers = [];
       this.iter(function (line) {
         var sps = line.markedSpans;
@@ -9551,7 +9446,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       return markers;
     },
 
-    posFromIndex: function posFromIndex(off) {
+    posFromIndex: function (off) {
       var ch,
           lineNo$$1 = this.first,
           sepSize = this.lineSeparator().length;
@@ -9563,10 +9458,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         off -= sz;
         ++lineNo$$1;
       });
-      return _clipPos(this, Pos(lineNo$$1, ch));
+      return clipPos(this, Pos(lineNo$$1, ch));
     },
-    indexFromPos: function indexFromPos(coords) {
-      coords = _clipPos(this, coords);
+    indexFromPos: function (coords) {
+      coords = clipPos(this, coords);
       var index = coords.ch;
       if (coords.line < this.first || coords.ch < 0) {
         return 0;
@@ -9579,7 +9474,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       return index;
     },
 
-    copy: function copy(copyHistory) {
+    copy: function (copyHistory) {
       var doc = new Doc(getLines(this, this.first, this.first + this.size), this.modeOption, this.first, this.lineSep, this.direction);
       doc.scrollTop = this.scrollTop;doc.scrollLeft = this.scrollLeft;
       doc.sel = this.sel;
@@ -9591,7 +9486,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       return doc;
     },
 
-    linkedDoc: function linkedDoc(options) {
+    linkedDoc: function (options) {
       if (!options) {
         options = {};
       }
@@ -9611,7 +9506,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       copySharedMarkers(copy, findSharedMarkers(this));
       return copy;
     },
-    unlinkDoc: function unlinkDoc(other) {
+    unlinkDoc: function (other) {
       var this$1 = this;
 
       if (other instanceof CodeMirror$1) {
@@ -9640,24 +9535,24 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         other.history.undone = copyHistoryArray(this.history.undone, splitIds);
       }
     },
-    iterLinkedDocs: function iterLinkedDocs(f) {
+    iterLinkedDocs: function (f) {
       linkedDocs(this, f);
     },
 
-    getMode: function getMode() {
+    getMode: function () {
       return this.mode;
     },
-    getEditor: function getEditor() {
+    getEditor: function () {
       return this.cm;
     },
 
-    splitLines: function splitLines(str) {
+    splitLines: function (str) {
       if (this.lineSep) {
         return str.split(this.lineSep);
       }
       return splitLinesAuto(str);
     },
-    lineSeparator: function lineSeparator() {
+    lineSeparator: function () {
       return this.lineSep || "\n";
     },
 
@@ -9706,7 +9601,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       var n = files.length,
           text = Array(n),
           read = 0;
-      var loadFile = function loadFile(file, i) {
+      var loadFile = function (file, i) {
         if (cm.options.allowDropFileTypes && indexOf(cm.options.allowDropFileTypes, file.type) == -1) {
           return;
         }
@@ -9719,7 +9614,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           }
           text[i] = content;
           if (++read == n) {
-            pos = _clipPos(cm.doc, pos);
+            pos = clipPos(cm.doc, pos);
             var change = { from: pos, to: pos,
               text: cm.doc.splitLines(text.join(cm.doc.lineSeparator())),
               origin: "paste" };
@@ -9753,7 +9648,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           setSelectionNoUndo(cm.doc, simpleSelection(pos, pos));
           if (selected) {
             for (var i$1 = 0; i$1 < selected.length; ++i$1) {
-              _replaceRange(cm.doc, "", selected[i$1].anchor, selected[i$1].head, "drag");
+              replaceRange(cm.doc, "", selected[i$1].anchor, selected[i$1].head, "drag");
             }
           }
           cm.replaceSelection(text$1, "around", "paste");
@@ -10104,7 +9999,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // Next, remove those actual ranges.
     runInOp(cm, function () {
       for (var i = kill.length - 1; i >= 0; i--) {
-        _replaceRange(cm.doc, "", kill[i].from, kill[i].to, "+delete");
+        replaceRange(cm.doc, "", kill[i].from, kill[i].to, "+delete");
       }
       ensureCursorVisible(cm);
     });
@@ -10173,11 +10068,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       return moveLogically(line, start, dir);
     }
 
-    var mv = function mv(pos, dir) {
+    var mv = function (pos, dir) {
       return moveCharLogically(line, pos instanceof Pos ? pos.ch : pos, dir);
     };
     var prep;
-    var getWrappedLineExtent = function getWrappedLineExtent(ch) {
+    var getWrappedLineExtent = function (ch) {
       if (!cm.options.lineWrapping) {
         return { begin: 0, end: line.text.length };
       }
@@ -10199,8 +10094,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // Case 3: Could not move within this bidi part in this visual line, so leave
     // the current bidi part
 
-    var searchInVisualLine = function searchInVisualLine(partPos, dir, wrappedLineExtent) {
-      var getRes = function getRes(ch, moveInStorageOrder) {
+    var searchInVisualLine = function (partPos, dir, wrappedLineExtent) {
+      var getRes = function (ch, moveInStorageOrder) {
         return moveInStorageOrder ? new Pos(start.line, mv(ch, 1), "before") : new Pos(start.line, ch, "after");
       };
 
@@ -10241,10 +10136,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // editor, mostly used for keybindings.
   var commands = {
     selectAll: selectAll,
-    singleSelection: function singleSelection(cm) {
+    singleSelection: function (cm) {
       return cm.setSelection(cm.getCursor("anchor"), cm.getCursor("head"), sel_dontScroll);
     },
-    killLine: function killLine(cm) {
+    killLine: function (cm) {
       return deleteNearSelection(cm, function (range) {
         if (range.empty()) {
           var len = getLine(cm.doc, range.head.line).text.length;
@@ -10258,81 +10153,81 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
       });
     },
-    deleteLine: function deleteLine(cm) {
+    deleteLine: function (cm) {
       return deleteNearSelection(cm, function (range) {
         return {
           from: Pos(range.from().line, 0),
-          to: _clipPos(cm.doc, Pos(range.to().line + 1, 0))
+          to: clipPos(cm.doc, Pos(range.to().line + 1, 0))
         };
       });
     },
-    delLineLeft: function delLineLeft(cm) {
+    delLineLeft: function (cm) {
       return deleteNearSelection(cm, function (range) {
         return {
           from: Pos(range.from().line, 0), to: range.from()
         };
       });
     },
-    delWrappedLineLeft: function delWrappedLineLeft(cm) {
+    delWrappedLineLeft: function (cm) {
       return deleteNearSelection(cm, function (range) {
         var top = cm.charCoords(range.head, "div").top + 5;
         var leftPos = cm.coordsChar({ left: 0, top: top }, "div");
         return { from: leftPos, to: range.from() };
       });
     },
-    delWrappedLineRight: function delWrappedLineRight(cm) {
+    delWrappedLineRight: function (cm) {
       return deleteNearSelection(cm, function (range) {
         var top = cm.charCoords(range.head, "div").top + 5;
         var rightPos = cm.coordsChar({ left: cm.display.lineDiv.offsetWidth + 100, top: top }, "div");
         return { from: range.from(), to: rightPos };
       });
     },
-    undo: function undo(cm) {
+    undo: function (cm) {
       return cm.undo();
     },
-    redo: function redo(cm) {
+    redo: function (cm) {
       return cm.redo();
     },
-    undoSelection: function undoSelection(cm) {
+    undoSelection: function (cm) {
       return cm.undoSelection();
     },
-    redoSelection: function redoSelection(cm) {
+    redoSelection: function (cm) {
       return cm.redoSelection();
     },
-    goDocStart: function goDocStart(cm) {
+    goDocStart: function (cm) {
       return cm.extendSelection(Pos(cm.firstLine(), 0));
     },
-    goDocEnd: function goDocEnd(cm) {
+    goDocEnd: function (cm) {
       return cm.extendSelection(Pos(cm.lastLine()));
     },
-    goLineStart: function goLineStart(cm) {
+    goLineStart: function (cm) {
       return cm.extendSelectionsBy(function (range) {
         return lineStart(cm, range.head.line);
       }, { origin: "+move", bias: 1 });
     },
-    goLineStartSmart: function goLineStartSmart(cm) {
+    goLineStartSmart: function (cm) {
       return cm.extendSelectionsBy(function (range) {
         return lineStartSmart(cm, range.head);
       }, { origin: "+move", bias: 1 });
     },
-    goLineEnd: function goLineEnd(cm) {
+    goLineEnd: function (cm) {
       return cm.extendSelectionsBy(function (range) {
         return lineEnd(cm, range.head.line);
       }, { origin: "+move", bias: -1 });
     },
-    goLineRight: function goLineRight(cm) {
+    goLineRight: function (cm) {
       return cm.extendSelectionsBy(function (range) {
         var top = cm.cursorCoords(range.head, "div").top + 5;
         return cm.coordsChar({ left: cm.display.lineDiv.offsetWidth + 100, top: top }, "div");
       }, sel_move);
     },
-    goLineLeft: function goLineLeft(cm) {
+    goLineLeft: function (cm) {
       return cm.extendSelectionsBy(function (range) {
         var top = cm.cursorCoords(range.head, "div").top + 5;
         return cm.coordsChar({ left: 0, top: top }, "div");
       }, sel_move);
     },
-    goLineLeftSmart: function goLineLeftSmart(cm) {
+    goLineLeftSmart: function (cm) {
       return cm.extendSelectionsBy(function (range) {
         var top = cm.cursorCoords(range.head, "div").top + 5;
         var pos = cm.coordsChar({ left: 0, top: top }, "div");
@@ -10342,73 +10237,73 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return pos;
       }, sel_move);
     },
-    goLineUp: function goLineUp(cm) {
+    goLineUp: function (cm) {
       return cm.moveV(-1, "line");
     },
-    goLineDown: function goLineDown(cm) {
+    goLineDown: function (cm) {
       return cm.moveV(1, "line");
     },
-    goPageUp: function goPageUp(cm) {
+    goPageUp: function (cm) {
       return cm.moveV(-1, "page");
     },
-    goPageDown: function goPageDown(cm) {
+    goPageDown: function (cm) {
       return cm.moveV(1, "page");
     },
-    goCharLeft: function goCharLeft(cm) {
+    goCharLeft: function (cm) {
       return cm.moveH(-1, "char");
     },
-    goCharRight: function goCharRight(cm) {
+    goCharRight: function (cm) {
       return cm.moveH(1, "char");
     },
-    goColumnLeft: function goColumnLeft(cm) {
+    goColumnLeft: function (cm) {
       return cm.moveH(-1, "column");
     },
-    goColumnRight: function goColumnRight(cm) {
+    goColumnRight: function (cm) {
       return cm.moveH(1, "column");
     },
-    goWordLeft: function goWordLeft(cm) {
+    goWordLeft: function (cm) {
       return cm.moveH(-1, "word");
     },
-    goGroupRight: function goGroupRight(cm) {
+    goGroupRight: function (cm) {
       return cm.moveH(1, "group");
     },
-    goGroupLeft: function goGroupLeft(cm) {
+    goGroupLeft: function (cm) {
       return cm.moveH(-1, "group");
     },
-    goWordRight: function goWordRight(cm) {
+    goWordRight: function (cm) {
       return cm.moveH(1, "word");
     },
-    delCharBefore: function delCharBefore(cm) {
+    delCharBefore: function (cm) {
       return cm.deleteH(-1, "char");
     },
-    delCharAfter: function delCharAfter(cm) {
+    delCharAfter: function (cm) {
       return cm.deleteH(1, "char");
     },
-    delWordBefore: function delWordBefore(cm) {
+    delWordBefore: function (cm) {
       return cm.deleteH(-1, "word");
     },
-    delWordAfter: function delWordAfter(cm) {
+    delWordAfter: function (cm) {
       return cm.deleteH(1, "word");
     },
-    delGroupBefore: function delGroupBefore(cm) {
+    delGroupBefore: function (cm) {
       return cm.deleteH(-1, "group");
     },
-    delGroupAfter: function delGroupAfter(cm) {
+    delGroupAfter: function (cm) {
       return cm.deleteH(1, "group");
     },
-    indentAuto: function indentAuto(cm) {
+    indentAuto: function (cm) {
       return cm.indentSelection("smart");
     },
-    indentMore: function indentMore(cm) {
+    indentMore: function (cm) {
       return cm.indentSelection("add");
     },
-    indentLess: function indentLess(cm) {
+    indentLess: function (cm) {
       return cm.indentSelection("subtract");
     },
-    insertTab: function insertTab(cm) {
+    insertTab: function (cm) {
       return cm.replaceSelection("\t");
     },
-    insertSoftTab: function insertSoftTab(cm) {
+    insertSoftTab: function (cm) {
       var spaces = [],
           ranges = cm.listSelections(),
           tabSize = cm.options.tabSize;
@@ -10419,7 +10314,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
       cm.replaceSelections(spaces);
     },
-    defaultTab: function defaultTab(cm) {
+    defaultTab: function (cm) {
       if (cm.somethingSelected()) {
         cm.indentSelection("add");
       } else {
@@ -10433,7 +10328,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // Doesn't scan more than one line above to find a character.
     // Doesn't do anything on an empty line.
     // Doesn't do anything with non-empty selections.
-    transposeChars: function transposeChars(cm) {
+    transposeChars: function (cm) {
       return runInOp(cm, function () {
         var ranges = cm.listSelections(),
             newSel = [];
@@ -10463,7 +10358,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         cm.setSelections(newSel);
       });
     },
-    newlineAndIndent: function newlineAndIndent(cm) {
+    newlineAndIndent: function (cm) {
       return runInOp(cm, function () {
         var sels = cm.listSelections();
         for (var i = sels.length - 1; i >= 0; i--) {
@@ -10476,10 +10371,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         ensureCursorVisible(cm);
       });
     },
-    openLine: function openLine(cm) {
+    openLine: function (cm) {
       return cm.replaceSelection("\n", "start");
     },
-    toggleOverwrite: function toggleOverwrite(cm) {
+    toggleOverwrite: function (cm) {
       return cm.toggleOverwrite();
     }
   };
@@ -10704,7 +10599,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   var DOUBLECLICK_DELAY = 400;
 
-  var PastClick = function PastClick(time, pos, button) {
+  var PastClick = function (time, pos, button) {
     this.time = time;
     this.pos = pos;
     this.button = button;
@@ -10891,10 +10786,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
       }
     });
-    var mouseMove = function mouseMove(e2) {
+    var mouseMove = function (e2) {
       moved = moved || Math.abs(event.clientX - e2.clientX) + Math.abs(event.clientY - e2.clientY) >= 10;
     };
-    var dragStart = function dragStart() {
+    var dragStart = function () {
       return moved = true;
     };
     // Let the drag handler handle this.
@@ -10926,7 +10821,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       return cm.findWordAt(pos);
     }
     if (unit == "line") {
-      return new Range(Pos(pos.line, 0), _clipPos(cm.doc, Pos(pos.line + 1, 0)));
+      return new Range(Pos(pos.line, 0), clipPos(cm.doc, Pos(pos.line + 1, 0)));
     }
     var result = unit(cm, pos);
     return new Range(result.from, result.to);
@@ -11024,7 +10919,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           anchor = maxPos(oldRange.to(), range$$1.head);
         }
         var ranges$1 = startSel.ranges.slice(0);
-        ranges$1[ourIndex] = bidiSimplify(cm, new Range(_clipPos(doc, anchor), head));
+        ranges$1[ourIndex] = bidiSimplify(cm, new Range(clipPos(doc, anchor), head));
         setSelection(doc, normalizeSelection(ranges$1, ourIndex), sel_mouse);
       }
     }
@@ -11167,7 +11062,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     for (var i = 0; i < cm.options.gutters.length; ++i) {
       var g = display.gutters.childNodes[i];
       if (g && g.getBoundingClientRect().right >= mX) {
-        var line = _lineAtHeight(cm.doc, mY);
+        var line = lineAtHeight(cm.doc, mY);
         var gutter = cm.options.gutters[i];
         signal(cm, type, cm, line, gutter, e);
         return e_defaultPrevented(e);
@@ -11206,7 +11101,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     clearCaches(cm);
   }
 
-  var Init = { toString: function toString() {
+  var Init = { toString: function () {
       return "CodeMirror.Init";
     } };
 
@@ -11270,7 +11165,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         lineNo++;
       });
       for (var i = newBreaks.length - 1; i >= 0; i--) {
-        _replaceRange(cm.doc, val, newBreaks[i], Pos(newBreaks[i].line, newBreaks[i].ch + val.length));
+        replaceRange(cm.doc, val, newBreaks[i], Pos(newBreaks[i].line, newBreaks[i].ch + val.length));
       }
     });
     option("specialChars", /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028\u2029\ufeff]/g, function (cm, val, old) {
@@ -11486,7 +11381,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     registerEventHandlers(this);
     ensureGlobalHandlers();
 
-    _startOperation(this);
+    startOperation(this);
     this.curOp.forceUpdate = true;
     attachDoc(this, doc);
 
@@ -11508,7 +11403,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     for (var i = 0; i < initHooks.length; ++i) {
       initHooks[i](this$1);
     }
-    _endOperation(this);
+    endOperation(this);
     // Suppress optimizelegibility in Webkit, since it breaks text
     // measuring on line wrapping boundaries.
     if (webkit && options.lineWrapping && getComputedStyle(display.lineDiv).textRendering == "optimizelegibility") {
@@ -11611,7 +11506,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             range = cm.findWordAt(pos);
           } else // Triple tap
           {
-            range = new Range(Pos(pos.line, 0), _clipPos(cm.doc, Pos(pos.line + 1, 0)));
+            range = new Range(Pos(pos.line, 0), clipPos(cm.doc, Pos(pos.line + 1, 0)));
           }
         cm.setSelection(range.anchor, range.head);
         cm.focus();
@@ -11645,21 +11540,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     });
 
     d.dragFunctions = {
-      enter: function enter(e) {
+      enter: function (e) {
         if (!signalDOMEvent(cm, e)) {
           e_stop(e);
         }
       },
-      over: function over(e) {
+      over: function (e) {
         if (!signalDOMEvent(cm, e)) {
           onDragOver(cm, e);e_stop(e);
         }
       },
-      start: function start(e) {
+      start: function (e) {
         return onDragStart(cm, e);
       },
       drop: operation(cm, onDrop),
-      leave: function leave(e) {
+      leave: function (e) {
         if (!signalDOMEvent(cm, e)) {
           clearDragCursor(cm);
         }
@@ -11753,7 +11648,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     if (indentString != curSpaceString) {
-      _replaceRange(doc, indentString, Pos(n, 0), Pos(n, curSpaceString.length), "+input");
+      replaceRange(doc, indentString, Pos(n, 0), Pos(n, curSpaceString.length), "+input");
       line.stateAfter = null;
       return true;
     } else {
@@ -11929,18 +11824,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // CodeMirror.prototype, for backwards compatibility and
   // convenience.
 
-  var addEditorMethods = function addEditorMethods(CodeMirror) {
+  var addEditorMethods = function (CodeMirror) {
     var optionHandlers = CodeMirror.optionHandlers;
 
     var helpers = CodeMirror.helpers = {};
 
     CodeMirror.prototype = {
       constructor: CodeMirror,
-      focus: function focus() {
+      focus: function () {
         window.focus();this.display.input.focus();
       },
 
-      setOption: function setOption(option, value) {
+      setOption: function (option, value) {
         var options = this.options,
             old = options[option];
         if (options[option] == value && option != "mode") {
@@ -11953,17 +11848,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         signal(this, "optionChange", this, option);
       },
 
-      getOption: function getOption(option) {
+      getOption: function (option) {
         return this.options[option];
       },
-      getDoc: function getDoc() {
+      getDoc: function () {
         return this.doc;
       },
 
-      addKeyMap: function addKeyMap(map$$1, bottom) {
+      addKeyMap: function (map$$1, bottom) {
         this.state.keyMaps[bottom ? "push" : "unshift"](getKeyMap(map$$1));
       },
-      removeKeyMap: function removeKeyMap(map$$1) {
+      removeKeyMap: function (map$$1) {
         var maps = this.state.keyMaps;
         for (var i = 0; i < maps.length; ++i) {
           if (maps[i] == map$$1 || maps[i].name == map$$1) {
@@ -12043,16 +11938,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       // Fetch the parser token for a given character. Useful for hacks
       // that want to inspect the mode state (say, for completion).
-      getTokenAt: function getTokenAt(pos, precise) {
+      getTokenAt: function (pos, precise) {
         return takeToken(this, pos, precise);
       },
 
-      getLineTokens: function getLineTokens(line, precise) {
+      getLineTokens: function (line, precise) {
         return takeToken(this, Pos(line), precise, true);
       },
 
-      getTokenTypeAt: function getTokenTypeAt(pos) {
-        pos = _clipPos(this.doc, pos);
+      getTokenTypeAt: function (pos) {
+        pos = clipPos(this.doc, pos);
         var styles = getLineStyles(this, getLine(this.doc, pos.line));
         var before = 0,
             after = (styles.length - 1) / 2,
@@ -12076,7 +11971,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return cut < 0 ? type : cut == 0 ? null : type.slice(0, cut - 1);
       },
 
-      getModeAt: function getModeAt(pos) {
+      getModeAt: function (pos) {
         var mode = this.doc.mode;
         if (!mode.innerMode) {
           return mode;
@@ -12084,11 +11979,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return CodeMirror.innerMode(mode, this.getTokenAt(pos).state).mode;
       },
 
-      getHelper: function getHelper(pos, type) {
+      getHelper: function (pos, type) {
         return this.getHelpers(pos, type)[0];
       },
 
-      getHelpers: function getHelpers(pos, type) {
+      getHelpers: function (pos, type) {
         var this$1 = this;
 
         var found = [];
@@ -12122,39 +12017,39 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return found;
       },
 
-      getStateAfter: function getStateAfter(line, precise) {
+      getStateAfter: function (line, precise) {
         var doc = this.doc;
         line = clipLine(doc, line == null ? doc.first + doc.size - 1 : line);
         return getContextBefore(this, line + 1, precise).state;
       },
 
-      cursorCoords: function cursorCoords(start, mode) {
+      cursorCoords: function (start, mode) {
         var pos,
             range$$1 = this.doc.sel.primary();
         if (start == null) {
           pos = range$$1.head;
-        } else if ((typeof start === 'undefined' ? 'undefined' : _typeof(start)) == "object") {
-          pos = _clipPos(this.doc, start);
+        } else if (typeof start == "object") {
+          pos = clipPos(this.doc, start);
         } else {
           pos = start ? range$$1.from() : range$$1.to();
         }
-        return _cursorCoords(this, pos, mode || "page");
+        return cursorCoords(this, pos, mode || "page");
       },
 
-      charCoords: function charCoords(pos, mode) {
-        return _charCoords(this, _clipPos(this.doc, pos), mode || "page");
+      charCoords: function (pos, mode) {
+        return charCoords(this, clipPos(this.doc, pos), mode || "page");
       },
 
-      coordsChar: function coordsChar(coords, mode) {
+      coordsChar: function (coords, mode) {
         coords = fromCoordSystem(this, coords, mode || "page");
-        return _coordsChar(this, coords.left, coords.top);
+        return coordsChar(this, coords.left, coords.top);
       },
 
-      lineAtHeight: function lineAtHeight(height, mode) {
+      lineAtHeight: function (height, mode) {
         height = fromCoordSystem(this, { top: height, left: 0 }, mode || "page").top;
-        return _lineAtHeight(this.doc, height + this.display.viewOffset);
+        return lineAtHeight(this.doc, height + this.display.viewOffset);
       },
-      heightAtLine: function heightAtLine(line, mode, includeWidgets) {
+      heightAtLine: function (line, mode, includeWidgets) {
         var end = false,
             lineObj;
         if (typeof line == "number") {
@@ -12168,23 +12063,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         } else {
           lineObj = line;
         }
-        return intoCoordSystem(this, lineObj, { top: 0, left: 0 }, mode || "page", includeWidgets || end).top + (end ? this.doc.height - _heightAtLine(lineObj) : 0);
+        return intoCoordSystem(this, lineObj, { top: 0, left: 0 }, mode || "page", includeWidgets || end).top + (end ? this.doc.height - heightAtLine(lineObj) : 0);
       },
 
-      defaultTextHeight: function defaultTextHeight() {
+      defaultTextHeight: function () {
         return textHeight(this.display);
       },
-      defaultCharWidth: function defaultCharWidth() {
+      defaultCharWidth: function () {
         return charWidth(this.display);
       },
 
-      getViewport: function getViewport() {
+      getViewport: function () {
         return { from: this.display.viewFrom, to: this.display.viewTo };
       },
 
-      addWidget: function addWidget(pos, node, scroll, vert, horiz) {
+      addWidget: function (pos, node, scroll, vert, horiz) {
         var display = this.display;
-        pos = _cursorCoords(this, _clipPos(this.doc, pos));
+        pos = cursorCoords(this, clipPos(this.doc, pos));
         var top = pos.bottom,
             left = pos.left;
         node.style.position = "absolute";
@@ -12229,7 +12124,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       triggerOnKeyUp: onKeyUp,
       triggerOnMouseDown: methodOp(onMouseDown),
 
-      execCommand: function execCommand(cmd) {
+      execCommand: function (cmd) {
         if (commands.hasOwnProperty(cmd)) {
           return commands[cmd].call(null, this);
         }
@@ -12239,16 +12134,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         triggerElectric(this, text);
       }),
 
-      findPosH: function findPosH(from, amount, unit, visually) {
+      findPosH: function (from, amount, unit, visually) {
         var this$1 = this;
 
         var dir = 1;
         if (amount < 0) {
           dir = -1;amount = -amount;
         }
-        var cur = _clipPos(this.doc, from);
+        var cur = clipPos(this.doc, from);
         for (var i = 0; i < amount; ++i) {
-          cur = _findPosH(this$1.doc, cur, dir, unit, visually);
+          cur = findPosH(this$1.doc, cur, dir, unit, visually);
           if (cur.hitSide) {
             break;
           }
@@ -12261,7 +12156,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         this.extendSelectionsBy(function (range$$1) {
           if (this$1.display.shift || this$1.doc.extend || range$$1.empty()) {
-            return _findPosH(this$1.doc, range$$1.head, dir, unit, this$1.options.rtlMoveVisually);
+            return findPosH(this$1.doc, range$$1.head, dir, unit, this$1.options.rtlMoveVisually);
           } else {
             return dir < 0 ? range$$1.from() : range$$1.to();
           }
@@ -12275,13 +12170,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           doc.replaceSelection("", null, "+delete");
         } else {
           deleteNearSelection(this, function (range$$1) {
-            var other = _findPosH(doc, range$$1.head, dir, unit, false);
+            var other = findPosH(doc, range$$1.head, dir, unit, false);
             return dir < 0 ? { from: other, to: range$$1.head } : { from: range$$1.head, to: other };
           });
         }
       }),
 
-      findPosV: function findPosV(from, amount, unit, goalColumn) {
+      findPosV: function (from, amount, unit, goalColumn) {
         var this$1 = this;
 
         var dir = 1,
@@ -12289,15 +12184,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (amount < 0) {
           dir = -1;amount = -amount;
         }
-        var cur = _clipPos(this.doc, from);
+        var cur = clipPos(this.doc, from);
         for (var i = 0; i < amount; ++i) {
-          var coords = _cursorCoords(this$1, cur, "div");
+          var coords = cursorCoords(this$1, cur, "div");
           if (x == null) {
             x = coords.left;
           } else {
             coords.left = x;
           }
-          cur = _findPosV(this$1, coords, dir, unit);
+          cur = findPosV(this$1, coords, dir, unit);
           if (cur.hitSide) {
             break;
           }
@@ -12315,14 +12210,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           if (collapse) {
             return dir < 0 ? range$$1.from() : range$$1.to();
           }
-          var headPos = _cursorCoords(this$1, range$$1.head, "div");
+          var headPos = cursorCoords(this$1, range$$1.head, "div");
           if (range$$1.goalColumn != null) {
             headPos.left = range$$1.goalColumn;
           }
           goals.push(headPos.left);
-          var pos = _findPosV(this$1, headPos, dir, unit);
+          var pos = findPosV(this$1, headPos, dir, unit);
           if (unit == "page" && range$$1 == doc.sel.primary()) {
-            addToScrollTop(this$1, _charCoords(this$1, pos, "div").top - headPos.top);
+            addToScrollTop(this$1, charCoords(this$1, pos, "div").top - headPos.top);
           }
           return pos;
         }, sel_move);
@@ -12334,7 +12229,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }),
 
       // Find the word at the given position (as returned by coordsChar).
-      findWordAt: function findWordAt(pos) {
+      findWordAt: function (pos) {
         var doc = this.doc,
             line = getLine(doc, pos.line).text;
         var start = pos.ch,
@@ -12365,7 +12260,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return new Range(Pos(pos.line, start), Pos(pos.line, end));
       },
 
-      toggleOverwrite: function toggleOverwrite(value) {
+      toggleOverwrite: function (value) {
         if (value != null && value == this.state.overwrite) {
           return;
         }
@@ -12377,17 +12272,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         signal(this, "overwriteToggle", this, this.state.overwrite);
       },
-      hasFocus: function hasFocus() {
+      hasFocus: function () {
         return this.display.input.getField() == activeElt();
       },
-      isReadOnly: function isReadOnly() {
+      isReadOnly: function () {
         return !!(this.options.readOnly || this.doc.cantEdit);
       },
 
       scrollTo: methodOp(function (x, y) {
         scrollToCoords(this, x, y);
       }),
-      getScrollInfo: function getScrollInfo() {
+      getScrollInfo: function () {
         var scroller = this.display.scroller;
         return { left: scroller.scrollLeft, top: scroller.scrollTop,
           height: scroller.scrollHeight - scrollGap(this) - this.display.barHeight,
@@ -12421,7 +12316,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       setSize: methodOp(function (width, height) {
         var this$1 = this;
 
-        var interpret = function interpret(val) {
+        var interpret = function (val) {
           return typeof val == "number" || /^\d+$/.test(String(val)) ? val + "px" : val;
         };
         if (width != null) {
@@ -12448,14 +12343,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         signal(this, "refresh", this);
       }),
 
-      operation: function operation(f) {
+      operation: function (f) {
         return runInOp(this, f);
       },
-      startOperation: function startOperation() {
-        return _startOperation(this);
+      startOperation: function () {
+        return startOperation(this);
       },
-      endOperation: function endOperation() {
-        return _endOperation(this);
+      endOperation: function () {
+        return endOperation(this);
       },
 
       refresh: methodOp(function () {
@@ -12483,16 +12378,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return old;
       }),
 
-      getInputField: function getInputField() {
+      getInputField: function () {
         return this.display.input.getField();
       },
-      getWrapperElement: function getWrapperElement() {
+      getWrapperElement: function () {
         return this.display.wrapper;
       },
-      getScrollerElement: function getScrollerElement() {
+      getScrollerElement: function () {
         return this.display.scroller;
       },
-      getGutterElement: function getGutterElement() {
+      getGutterElement: function () {
         return this.display.gutters;
       }
     };
@@ -12519,7 +12414,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // string, or towards the character to the right of the current
   // position. The resulting position will have a hitSide=true
   // property if it reached the end of the document.
-  function _findPosH(doc, pos, dir, unit, visually) {
+  function findPosH(doc, pos, dir, unit, visually) {
     var oldPos = pos;
     var origDir = dir;
     var lineObj = getLine(doc, pos.line);
@@ -12592,7 +12487,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // For relative vertical movement. Dir may be -1 or 1. Unit can be
   // "page" or "line". The resulting position will have a hitSide=true
   // property if it reached the end of the document.
-  function _findPosV(cm, pos, dir, unit) {
+  function findPosV(cm, pos, dir, unit) {
     var doc = cm.doc,
         x = pos.left,
         y;
@@ -12605,7 +12500,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
     var target;
     for (;;) {
-      target = _coordsChar(cm, x, y);
+      target = coordsChar(cm, x, y);
       if (!target.outside) {
         break;
       }
@@ -12619,7 +12514,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // CONTENTEDITABLE INPUT STYLE
 
-  var ContentEditableInput = function ContentEditableInput(cm) {
+  var ContentEditableInput = function (cm) {
     this.cm = cm;
     this.lastAnchorNode = this.lastAnchorOffset = this.lastFocusNode = this.lastFocusOffset = null;
     this.polling = new Delayed();
@@ -12991,7 +12886,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var chFrom = Pos(fromLine, cutFront);
     var chTo = Pos(toLine, oldText.length ? lst(oldText).length - cutEnd : 0);
     if (newText.length > 1 || newText[0] || cmp(chFrom, chTo)) {
-      _replaceRange(cm.doc, newText, chFrom, chTo, "+input");
+      replaceRange(cm.doc, newText, chFrom, chTo, "+input");
       return true;
     }
   };
@@ -13260,7 +13155,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // TEXTAREA INPUT STYLE
 
-  var TextareaInput = function TextareaInput(cm) {
+  var TextareaInput = function (cm) {
     this.cm = cm;
     // See input.poll and input.reset
     this.prevInput = "";
@@ -13379,7 +13274,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     // Move the hidden textarea near the cursor to prevent scrolling artifacts
     if (cm.options.moveInputWithCursor) {
-      var headPos = _cursorCoords(cm, doc.sel.primary().head, "div");
+      var headPos = cursorCoords(cm, doc.sel.primary().head, "div");
       var wrapOff = display.wrapper.getBoundingClientRect(),
           lineOff = display.lineDiv.getBoundingClientRect();
       result.teTop = Math.max(0, Math.min(display.wrapper.clientHeight - 10, headPos.top + lineOff.top - wrapOff.top));
@@ -13523,7 +13418,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     if (cm.doc.sel == cm.display.selForContextMenu) {
       var first = text.charCodeAt(0);
       if (first == 0x200b && !prevInput) {
-        prevInput = '\u200B';
+        prevInput = "\u200b";
       }
       if (first == 0x21da) {
         this.reset();return this.cm.execCommand("undo");
@@ -13613,10 +13508,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     function prepareSelectAllHack() {
       if (te.selectionStart != null) {
         var selected = cm.somethingSelected();
-        var extval = '\u200B' + (selected ? te.value : "");
-        te.value = '\u21DA'; // Used to catch context-menu undo
+        var extval = "\u200b" + (selected ? te.value : "");
+        te.value = "\u21da"; // Used to catch context-menu undo
         te.value = extval;
-        input.prevInput = selected ? "" : '\u200B';
+        input.prevInput = selected ? "" : "\u200b";
         te.selectionStart = 1;te.selectionEnd = extval.length;
         // Re-set this, in case some other handler touched the
         // selection in the meantime.
@@ -13637,8 +13532,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           prepareSelectAllHack();
         }
         var i = 0,
-            poll = function poll() {
-          if (display.selForContextMenu == cm.doc.sel && te.selectionStart == 0 && te.selectionEnd > 0 && input.prevInput == '\u200B') {
+            poll = function () {
+          if (display.selForContextMenu == cm.doc.sel && te.selectionStart == 0 && te.selectionEnd > 0 && input.prevInput == "\u200b") {
             operation(cm, selectAll)(cm);
           } else if (i++ < 10) {
             display.detectingSelectAll = setTimeout(poll, 500);
@@ -13656,7 +13551,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
     if (captureRightClick) {
       e_stop(e);
-      var mouseup = function mouseup() {
+      var mouseup = function () {
         off(window, "mouseup", mouseup);
         setTimeout(rehide, 20);
       };
@@ -13825,7 +13720,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // Minimal default mode.
   CodeMirror$1.defineMode("null", function () {
-    return { token: function token(stream) {
+    return { token: function (stream) {
         return stream.skipToEnd();
       } };
   });
@@ -13858,22 +13753,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
 (function (mod) {
-  if (( false ? undefined : _typeof(exports)) == "object" && ( false ? undefined : _typeof(module)) == "object") // CommonJS
-    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else if (true) // AMD
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (mod),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else // Plain browser env
-    {}
+  if (true) // CommonJS
+    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else {}
 })(function (CodeMirror) {
   "use strict";
 
@@ -14000,9 +13885,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       return states[state.context.type](type, stream, state);
     }
     function popAndPass(type, stream, state, n) {
-      for (var i = n || 1; i > 0; i--) {
-        state.context = state.context.prev;
-      }return pass(type, stream, state);
+      for (var i = n || 1; i > 0; i--) state.context = state.context.prev;
+      return pass(type, stream, state);
     }
 
     // Parser
@@ -14202,17 +14086,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
 
     return {
-      startState: function startState(base) {
+      startState: function (base) {
         return { tokenize: null,
           state: inline ? "block" : "top",
           stateArg: null,
           context: new Context(inline ? "block" : "top", base || 0, null) };
       },
 
-      token: function token(stream, state) {
+      token: function (stream, state) {
         if (!state.tokenize && stream.eatSpace()) return null;
         var style = (state.tokenize || tokenBase)(stream, state);
-        if (style && (typeof style === "undefined" ? "undefined" : _typeof(style)) == "object") {
+        if (style && typeof style == "object") {
           type = style[1];
           style = style[0];
         }
@@ -14221,7 +14105,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return override;
       },
 
-      indent: function indent(state, textAfter) {
+      indent: function (state, textAfter) {
         var cx = state.context,
             ch = textAfter && textAfter.charAt(0);
         var indent = cx.indent;
@@ -14316,7 +14200,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     colorKeywords: colorKeywords,
     valueKeywords: valueKeywords,
     tokenHooks: {
-      "/": function _(stream, state) {
+      "/": function (stream, state) {
         if (!stream.eat("*")) return false;
         state.tokenize = tokenCComment;
         return tokenCComment(stream, state);
@@ -14337,7 +14221,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     allowNested: true,
     lineComment: "//",
     tokenHooks: {
-      "/": function _(stream, state) {
+      "/": function (stream, state) {
         if (stream.eat("/")) {
           stream.skipToEnd();
           return ["comment", "comment"];
@@ -14348,16 +14232,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           return ["operator", "operator"];
         }
       },
-      ":": function _(stream) {
+      ":": function (stream) {
         if (stream.match(/\s*\{/, false)) return [null, null];
         return false;
       },
-      "$": function $(stream) {
+      "$": function (stream) {
         stream.match(/^[\w-]+/);
         if (stream.match(/^\s*:/, false)) return ["variable-2", "variable-definition"];
         return ["variable-2", "variable"];
       },
-      "#": function _(stream) {
+      "#": function (stream) {
         if (!stream.eat("{")) return false;
         return [null, "interpolation"];
       }
@@ -14378,7 +14262,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     allowNested: true,
     lineComment: "//",
     tokenHooks: {
-      "/": function _(stream, state) {
+      "/": function (stream, state) {
         if (stream.eat("/")) {
           stream.skipToEnd();
           return ["comment", "comment"];
@@ -14389,14 +14273,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           return ["operator", "operator"];
         }
       },
-      "@": function _(stream) {
+      "@": function (stream) {
         if (stream.eat("{")) return [null, "interpolation"];
         if (stream.match(/^(charset|document|font-face|import|(-(moz|ms|o|webkit)-)?keyframes|media|namespace|page|supports)\b/i, false)) return false;
         stream.eatWhile(/[\w\\\-]/);
         if (stream.match(/^\s*:/, false)) return ["variable-2", "variable-definition"];
         return ["variable-2", "variable"];
       },
-      "&": function _() {
+      "&": function () {
         return ["atom", "atom"];
       }
     },
@@ -14416,7 +14300,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     valueKeywords: valueKeywords,
     supportsAtComponent: true,
     tokenHooks: {
-      "/": function _(stream, state) {
+      "/": function (stream, state) {
         if (!stream.eat("*")) return false;
         state.tokenize = tokenCComment;
         return tokenCComment(stream, state);
@@ -14426,7 +14310,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     helperType: "gss"
   });
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -14437,22 +14320,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
 (function (mod) {
-  if (( false ? undefined : _typeof(exports)) == "object" && ( false ? undefined : _typeof(module)) == "object") // CommonJS
-    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"), __webpack_require__(/*! ../xml/xml */ "./node_modules/codemirror/mode/xml/xml.js"), __webpack_require__(/*! ../javascript/javascript */ "./node_modules/codemirror/mode/javascript/javascript.js"), __webpack_require__(/*! ../css/css */ "./node_modules/codemirror/mode/css/css.js"));else if (true) // AMD
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"), __webpack_require__(/*! ../xml/xml */ "./node_modules/codemirror/mode/xml/xml.js"), __webpack_require__(/*! ../javascript/javascript */ "./node_modules/codemirror/mode/javascript/javascript.js"), __webpack_require__(/*! ../css/css */ "./node_modules/codemirror/mode/css/css.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (mod),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else // Plain browser env
-    {}
+  if (true) // CommonJS
+    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"), __webpack_require__(/*! ../xml/xml */ "./node_modules/codemirror/mode/xml/xml.js"), __webpack_require__(/*! ../javascript/javascript */ "./node_modules/codemirror/mode/javascript/javascript.js"), __webpack_require__(/*! ../css/css */ "./node_modules/codemirror/mode/css/css.js"));else {}
 })(function (CodeMirror) {
   "use strict";
 
@@ -14493,9 +14366,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     for (var tag in from) {
       var dest = to[tag] || (to[tag] = []);
       var source = from[tag];
-      for (var i = source.length - 1; i >= 0; i--) {
-        dest.unshift(source[i]);
-      }
+      for (var i = source.length - 1; i >= 0; i--) dest.unshift(source[i]);
     }
   }
 
@@ -14519,9 +14390,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         configScript = parserConfig && parserConfig.scriptTypes;
     addTags(defaultTags, tags);
     if (configTags) addTags(configTags, tags);
-    if (configScript) for (var i = configScript.length - 1; i >= 0; i--) {
-      tags.script.unshift(["type", configScript[i].matches, configScript[i].mode]);
-    }function html(stream, state) {
+    if (configScript) for (var i = configScript.length - 1; i >= 0; i--) tags.script.unshift(["type", configScript[i].matches, configScript[i].mode]);
+
+    function html(stream, state) {
       var style = htmlMode.token(stream, state.htmlState),
           tag = /\btag\b/.test(style),
           tagName;
@@ -14552,12 +14423,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
 
     return {
-      startState: function startState() {
+      startState: function () {
         var state = CodeMirror.startState(htmlMode);
         return { token: html, inTag: null, localMode: null, localState: null, htmlState: state };
       },
 
-      copyState: function copyState(state) {
+      copyState: function (state) {
         var local;
         if (state.localState) {
           local = CodeMirror.copyState(state.localMode, state.localState);
@@ -14567,15 +14438,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           htmlState: CodeMirror.copyState(htmlMode, state.htmlState) };
       },
 
-      token: function token(stream, state) {
+      token: function (stream, state) {
         return state.token(stream, state);
       },
 
-      indent: function indent(state, textAfter, line) {
+      indent: function (state, textAfter, line) {
         if (!state.localMode || /^\s*<\//.test(textAfter)) return htmlMode.indent(state.htmlState, textAfter);else if (state.localMode.indent) return state.localMode.indent(state.localState, textAfter, line);else return CodeMirror.Pass;
       },
 
-      innerMode: function innerMode(state) {
+      innerMode: function (state) {
         return { state: state.localState || state.htmlState, mode: state.localMode || htmlMode };
       }
     };
@@ -14583,7 +14454,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   CodeMirror.defineMIME("text/html", "htmlmixed");
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -14594,22 +14464,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
 (function (mod) {
-  if (( false ? undefined : _typeof(exports)) == "object" && ( false ? undefined : _typeof(module)) == "object") // CommonJS
-    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else if (true) // AMD
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (mod),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else // Plain browser env
-    {}
+  if (true) // CommonJS
+    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else {}
 })(function (CodeMirror) {
   "use strict";
 
@@ -14843,12 +14703,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     function inScope(state, varname) {
-      for (var v = state.localVars; v; v = v.next) {
-        if (v.name == varname) return true;
-      }for (var cx = state.context; cx; cx = cx.prev) {
-        for (var v = cx.vars; v; v = v.next) {
-          if (v.name == varname) return true;
-        }
+      for (var v = state.localVars; v; v = v.next) if (v.name == varname) return true;
+      for (var cx = state.context; cx; cx = cx.prev) {
+        for (var v = cx.vars; v; v = v.next) if (v.name == varname) return true;
       }
     }
 
@@ -14863,9 +14720,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       while (true) {
         var combinator = cc.length ? cc.pop() : jsonMode ? expression : statement;
         if (combinator(type, content)) {
-          while (cc.length && cc[cc.length - 1].lex) {
-            cc.pop()();
-          }if (cx.marked) return cx.marked;
+          while (cc.length && cc[cc.length - 1].lex) cc.pop()();
+          if (cx.marked) return cx.marked;
           if (type == "variable" && inScope(state, content)) return "variable-2";
           return style;
         }
@@ -14876,9 +14732,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     var cx = { state: null, column: null, marked: null, cc: null };
     function pass() {
-      for (var i = arguments.length - 1; i >= 0; i--) {
-        cx.cc.push(arguments[i]);
-      }
+      for (var i = arguments.length - 1; i >= 0; i--) cx.cc.push(arguments[i]);
     }
     function cont() {
       pass.apply(null, arguments);
@@ -14886,9 +14740,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
     function register(varname) {
       function inList(list) {
-        for (var v = list; v; v = v.next) {
-          if (v.name == varname) return true;
-        }return false;
+        for (var v = list; v; v = v.next) if (v.name == varname) return true;
+        return false;
       }
       var state = cx.state;
       cx.marked = "def";
@@ -14917,12 +14770,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       cx.state.context = cx.state.context.prev;
     }
     function pushlex(type, info) {
-      var result = function result() {
+      var result = function () {
         var state = cx.state,
             indent = state.indented;
-        if (state.lexical.type == "stat") indent = state.lexical.indented;else for (var outer = state.lexical; outer && outer.type == ")" && outer.align; outer = outer.prev) {
-          indent = outer.indented;
-        }state.lexical = new JSLexical(indent, cx.stream.column(), type, null, state.lexical, info);
+        if (state.lexical.type == "stat") indent = state.lexical.indented;else for (var outer = state.lexical; outer && outer.type == ")" && outer.align; outer = outer.prev) indent = outer.indented;
+        state.lexical = new JSLexical(indent, cx.stream.column(), type, null, state.lexical, info);
       };
       result.lex = true;
       return result;
@@ -15152,9 +15004,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       };
     }
     function contCommasep(what, end, info) {
-      for (var i = 3; i < arguments.length; i++) {
-        cx.cc.push(arguments[i]);
-      }return cont(pushlex(end, info), commasep(what, end), poplex);
+      for (var i = 3; i < arguments.length; i++) cx.cc.push(arguments[i]);
+      return cont(pushlex(end, info), commasep(what, end), poplex);
     }
     function block(type) {
       if (type == "}") return cont();
@@ -15411,7 +15262,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // Interface
 
     return {
-      startState: function startState(basecolumn) {
+      startState: function (basecolumn) {
         var state = {
           tokenize: tokenBase,
           lastType: "sof",
@@ -15421,11 +15272,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           context: parserConfig.localVars && { vars: parserConfig.localVars },
           indented: basecolumn || 0
         };
-        if (parserConfig.globalVars && _typeof(parserConfig.globalVars) == "object") state.globalVars = parserConfig.globalVars;
+        if (parserConfig.globalVars && typeof parserConfig.globalVars == "object") state.globalVars = parserConfig.globalVars;
         return state;
       },
 
-      token: function token(stream, state) {
+      token: function (stream, state) {
         if (stream.sol()) {
           if (!state.lexical.hasOwnProperty("align")) state.lexical.align = false;
           state.indented = stream.indentation();
@@ -15438,7 +15289,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return parseJS(state, style, type, content, stream);
       },
 
-      indent: function indent(state, textAfter) {
+      indent: function (state, textAfter) {
         if (state.tokenize == tokenComment) return CodeMirror.Pass;
         if (state.tokenize != tokenBase) return 0;
         var firstChar = textAfter && textAfter.charAt(0),
@@ -15449,9 +15300,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           var c = state.cc[i];
           if (c == poplex) lexical = lexical.prev;else if (c != maybeelse) break;
         }
-        while ((lexical.type == "stat" || lexical.type == "form") && (firstChar == "}" || (top = state.cc[state.cc.length - 1]) && (top == maybeoperatorComma || top == maybeoperatorNoComma) && !/^[,\.=+\-*:?[\(]/.test(textAfter))) {
-          lexical = lexical.prev;
-        }if (statementIndent && lexical.type == ")" && lexical.prev.type == "stat") lexical = lexical.prev;
+        while ((lexical.type == "stat" || lexical.type == "form") && (firstChar == "}" || (top = state.cc[state.cc.length - 1]) && (top == maybeoperatorComma || top == maybeoperatorNoComma) && !/^[,\.=+\-*:?[\(]/.test(textAfter))) lexical = lexical.prev;
+        if (statementIndent && lexical.type == ")" && lexical.prev.type == "stat") lexical = lexical.prev;
         var type = lexical.type,
             closing = firstChar == type;
 
@@ -15472,7 +15322,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       expressionAllowed: expressionAllowed,
 
-      skipExpression: function skipExpression(state) {
+      skipExpression: function (state) {
         var top = state.cc[state.cc.length - 1];
         if (top == expression || top == expressionNoComma) state.cc.pop();
       }
@@ -15492,7 +15342,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   CodeMirror.defineMIME("text/typescript", { name: "javascript", typescript: true });
   CodeMirror.defineMIME("application/typescript", { name: "javascript", typescript: true });
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -15503,22 +15352,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
 (function (mod) {
-  if (( false ? undefined : _typeof(exports)) == "object" && ( false ? undefined : _typeof(module)) == "object") // CommonJS
-    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else if (true) // AMD
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (mod),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else // Plain browser env
-    {}
+  if (true) // CommonJS
+    mod(__webpack_require__(/*! ../../lib/codemirror */ "./node_modules/codemirror/lib/codemirror.js"));else {}
 })(function (CodeMirror) {
   "use strict";
 
@@ -15571,11 +15410,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var indentUnit = editorConf.indentUnit;
     var config = {};
     var defaults = config_.htmlMode ? htmlConfig : xmlConfig;
-    for (var prop in defaults) {
-      config[prop] = defaults[prop];
-    }for (var prop in config_) {
-      config[prop] = config_[prop];
-    } // Return variables for tokenizers
+    for (var prop in defaults) config[prop] = defaults[prop];
+    for (var prop in config_) config[prop] = config_[prop];
+
+    // Return variables for tokenizers
     var type, setStyle;
 
     function inText(stream, state) {
@@ -15651,7 +15489,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     function inAttribute(quote) {
-      var closure = function closure(stream, state) {
+      var closure = function (stream, state) {
         while (!stream.eol()) {
           if (stream.next() == quote) {
             state.tokenize = inTag;
@@ -15815,7 +15653,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     return {
-      startState: function startState(baseIndent) {
+      startState: function (baseIndent) {
         var state = { tokenize: inText,
           state: baseState,
           indented: baseIndent || 0,
@@ -15825,7 +15663,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return state;
       },
 
-      token: function token(stream, state) {
+      token: function (stream, state) {
         if (!state.tagName && stream.sol()) state.indented = stream.indentation();
 
         if (stream.eatSpace()) return null;
@@ -15839,7 +15677,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return style;
       },
 
-      indent: function indent(state, textAfter, fullLine) {
+      indent: function (state, textAfter, fullLine) {
         var context = state.context;
         // Indent multi-line strings (e.g. css).
         if (state.tokenize.isInAttribute) {
@@ -15872,9 +15710,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             if (grabbers && grabbers.hasOwnProperty(tagAfter[2])) context = context.prev;else break;
           }
         }
-        while (context && context.prev && !context.startOfLine) {
-          context = context.prev;
-        }if (context) return context.indent + indentUnit;else return state.baseIndent || 0;
+        while (context && context.prev && !context.startOfLine) context = context.prev;
+        if (context) return context.indent + indentUnit;else return state.baseIndent || 0;
       },
 
       electricInput: /<\/[\s\w:]+>$/,
@@ -15884,7 +15721,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       configuration: config.htmlMode ? "html" : "xml",
       helperType: config.htmlMode ? "html" : "xml",
 
-      skipAttribute: function skipAttribute(state) {
+      skipAttribute: function (state) {
         if (state.state == attrValueState) state.state = attrState;
       }
     };
@@ -15894,7 +15731,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   CodeMirror.defineMIME("application/xml", "xml");
   if (!CodeMirror.mimeModes.hasOwnProperty("text/html")) CodeMirror.defineMIME("text/html", { name: "xml", htmlMode: true });
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
@@ -15906,7 +15742,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../css-loader!./base16-dark.css */ "./node_modules/css-loader/index.js!./node_modules/codemirror/theme/base16-dark.css");
+var content = __webpack_require__(/*! !../../css-loader??ref--6-1!./base16-dark.css */ "./node_modules/css-loader/index.js??ref--6-1!./node_modules/codemirror/theme/base16-dark.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -15933,10 +15769,7 @@ if(false) {}
   !*** ./node_modules/component-bind/index.js ***!
   \**********************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 /**
  * Slice reference.
@@ -15970,8 +15803,6 @@ module.exports = function (obj, fn) {
   \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 
 
 /**
@@ -16139,13 +15970,11 @@ Emitter.prototype.hasListeners = function (event) {
   !*** ./node_modules/component-inherit/index.js ***!
   \*************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 
 module.exports = function (a, b) {
-  var fn = function fn() {};
+  var fn = function () {};
   fn.prototype = b.prototype;
   a.prototype = new fn();
   a.prototype.constructor = a;
@@ -16153,10 +15982,10 @@ module.exports = function (a, b) {
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/codemirror/addon/scroll/simplescrollbars.css":
-/*!*********************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/codemirror/addon/scroll/simplescrollbars.css ***!
-  \*********************************************************************************************/
+/***/ "./node_modules/css-loader/index.js??ref--6-1!./node_modules/codemirror/addon/scroll/simplescrollbars.css":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/codemirror/addon/scroll/simplescrollbars.css ***!
+  \*******************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16172,10 +16001,10 @@ exports.push([module.i, ".CodeMirror-simplescroll-horizontal div, .CodeMirror-si
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/codemirror/lib/codemirror.css":
-/*!******************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/codemirror/lib/codemirror.css ***!
-  \******************************************************************************/
+/***/ "./node_modules/css-loader/index.js??ref--6-1!./node_modules/codemirror/lib/codemirror.css":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/codemirror/lib/codemirror.css ***!
+  \****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16191,10 +16020,10 @@ exports.push([module.i, "/* BASICS */\n\n.CodeMirror {\n  /* Set height, width, 
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/codemirror/theme/base16-dark.css":
-/*!*********************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/codemirror/theme/base16-dark.css ***!
-  \*********************************************************************************/
+/***/ "./node_modules/css-loader/index.js??ref--6-1!./node_modules/codemirror/theme/base16-dark.css":
+/*!*******************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/codemirror/theme/base16-dark.css ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16210,10 +16039,10 @@ exports.push([module.i, "/*\n\n    Name:       Base16 Default Dark\n    Author: 
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/edit/codemirror.ui/noscroll.css":
-/*!***********************************************************************!*\
-  !*** ./node_modules/css-loader!./src/edit/codemirror.ui/noscroll.css ***!
-  \***********************************************************************/
+/***/ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/codemirror.ui/noscroll.css":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./src/edit/codemirror.ui/noscroll.css ***!
+  \*********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16229,10 +16058,10 @@ exports.push([module.i, "\n.CodeMirror {\n  /* Set height, width, borders, and g
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/edit/editor.ui/theme.css":
-/*!****************************************************************!*\
-  !*** ./node_modules/css-loader!./src/edit/editor.ui/theme.css ***!
-  \****************************************************************/
+/***/ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/editor.ui/theme.css":
+/*!**************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./src/edit/editor.ui/theme.css ***!
+  \**************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16241,17 +16070,17 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.treefm {\n  height: calc(100% - 34px);\n}\n\n.global_local_switch {\n  height: 30px;\n}\n\n.webpack_button {\n  color: transparent;\n  border: 1px solid #0000;\n  background-color: transparent;\n  background-image: url(/cmbird-res/webpack.png);\n  width: 30px;\n  height: 30px;\n  background-repeat: no-repeat;\n  background-position: center center;\n  background-size: contain;\n}\n\n.webpack_button:hover {\n  background-color: transparent;\n  border: 1px solid #BBB;\n}\n", ""]);
+exports.push([module.i, "\n.treefm {\n  height: calc(100% - 34px);\n}\n\n.global_local_switch {\n  height: 30px;\n}\n\n.webpack_button {\n  color: transparent;\n  border: 1px solid #0000;\n  background-color: transparent;\n  background-image: url('res/webpack.png');\n  width: 30px;\n  height: 30px;\n  background-repeat: no-repeat;\n  background-position: center center;\n  background-size: contain;\n}\n\n.webpack_button:hover {\n  background-color: transparent;\n  border: 1px solid #BBB;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/edit/split.ui/theme.css":
-/*!***************************************************************!*\
-  !*** ./node_modules/css-loader!./src/edit/split.ui/theme.css ***!
-  \***************************************************************/
+/***/ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/split.ui/theme.css":
+/*!*************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./src/edit/split.ui/theme.css ***!
+  \*************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16267,10 +16096,10 @@ exports.push([module.i, "\n.split_ui {\n  width: 100%;\n  height: 100%;\n}\n\n.s
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/edit/tabs.ui/horz.css":
-/*!*************************************************************!*\
-  !*** ./node_modules/css-loader!./src/edit/tabs.ui/horz.css ***!
-  \*************************************************************/
+/***/ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/tabs.ui/horz.css":
+/*!***********************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./src/edit/tabs.ui/horz.css ***!
+  \***********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16286,10 +16115,10 @@ exports.push([module.i, ".tabs_ui_container {\n  height: 100%;\n}\n\n.tabs_ui_co
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/edit/theme.css":
-/*!******************************************************!*\
-  !*** ./node_modules/css-loader!./src/edit/theme.css ***!
-  \******************************************************/
+/***/ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/theme.css":
+/*!****************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./src/edit/theme.css ***!
+  \****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16305,10 +16134,10 @@ exports.push([module.i, "body {\n  overflow: hidden;\n}\n\n.tools {\n  position:
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/edit/treefm.ui/style.css":
-/*!****************************************************************!*\
-  !*** ./node_modules/css-loader!./src/edit/treefm.ui/style.css ***!
-  \****************************************************************/
+/***/ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/treefm.ui/style.css":
+/*!**************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./src/edit/treefm.ui/style.css ***!
+  \**************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16324,10 +16153,10 @@ exports.push([module.i, ".treefm {\n  background-color: #111;\n  font-size: 14px
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/edit/window.ui/sheet.css":
-/*!****************************************************************!*\
-  !*** ./node_modules/css-loader!./src/edit/window.ui/sheet.css ***!
-  \****************************************************************/
+/***/ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/window.ui/sheet.css":
+/*!**************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./src/edit/window.ui/sheet.css ***!
+  \**************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16348,10 +16177,7 @@ exports.push([module.i, ".window_mod {\n  position: fixed;\n  top: 100px;\n  lef
   !*** ./node_modules/css-loader/lib/css-base.js ***!
   \*************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 /*
 	MIT License http://www.opensource.org/licenses/mit-license.php
@@ -16437,12 +16263,7 @@ function toComment(sourceMap) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/**
+/* WEBPACK VAR INJECTION */(function(process) {/**
  * This is the web browser implementation of `debug()`.
  *
  * Expose `debug()` as the module.
@@ -16546,7 +16367,7 @@ function formatArgs(args) {
 function log() {
   // this hackery is required for IE8/9, where
   // the `console.log` function doesn't have 'apply'
-  return 'object' === (typeof console === 'undefined' ? 'undefined' : _typeof(console)) && console.log && Function.prototype.apply.call(console.log, console, arguments);
+  return 'object' === typeof console && console.log && Function.prototype.apply.call(console.log, console, arguments);
 }
 
 /**
@@ -16619,8 +16440,6 @@ function localstorage() {
   \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 
 
 /**
@@ -16835,8 +16654,6 @@ function coerce(val) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
 
 module.exports = __webpack_require__(/*! ./socket */ "./node_modules/engine.io-client/lib/socket.js");
 
@@ -16857,12 +16674,7 @@ module.exports.parser = __webpack_require__(/*! engine.io-parser */ "./node_modu
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/**
+/* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies.
  */
 
@@ -16893,7 +16705,7 @@ function Socket(uri, opts) {
 
   opts = opts || {};
 
-  if (uri && 'object' === (typeof uri === 'undefined' ? 'undefined' : _typeof(uri))) {
+  if (uri && 'object' === typeof uri) {
     opts = uri;
     uri = null;
   }
@@ -16955,7 +16767,7 @@ function Socket(uri, opts) {
   this.forceNode = !!opts.forceNode;
 
   // other options for Node.js client
-  var freeGlobal = (typeof global === 'undefined' ? 'undefined' : _typeof(global)) === 'object' && global;
+  var freeGlobal = typeof global === 'object' && global;
   if (freeGlobal.global === freeGlobal) {
     if (opts.extraHeaders && Object.keys(opts.extraHeaders).length > 0) {
       this.extraHeaders = opts.extraHeaders;
@@ -17605,9 +17417,6 @@ Socket.prototype.filterUpgrades = function (upgrades) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
 /**
  * Module dependencies.
  */
@@ -17775,10 +17584,7 @@ Transport.prototype.onClose = function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-/**
+/* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies
  */
 
@@ -17842,9 +17648,7 @@ function polling(opts) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
-
 /**
  * Module requirements.
  */
@@ -18086,10 +17890,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-/**
+/* WEBPACK VAR INJECTION */(function(global) {/**
  * Module requirements.
  */
 
@@ -18519,9 +18320,6 @@ function unloadHandler() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
 /**
  * Module dependencies.
  */
@@ -18652,7 +18450,7 @@ Polling.prototype.poll = function () {
 Polling.prototype.onData = function (data) {
   var self = this;
   debug('polling got data %s', data);
-  var callback = function callback(packet, index, total) {
+  var callback = function (packet, index, total) {
     // if its the first message we consider the transport open
     if ('opening' === self.readyState) {
       self.onOpen();
@@ -18721,7 +18519,7 @@ Polling.prototype.doClose = function () {
 Polling.prototype.write = function (packets) {
   var self = this;
   this.writable = false;
-  var callbackfn = function callbackfn() {
+  var callbackfn = function () {
     self.writable = true;
     self.emit('drain');
   };
@@ -18776,10 +18574,7 @@ Polling.prototype.uri = function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-/**
+/* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies.
  */
 
@@ -19075,10 +18870,7 @@ WS.prototype.check = function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-// browser shim for xmlhttprequest module
+/* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 
 var hasCORS = __webpack_require__(/*! has-cors */ "./node_modules/has-cors/index.js");
 
@@ -19126,12 +18918,7 @@ module.exports = function (opts) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/**
+/* WEBPACK VAR INJECTION */(function(process) {/**
  * This is the web browser implementation of `debug()`.
  *
  * Expose `debug()` as the module.
@@ -19240,7 +19027,7 @@ function formatArgs(args) {
 function log() {
   // this hackery is required for IE8/9, where
   // the `console.log` function doesn't have 'apply'
-  return 'object' === (typeof console === 'undefined' ? 'undefined' : _typeof(console)) && console.log && Function.prototype.apply.call(console.log, console, arguments);
+  return 'object' === typeof console && console.log && Function.prototype.apply.call(console.log, console, arguments);
 }
 
 /**
@@ -19313,8 +19100,6 @@ function localstorage() {
   \***********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 
 
 /**
@@ -19552,10 +19337,7 @@ function coerce(val) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-/**
+/* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies.
  */
 
@@ -19903,7 +19685,7 @@ function map(ary, each, done) {
   var result = new Array(ary.length);
   var next = after(ary.length, done);
 
-  var eachWithIndex = function eachWithIndex(i, el, cb) {
+  var eachWithIndex = function (i, el, cb) {
     each(el, function (error, msg) {
       result[i] = msg;
       cb(error, result);
@@ -20168,9 +19950,7 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
   !*** ./node_modules/engine.io-parser/lib/keys.js ***!
   \***************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 
 /**
@@ -20201,23 +19981,18 @@ module.exports = Object.keys || function keys(obj) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/*! https://mths.be/utf8js v2.1.2 by @mathias */
+/* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/utf8js v2.1.2 by @mathias */
 ;(function (root) {
 
 	// Detect free variables `exports`
-	var freeExports = ( false ? undefined : _typeof(exports)) == 'object' && exports;
+	var freeExports = typeof exports == 'object' && exports;
 
 	// Detect free variable `module`
-	var freeModule = ( false ? undefined : _typeof(module)) == 'object' && module && module.exports == freeExports && module;
+	var freeModule = typeof module == 'object' && module && module.exports == freeExports && module;
 
 	// Detect free variable `global`, from Node.js or Browserified code,
 	// and use it as `root`
-	var freeGlobal = (typeof global === 'undefined' ? 'undefined' : _typeof(global)) == 'object' && global;
+	var freeGlobal = typeof global == 'object' && global;
 	if (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal) {
 		root = freeGlobal;
 	}
@@ -20436,28 +20211,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	// Some AMD build optimizers, like r.js, check for specific condition patterns
 	// like the following:
-	if ("function" == 'function' && _typeof(__webpack_require__(/*! !webpack amd options */ "./node_modules/webpack/buildin/amd-options.js")) == 'object' && __webpack_require__(/*! !webpack amd options */ "./node_modules/webpack/buildin/amd-options.js")) {
+	if (true) {
 		!(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
 			return utf8;
 		}).call(exports, __webpack_require__, exports, module),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else if (freeExports && !freeExports.nodeType) {
-		if (freeModule) {
-			// in Node.js or RingoJS v0.8.0+
-			freeModule.exports = utf8;
-		} else {
-			// in Narwhal or RingoJS v0.7.0-
-			var object = {};
-			var hasOwnProperty = object.hasOwnProperty;
-			for (var key in utf8) {
-				hasOwnProperty.call(utf8, key) && (freeExports[key] = utf8[key]);
-			}
-		}
-	} else {
-		// in Rhino or a web browser
-		root.utf8 = utf8;
-	}
-})(undefined);
+	} else { var key, hasOwnProperty, object; }
+})(this);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module), __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
@@ -20469,12 +20229,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/* global Blob File */
+/* WEBPACK VAR INJECTION */(function(global) {/* global Blob File */
 
 /*
  * Module requirements.
@@ -20502,7 +20257,7 @@ module.exports = hasBinary;
  */
 
 function hasBinary(obj) {
-  if (!obj || (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object') {
+  if (!obj || typeof obj !== 'object') {
     return false;
   }
 
@@ -20541,10 +20296,7 @@ function hasBinary(obj) {
   !*** ./node_modules/has-binary2/node_modules/isarray/index.js ***!
   \****************************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 var toString = {}.toString;
 
@@ -20559,9 +20311,7 @@ module.exports = Array.isArray || function (arr) {
   !*** ./node_modules/has-cors/index.js ***!
   \****************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 
 /**
@@ -20587,9 +20337,7 @@ try {
   !*** ./node_modules/indexof/index.js ***!
   \***************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 
 var indexOf = [].indexOf;
@@ -20609,12 +20357,7 @@ module.exports = function (arr, obj) {
   !*** ./node_modules/ms/index.js ***!
   \**********************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+/***/ (function(module, exports) {
 
 /**
  * Helpers.
@@ -20642,7 +20385,7 @@ var y = d * 365.25;
 
 module.exports = function (val, options) {
   options = options || {};
-  var type = typeof val === 'undefined' ? 'undefined' : _typeof(val);
+  var type = typeof val;
   if (type === 'string' && val.length > 0) {
     return parse(val);
   } else if (type === 'number' && isNaN(val) === false) {
@@ -20767,10 +20510,7 @@ function plural(ms, n, name) {
   !*** ./node_modules/parseqs/index.js ***!
   \***************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 /**
  * Compiles a querystring
@@ -20817,10 +20557,7 @@ exports.decode = function (qs) {
   !*** ./node_modules/parseuri/index.js ***!
   \****************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 /**
  * Parses an URI
@@ -20867,10 +20604,7 @@ module.exports = function parseuri(str) {
   !*** ./node_modules/process/browser.js ***!
   \*****************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 // shim for using process in browser
 var process = module.exports = {};
@@ -21067,10 +20801,6 @@ process.umask = function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /**
  * Module dependencies.
@@ -21107,7 +20837,7 @@ var cache = exports.managers = {};
  */
 
 function lookup(uri, opts) {
-  if ((typeof uri === 'undefined' ? 'undefined' : _typeof(uri)) === 'object') {
+  if (typeof uri === 'object') {
     opts = uri;
     uri = undefined;
   }
@@ -21174,10 +20904,6 @@ exports.Socket = __webpack_require__(/*! ./socket */ "./node_modules/socket.io-c
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /**
  * Module dependencies.
@@ -21215,7 +20941,7 @@ module.exports = Manager;
 
 function Manager(uri, opts) {
   if (!(this instanceof Manager)) return new Manager(uri, opts);
-  if (uri && 'object' === (typeof uri === 'undefined' ? 'undefined' : _typeof(uri))) {
+  if (uri && 'object' === typeof uri) {
     opts = uri;
     uri = undefined;
   }
@@ -21445,7 +21171,7 @@ Manager.prototype.open = Manager.prototype.connect = function (fn, opts) {
     }, timeout);
 
     this.subs.push({
-      destroy: function destroy() {
+      destroy: function () {
         clearTimeout(timer);
       }
     });
@@ -21730,7 +21456,7 @@ Manager.prototype.reconnect = function () {
     }, delay);
 
     this.subs.push({
-      destroy: function destroy() {
+      destroy: function () {
         clearTimeout(timer);
       }
     });
@@ -21758,9 +21484,7 @@ Manager.prototype.onreconnect = function () {
   !*** ./node_modules/socket.io-client/lib/on.js ***!
   \*************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 
 /**
@@ -21781,7 +21505,7 @@ module.exports = on;
 function on(obj, ev, fn) {
   obj.on(ev, fn);
   return {
-    destroy: function destroy() {
+    destroy: function () {
       obj.removeListener(ev, fn);
     }
   };
@@ -21796,10 +21520,6 @@ function on(obj, ev, fn) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /**
  * Module dependencies.
@@ -21982,7 +21702,7 @@ Socket.prototype.onopen = function () {
   // write connect packet if necessary
   if ('/' !== this.nsp) {
     if (this.query) {
-      var query = _typeof(this.query) === 'object' ? parseqs.encode(this.query) : this.query;
+      var query = typeof this.query === 'object' ? parseqs.encode(this.query) : this.query;
       debug('sending connect packet with query %s', query);
       this.packet({ type: parser.CONNECT, query: query });
     } else {
@@ -22222,9 +21942,7 @@ Socket.prototype.compress = function (compress) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
-
 /**
  * Module dependencies.
  */
@@ -22310,12 +22028,7 @@ function url(uri, loc) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/*global Blob,File*/
+/* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
 
 /**
  * Module requirements
@@ -22359,7 +22072,7 @@ function _deconstructPacket(data, buffers) {
       newData[i] = _deconstructPacket(data[i], buffers);
     }
     return newData;
-  } else if ((typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object' && !(data instanceof Date)) {
+  } else if (typeof data === 'object' && !(data instanceof Date)) {
     var newData = {};
     for (var key in data) {
       newData[key] = _deconstructPacket(data[key], buffers);
@@ -22393,7 +22106,7 @@ function _reconstructPacket(data, buffers) {
     for (var i = 0; i < data.length; i++) {
       data[i] = _reconstructPacket(data[i], buffers);
     }
-  } else if ((typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object') {
+  } else if (typeof data === 'object') {
     for (var key in data) {
       data[key] = _reconstructPacket(data[key], buffers);
     }
@@ -22442,7 +22155,7 @@ exports.removeBlobs = function (data, callback) {
       for (var i = 0; i < obj.length; i++) {
         _removeBlobs(obj[i], i, obj);
       }
-    } else if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && !isBuf(obj)) {
+    } else if (typeof obj === 'object' && !isBuf(obj)) {
       // and object
       for (var key in obj) {
         _removeBlobs(obj[key], key, obj);
@@ -22467,8 +22180,6 @@ exports.removeBlobs = function (data, callback) {
   \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 
 
 /**
@@ -22882,9 +22593,7 @@ function error(msg) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
-
 module.exports = isBuf;
 
 /**
@@ -22907,12 +22616,7 @@ function isBuf(obj) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/**
+/* WEBPACK VAR INJECTION */(function(process) {/**
  * This is the web browser implementation of `debug()`.
  *
  * Expose `debug()` as the module.
@@ -23021,7 +22725,7 @@ function formatArgs(args) {
 function log() {
   // this hackery is required for IE8/9, where
   // the `console.log` function doesn't have 'apply'
-  return 'object' === (typeof console === 'undefined' ? 'undefined' : _typeof(console)) && console.log && Function.prototype.apply.call(console.log, console, arguments);
+  return 'object' === typeof console && console.log && Function.prototype.apply.call(console.log, console, arguments);
 }
 
 /**
@@ -23094,8 +22798,6 @@ function localstorage() {
   \***********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 
 
 /**
@@ -23331,10 +23033,7 @@ function coerce(val) {
   !*** ./node_modules/socket.io-parser/node_modules/isarray/index.js ***!
   \*********************************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 var toString = {}.toString;
 
@@ -23736,9 +23435,7 @@ function updateLink (link, options, obj) {
   !*** ./node_modules/style-loader/lib/urls.js ***!
   \***********************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 
 /**
@@ -23836,10 +23533,7 @@ module.exports = function (css) {
   !*** ./node_modules/to-array/index.js ***!
   \****************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 module.exports = toArray;
 
@@ -23857,31 +23551,12 @@ function toArray(list, index) {
 
 /***/ }),
 
-/***/ "./node_modules/webpack/buildin/amd-options.js":
-/*!****************************************!*\
-  !*** (webpack)/buildin/amd-options.js ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
-module.exports = __webpack_amd_options__;
-
-/* WEBPACK VAR INJECTION */}.call(this, {}))
-
-/***/ }),
-
 /***/ "./node_modules/webpack/buildin/global.js":
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
   \***********************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+/***/ (function(module, exports) {
 
 var g;
 
@@ -23895,7 +23570,7 @@ try {
 	g = g || Function("return this")() || (1, eval)("this");
 } catch (e) {
 	// This works if the window reference is available
-	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+	if (typeof window === "object") g = window;
 }
 
 // g can still be undefined, but nothing to do about it...
@@ -23911,10 +23586,7 @@ module.exports = g;
   !*** (webpack)/buildin/module.js ***!
   \***********************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 module.exports = function (module) {
 	if (!module.webpackPolyfill) {
@@ -23924,13 +23596,13 @@ module.exports = function (module) {
 		if (!module.children) module.children = [];
 		Object.defineProperty(module, "loaded", {
 			enumerable: true,
-			get: function get() {
+			get: function () {
 				return module.l;
 			}
 		});
 		Object.defineProperty(module, "id", {
 			enumerable: true,
-			get: function get() {
+			get: function () {
 				return module.i;
 			}
 		});
@@ -24009,9 +23681,9 @@ function yeast() {
 //
 // Map each character to its index.
 //
-for (; i < length; i++) {
-  map[alphabet[i]] = i;
-} //
+for (; i < length; i++) map[alphabet[i]] = i;
+
+//
 // Expose the `yeast`, `encode` and `decode` functions.
 //
 yeast.encode = encode;
@@ -24043,9 +23715,7 @@ module.exports = "<button class=\"editor_btn\">&lt;&sol;&gt;</button>\n";
 
 //require("./style.css");
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var CodeMirror = __webpack_require__(/*! codemirror */ "./node_modules/codemirror/lib/codemirror.js");
+const CodeMirror = __webpack_require__(/*! codemirror */ "./node_modules/codemirror/lib/codemirror.js");
 
 __webpack_require__(/*! codemirror/lib/codemirror.css */ "./node_modules/codemirror/lib/codemirror.css");
 __webpack_require__(/*! codemirror/theme/base16-dark.css */ "./node_modules/codemirror/theme/base16-dark.css");
@@ -24066,10 +23736,8 @@ __webpack_require__(/*! codemirror/addon/scroll/simplescrollbars.js */ "./node_m
 
 var XHR = __webpack_require__(/*! ../../utils/xhr.js */ "./src/utils/xhr.js");
 
-module.exports = function () {
-  function _class(text, mode, readonly, init_cfg) {
-    _classCallCheck(this, _class);
-
+module.exports = class {
+  constructor(text, mode, readonly, init_cfg) {
     this.element = document.createElement("div");
     this.element.style.height = "100%";
 
@@ -24137,9 +23805,7 @@ module.exports = function () {
     this_class.cm = CodeMirror.fromTextArea(textarea, cfg);
     this_class.cm.refresh();
   }
-
-  return _class;
-}();
+};
 
 /***/ }),
 
@@ -24151,7 +23817,7 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../node_modules/css-loader!./noscroll.css */ "./node_modules/css-loader/index.js!./src/edit/codemirror.ui/noscroll.css");
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!./noscroll.css */ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/codemirror.ui/noscroll.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -24180,25 +23846,19 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
+/* WEBPACK VAR INJECTION */(function(global) {function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var XHR = __webpack_require__(/*! ../../utils/xhr.js */ "./src/utils/xhr.js");
-var XHRA = __webpack_require__(/*! ../../utils/xhr_async.js */ "./src/utils/xhr_async.js");
-var WindowUI = __webpack_require__(/*! ../window.ui/index.js */ "./src/edit/window.ui/index.js");
-var SplitUI = __webpack_require__(/*! ../split.ui/index.js */ "./src/edit/split.ui/index.js");
+const XHR = __webpack_require__(/*! ../../utils/xhr.js */ "./src/utils/xhr.js");
+const XHRA = __webpack_require__(/*! ../../utils/xhr_async.js */ "./src/utils/xhr_async.js");
+const WindowUI = __webpack_require__(/*! ../window.ui/index.js */ "./src/edit/window.ui/index.js");
+const SplitUI = __webpack_require__(/*! ../split.ui/index.js */ "./src/edit/split.ui/index.js");
 
 __webpack_require__(/*! ./theme.css */ "./src/edit/editor.ui/theme.css");
 
-var Session = __webpack_require__(/*! ./session.js */ "./src/edit/editor.ui/session.js");
+const Session = __webpack_require__(/*! ./session.js */ "./src/edit/editor.ui/session.js");
 
-module.exports = function () {
-  function _class(target, dir, iframe, pathname) {
-    _classCallCheck(this, _class);
+module.exports = class {
+  constructor(target, dir, iframe, pathname) {
 
     var socket = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js")('http://127.0.0.1:9639');
     console.log("CONNECTING TO http://127.0.0.1:9369");
@@ -24222,7 +23882,7 @@ module.exports = function () {
     this.window = new WindowUI({
       DOM: document.body,
       title: "Editor",
-      resize_cb: function resize_cb() {
+      resize_cb: function () {
         split.auto_resize();
       }
     });
@@ -24245,25 +23905,31 @@ module.exports = function () {
     var state = false;
     webpack_button.style.border = "solid 1px #FF0000";
 
-    webpack_button.addEventListener('click', async function (e) {
-      var chstate = state != true;
-      console.log({
-        command: "webpack-watch",
-        value: chstate,
-        name: dir
-      });
-      state = await XHRA.post("pages.io", {
-        command: "webpack-watch",
-        value: chstate,
-        name: dir
+    webpack_button.addEventListener('click', (() => {
+      var _ref = _asyncToGenerator(function* (e) {
+        var chstate = state != true;
+        console.log({
+          command: "webpack-watch",
+          value: chstate,
+          name: dir
+        });
+        state = yield XHRA.post("pages.io", {
+          command: "webpack-watch",
+          value: chstate,
+          name: dir
+        });
+
+        if (state) {
+          webpack_button.style.border = "solid 1px #00FF00";
+        } else {
+          webpack_button.style.border = "solid 1px #FF0000";
+        }
       });
 
-      if (state) {
-        webpack_button.style.border = "solid 1px #00FF00";
-      } else {
-        webpack_button.style.border = "solid 1px #FF0000";
-      }
-    });
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    })());
     var local_session = new Session(target, dir, iframe, pathname);
     this.append_session_elements(local_session);
     var global_session = new Session("globals", ".", iframe, pathname);
@@ -24282,25 +23948,19 @@ module.exports = function () {
     });
   }
 
-  _createClass(_class, [{
-    key: "append_session_elements",
-    value: function append_session_elements(session) {
-      var treefm = session.treefm;
-      var tabs = session.tabs;
+  append_session_elements(session) {
+    var treefm = session.treefm;
+    var tabs = session.tabs;
 
-      this.split.list[0].appendChild(treefm.element);
-      this.split.list[1].style.overflow = "hidden";
-      this.split.list[1].appendChild(tabs.element);
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.window.destroy();
-    }
-  }]);
+    this.split.list[0].appendChild(treefm.element);
+    this.split.list[1].style.overflow = "hidden";
+    this.split.list[1].appendChild(tabs.element);
+  }
 
-  return _class;
-}();
+  destroy() {
+    this.window.destroy();
+  }
+};
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
@@ -24312,25 +23972,18 @@ module.exports = function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
 
+const TreeFM = __webpack_require__(/*! ../treefm.ui */ "./src/edit/treefm.ui/index.js");
+const TabsUI = __webpack_require__(/*! ../tabs.ui/index.js */ "./src/edit/tabs.ui/index.js");
+const CodeMirror = __webpack_require__(/*! ../codemirror.ui/index.js */ "./src/edit/codemirror.ui/index.js");
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+const template_prefix = "/cmb_admin/t/";
+const page_prefix = "/p/";
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+const XHR = __webpack_require__(/*! ../../utils/xhr.js */ "./src/utils/xhr.js");
 
-var TreeFM = __webpack_require__(/*! ../treefm.ui */ "./src/edit/treefm.ui/index.js");
-var TabsUI = __webpack_require__(/*! ../tabs.ui/index.js */ "./src/edit/tabs.ui/index.js");
-var CodeMirror = __webpack_require__(/*! ../codemirror.ui/index.js */ "./src/edit/codemirror.ui/index.js");
-
-var template_prefix = "/cmb_admin/t/";
-var page_prefix = "/p/";
-
-var XHR = __webpack_require__(/*! ../../utils/xhr.js */ "./src/utils/xhr.js");
-
-module.exports = function () {
-  function _class(target, dir, iframe, refresh_path) {
-    _classCallCheck(this, _class);
+module.exports = class {
+  constructor(target, dir, iframe, refresh_path) {
 
     var tabs = this.tabs = new TabsUI();
 
@@ -24339,21 +23992,21 @@ module.exports = function () {
     var treefm = this.treefm = new TreeFM({
       target: target,
       dir: dir,
-      file_cb: function file_cb(file) {
+      file_cb: function (file) {
         var tab = tabs.select(file.rel_path);
         if (tab) {
           tab.display();
         } else {
           treefm.read_file(file.rel_path, function (file_content) {
             var extension = file.rel_path.substr(file.rel_path.lastIndexOf('.') + 1);
-            var original_extension = extension;
+            let original_extension = extension;
             if (extension == "json") extension = "js";
             var html_editor = new CodeMirror(file_content, extension, false, {
               disable_scrollbar: true
             });
             tabs.add({
               text: file.name,
-              cb: function cb(display) {
+              cb: function (display) {
                 display.appendChild(html_editor.element);
                 html_editor.cm.refresh();
                 if (last_save_callback) {
@@ -24388,16 +24041,11 @@ module.exports = function () {
     });
   }
 
-  _createClass(_class, [{
-    key: "destroy",
-    value: function destroy() {
-      this.tabs.destroy();
-      this.treefm.destroy();
-    }
-  }]);
-
-  return _class;
-}();
+  destroy() {
+    this.tabs.destroy();
+    this.treefm.destroy();
+  }
+};
 
 /***/ }),
 
@@ -24409,7 +24057,7 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../node_modules/css-loader!./theme.css */ "./node_modules/css-loader/index.js!./src/edit/editor.ui/theme.css");
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!./theme.css */ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/editor.ui/theme.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -24438,18 +24086,15 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
 __webpack_require__(/*! ./theme.css */ "./src/edit/theme.css");
 
-var XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
-var Editor = __webpack_require__(/*! ./editor.ui/index.js */ "./src/edit/editor.ui/index.js");
+const XHR = __webpack_require__(/*! ../utils/xhr.js */ "./src/utils/xhr.js");
+const Editor = __webpack_require__(/*! ./editor.ui/index.js */ "./src/edit/editor.ui/index.js");
 
-var template = XHR.getParamByName('template');
-var page = XHR.getParamByName('page');
+const template = XHR.getParamByName('template');
+const page = XHR.getParamByName('page');
 
-var target_name = encodeURIComponent(template || page);
+let target_name = encodeURIComponent(template || page);
 
 console.log(page);
 
@@ -24518,19 +24163,10 @@ function firstLoad() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 __webpack_require__(/*! ./theme.css */ "./src/edit/split.ui/theme.css");
 
-module.exports = function () {
-  function _class(dom, direction) {
-    _classCallCheck(this, _class);
-
+module.exports = class {
+  constructor(dom, direction) {
     this.element = document.createElement("div");
     this.element.classList.add("split_ui");
     dom.appendChild(this.element);
@@ -24545,137 +24181,125 @@ module.exports = function () {
     this.direction = direction;
   }
 
-  _createClass(_class, [{
-    key: "split",
-    value: function split(pieces) {
-      var _this = this;
+  split(pieces) {
+    if (this.direction == "horizontal") {
+      this.pieces = pieces;
+      var split_div_width = Math.floor(this.width / pieces);
+      for (var p = 0; p < pieces; p++) {
+        var piece_width = split_div_width;
+        if (p > 0) {
+          let resize_line = document.createElement("div");
+          resize_line.classList.add("split_ui_horizontal_line");
+          this.element.appendChild(resize_line);
+          piece_width -= 3;
 
-      if (this.direction == "horizontal") {
-        this.pieces = pieces;
-        var split_div_width = Math.floor(this.width / pieces);
-        for (var p = 0; p < pieces; p++) {
-          var piece_width = split_div_width;
-          if (p > 0) {
-            var startX;
-            var this_class;
+          var startX;
 
-            (function () {
-              var resize_drag = function resize_drag(e) {
-                var deltaX = e.clientX - startX;
-                startX = e.clientX;
+          var this_class = this;
 
-                var target_left = resize_line.previousSibling;
-                var target_right = resize_line.nextSibling;
-                if (target_left.offsetWidth + deltaX > 0 && target_right.offsetWidth - deltaX > 0) {
-                  var left_width = target_left.offsetWidth + deltaX;
-                  var right_width_dec = 0;
-                  if (left_width < this_class.min_piece_width) {
-                    right_width_dec = this_class.min_piece_width - left_width;
-                    left_width = this_class.min_piece_width;
-                  }
+          resize_line.addEventListener("mousedown", function (e) {
+            startX = e.clientX;
+            this_class.element.addEventListener('mousemove', resize_drag);
+          });
 
-                  var right_width = target_right.offsetWidth - deltaX;
-                  var left_width_dec = 0;
-                  if (right_width < this_class.min_piece_width) {
-                    left_width_dec = this_class.min_piece_width - right_width;
-                    right_width = this_class.min_piece_width;
-                  }
+          this.element.addEventListener('mouseup', function (e) {
+            this_class.element.removeEventListener('mousemove', resize_drag);
+          });
 
-                  target_left.style.width = left_width - left_width_dec + "px";
-                  target_right.style.width = right_width - right_width_dec + "px";
-                } else {
-                  startX -= deltaX;
-                }
-              };
+          function resize_drag(e) {
+            var deltaX = e.clientX - startX;
+            startX = e.clientX;
 
-              var resize_line = document.createElement("div");
-              resize_line.classList.add("split_ui_horizontal_line");
-              _this.element.appendChild(resize_line);
-              piece_width -= 3;
+            var target_left = resize_line.previousSibling;
+            var target_right = resize_line.nextSibling;
+            if (target_left.offsetWidth + deltaX > 0 && target_right.offsetWidth - deltaX > 0) {
+              var left_width = target_left.offsetWidth + deltaX;
+              var right_width_dec = 0;
+              if (left_width < this_class.min_piece_width) {
+                right_width_dec = this_class.min_piece_width - left_width;
+                left_width = this_class.min_piece_width;
+              }
 
-              this_class = _this;
+              var right_width = target_right.offsetWidth - deltaX;
+              var left_width_dec = 0;
+              if (right_width < this_class.min_piece_width) {
+                left_width_dec = this_class.min_piece_width - right_width;
+                right_width = this_class.min_piece_width;
+              }
 
-
-              resize_line.addEventListener("mousedown", function (e) {
-                startX = e.clientX;
-                this_class.element.addEventListener('mousemove', resize_drag);
-              });
-
-              _this.element.addEventListener('mouseup', function (e) {
-                this_class.element.removeEventListener('mousemove', resize_drag);
-              });
-            })();
+              target_left.style.width = left_width - left_width_dec + "px";
+              target_right.style.width = right_width - right_width_dec + "px";
+            } else {
+              startX -= deltaX;
+            }
           }
-          var split_div = document.createElement("div");
-          split_div.classList.add("split_ui_horizontal");
-          split_div.style.width = piece_width + "px";
-          this.element.appendChild(split_div);
-          this.list.push(split_div);
         }
+        var split_div = document.createElement("div");
+        split_div.classList.add("split_ui_horizontal");
+        split_div.style.width = piece_width + "px";
+        this.element.appendChild(split_div);
+        this.list.push(split_div);
       }
     }
-  }, {
-    key: "auto_resize",
-    value: function auto_resize() {
-      var old_width = this.width;
-      this.width = this.element.offsetWidth;
-      var delta_width = this.width - old_width;
-      this.height = this.element.offsetHeight;
+  }
 
-      if (this.direction == "horizontal") {
-        var piece_delta_width = delta_width / this.pieces;
-        var next_delta = 0;
-        for (var p = 0; p < this.pieces; p++) {
-          var new_width;
-          if (piece_delta_width > 0) {
-            if (p == this.pieces - 1) {
-              new_width = this.list[p].offsetWidth + Math.ceil(piece_delta_width);
-            } else {
-              new_width = this.list[p].offsetWidth + Math.floor(piece_delta_width);
-            }
-          } else if (piece_delta_width < 0) {
-            if (p == this.pieces - 1) {
-              new_width = this.list[p].offsetWidth + Math.floor(piece_delta_width);
-            } else {
-              new_width = this.list[p].offsetWidth + Math.ceil(piece_delta_width);
-            }
+  auto_resize() {
+    var old_width = this.width;
+    this.width = this.element.offsetWidth;
+    var delta_width = this.width - old_width;
+    this.height = this.element.offsetHeight;
+
+    if (this.direction == "horizontal") {
+      var piece_delta_width = delta_width / this.pieces;
+      var next_delta = 0;
+      for (var p = 0; p < this.pieces; p++) {
+        var new_width;
+        if (piece_delta_width > 0) {
+          if (p == this.pieces - 1) {
+            new_width = this.list[p].offsetWidth + Math.ceil(piece_delta_width);
           } else {
-            new_width = this.list[p].offsetWidth;
+            new_width = this.list[p].offsetWidth + Math.floor(piece_delta_width);
           }
+        } else if (piece_delta_width < 0) {
+          if (p == this.pieces - 1) {
+            new_width = this.list[p].offsetWidth + Math.floor(piece_delta_width);
+          } else {
+            new_width = this.list[p].offsetWidth + Math.ceil(piece_delta_width);
+          }
+        } else {
+          new_width = this.list[p].offsetWidth;
+        }
 
+        this.list[p].style.width = new_width + "px";
+
+        if (new_width < this.min_piece_width) {
+          next_delta = this.min_piece_width - new_width;
+          new_width = this.min_piece_width;
           this.list[p].style.width = new_width + "px";
+        } else {
+          this.list[p].style.width = new_width - next_delta + "px";
+          next_delta = 0;
+        }
+      }
+
+      if (next_delta > 0) {
+        for (var p = 0; p < this.pieces; p++) {
+          var new_width = this.list[p].offsetWidth - next_delta;
 
           if (new_width < this.min_piece_width) {
             next_delta = this.min_piece_width - new_width;
             new_width = this.min_piece_width;
             this.list[p].style.width = new_width + "px";
           } else {
-            this.list[p].style.width = new_width - next_delta + "px";
+            this.list[p].style.width = new_width + "px";
             next_delta = 0;
-          }
-        }
-
-        if (next_delta > 0) {
-          for (var p = 0; p < this.pieces; p++) {
-            var new_width = this.list[p].offsetWidth - next_delta;
-
-            if (new_width < this.min_piece_width) {
-              next_delta = this.min_piece_width - new_width;
-              new_width = this.min_piece_width;
-              this.list[p].style.width = new_width + "px";
-            } else {
-              this.list[p].style.width = new_width + "px";
-              next_delta = 0;
-              break;
-            }
+            break;
           }
         }
       }
     }
-  }]);
-
-  return _class;
-}();
+  }
+};
 
 /***/ }),
 
@@ -24687,7 +24311,7 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../node_modules/css-loader!./theme.css */ "./node_modules/css-loader/index.js!./src/edit/split.ui/theme.css");
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!./theme.css */ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/split.ui/theme.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -24717,7 +24341,7 @@ if(false) {}
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../node_modules/css-loader!./horz.css */ "./node_modules/css-loader/index.js!./src/edit/tabs.ui/horz.css");
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!./horz.css */ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/tabs.ui/horz.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -24746,21 +24370,12 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 __webpack_require__(/*! ./horz.css */ "./src/edit/tabs.ui/horz.css");
 
 var Tab = __webpack_require__(/*! ./tab.js */ "./src/edit/tabs.ui/tab.js");
 
-module.exports = function () {
-  function _class() {
-    _classCallCheck(this, _class);
-
+module.exports = class {
+  constructor() {
     this.element = document.createElement('div');
     this.element.classList.add('tabs_ui_container');
 
@@ -24776,63 +24391,54 @@ module.exports = function () {
     this.list = [];
   }
 
-  _createClass(_class, [{
-    key: 'add',
-    value: function add(data) {
-      var tab = new Tab(data, this);
-      this.menu.appendChild(tab.element);
-      this.list.push(tab);
-      tab.display();
-    }
-  }, {
-    key: 'remove',
-    value: function remove(tab) {
-      this.menu.removeChild(tab.element);
-      this.list.splice(this.list.indexOf(tab), 1);
-      if (tab.element == this.displayed_tab) {
-        if (this.list.length > 0) {
-          this.display(this.list[this.list.length - 1]);
-        } else {
-          this.display_div.innerHTML = "";
-        }
+  add(data) {
+    var tab = new Tab(data, this);
+    this.menu.appendChild(tab.element);
+    this.list.push(tab);
+    tab.display();
+  }
+
+  remove(tab) {
+    this.menu.removeChild(tab.element);
+    this.list.splice(this.list.indexOf(tab), 1);
+    if (tab.element == this.displayed_tab) {
+      if (this.list.length > 0) {
+        this.display(this.list[this.list.length - 1]);
+      } else {
+        this.display_div.innerHTML = "";
       }
     }
-  }, {
-    key: 'select',
-    value: function select(id) {
-      var result = false;
-      for (var t = 0; t < this.list.length; t++) {
-        if (this.list[t].id == id) {
-          result = this.list[t];
-          break;
-        }
+  }
+
+  select(id) {
+    var result = false;
+    for (var t = 0; t < this.list.length; t++) {
+      if (this.list[t].id == id) {
+        result = this.list[t];
+        break;
       }
-      return result;
     }
-  }, {
-    key: 'display',
-    value: function display(tab) {
-      var this_class = this;
-      tab.cb(function () {
-        if (this_class.displayed_tab) {
-          this_class.displayed_tab.classList.remove("tabs_ui_selected");
-        }
-        this_class.displayed_tab = tab.element;
-        this_class.displayed_tab.classList.add("tabs_ui_selected");
+    return result;
+  }
 
-        this_class.display_div.innerHTML = "";
-        return this_class.display_div;
-      }());
-    }
-  }, {
-    key: 'destroy',
-    value: function destroy() {
-      this.element.parentNode.removeChild(this.element);
-    }
-  }]);
+  display(tab) {
+    var this_class = this;
+    tab.cb(function () {
+      if (this_class.displayed_tab) {
+        this_class.displayed_tab.classList.remove("tabs_ui_selected");
+      }
+      this_class.displayed_tab = tab.element;
+      this_class.displayed_tab.classList.add("tabs_ui_selected");
 
-  return _class;
-}();
+      this_class.display_div.innerHTML = "";
+      return this_class.display_div;
+    }());
+  }
+
+  destroy() {
+    this.element.parentNode.removeChild(this.element);
+  }
+};
 
 /***/ }),
 
@@ -24841,19 +24447,12 @@ module.exports = function () {
   !*** ./src/edit/tabs.ui/tab.js ***!
   \*********************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-module.exports = function () {
-  function _class(data, tabs) {
-    _classCallCheck(this, _class);
-
+module.exports = class {
+  constructor(data, tabs) {
     this.id = data.id;
     this.cb = data.cb;
     this.tabs = tabs;
@@ -24880,15 +24479,10 @@ module.exports = function () {
     });
   }
 
-  _createClass(_class, [{
-    key: 'display',
-    value: function display() {
-      this.tabs.display(this);
-    }
-  }]);
-
-  return _class;
-}();
+  display() {
+    this.tabs.display(this);
+  }
+};
 
 /***/ }),
 
@@ -24900,7 +24494,7 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../node_modules/css-loader!./theme.css */ "./node_modules/css-loader/index.js!./src/edit/theme.css");
+var content = __webpack_require__(/*! !../../node_modules/css-loader??ref--6-1!./theme.css */ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/theme.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -24940,63 +24534,39 @@ module.exports = "<div name=\"new_file\">New File</div>\n<div name=\"new_folder\
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 var html = __webpack_require__(/*! ./contextmenu.html */ "./src/edit/treefm.ui/contextmenu.html");
 
-module.exports = function () {
-  function _class() {
-    _classCallCheck(this, _class);
-
+module.exports = class {
+  constructor() {
     this.element = document.createElement('div');
     this.element.classList.add("treefm_contexmenu");
     document.body.appendChild(this.element);
   }
 
-  _createClass(_class, [{
-    key: "display",
-    value: function display(x, y, callbacks) {
-      var _this = this;
+  display(x, y, callbacks) {
+    console.log(callbacks);
+    this.element.innerHTML = html;
 
-      console.log(callbacks);
-      this.element.innerHTML = html;
-
-      var _loop = function _loop(name) {
-        item = _this.element.querySelector('div[name="' + name + '"]');
-
-        if (!callbacks[name]) {
-          item.style.display = "none";
-        } else {
-          item.addEventListener("click", function (e) {
-            callbacks[name]();
-          });
-        }
-      };
-
-      for (var name in callbacks) {
-        var item;
-
-        _loop(name);
+    for (let name in callbacks) {
+      var item = this.element.querySelector('div[name="' + name + '"]');
+      if (!callbacks[name]) {
+        item.style.display = "none";
+      } else {
+        item.addEventListener("click", function (e) {
+          callbacks[name]();
+        });
       }
-
-      this.element.style.display = "block";
-      this.element.style.left = x + "px";
-      this.element.style.top = y + "px";
     }
-  }, {
-    key: "hide",
-    value: function hide() {
-      this.element.style.display = "none";
-    }
-  }]);
 
-  return _class;
-}();
+    this.element.style.display = "block";
+    this.element.style.left = x + "px";
+    this.element.style.top = y + "px";
+  }
+
+  hide() {
+    this.element.style.display = "none";
+  }
+};
 
 /***/ }),
 
@@ -25007,21 +24577,12 @@ module.exports = function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var File = __webpack_require__(/*! ./file.js */ "./src/edit/treefm.ui/file.js");
+/* WEBPACK VAR INJECTION */(function(global) {const File = __webpack_require__(/*! ./file.js */ "./src/edit/treefm.ui/file.js");
 
 var padding_left = 10;
 
-var Dir = module.exports = function () {
-  function _class(data, treefm) {
-    _classCallCheck(this, _class);
-
+var Dir = module.exports = class {
+  constructor(data, treefm) {
     this.element = document.createElement('div');
     this.path = data.rel_path;
     this.name = data.name;
@@ -25051,7 +24612,7 @@ var Dir = module.exports = function () {
     name_div.addEventListener('contextmenu', function (e) {
       e.preventDefault();
       var callbacks = {
-        new_file: function new_file() {
+        new_file: function () {
           content_div.style.display = "block";
           content_div.displayed = true;
 
@@ -25076,7 +24637,7 @@ var Dir = module.exports = function () {
             }
           });
         },
-        new_folder: function new_folder() {
+        new_folder: function () {
           content_div.style.display = "block";
           content_div.displayed = true;
 
@@ -25102,7 +24663,7 @@ var Dir = module.exports = function () {
             }
           });
         },
-        upload: function upload() {
+        upload: function () {
           treefm.contextmenu.hide();
 
           var form = document.createElement('form');
@@ -25134,31 +24695,8 @@ var Dir = module.exports = function () {
 
             var formData = new FormData(form);
 
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-              for (var _iterator = formData.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                var _step$value = _slicedToArray(_step.value, 2),
-                    key = _step$value[0],
-                    value = _step$value[1];
-
-                console.log(key, value);
-              }
-            } catch (err) {
-              _didIteratorError = true;
-              _iteratorError = err;
-            } finally {
-              try {
-                if (!_iteratorNormalCompletion && _iterator.return) {
-                  _iterator.return();
-                }
-              } finally {
-                if (_didIteratorError) {
-                  throw _iteratorError;
-                }
-              }
+            for (var [key, value] of formData.entries()) {
+              console.log(key, value);
             }
 
             treefm.upload_files(formData, function () {
@@ -25174,7 +24712,7 @@ var Dir = module.exports = function () {
             });
           }, false);
         },
-        rename: function rename() {
+        rename: function () {
           treefm.contextmenu.hide();
           var name_input = document.createElement("input");
           name_input.type = "text";
@@ -25193,7 +24731,7 @@ var Dir = module.exports = function () {
             }
           });
         },
-        delete: function _delete() {
+        delete: function () {
           treefm.contextmenu.hide();
           treefm.rm_dir(this_class.path, function () {
             this_class.element.parentNode.removeChild(this_class.element);
@@ -25219,7 +24757,7 @@ var Dir = module.exports = function () {
     content_div.displayed = false;
     content_div.classList.add("treefm_dir_content");
     for (var f = 0; f < data.content.length; f++) {
-      var child_file = data.content[f];
+      let child_file = data.content[f];
       if (child_file.type == "dir") {
         child_file.padding_index = this_class.padding_index + 1;
         var child_dir = new Dir(child_file, treefm);
@@ -25242,9 +24780,7 @@ var Dir = module.exports = function () {
 
     this.element.appendChild(content_div);
   }
-
-  return _class;
-}();
+};
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
@@ -25256,17 +24792,11 @@ var Dir = module.exports = function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 var padding_left = 10;
 
-module.exports = function () {
-  function _class(data, treefm) {
-    _classCallCheck(this, _class);
-
+module.exports = class {
+  constructor(data, treefm) {
     this.path = data.rel_path;
     this.name = data.name;
     this.padding_index = data.padding_index;
@@ -25286,7 +24816,7 @@ module.exports = function () {
       var callbacks = {
         new_file: false,
         new_folder: false,
-        rename: function rename() {
+        rename: function () {
           treefm.contextmenu.hide();
           var name_input = document.createElement("input");
           name_input.type = "text";
@@ -25305,7 +24835,7 @@ module.exports = function () {
             }
           });
         },
-        delete: function _delete() {
+        delete: function () {
           treefm.contextmenu.hide();
           treefm.rm_file(this_class.path, function () {
             this_class.element.parentNode.removeChild(this_class.element);
@@ -25323,9 +24853,7 @@ module.exports = function () {
       }
     });
   }
-
-  return _class;
-}();
+};
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
@@ -25337,22 +24865,13 @@ module.exports = function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var XHR = __webpack_require__(/*! ../../utils/xhr.js */ "./src/utils/xhr.js");
-var Dir = __webpack_require__(/*! ./dir.js */ "./src/edit/treefm.ui/dir.js");
-var ContextMenu = __webpack_require__(/*! ./contextmenu.js */ "./src/edit/treefm.ui/contextmenu.js");
+const XHR = __webpack_require__(/*! ../../utils/xhr.js */ "./src/utils/xhr.js");
+const Dir = __webpack_require__(/*! ./dir.js */ "./src/edit/treefm.ui/dir.js");
+const ContextMenu = __webpack_require__(/*! ./contextmenu.js */ "./src/edit/treefm.ui/contextmenu.js");
 __webpack_require__(/*! ./style.css */ "./src/edit/treefm.ui/style.css");
 
-module.exports = function () {
-  function _class(cfg) {
-    _classCallCheck(this, _class);
-
+module.exports = class {
+  constructor(cfg) {
     this.element = document.createElement("div");
     this.element.classList.add("treefm");
     this.file_cb = cfg.file_cb;
@@ -25379,111 +24898,99 @@ module.exports = function () {
     });
   }
 
-  _createClass(_class, [{
-    key: "read_file",
-    value: function read_file(file_path, cb) {
-      XHR.get('treefm.io', {
-        target: this.target,
-        command: "read",
-        path: file_path
-      }, function () {
-        var file_content = JSON.parse(this.responseText);
-        cb(file_content);
-      });
-    }
-  }, {
-    key: "write_file",
-    value: function write_file(file_path, content, cb) {
-      XHR.get('treefm.io', {
-        target: this.target,
-        command: "write",
-        path: file_path,
-        data: content
-      }, function () {
-        var response = JSON.parse(this.responseText);
-        if (response == "success") {
-          cb();
-        };
-      });
-    }
-  }, {
-    key: "upload_files",
-    value: function upload_files(formData, cb) {
-      XHR.post('treefm.io', {
-        formData: formData
-      }, function () {
-        var response = JSON.parse(this.responseText);
-        if (response == "success") {
-          cb();
-        };
-      });
-    }
-  }, {
-    key: "rm_file",
-    value: function rm_file(file_path, cb) {
-      XHR.get('treefm.io', {
-        target: this.target,
-        command: "rm",
-        path: file_path
-      }, function () {
-        var response = JSON.parse(this.responseText);
-        if (response == "success") {
-          cb();
-        };
-      });
-    }
-  }, {
-    key: "mkdir",
-    value: function mkdir(file_path, cb) {
-      XHR.get('treefm.io', {
-        target: this.target,
-        command: "mkdir",
-        path: file_path
-      }, function () {
-        var response = JSON.parse(this.responseText);
-        if (response == "success") {
-          cb();
-        };
-      });
-    }
-  }, {
-    key: "rm_dir",
-    value: function rm_dir(file_path, cb) {
-      XHR.get('treefm.io', {
-        target: this.target,
-        command: "rmdir",
-        path: file_path
-      }, function () {
-        var response = JSON.parse(this.responseText);
-        if (response == "success") {
-          cb();
-        };
-      });
-    }
-  }, {
-    key: "rename",
-    value: function rename(file_path, new_path, cb) {
-      XHR.get('treefm.io', {
-        target: this.target,
-        command: "rename",
-        path: file_path,
-        data: new_path
-      }, function () {
-        var response = JSON.parse(this.responseText);
-        if (response == "success") {
-          cb();
-        };
-      });
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.element.parentNode.removeChild(this.element);
-    }
-  }]);
+  read_file(file_path, cb) {
+    XHR.get('treefm.io', {
+      target: this.target,
+      command: "read",
+      path: file_path
+    }, function () {
+      var file_content = JSON.parse(this.responseText);
+      cb(file_content);
+    });
+  }
 
-  return _class;
-}();
+  write_file(file_path, content, cb) {
+    XHR.get('treefm.io', {
+      target: this.target,
+      command: "write",
+      path: file_path,
+      data: content
+    }, function () {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+
+  upload_files(formData, cb) {
+    XHR.post('treefm.io', {
+      formData: formData
+    }, function () {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+
+  rm_file(file_path, cb) {
+    XHR.get('treefm.io', {
+      target: this.target,
+      command: "rm",
+      path: file_path
+    }, function () {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+
+  mkdir(file_path, cb) {
+    XHR.get('treefm.io', {
+      target: this.target,
+      command: "mkdir",
+      path: file_path
+    }, function () {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+
+  rm_dir(file_path, cb) {
+    XHR.get('treefm.io', {
+      target: this.target,
+      command: "rmdir",
+      path: file_path
+    }, function () {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+
+  rename(file_path, new_path, cb) {
+    XHR.get('treefm.io', {
+      target: this.target,
+      command: "rename",
+      path: file_path,
+      data: new_path
+    }, function () {
+      var response = JSON.parse(this.responseText);
+      if (response == "success") {
+        cb();
+      };
+    });
+  }
+
+  destroy() {
+    this.element.parentNode.removeChild(this.element);
+  }
+};
 
 /***/ }),
 
@@ -25495,7 +25002,7 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../node_modules/css-loader!./style.css */ "./node_modules/css-loader/index.js!./src/edit/treefm.ui/style.css");
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!./style.css */ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/treefm.ui/style.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -25535,12 +25042,7 @@ module.exports = "<header class=\"window_mod_header\">\n  <div class=\"window_mo
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
 
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 __webpack_require__(/*! ./sheet.css */ "./src/edit/window.ui/sheet.css");
 var html = __webpack_require__(/*! ./src/edit/window.ui/body.html */ "./src/edit/window.ui/body.html");
@@ -25551,10 +25053,8 @@ var min_height = 65;
 var init_width = 680;
 var init_height = 360;
 
-module.exports = function () {
-  function _class(cfg) {
-    _classCallCheck(this, _class);
-
+module.exports = class {
+  constructor(cfg) {
     this.element = document.createElement("div");
     this.element.innerHTML = html;
     this.element.style.minWidth = min_width + "px";
@@ -25621,7 +25121,7 @@ module.exports = function () {
     }
 
     function div_up(next) {
-      var up_cb = function up_cb(e) {
+      let up_cb = function (e) {
         this_class.mouse_div.style.display = "none";
         next();
         this_class.mouse_div.removeEventListener('mouseup', up_cb);
@@ -25673,7 +25173,7 @@ module.exports = function () {
     // RESZ
 
     var startX, startY, startWidth, startHeight, curTarget, curFollower;
-    var make = function make(target, directions, cb) {
+    var make = function (target, directions, cb) {
       if (directions == '*') {
         makeN(target);
         makeNE(target);
@@ -26069,78 +25569,69 @@ module.exports = function () {
     make(this_class.element, '*', cfg.resize_cb);
   }
 
-  _createClass(_class, [{
-    key: "maximize",
-    value: function maximize() {
-      if (!this.maximized) {
-        this.mem_layout = {
-          width: this.element.offsetWidth,
-          height: this.element.offsetHeight,
-          top: this.element.offsetTop,
-          left: this.element.offsetLeft
-        };
-        console.log(this.mem_layout);
+  maximize() {
+    if (!this.maximized) {
+      this.mem_layout = {
+        width: this.element.offsetWidth,
+        height: this.element.offsetHeight,
+        top: this.element.offsetTop,
+        left: this.element.offsetLeft
+      };
+      console.log(this.mem_layout);
 
-        this.element.style.width = "auto";
-        this.element.style.height = "auto";
-        this.element.style.top = 0;
-        this.element.style.left = 0;
-        this.element.style.right = 0;
-        this.element.style.bottom = 0;
+      this.element.style.width = "auto";
+      this.element.style.height = "auto";
+      this.element.style.top = 0;
+      this.element.style.left = 0;
+      this.element.style.right = 0;
+      this.element.style.bottom = 0;
 
-        this.element.removeChild(this.resize_controls);
+      this.element.removeChild(this.resize_controls);
 
-        this.maximized = true;
+      this.maximized = true;
 
-        this.resize_cb();
-      }
+      this.resize_cb();
     }
-  }, {
-    key: "minimize",
-    value: function minimize() {
-      if (this.maximized) {
-        console.log(this.mem_layout);
-        this.element.style.width = this.mem_layout.width + "px";
-        this.element.style.height = this.mem_layout.height + "px";
-        this.element.style.top = this.mem_layout.top + "px";
-        this.element.style.left = this.mem_layout.left + "px";
-        this.element.style.right = "auto";
-        this.element.style.bottom = "auto";
+  }
 
-        this.element.appendChild(this.resize_controls);
+  minimize() {
+    if (this.maximized) {
+      console.log(this.mem_layout);
+      this.element.style.width = this.mem_layout.width + "px";
+      this.element.style.height = this.mem_layout.height + "px";
+      this.element.style.top = this.mem_layout.top + "px";
+      this.element.style.left = this.mem_layout.left + "px";
+      this.element.style.right = "auto";
+      this.element.style.bottom = "auto";
 
-        this.resize_controls.style.display = "auto";
+      this.element.appendChild(this.resize_controls);
 
-        this.maximized = false;
+      this.resize_controls.style.display = "auto";
 
-        this.resize_cb();
-      }
+      this.maximized = false;
+
+      this.resize_cb();
     }
-  }, {
-    key: "dipslay",
-    value: function dipslay() {
-      if (!this.visible) {
-        this.DOM.appendChild(this.element);
-        this.visible = true;
-      }
-    }
-  }, {
-    key: "hide",
-    value: function hide() {
-      if (this.visible) {
-        this.DOM.removeChild(this.element);
-        this.visible = false;
-      }
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.element.parentNode.removeChild(this.element);
-    }
-  }]);
+  }
 
-  return _class;
-}();
+  dipslay() {
+    if (!this.visible) {
+      this.DOM.appendChild(this.element);
+      this.visible = true;
+    }
+  }
+
+  hide() {
+    if (this.visible) {
+      this.DOM.removeChild(this.element);
+      this.visible = false;
+    }
+  }
+
+  destroy() {
+    this.element.parentNode.removeChild(this.element);
+  }
+};
 
 /***/ }),
 
@@ -26152,7 +25643,7 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../node_modules/css-loader!./sheet.css */ "./node_modules/css-loader/index.js!./src/edit/window.ui/sheet.css");
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!./sheet.css */ "./node_modules/css-loader/index.js??ref--6-1!./src/edit/window.ui/sheet.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -26184,74 +25675,59 @@ if(false) {}
 "use strict";
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+module.exports = class {
+  static get(url, params, callback) {
+    if (params) {
+      url += "?data=" + encodeURIComponent(JSON.stringify(params));
+    }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("load", callback);
+    xhr.open("GET", url);
+    xhr.send();
 
-module.exports = function () {
-  function _class() {
-    _classCallCheck(this, _class);
+    console.log(url);
   }
 
-  _createClass(_class, null, [{
-    key: "get",
-    value: function get(url, params, callback) {
-      if (params) {
-        url += "?data=" + encodeURIComponent(JSON.stringify(params));
-      }
-
+  static post(url, params, callback) {
+    if (params.formData) {
+      console.log("FORM DATA");
       var xhr = new XMLHttpRequest();
+      xhr.open("POST", url);
+      //  xhr.setRequestHeader("Content-Type","multipart/form-data");
+      xhr.send(params.formData);
       xhr.addEventListener("load", callback);
-      xhr.open("GET", url);
-      xhr.send();
-
       console.log(url);
+    } else {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+
+      //Send the proper header information along with the request
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+      xhr.onreadystatechange = function () {
+        //Call a function when the state changes.
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          callback(xhr.responseText);
+        }
+      };
+
+      var json = JSON.stringify(params);
+      var param_str = 'data=' + encodeURIComponent(json);
+      xhr.send(param_str);
     }
-  }, {
-    key: "post",
-    value: function post(url, params, callback) {
-      if (params.formData) {
-        console.log("FORM DATA");
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url);
-        //  xhr.setRequestHeader("Content-Type","multipart/form-data");
-        xhr.send(params.formData);
-        xhr.addEventListener("load", callback);
-        console.log(url);
-      } else {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url, true);
+  }
 
-        //Send the proper header information along with the request
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-        xhr.onreadystatechange = function () {
-          //Call a function when the state changes.
-          if (xhr.readyState == 4 && xhr.status == 200) {
-            callback(xhr.responseText);
-          }
-        };
-
-        var json = JSON.stringify(params);
-        var param_str = 'data=' + encodeURIComponent(json);
-        xhr.send(param_str);
-      }
-    }
-  }, {
-    key: "getParamByName",
-    value: function getParamByName(name, url) {
-      if (!url) url = window.location.href;
-      name = name.replace(/[\[\]]/g, "\\$&");
-      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-          results = regex.exec(url);
-      if (!results) return null;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
-  }]);
-
-  return _class;
-}();
+  static getParamByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+};
 
 /***/ }),
 
@@ -26265,20 +25741,13 @@ module.exports = function () {
 "use strict";
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-module.exports = function () {
-  function _class() {
-    _classCallCheck(this, _class);
-  }
-
-  _createClass(_class, null, [{
-    key: "get",
-    value: async function get(url, params) {
+module.exports = class {
+  static get(url, params) {
+    return _asyncToGenerator(function* () {
       try {
-        return await new Promise(function (resolve) {
+        return yield new Promise(function (resolve) {
           if (params) {
             url += "?data=" + encodeURIComponent(JSON.stringify(params));
           }
@@ -26295,12 +25764,13 @@ module.exports = function () {
         console.error(e);
         return undefined;
       }
-    }
-  }, {
-    key: "post",
-    value: async function post(url, params) {
+    })();
+  }
+
+  static post(url, params) {
+    return _asyncToGenerator(function* () {
       try {
-        return await new Promise(function (resolve) {
+        return yield new Promise(function (resolve) {
           if (params.formData) {
             console.log("FORM DATA");
             var xhr = new XMLHttpRequest();
@@ -26334,22 +25804,19 @@ module.exports = function () {
         console.error(e);
         return undefined;
       }
-    }
-  }, {
-    key: "getParamByName",
-    value: function getParamByName(name, url) {
-      if (!url) url = window.location.href;
-      name = name.replace(/[\[\]]/g, "\\$&");
-      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-          results = regex.exec(url);
-      if (!results) return null;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
-  }]);
+    })();
+  }
 
-  return _class;
-}();
+  static getParamByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+};
 
 /***/ }),
 

@@ -154,10 +154,6 @@ module.exports = class {
           this_class.context = await this_class.compile_context(this_class.context);
           this_class.context.sessions = [];
 
-          if (req.customer_id) {
-            this_class.context.customer_id = req.customer_id;
-          }
-
           for (var sess_key in req.access_tokens) {
             this_class.context.sessions.push(sess_key);
           }

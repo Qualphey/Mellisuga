@@ -51,6 +51,8 @@ module.exports = class {
     this.required_custom_columns = cfg.required_custom_columns;
     this.unique_custom_columns = cfg.unique_custom_columns;
 
+    this.super_disabled = cfg.super_disabled;
+
     this.rights = cfg.rights;
 
     var this_class = this;
@@ -359,6 +361,9 @@ module.exports = class {
 
                   if (required_right === 'super_admin') {
                     if (!found.super) {
+                      access_granted = false;
+                      break;
+                    } else if (this.super_disabled) {
                       access_granted = false;
                       break;
                     }

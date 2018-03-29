@@ -133,7 +133,8 @@ module.exports = class CMBird {
               authenticated: config.admin_path
             },
             prefix: '/cmb_admin',
-            rights: true
+            rights: true,
+            super_disabled: cfg.disable_super
           });
 
           var auth = this_class.auth = await Auth.init(router.app, aura, {

@@ -1,0 +1,71 @@
+
+header {
+	height: 80px;
+	color: #151515;
+}
+
+header img {
+	position: absolute;
+	top: 10px;
+	left: 3%;
+}
+
+header h2 {
+	font-family: "Podkova";
+	margin: 0;
+	display: inline-block;
+	float: left;
+	line-height: 80px;
+	padding-left: calc(3% + 164px);
+	font-size: 24px;
+}
+
+header div {
+	display: inline-block;
+	float: right;
+	padding-right: 3%;
+}
+
+header div a {
+	display: inline-block;
+	line-height: 80px;
+	text-decoration: none;
+	color: #151515;
+	padding: 0px 30px;
+	font-size: 18px;
+}
+
+header div a:hover {
+	background-color: #151515;
+	color: #DDD;
+}
+
+.eye_feed {
+	display: table;
+	margin: 0 auto;
+	width: 100%;
+	height: calc(100% - 80px);
+	background-color: #151515;
+	color: #DDD;
+	text-align: center;
+}
+
+.eye_feed h1 {
+	padding: 0;
+	margin: 0;
+	display: table-cell;
+	height: 100%;
+	vertical-align: middle;
+}
+
+.more {
+	background-color: #151515;
+	color: #DDD;
+	text-align: center;
+}
+
+.more h2 {
+	padding: 0;
+	margin: 0;
+	
+}

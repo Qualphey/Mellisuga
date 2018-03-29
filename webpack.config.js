@@ -1,5 +1,5 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
     watch: true,
@@ -13,16 +13,17 @@ module.exports = {
       'main': './src/index.js'
     },
     output: {
-      filename: '[name].js'
+      filename: '[name].js',
+      chunkFilename: "[name].chunk.js"
     },
     module: {
         rules: [
           {
-              test: /\.js$/,
-              loader: 'babel-loader',
-              query: {
-                  presets: ['es2015']
-              }
+            test: /\.js$/,
+            loader: 'babel-loader',
+            query: {
+              presets: ['es2017']
+            }
           },
           {
             test: /\.json$/,
@@ -30,7 +31,12 @@ module.exports = {
           },
           {
             test: /\.css$/,
-            use: [ 'style-loader', 'css-loader' ]
+            use: [ 'style-loader', {
+              loader: 'css-loader',
+              options: {
+                url: false
+              }
+            }]
           },
           {
             test: /\.less$/,
@@ -50,19 +56,11 @@ module.exports = {
                 attrs: [':data-src']
               }
             }
-          },
-          {
-            test: /\.vs$/,
-            use: 'raw-loader'
-          },
-          {
-            test: /\.fs$/,
-            use: 'raw-loader'
           }
         ]
     },
     stats: {
-        colors: true
+      colors: true
     },
     devtool: 'source-map'
 };

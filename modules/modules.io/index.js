@@ -1,17 +1,46 @@
+const fs = require('fs-extra');
+const path = require('path');
 
-const fs = require("fs");
-const path = require("path");
-
-module.exports = class {
-  constructor(modules_path, cmbird) {
+module.exports = class ModulesIO {
+  constructor(modules_path) {
     this.dir = modules_path;
+  }
+
+  static async init(cmbird) {
+
+    const modules_path = path.resolve(cmbird.app_path, 'cmbird_modules');
 
     if (!fs.existsSync(modules_path)){
       fs.mkdirSync(modules_path);
     }
-    this.all().forEach(module => {
-      var args = [];
 
+    let this_class = new module.exports(modules_path);
+
+    const default_path = path.resolve(__dirname, 'default');
+
+    var file_list = fs.readdirSync(default_path);
+    file_list.forEach(file => {
+      const file_path = path.resolve(default_path, file);
+      var lstat = fs.lstatSync(file_path);
+      if (lstat.isFile()) {
+        // ----++++
+      } else if (lstat.isDirectory()) {
+  /*      const dest_path = path.resolve(modules_path, file);
+        if (!fs.existsSync(dest_path)){
+          fs.copy(file_path, dest_path, function (err) {
+            if (err) return console.error(err)
+
+          });
+        }*/
+      }
+    });
+
+    cmbird.modules = {};
+
+    this_class.all().forEach(module => {
+
+      var args = [];
+/*
       for (var a = 0; a < module.config.init_arguments.length; a++) {
         var arg = module.config.init_arguments[a];
         switch (arg) {
@@ -21,25 +50,20 @@ module.exports = class {
           case 'pages':
             args.push(cmbird.pages);
             break;
-          case  'user_table':
+          case 'user_table':
             args.push(cmbird.auth.table);
             break;
           default:
         }
-
       }
+            cmbird.modules[module.name] = require(module.index).init(cmbird, ...args);
+*/
 
-      module.object = require(module.index).init(...args);
+      cmbird.modules[module.name] = require(module.index).init(cmbird);
     });
   }
 
-  static async init(modules_path, cmbird) {
-
-    return new module.exports(modules_path, cmbird);
-  }
-
   all() {
-
     var list = [];
     var this_class = this;
 

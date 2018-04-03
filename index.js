@@ -137,7 +137,7 @@ module.exports = class CMBird {
             super_disabled: cfg.disable_super
           });
 
-          var auth = this_class.auth = await Auth.init(router.app, aura, {
+          let user_auth_cfg = {
             table_name: "user_accounts",
             auth_paths: {
               unauthorized: "/signin",
@@ -152,8 +152,16 @@ module.exports = class CMBird {
               sumoketa: "boolean"
             },
             required_custom_columns: ['vardas', 'pavarde', 'tel_nr', 'planas'],
-            unique_custom_columns: ['tel_nr']
-          });
+            unique_custom_columns: ['tel_nr'],
+            autolock: true
+          }
+
+          if (cfg.smtp) {
+            user_auth_cfg.smtp = cfg.smtp;
+            user_auth_cfg.msg = cfg.smtp.msg;
+          }
+
+          var auth = this_class.auth = await Auth.init(router.app, aura, user_auth_cfg);
 
           var pages_io = this_class.pages = await PagesIO.init(router, posts, auth, admin);
 

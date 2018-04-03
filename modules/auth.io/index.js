@@ -5,8 +5,24 @@ var jwt = require("jsonwebtoken");
 var cookie = require('cookie');
 var COOKIE_SECRET = "5x4dhyc8s6ag84ngc91d3zx21v4x8c9cv54zd6r8gzx21c"
 
-var bcrypt = require('bcryptjs');
-var crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
+const cryptorithm = 'aes-256-cbc';
+const cryptword = '41631b983cc0906948401650d5636e8afac451c74abfd7935989cad7116e0c75';
+
+function encrypt(text){
+  var cipher = crypto.createCipher(cryptorithm, cryptword)
+  var crypted = cipher.update(text,'utf8','hex')
+  crypted += cipher.final('hex');
+  return crypted;
+}
+
+function decrypt(text){
+  var decipher = crypto.createDecipher(cryptorithm, cryptword)
+  var dec = decipher.update(text,'hex','utf8')
+  dec += decipher.final('utf8');
+  return dec;
+}
 
 const fs = require('fs-extra')
 const path = require('path');
@@ -19,6 +35,10 @@ var nunjucks_env = new nunjucks.Environment(new nunjucks.FileSystemLoader([
 //      watch: true,
   noCache: true
 }));
+
+const schedule = require('node-schedule');
+
+const nodemailer = require('nodemailer');
 
 function obj_to_qstr(obj, prefix) {
   var str = [],
@@ -36,12 +56,6 @@ function obj_to_qstr(obj, prefix) {
 
 module.exports = class {
   constructor(app, table, cfg) {
-    /*
-      CONFIG {
-        table_name: "string",
-        unauthorized: function(res),
-      }
-    */
 
     this.name = cfg.table_name;
     this.table = table;
@@ -53,9 +67,16 @@ module.exports = class {
 
     this.super_disabled = cfg.super_disabled;
 
-    this.rights = cfg.rights;
+    this.autolock = cfg.autolock;
 
     var this_class = this;
+
+    if (cfg.smtp) {
+      this.smtp = cfg.smtp;
+      this.msg = cfg.msg;
+    }
+
+    this.rights = cfg.rights;
 
     this.terminate = function(ireq, ires, inext) {
       function forward(that, req, res, next) {
@@ -92,7 +113,7 @@ module.exports = class {
       next();
     });
 
-    var app_path = cfg.prefix+'-auth.io';
+    var app_path = this.app_path = cfg.prefix+'-auth.io';
     app.post(app_path, async function(req, res, next) {
       try {
         var data = req.body;
@@ -115,8 +136,15 @@ module.exports = class {
             //  res.redirect(this_class.paths.unauthorized);
             }
             break;
+          case 'confirm':
+            const results = await this_class.confirm(data.code);
+            res.send(JSON.stringify(results));
+            break;
           case 'authenticate':
             this_class.authenticate(req, res, next);
+            break;
+          case 'details':
+            this_class.details(req, res, next);
             break;
           case 'terminate':
             this_class.terminate(req, res, next);
@@ -131,6 +159,16 @@ module.exports = class {
     app.get(app_path, async function(req, res, next) {
       this_class.terminate(req, res, next);
     });
+
+    schedule.scheduleJob('0 0 * * *', async function() {
+      const list = await this_class.table.select(["id", "email_confirm_until"], "email_confirmation != $1", [true]);
+      for (var a = 0; a < list.length; a++) {
+        let acc = list[a];
+        if (acc.email_confirm_until < Date.now()) {
+          this_class.table.delete("id = $1", [acc.id]);
+        }
+      }
+    });
   }
 
   static async init(app, aura, cfg) {
@@ -141,7 +179,10 @@ module.exports = class {
         password: 'varchar(256)',
         jwt_secret: 'varchar(256)',
         access_token: 'varchar(256)',
-        cfg: 'jsonb'
+        cfg: 'jsonb',
+        email_confirmation: 'boolean',
+        email_confirm_until: 'bigint',
+        locked: 'boolean'
       };
 
       if (cfg.rights) {
@@ -159,6 +200,33 @@ module.exports = class {
         columns: columns
       });
 
+
+
+      if (cfg.smtp) {
+        let transporter = nodemailer.createTransport({
+          host: cfg.smtp.host,
+          port: cfg.smtp.port,
+          secure: false
+        });
+//        let transporter = nodemailer.createTransport('smtps://user%40gmail.com:password@smtp.gmail.com');
+        cfg.smtp = await new Promise(function(resolve) {
+          function timeout() {
+            console.error("SMTP connection timeout!");
+            resolve(transporter);
+          }
+
+          const timeout_id = setTimeout(timeout, 15000);
+
+          transporter.verify(function(error, success) {
+            if (error) {
+              console.log(error);
+            } else {
+              clearTimeout(timeout_id);
+              resolve(transporter);
+            }
+          });
+        });
+      }
       return new module.exports(app, table, cfg);
     } catch (e) {
       console.error(e.stack);
@@ -236,8 +304,41 @@ module.exports = class {
           acc_data[reqcol_name] = data[reqcol_name];
         }
 
+        if (this.smtp) {
+          acc_data.email_confirm_until = Date.now()+24*60*60*1000; // plus 24 hours
+        }
+
+        if (this.autolock) {
+          acc_data.locked = true;
+        }
+
         result.success = true;
         result.id = await this.table.insert(acc_data);
+
+        if (this.smtp) {
+          const confirmation_code = encrypt(acc_data.email);
+          var confirm_url = "?confirm="+confirmation_code;
+
+          let mailOptions = {
+            from: this.msg.from,
+            to: acc_data.email,
+            subject: this.msg.subject,
+            text: this.msg.text(confirmation_code, confirm_url),
+            html: this.msg.html(confirmation_code, confirm_url)
+          };
+
+          this.smtp.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              return console.log(error);
+            }
+            console.log('Message sent: %s', info.messageId);
+            // Preview only available when sending through an Ethereal account
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+            // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+            // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+          });
+        }
       } else {
         result.err = {}
         if (empty_fields.length > 0) {
@@ -257,15 +358,46 @@ module.exports = class {
     }
   }
 
+  async confirm(code) {
+    try {
+      if (code) {
+        let found = await this.table.select(
+          ["vardas", "pavarde", "email", "id"],
+          "email = $1",
+          [decrypt(code)]
+        );
+
+        if (1 < found.length) {
+          console.log("EMAIL CONFIRMATION DUPLICATE << !IMPORTANT");
+        }
+
+        if (0 < found.length) {
+          var cuser = found[0];
+          await this.table.update({
+            email_confirmation: true
+          }, "email = $1", [cuser.email]);
+          return { user_data: cuser };
+        } else {
+          return { err: true };
+        }
+      } else {
+        return { err: true };
+      }
+    } catch (e) {
+      console.error(e);
+      return { err: true };
+    };
+  }
+
   async authenticate(req, res, next) {
     var this_class = this;
 
     try {
-      var data = req.body;
-      if (!data.email) {
-        this.failed_response(res, "FAILED: email address was not defined");
-      } else if (!data.pwd) {
-        this.failed_response(res, "FAILED: password was not defined");
+      var data = JSON.parse(req.body.data);
+      if (!data.email || !data.pwd) {
+        res.send(JSON.stringify({
+          err: true
+        }));
       } else {
         let found = await this.table.select(
           '*', "(email = $1)", [data.email]
@@ -275,48 +407,80 @@ module.exports = class {
           found = JSON.parse(JSON.stringify(found[0]));
 
           if (bcrypt.compareSync(data.pwd, found.password)) {
-            let jwt_secret = crypto.randomBytes(64).toString('hex');
-            let token = jwt.sign({
-              exp: Math.floor(Date.now() / 1000) + 60 * 15,
-              email: data.email
-            }, jwt_secret);
-            found.access_token = token;
-
-            await this.table.update({
-              access_token: token,
-              jwt_secret: jwt_secret
-            }, "id = $1", [found.id]);
-
-            res.cookie(this.name+'_access_token', token, {
-              httpOnly: true,
-              maxAge: 1000 * 60 * 15
-            });
-
-            if (this.forward_token) {
-              res.send(nunjucks_env.render('forward_token.html', {
-                target: this.paths.authenticated,
-                token: token
-              }));
-            } else {
-              if (found.cfg) {
-                if (found.cfg.auth_next) {
-                  res.redirect(found.cfg.auth_next);
-                } else if (data.next_url) {
-                  res.redirect(data.next_url);
-                } else {
-                  res.redirect(this.paths.authenticated);
-                }
-              } else if (data.next_url) {
-                res.redirect(data.next_url);
-              } else {
-                res.redirect(this.paths.authenticated);
+            let proceed = true;
+            if (this.smtp) {
+              if (!found.email_confirmation) {
+                proceed = false;
               }
             }
+            if (proceed) {
+              if (!found.locked) {
+                let jwt_secret = crypto.randomBytes(64).toString('hex');
+                let token = jwt.sign({
+                  exp: Math.floor(Date.now() / 1000) + 60 * 15,
+                  email: data.email
+                }, jwt_secret);
+                found.access_token = token;
+
+                await this.table.update({
+                  access_token: token,
+                  jwt_secret: jwt_secret
+                }, "id = $1", [found.id]);
+
+                res.cookie(this.name+'_access_token', token, {
+                  httpOnly: true,
+                  maxAge: 1000 * 60 * 15
+                });
+
+                if (this.forward_token) {
+                  res.send(nunjucks_env.render('forward_token.html', {
+                    target: this.paths.authenticated,
+                    token: token
+                  }));
+                } else {
+                  if (found.cfg) {
+                    if (found.cfg.auth_next) {
+                      res.send(JSON.stringify({
+                        next_url: found.cfg.auth_next
+                      }));
+                    } else if (data.next_url) {
+                      res.send(JSON.stringify({
+                        next_url: data.next_url
+                      }));
+                    } else {
+                      res.send(JSON.stringify({
+                        next_url: this.paths.authenticated
+                      }));
+                    }
+                  } else if (data.next_url) {
+                    res.send(JSON.stringify({
+                      next_url: data.next_url
+                    }));
+                  } else {
+                    res.send(JSON.stringify({
+                      next_url: this.paths.authenticated
+                    }));
+                  }
+                }
+              } else {
+                res.send(JSON.stringify({
+                  err: "locked"
+                }));
+              }
+            } else {
+              res.send(JSON.stringify({
+                err: "email_confirm"
+              }));
+            }
           } else {
-            this_class.failed_response(res, "FAILED: incorect password!");
+            res.send(JSON.stringify({
+              err: "usr/pass"
+            }));
           }
         } else {
-          this.failed_response(res, "FAILED: no user registered with such email address!");
+          res.send(JSON.stringify({
+            err: "usr/pass"
+          }));
         }
       }
     } catch (e) {
@@ -391,6 +555,44 @@ module.exports = class {
               console.log(e);
               res.redirect(redirect_path);
             }
+          } else {
+            this.terminate(req, res, next);
+          }
+        }
+      } else {
+        res.redirect(redirect_path);
+      }
+    } catch (e) {
+      console.error(e.stack);
+    }
+  }
+
+  async details(req, res, next) {
+    try {
+      if (req.headers.cookie) {
+        var cookies = cookie.parse(req.headers.cookie);
+        if (cookies[this.name+'_access_token']) {
+          req.access_token = cookies[this.name+'_access_token'];
+        } else {
+          res.redirect(redirect_path);
+        }
+
+        var access_token = req.access_token;
+
+        if (access_token) {
+          var found = await this.table.select(
+            '*',
+            "access_token = $1", [access_token]
+          );
+
+
+          if (found.length > 0) {
+            found = found[0];
+            delete found.id;
+            delete found.password;
+            delete found.jwt_secret;
+            delete found.access_token;
+            res.send(JSON.stringify(found));
           } else {
             this.terminate(req, res, next);
           }

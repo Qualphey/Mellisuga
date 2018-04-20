@@ -229,7 +229,7 @@ module.exports = class {
           port: cfg.smtp.port,
           secure: false
         });*/
-        let transporter = nodemailer.createTransport('smtps://qualphey%40gmail.com:brah3vish9shiv6@smtp.gmail.com');
+        let transporter = nodemailer.createTransport('smtps://username%40gmail.com:password@smtp.gmail.com');
         cfg.smtp = await new Promise(function(resolve) {
           function timeout() {
             console.error("SMTP connection timeout!");

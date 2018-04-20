@@ -3,7 +3,6 @@
 var jwt = require("jsonwebtoken");
 
 var cookie = require('cookie');
-var COOKIE_SECRET = "5x4dhyc8s6ag84ngc91d3zx21v4x8c9cv54zd6r8gzx21c"
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -19,7 +18,7 @@ function encrypt(text){
 
 function decrypt(text){
   var decipher = crypto.createDecipher(cryptorithm, cryptword)
-  var dec = decipher.update(text,'hex','utf8')
+  var dec = decipher.update(text, 'hex', 'utf8')
   dec += decipher.final('utf8');
   return dec;
 }
@@ -143,11 +142,33 @@ module.exports = class {
           case 'authenticate':
             this_class.authenticate(req, res, next);
             break;
+          case 'terminate':
+            this_class.terminate(req, res, next);
+            break;
+          default:
+        }
+      } catch (e) {
+        console.error(e.stack);
+      }
+    });
+
+    var restricted_path = cfg.prefix+'-auth.io-restricted';
+    app.post(restricted_path, this.orize, async function(req, res, next) {
+      try {
+        var data = req.body;
+
+        if (data.data) {
+          if (typeof data.data === 'string' || data.data instanceof String) {
+            data = JSON.parse(data.data);
+          }
+        }
+
+        switch (data.command) {
           case 'details':
             this_class.details(req, res, next);
             break;
-          case 'terminate':
-            this_class.terminate(req, res, next);
+          case 'edit':
+            this_class.edit(data, res);
             break;
           default:
         }
@@ -203,12 +224,12 @@ module.exports = class {
 
 
       if (cfg.smtp) {
-        let transporter = nodemailer.createTransport({
+/*        let transporter = nodemailer.createTransport({
           host: cfg.smtp.host,
           port: cfg.smtp.port,
           secure: false
-        });
-//        let transporter = nodemailer.createTransport('smtps://user%40gmail.com:password@smtp.gmail.com');
+        });*/
+        let transporter = nodemailer.createTransport('smtps://qualphey%40gmail.com:brah3vish9shiv6@smtp.gmail.com');
         cfg.smtp = await new Promise(function(resolve) {
           function timeout() {
             console.error("SMTP connection timeout!");
@@ -317,14 +338,13 @@ module.exports = class {
 
         if (this.smtp) {
           const confirmation_code = encrypt(acc_data.email);
-          var confirm_url = "?confirm="+confirmation_code;
 
           let mailOptions = {
             from: this.msg.from,
             to: acc_data.email,
             subject: this.msg.subject,
-            text: this.msg.text(confirmation_code, confirm_url),
-            html: this.msg.html(confirmation_code, confirm_url)
+            text: nunjucks.renderString(this.msg.text, { code: confirmation_code }),
+            html: nunjucks.renderString(this.msg.html, { code: confirmation_code })
           };
 
           this.smtp.sendMail(mailOptions, (error, info) => {
@@ -414,7 +434,7 @@ module.exports = class {
               }
             }
             if (proceed) {
-              if (!found.locked) {
+              if ('1' === '1') { //  !!!! --> !found.locked TODO
                 let jwt_secret = crypto.randomBytes(64).toString('hex');
                 let token = jwt.sign({
                   exp: Math.floor(Date.now() / 1000) + 60 * 15,
@@ -588,7 +608,6 @@ module.exports = class {
 
           if (found.length > 0) {
             found = found[0];
-            delete found.id;
             delete found.password;
             delete found.jwt_secret;
             delete found.access_token;
@@ -599,6 +618,41 @@ module.exports = class {
         }
       } else {
         res.redirect(redirect_path);
+      }
+    } catch (e) {
+      console.error(e.stack);
+    }
+  }
+
+  async edit(data, res) {
+    try {
+      switch (data.what) {
+        case "fname":
+          await this.table.update({
+              vardas: data.value
+            },
+            "id = $1", [data.id]
+          );
+          res.send("{}");
+          break;
+        case "lname":
+          await this.table.update({
+              pavarde: data.value
+            },
+            "id = $1", [data.id]
+          );
+          res.send("{}");
+          break;
+        case "phone":
+          await this.table.update({
+              tel_nr: data.value
+            },
+            "id = $1", [data.id]
+          );
+          res.send("{}");
+          break;
+        default:
+          console.error("AUTH.IO: invalid edit target: ", data.what);
       }
     } catch (e) {
       console.error(e.stack);

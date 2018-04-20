@@ -1,0 +1,19 @@
+<html>
+  <body>
+    <script>
+      var form = document.createElement("form");
+      form.setAttribute("method", "post");
+      form.setAttribute("action", "{{ target }}");
+
+      var hiddenField = document.createElement("input");
+      hiddenField.setAttribute("type", "hidden");
+      hiddenField.setAttribute("name", "token");
+      hiddenField.setAttribute("value", "{{ token }}");
+
+      form.appendChild(hiddenField);
+
+      document.body.appendChild(form);
+      form.submit();
+    </script>
+  </body>
+</html>

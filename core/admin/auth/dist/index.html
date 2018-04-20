@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+
+    <link rel="apple-touch-icon" sizes="120x120" href="/g/res/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/g/res/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/g/res/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/g/res/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/g/res/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="/g/theme.css">
+    <link rel="stylesheet" type="text/css" href="theme.css">
+	</head>
+  <body>
+		<header>
+      <img id="logo_img" src="/g/res/logo-compact.png" />
+			<h2 id="main_h">{{ title }}</h2>
+		</header>
+    <div class="content_block">
+      <div class="vert_mid">
+        <h3>Prisijunkite prie savo paskyros</h3>
+        <div id="err_msg_field"></div>
+        <form action="/admin-auth" method="post" id="auth_form">
+          <input name="email" type="text" placeholder="E-pašto adresas" />
+          <input name="pwd" type="password" placeholder="**slaptažodis**" />
+          <input type="hidden" name="command" value="authenticate" />
+          <input class="submit" type="submit" value="Prisijungti">
+        </form>
+      </div>
+    </div>
+  </body>
+  <script src="/g/index.js"></script>
+  <script src="main.js"></script>
+</html>

@@ -1,0 +1,35 @@
+.treefm {
+  background-color: #111;
+  font-size: 14px;
+  padding: 2px;
+  user-select: none;
+}
+
+.treefm_dir_content {
+  display: none;
+}
+
+.treefm_item {
+  color: #DDD;
+  padding: 2px 10px;
+  white-space: nowrap;
+}
+
+.treefm_item:hover, .treefm_contexmenu div:hover {
+  background-color: #1C1C1C;
+  cursor: default;
+}
+
+.treefm_contexmenu {
+  display: none;
+  position: fixed;
+  background-color: #090909;
+  color: #DDD;
+  cursor: default;
+  font-size: 15px;
+  z-index: 2;
+}
+
+.treefm_contexmenu div {
+  padding: 2px 10px;
+}

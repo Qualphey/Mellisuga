@@ -1,0 +1,13 @@
+
+body, html {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#cmb_page_display {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}

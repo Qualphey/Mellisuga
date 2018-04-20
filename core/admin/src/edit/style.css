@@ -1,0 +1,25 @@
+body {
+  overflow: hidden;
+}
+
+.tools {
+  position: fixed;
+  bottom: 0;
+  right: 100px;
+}
+
+.tools button {
+  background-color: #222;
+  color: #FFF;
+  border: 1px solid #444;
+  width: 64px;
+  height: 32px;
+}
+
+.tools button:hover {
+  background-color: #111;
+}
+
+.edit_switch {
+  display: inline-block;
+}

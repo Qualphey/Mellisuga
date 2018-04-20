@@ -1,0 +1,96 @@
+
+
+html, body {
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+#logo_img {
+	position: absolute;
+	top: 8px;
+	left: 3%;
+}
+
+header {
+  min-height: 40px;
+	height: 40px;
+	color: #FFF;
+  background-color: #773126;
+  border-bottom: none;
+}
+
+header h2 {
+	font-family: "Podkova";
+	margin: 0;
+	display: inline-block;
+	float: left;
+	line-height: 40px;
+	padding-left: calc(3% + 36px);
+	font-size: 16px;
+	color: #EEE;
+}
+
+.content_block {
+    display: block;
+    background-color: #151515;
+    position: absolute;
+		top: 40px;
+		bottom: 0px;
+		left: 0px;
+		right: 0px;
+}
+
+.vert_mid {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 300px;
+  padding: 100px 200px;
+  color: #DDD;
+  background-color: #111;
+  border: 1px solid #DDD;
+}
+
+.vert_mid h3 {
+  margin: 0;
+  padding: 0;
+}
+
+.vert_mid input {
+  background-color: #111;
+  border: 1px solid #DDD;
+  color: #DDD;
+  padding: 4px 10px;
+}
+
+.vert_mid input[type="text"], .vert_mid input[type="password"] {
+  width: 90%;
+  margin-top: 15px;
+}
+
+.vert_mid a {
+  text-decoration: none;
+  color: #daa85d;
+}
+
+
+
+.submit {
+  margin-top: 10px;
+  margin-left: 190px;
+}
+
+#err_msg_field {
+  color: #bf4835;
+  position: absolute;
+  width: fit-content;
+  left: 50%;
+  transform: translate(-50%,0%);
+  bottom: 70px;
+}
+
+#err_msg_field p {
+  margin: 0;
+}

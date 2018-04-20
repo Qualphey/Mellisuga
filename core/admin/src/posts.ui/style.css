@@ -1,0 +1,62 @@
+.posts  {
+  width: calc(100%-20px);
+  margin: auto;
+  padding: 10px;
+}
+
+.post_display, table {
+  width: 100%;
+}
+
+.post_title {
+  display: inline-block;
+  margin: 0;
+  padding: 10px 30px;
+}
+
+.post_element button {
+  float: right;
+}
+
+.post_element {
+  margin-top: 20px;
+}
+
+.post_content {
+  padding: 0px 20px;
+  width: calc(100% - 40px);
+  word-wrap: break-word;
+}
+
+
+.new_post_button {
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background-color: #111;
+  color: #FFF;
+  cursor: pointer;
+  user-select: none;
+}
+
+.new_post_button:hover {
+  background-color: #222;
+}
+
+.post_title_input {
+  width: 300px;
+}
+
+.post_tags_input {
+  width: 500px;
+}
+
+.post_submit_input, .post_cancel_input {
+  width: 120px;
+  float: right;
+}
+
+.note-toolbar {
+  z-index: 1;
+}

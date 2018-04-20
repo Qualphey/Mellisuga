@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 
 module.exports = class {
-  constructor(app, table) {
+  constructor(cmbird) {
+    let app = cmbird.app, table = cmbird.admin.auth.table;
     this.app = app;
 
     this.table = table;
@@ -9,7 +10,7 @@ module.exports = class {
     var this_class = this;
     console.log("ADMINS");
 
-    app.post(global.cmb_config.admin_path+"/admin_accounts.io", async function(req, res) {
+    app.post(cmbird.config.admin_path+"/admin_accounts.io", cmbird.admin.auth.orize_gen(["super_admin"]), async function(req, res) {
       try {
         let data;
         try {
@@ -51,6 +52,9 @@ module.exports = class {
               var salt = bcrypt.genSaltSync(10);
               data.password = bcrypt.hashSync(data.password, salt);
               console.log(data);
+              if (data.cfg === "") {
+                data.cfg = "{}";
+              }
               await table.insert(data);
               res.send("success");
             }
@@ -91,7 +95,7 @@ module.exports = class {
 
       return new module.exports(app, table);
     } catch (e) {
-      console.log(e);
+      console.error(e.stack);
       return false;
     }
   }

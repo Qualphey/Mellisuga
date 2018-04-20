@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>CMBird Setup</title>
+
+    <script src="lib/jquery-3.2.1.min.js"></script>
+
+    <link href="lib/summernote-lite.css" rel="stylesheet">
+    <script src="lib/summernote-lite.js"></script>
+    <script src="lib/lang/summernote-lt-LT.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="res/theme.css">
+	</head>
+  <body>
+    <header>
+      <ul>
+        <li><button id="templates_button" class="navigation_button">Templates</button></li>
+        <li><button id="pages_button" class="navigation_button">Pages</button></li>
+        <li><button id="posts_button" class="navigation_button">Posts</button></li>
+        <li><button id="gallery_button" class="navigation_button">Gallery</button></li>
+        <li><button id="accounts_button" class="navigation_button">Admins</button></li>
+        <li><button id="users_button" class="navigation_button" disabled>Users</button></li>
+        <li style="float:right">
+          <form action="/admin-auth" method="post">
+            <input type="hidden" name="command" value="terminate" />
+            <input class="submit" type="submit" value="Sign Out" />
+          </form>
+        </li>
+      </ul>
+    </header>
+    <div id="display_box">
+
+    </div>
+
+  <!--  <button id="tt">
+      Token test
+    </button> -->
+  </body>
+  <script src="test.js"></script>
+  <script src="main.js"></script>
+</html>

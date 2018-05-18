@@ -283,11 +283,7 @@ module.exports = class {
         }
       }
 
-      if (access_granted) {
-        return true;
-      } else {
-        return false;
-      }
+      return access_granted;
     } else {
       return true;
     }

@@ -44,13 +44,25 @@ module.exports = class {
 
           xhr.onreadystatechange = function() {//Call a function when the state changes.
             if(xhr.readyState == 4 && xhr.status == 200) {
-              resolve(JSON.parse(xhr.responseText));
+              try {
+                let obj = JSON.parse(xhr.responseText)
+                resolve(obj);
+              } catch (e) {
+                resolve(xhr.responseText);
+              }
             }
           }
 
-          var json = JSON.stringify(params);
-          var param_str = 'data='+encodeURIComponent(json);
-          xhr.send(param_str);
+          const token = localStorage.getItem("access_token");
+
+          if (token) {
+            var json = JSON.stringify(params);
+            var param_str = 'data='+encodeURIComponent(json)+'&access_token='+token;
+            xhr.send(param_str);
+          } else {
+            console.error("Token not found");
+            resolve(undefined);
+          }
         }
       });
     } catch(e) {

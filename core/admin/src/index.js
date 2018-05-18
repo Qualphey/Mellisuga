@@ -1,3 +1,22 @@
+
+var socket = require('socket.io-client')('http://127.0.0.1:9639');
+console.log("CONNECTING TO http://127.0.0.1:9369");
+socket.on('connect', function(){
+  console.log("CONNECTED");
+});
+
+socket.on('webpack-done', function(stats){
+  console.log(stats);
+});
+
+socket.on('webpack-err', function(err){
+  console.error(err);
+});
+
+socket.on('disconnect', function(){
+  console.log("DISCONNETED");
+});
+
 var config = global.config = {
   admin_path : "/cmb_admin"
 }
@@ -52,7 +71,9 @@ window.addEventListener("load", async function(e) {
     pages_div.button.addEventListener('click', function(e) {
       view_selection(pages_div);
     })
-    var PagesUI = new (require('./pages.ui/index.js'))(pages_div);
+
+    var PagesUI = await (require('./pages.ui/index.js')).init(pages_div);
+    console.log("PAGES DONE");
 
     var posts_div = document.createElement('div');
     posts_div.button = document.getElementById('posts_button');

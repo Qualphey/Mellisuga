@@ -104,30 +104,18 @@ module.exports = class {
 
 //    }
 
-    app.get(cfg.command_path, function(req, res) {
-      var data = JSON.parse(req.query.data);
-      /*
-        {
-          command: "all"
-        }
-      */
-      switch (data.command) {
-        case 'all':
-          var list = this_class.all();
-          res.send(JSON.stringify(list));
-          break;
-        default:
-          console.error("PagesIO: unknown command", data.command);
-      }
-    });
+  }
 
-    var err_response = function(res, text) {
+  init_admin(auth) {
+    let this_class = this;
+    let cmbird = this.cmbird;
+    let err_response = function(res, text) {
       res.send(JSON.stringify({
         err: text
       }));
     }
 
-    app.post(cfg.command_path, function(req, res) {
+    this.app.post(this.command_path, auth.orize, function(req, res) {
       var data = JSON.parse(req.body.data);
       /*
         {
@@ -136,6 +124,10 @@ module.exports = class {
         }
       */
       switch (data.command) {
+        case 'all':
+          var list = this_class.all();
+          res.send(JSON.stringify(list));
+          break;
         case 'add':
           if (data.name) {
             if (data.name.length > 0) {
@@ -227,7 +219,7 @@ module.exports = class {
                 poll: 1000
               }, (err, stats) => {
                 if (err) console.error(err);
-                router.clients.forEach(client => {
+                cmbird.router.clients.forEach(client => {
                   let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
                   if (ip === client.address) {
                     if (stats.hasErrors()) {

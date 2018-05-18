@@ -19,4 +19,8 @@ module.exports = class Templates extends Manager {
       posts: cmbird.posts
     }, cmbird);
   }
+
+  init_admin(auth) {
+    super.init_admin(auth);
+  }
 }

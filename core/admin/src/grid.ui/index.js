@@ -41,7 +41,6 @@ module.exports = class {
   }
 
   add(item) {
-    console.log(item, this.cur_tr.items, this.cur_tr.max_items);
     if (this.cur_tr.items == this.cur_tr.max_items) {
       this.cur_tr = new TR(this.items_in_row);
       this.element.appendChild(this.cur_tr.element);

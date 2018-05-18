@@ -12,12 +12,12 @@ const bcrypt = require("bcryptjs");
 const express = require("express");
 
 module.exports = class {
-  constructor() {
-
+  constructor(cfg) {
+    this.super_disabled = cfg.super_disabled;
   }
 
   static async init(cfg, cmbird) {
-    let this_class = cmbird.admin = new module.exports();
+    let this_class = cmbird.admin = new module.exports(cfg);
     let config = cmbird.config;
 
     let aura = cmbird.aura = await Aura.connect({
@@ -32,8 +32,18 @@ module.exports = class {
 
     this_class.table = auth.table;
 
-    cmbird.pages.serve_dir("/admin_auth", path.resolve(__dirname, 'auth/dist'));
-    cmbird.pages.serve_dir("/cmbird_admin", path.resolve(__dirname, 'dist'), auth);
+    cmbird.pages.serve_dir("/admin_auth", path.resolve(__dirname, 'auth/dist'), {
+      name: "admin_auth"
+    });
+//    cmbird.pages.serve_dir("/cmbird_admin", path.resolve(__dirname, 'dist-bak'), auth);
+    if (!this_class.super_disabled) {
+      cmbird.pages.serve_dirs("/cmbird_admin", path.resolve(__dirname, 'dist'), {
+        auth: auth,
+        globals_path: path.resolve(__dirname, 'globals'),
+        name: "admin",
+        dev_only: true
+      });
+    }
 
     if (!fs.existsSync(cmbird.globals_path)){
       fs.mkdirSync(cmbird.globals_path);

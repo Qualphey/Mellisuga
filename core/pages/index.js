@@ -47,4 +47,8 @@ module.exports = class PagesIO {
       auth: auth
     }, this.cmbird, this.pages);
   }
+
+  server_dirs(request_path_prefix, dir_full_path, auth) {
+    
+  }
 }

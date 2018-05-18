@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+
+    <link href="theme.css" rel="stylesheet">
+    <link href="/cmbird_admin/g/theme.css" rel="stylesheet">
+	</head>
+  <body>
+    {% include "navi.njk" %}
+    <div id="admin_accounts_ui" class="admin_accounts_ui">
+      <h2>Administrator accounts</h2>
+
+      <table class="admin_accounts_ui_list">
+        <tr id="admin_accounts_ui_cells">
+          <td class="admin_accounts_ui_item_name">
+            Email
+          </td>
+          <td>
+            Super
+          </td>
+          <td>
+            Configurations
+          </td>
+          <td>
+            Options
+          </td>
+        </tr>
+        <tr id="admin_accounts_ui_new_item_input" style="display: none;">
+          <td class="admin_accounts_ui_item_name">
+            <input type="text" name="email" placeholder="email address" /><br />
+            <input type="password" name="password" placeholder="password" />
+          </td>
+          <td>
+            <input type="checkbox" name="super" />
+          </td>
+          <td class="new_json_edit">
+
+          </td>
+          <td>
+            <button name="submit">Submit</button>
+            <button name="cancel">X</button>
+          </td>
+        </tr>
+      </table>
+      <div class="admin_accounts_ui_item" id="admin_accounts_ui_new_item">
+        Add administrator account
+      </div>
+    </div>
+  </body>
+  <script src="main.js"></script>
+</html>

@@ -20,8 +20,8 @@ const Pages = require("./pages/index.js")
 const Auth = require("./auth/index.js");
 
 const PostsIO = require("./posts/index.js");
-const PagesIO = require("./pages/index.js");
-const BuiltinIO = require("./pages/builtin.js");
+const PagesIO = require("./pages0/index.js");
+//const BuiltinIO = require("./pages/builtin.js");
 
 /*
 const FMIO = require("./modules/treefm.io/fm.io.js");
@@ -61,6 +61,8 @@ module.exports = class CMBird {
 
     this.db_super_user = cfg.db_user;
     this.db_super_pwd = cfg.db_pwd;
+
+    this.dev_mode = cfg.dev_mode;
   }
 
   static async init(cfg) {
@@ -72,7 +74,7 @@ module.exports = class CMBird {
       let router = this_class.router = await Router.init(this_class.host, this_class.port);
       this_class.app = router.app;
 
-      var pages_io = this_class.pages = await PagesIO.init(cfg, this_class);
+      let pages_io = this_class.pages = await PagesIO.init(cfg, this_class);
 
       let admin = undefined;
       if (!config.setup) {
@@ -99,6 +101,11 @@ module.exports = class CMBird {
         }, this_class);
       }
 
+      if (!cfg.disable_super) {
+        pages_io.init_controls(admin.auth);
+      }
+/*      pages_io.pages.init_admin(admin.auth);
+      pages_io.templates.init_admin(admin.auth);*/
 
       let aura = this_class.aura;
 
@@ -114,7 +121,9 @@ module.exports = class CMBird {
           pavarde: "varchar(256)",
           tel_nr: "varchar(32)",
           planas: "smallint",
-          sumoketa: "boolean"
+          sumoketa: "boolean",
+          imone: "varchar(256)",
+          pareigos: "varchar(256)"
         },
         required_custom_columns: ['vardas', 'pavarde', 'tel_nr', 'planas'],
         unique_custom_columns: ['tel_nr'],
@@ -132,20 +141,20 @@ module.exports = class CMBird {
         pages_path: config.pages_path
       });
 
-      pages_io.load();
+      pages_io.serve_dirs('/', path.resolve(this_class.app_path, 'pages-test'), {
+        auth: auth
+      });
 
-
+/*
       var builtin_pages = await BuiltinIO.init(
         path.resolve(this_class.pages_path, ".builtin"), [
-          path.resolve(__dirname, "/../modules/auth.io/pages/signin"),
-          path.resolve(__dirname, "/../modules/auth.io/pages/signup")
         ], [
           this_class.pages_path
         ], this_class
       );
 
       builtin_pages.load();
-
+*/
       let modules = await Moduload.init(this_class);
 
       router.use(

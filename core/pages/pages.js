@@ -28,4 +28,8 @@ module.exports = class Pages extends Manager {
       auth: cmbird.auth
     }, cmbird);
   }
+
+  init_admin(auth) {
+    super.init_admin(auth);
+  }
 }

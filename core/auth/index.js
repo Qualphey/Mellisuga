@@ -199,8 +199,7 @@ module.exports = class {
         id: 'uuid',
         email: 'varchar(256)',
         password: 'varchar(256)',
-        jwt_secret: 'varchar(256)',
-        access_token: 'varchar(256)',
+        jwt_token: 'varchar(512)',
         cfg: 'jsonb',
         email_confirmation: 'boolean',
         email_confirm_until: 'bigint',
@@ -225,12 +224,16 @@ module.exports = class {
 
 
       if (cfg.smtp) {
-        let transporter = nodemailer.createTransport({
-          host: cfg.smtp.host,
-          port: cfg.smtp.port,
-          secure: false
-        });
-    //    let transporter = nodemailer.createTransport('smtps://username%40gmail.com:password@smtp.gmail.com');
+        let transporter = undefined;
+        if (cfg.smtp.gmail) {
+          transporter = nodemailer.createTransport(cfg.smtp.gmail);
+        } else {
+          transporter = nodemailer.createTransport({
+            host: cfg.smtp.host,
+            port: cfg.smtp.port,
+            secure: false
+          });
+        }
         cfg.smtp = await new Promise(function(resolve) {
           function timeout() {
             console.error("SMTP connection timeout!");
@@ -351,6 +354,7 @@ module.exports = class {
             html: nunjucks.renderString(this.msg.html, { code: confirmation_code })
           };
 
+
           this.smtp.sendMail(mailOptions, (error, info) => {
             if (error) {
               return console.log(error);
@@ -386,7 +390,7 @@ module.exports = class {
     try {
       if (code) {
         let found = await this.table.select(
-          ["vardas", "pavarde", "email", "id"],
+          ["vardas", "pavarde", "imone", "pareigos", "email", "id"],
           "email = $1",
           [decrypt(code)]
         );
@@ -439,19 +443,19 @@ module.exports = class {
             }
             if (proceed) {
               if ('1' === '1') { //  !!!! --> !found.locked TODO
-                let jwt_secret = crypto.randomBytes(64).toString('hex');
-                let token = jwt.sign({
-                  exp: Math.floor(Date.now() / 1000) + 60 * 15,
-                  email: data.email
-                }, jwt_secret);
-                found.access_token = token;
+                const csrf_token = crypto.randomBytes(64).toString('hex');
+
+                const jwt_token = jwt.sign({
+                  exp: Math.floor(Date.now() / 1000) + 60 * 30,
+                  email: data.email,
+                  csrf: csrf_token
+                }, found.password);
 
                 await this.table.update({
-                  access_token: token,
-                  jwt_secret: jwt_secret
+                  jwt_token: jwt_token
                 }, "id = $1", [found.id]);
 
-                res.cookie(this.name+'_access_token', token, {
+                res.cookie(this.name+'_access_token', jwt_token, {
                   httpOnly: true,
                   maxAge: 1000 * 60 * 15
                 });
@@ -459,29 +463,34 @@ module.exports = class {
                 if (this.forward_token) {
                   res.send(nunjucks_env.render('forward_token.html', {
                     target: this.paths.authenticated,
-                    token: token
+                    access_token: csrf_token,
                   }));
                 } else {
                   if (found.cfg) {
                     if (found.cfg.auth_next) {
                       res.send(JSON.stringify({
+                        access_token: csrf_token,
                         next_url: found.cfg.auth_next
                       }));
                     } else if (data.next_url) {
                       res.send(JSON.stringify({
+                        access_token: csrf_token,
                         next_url: data.next_url
                       }));
                     } else {
                       res.send(JSON.stringify({
+                        access_token: csrf_token,
                         next_url: this.paths.authenticated
                       }));
                     }
                   } else if (data.next_url) {
                     res.send(JSON.stringify({
+                      access_token: csrf_token,
                       next_url: data.next_url
                     }));
                   } else {
                     res.send(JSON.stringify({
+                      access_token: csrf_token,
                       next_url: this.paths.authenticated
                     }));
                   }
@@ -514,69 +523,130 @@ module.exports = class {
 
   async authorize(req, res, next, required_rights) {
     try {
-      var repath = req.originalUrl;
-      if (Object.keys(req.query).length != 0 && req.query.constructor === Object) {
-        repath += "?"+obj_to_qstr(req.query)
-      }
-
-
-      const redirect_path = this.paths.unauthorized+"?next_url="+encodeURIComponent(repath);
-
+      let jwt_token = undefined;
       if (req.headers.cookie) {
         var cookies = cookie.parse(req.headers.cookie);
-        if (cookies[this.name+'_access_token']) {
-          req.access_token = cookies[this.name+'_access_token'];
-        } else {
-          res.redirect(redirect_path);
+        if (cookies['user_accounts_access_token']) {
+          req.jwt_token = jwt_token = cookies['user_accounts_access_token'];
         }
+      }
 
-        var access_token = req.access_token;
+      let redirect_path = undefined;
+      if (req.method === "GET") {
+        redirect_path = this.paths.unauthorized+"?next_url="+encodeURIComponent(req.originalUrl);
+      }
 
-        if (access_token) {
-          var found = await this.table.select(
-            ['id', 'jwt_secret', 'access_token', 'super', 'cfg'],
-            "access_token = $1", [access_token]
-          );
-
-          if (found.length > 0) {
-            found = JSON.parse(JSON.stringify(found[0]));
-            req.customer_id = found.id;
-            try {
-              var decoded = jwt.verify(req.access_token, found.jwt_secret);
-              if (required_rights) {
-                var access_granted = true;
-                for (var r = 0; r < required_rights.length; r++) {
-                  var required_right = required_rights[r];
-                  if (!found.cfg.rights.includes(required_right)) {
-                    access_granted = false;
-                    break;
-                  }
-                }
-                if (access_granted) {
-                  next();
-                } else {
-                  if (found.cfg.auth_next) {
-                    res.redirect(found.cfg.auth_next);
-                  } else {
-                    res.redirect(redirect_path);
-                  }
-                }
-              } else {
-                next();
-              }
-            } catch (e) {
-              console.error(e.stack);
-              res.redirect(redirect_path);
-            }
-          } else {
-            this.terminate(req, res, next);
-          }
+      if (!jwt_token) {
+        if (redirect_path) {
+          res.status(401).redirect(redirect_path);
+        } else {
+          res.status(401).redirect(default_redirect);
         }
       } else {
-        res.redirect(redirect_path);
+        let session_data = await this.decrypt_token(jwt_token);
+          console.log("req.method",req.method);
+
+        if (session_data) {
+          if (req.method === "POST") {
+            if (req.body.access_token) {
+              const csrf_token = req.body.access_token;
+
+              if (session_data.csrf === csrf_token) {
+                if (this.check_rights(session_data, required_rights)) {
+                  next();
+                } else {
+                  res.status(401).send("Unauthorized");
+                }
+
+              } else {
+                res.status(401).send("Unauthorized");
+              }
+            } else {
+              res.status(401).send("Unauthorized");
+            }
+          } else {
+            if (this.check_rights(session_data, required_rights)) {
+              next();
+            } else {
+
+              console.log("RE");
+              res.redirect(401, redirect_path);
+            }
+          }
+        } else {
+          if (redirect_path) {
+            res.status(401).redirect(redirect_path);
+          } else {
+            res.status(401).redirect(default_redirect);
+          }
+        }
       }
     } catch (e) {
       console.error(e.stack);
+    }
+  }
+
+  async decrypt_token(jwt_token) {
+    try {
+      var found = await this.table.select(
+        ['id', 'password', 'super', 'cfg'],
+        "jwt_token = $1", [jwt_token]
+      );
+
+
+      if (found.length > 0) {
+        found = JSON.parse(JSON.stringify(found[0]));
+      } else {
+        found = undefined;
+      }
+
+      let jwt_payload = undefined;
+      try {
+        jwt_payload = jwt.verify(jwt_token, found.password);
+      } catch (e) {
+        console.error(e);
+        return undefined;
+      }
+
+      jwt_payload.super = found.super;
+      jwt_payload.rights = found.cfg.rights;
+
+      return jwt_payload;
+    } catch (e) {
+      console.error(e.stack);
+      return undefined;
+    }
+  }
+
+  check_rights(session_data, required_rights) {
+    if (required_rights) {
+      var access_granted = true;
+      for (var r = 0; r < required_rights.length; r++) {
+        var required_right = required_rights[r];
+
+        if (required_right === 'super_admin') {
+          if (!session_data.super) {
+            access_granted = false;
+            break;
+          } else if (this.super_disabled) {
+            access_granted = false;
+            break;
+          }
+        } else {
+          if (!session_data.rights.includes(required_right)) {
+            access_granted = false;
+            break;
+          }
+        }
+      }
+
+      if (access_granted) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
     }
   }
 
@@ -590,12 +660,12 @@ module.exports = class {
           res.redirect(redirect_path);
         }
 
-        var access_token = req.access_token;
+        var access_token = req.jwt_token;
 
         if (access_token) {
           var found = await this.table.select(
             '*',
-            "access_token = $1", [access_token]
+            "jwt_token = $1", [access_token]
           );
 
 

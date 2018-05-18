@@ -1,42 +1,15 @@
 
 
 html, body {
-    display: table;
-    position: absolute;
     height: 100%;
     width: 100%;
 }
 
-#logo_img {
-	position: absolute;
-	top: 8px;
-	left: 3%;
-}
-
-header {
-  min-height: 40px;
-	height: 40px;
-	color: #FFF;
-  background-color: #773126;
-  border-bottom: none;
-}
-
-header h2 {
-	font-family: "Podkova";
-	margin: 0;
-	display: inline-block;
-	float: left;
-	line-height: 40px;
-	padding-left: calc(3% + 36px);
-	font-size: 16px;
-	color: #EEE;
-}
-
 .content_block {
     display: block;
-    background-color: #151515;
+    background-color: #F9F9F9;
     position: absolute;
-		top: 40px;
+		top: 0px;
 		bottom: 0px;
 		left: 0px;
 		right: 0px;
@@ -48,9 +21,11 @@ header h2 {
   transform: translate(-50%,-50%);
   width: 300px;
   padding: 100px 200px;
-  color: #DDD;
-  background-color: #111;
-  border: 1px solid #DDD;
+  color: #333;
+  background-color: #f0f0f0;
+  border: 1px solid #CCC;
+  box-shadow: 0px 0px 30px #DDD;
+  border-radius: 2px;
 }
 
 .vert_mid h3 {
@@ -59,15 +34,26 @@ header h2 {
 }
 
 .vert_mid input {
-  background-color: #111;
-  border: 1px solid #DDD;
-  color: #DDD;
+  background-color: #EEE;
+  border: 1px solid #CCC;
+  color: #333;
   padding: 4px 10px;
+  font-size: 20px;
+}
+
+.vert_mid input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #EEE inset;
+  -webkit-text-fill-color: #333 !important;
 }
 
 .vert_mid input[type="text"], .vert_mid input[type="password"] {
-  width: 90%;
+  width: calc(100% - 22px);
   margin-top: 15px;
+}
+
+.vert_mid input[type="submit"] {
+  margin-top: 20px;
+  box-shadow: 0px 0px 5px #CCC;
 }
 
 .vert_mid a {

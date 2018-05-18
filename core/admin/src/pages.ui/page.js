@@ -1,6 +1,6 @@
 'use strict'
 
-const XHR = require('../utils/xhr.js');
+const XHR = require('../utils/xhr_async.js');
 
 var html = require('./page.html');
 
@@ -9,10 +9,9 @@ module.exports = class {
     this.element = document.createElement('div');
     this.element.innerHTML = html;
     this.name = cfg.name;
+    this.parent_list = cfg.parent_list;
     this.filename = cfg.file;
     this.path = cfg.path;
-
-    console.log("PAGE filename", this.filename);
 
     var max_length = 16;
     if(this.name.length > max_length) {
@@ -28,13 +27,10 @@ module.exports = class {
     var page_element = this.element;
     page_element.classList.add('pages_ui_item');
 
-    var this_class = this;
+    let this_class = this;
 
     var link = page_element.querySelector('.page_name');
-
-    link.addEventListener('click', function(e) {
-      window.location.href = this_class.path;
-    });
+    link.href = this.path;
 
     link.innerHTML = this.name;
 
@@ -45,7 +41,25 @@ module.exports = class {
     });
     edit_btn.innerHTML = '/';
 
-    var this_class = this;
+    let webpack_btn = page_element.querySelector('.webpack_btn');
+    var state = false;
+
+    webpack_btn.addEventListener('click', async function(e) {
+      var chstate = (state != true);
+      state = await XHR.post("pages.io", {
+        command: "webpack-watch",
+        value: chstate,
+        list: this_class.parent_list,
+        name: this_class.name
+      });
+      state = chstate;
+
+      if (chstate) {
+        webpack_btn.src = "res/webpack-on.png";
+      } else {
+        webpack_btn.src = "res/webpack-off.png";
+      }
+    });
 
     var del_button = page_element.querySelector('.del_btn');
     del_button.addEventListener('click', function(e) {
@@ -86,17 +100,16 @@ module.exports = class {
         proceed()
       });
 
-      function proceed() {
+      async function proceed() {
         if (input.value === this_class.name) {
-          XHR.post('pages.io', {
+          var response = await XHR.post('pages.io', {
             command: 'rm',
             name: this_class.filename
-          }, function(response) {
-            if (response == "success") {
-              this_class.table.remove(this_class.element);
-              document.body.removeChild(popup);
-            }
           });
+          if (response == "success") {
+            this_class.table.remove(this_class.element);
+            document.body.removeChild(popup);
+          }
         } else {
           err_msg.innerHTML = "Incorrect!";
         }

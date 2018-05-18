@@ -60,6 +60,12 @@ module.exports = class {
     }));
 
     this.compiler = webpack({
+        watch: true,
+        watchOptions: {
+          aggregateTimeout: 300,
+          poll: 1000
+        },
+        mode: 'development',
         entry: {
           './main': path.resolve(this.full_path, 'src/index.js'),
         },
@@ -67,20 +73,21 @@ module.exports = class {
           path: this.full_path,
           filename: '[name].js'
         },
-        mode: 'development',
-        resolveLoader: {
-          modules: [ 'cmbird/node_modules' ]
+        resolve: {
+          modules: [
+            path.resolve(__dirname, '../../node_modules')
+          ],
+          alias: {
+            globals: path.resolve(cmbird.globals_path, 'modules')
+          }
         },
         module: {
             rules: [
               {
                 test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
-                use: {
-                  loader: 'babel-loader',
-                  options: {
-                    presets: [require.resolve('babel-preset-es2017')]
-                  }
+                loader: 'babel-loader',
+                query: {
+                  presets: ['es2017']
                 }
               },
               {
@@ -89,7 +96,12 @@ module.exports = class {
               },
               {
                 test: /\.css$/,
-                use: [ 'style-loader', 'css-loader' ]
+                use: [ 'style-loader', {
+                  loader: 'css-loader',
+                  options: {
+                    url: false
+                  }
+                }]
               },
               {
                 test: /\.less$/,
@@ -109,19 +121,11 @@ module.exports = class {
                     attrs: [':data-src']
                   }
                 }
-              },
-              {
-                test: /\.vs$/,
-                use: 'raw-loader'
-              },
-              {
-                test: /\.fs$/,
-                use: 'raw-loader'
               }
             ]
         },
         stats: {
-            colors: true
+          colors: true
         },
         devtool: 'source-map'
     });
@@ -190,6 +194,7 @@ module.exports = class {
           this_class.update();
           this_class.context = await this_class.compile_context(this_class.context);
           this_class.context.sessions = [];
+
 
           for (var sess_key in req.access_tokens) {
             this_class.context.sessions.push(sess_key);
@@ -313,6 +318,13 @@ module.exports = class {
         var result = await this.posts.select_by_tags(tags);
 
         context.posts = result;
+      }
+
+      if (context.lang) {
+        const lang_json = fs.readFileSync(
+          path.resolve(this.full_path, "lang", context.lang+".json")
+        );
+        context.lang = JSON.parse(lang_json);
       }
 
       if (context.menu) {

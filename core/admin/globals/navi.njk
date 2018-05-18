@@ -1,0 +1,11 @@
+<header>
+  <div>
+    {% for item in menu %}
+      <a href="{{ item.path }}">{{ item.name }}</a>
+    {% endfor %}
+    <form action="/admin-auth" method="post">
+      <input type="hidden" name="command" value="terminate" />
+      <input class="submit" type="submit" value="Sign Out" />
+    </form>
+  </div>
+</header>

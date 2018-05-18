@@ -17,13 +17,9 @@
     <link rel="stylesheet" type="text/css" href="theme.css">
 	</head>
   <body>
-		<header>
-      <img id="logo_img" src="/g/res/logo-compact.png" />
-			<h2 id="main_h">{{ title }}</h2>
-		</header>
     <div class="content_block">
       <div class="vert_mid">
-        <h3>Prisijunkite prie savo paskyros</h3>
+        <h3>{{ lang.auth_instructions }}</h3>
         <div id="err_msg_field"></div>
         <form action="/admin-auth" method="post" id="auth_form">
           <input name="email" type="text" placeholder="E-pašto adresas" />

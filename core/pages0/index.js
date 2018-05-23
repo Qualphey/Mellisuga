@@ -95,7 +95,9 @@ module.exports = class PagesIO {
 
     obj.unlisted = [];
     for (let p = 0; p < this.list.length; p++) {
-      obj.unlisted.push(this.list[p].data());
+      if (!this.list[p].dev_only || this.list[p].dev_only && this.cmbird.dev_mode) {
+        obj.unlisted.push(this.list[p].data());
+      }
     }
 
     return obj;
@@ -149,9 +151,11 @@ module.exports = class PagesIO {
   select_obj(list_name, page_name) {
     if (list_name === "unlisted") {
       for (let p = 0; p < this.list.length; p++) {
-        let pdata = this.list[p];
-        if (pdata.name === page_name) {
-          return pdata;
+        if (!this.list[p].dev_only || this.list[p].dev_only && this.cmbird.dev_mode) {
+          let pdata = this.list[p];
+          if (pdata.name === page_name) {
+            return pdata;
+          }
         }
       }
     } else {

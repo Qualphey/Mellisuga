@@ -137,9 +137,7 @@ module.exports = class CMBird {
 
       var auth = this_class.auth = await Auth.init(this_class.app, aura, user_auth_cfg);
 
-      var posts = this_class.posts = await PostsIO.init(router.app, aura, {
-        pages_path: config.pages_path
-      });
+      var posts = this_class.posts = await PostsIO.init(this_class);
 
       pages_io.serve_dirs('/', path.resolve(this_class.app_path, 'pages-test'), {
         auth: auth

@@ -14,7 +14,7 @@ module.exports = class ModulesIO {
     }
 
     let this_class = new module.exports(modules_path);
-
+/*
     const default_path = path.resolve(__dirname, 'default');
 
     var file_list = fs.readdirSync(default_path);
@@ -33,7 +33,7 @@ module.exports = class ModulesIO {
         }
       }
     });
-
+*/
     cmbird.modules = {};
 
     const priorities = [

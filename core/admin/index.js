@@ -33,7 +33,8 @@ module.exports = class {
     this_class.table = auth.table;
 
     cmbird.pages.serve_dir("/admin_auth", path.resolve(__dirname, 'auth/dist'), {
-      name: "admin_auth"
+      name: "admin_auth",
+      dev_only: true
     });
 //    cmbird.pages.serve_dir("/cmbird_admin", path.resolve(__dirname, 'dist-bak'), auth);
     if (!this_class.super_disabled) {

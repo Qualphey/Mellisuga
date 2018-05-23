@@ -20,6 +20,7 @@ module.exports = class {
       this.name = this.full_path.substr(this.full_path.lastIndexOf('/') + 1);
     }
 
+
     this.dev_only = cfg.dev_only;
 
     let index_path = this.index_path = path.resolve(this.full_path, "index.html");

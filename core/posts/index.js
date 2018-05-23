@@ -1,12 +1,11 @@
 
 module.exports = class {
-  constructor(app, table, config) {
-    this.app = app;
+  constructor(table, cmbird) {
+    let app = this.app = cmbird.app;
 
     this.table = table;
-    this.config = config;
 
-    var this_class = this;
+    let this_class = this;
 
     app.get("/posts.io", async function(req, res) {
       try {
@@ -40,7 +39,7 @@ module.exports = class {
       };
     });
 
-    app.post(global.cmb_config.admin_path+"/posts.io", async function(req, res) {
+    app.post(cmbird.admin_path+"/posts.io", async function(req, res) {
       try {
         var data = JSON.parse(req.body.data);
         /*
@@ -84,16 +83,16 @@ module.exports = class {
 
   }
 
-  static async init(app, aura, config) {
+  static async init(cmbird) {
     try {
-      var table = await aura.table('posts', {
+      var table = await cmbird.aura.table('posts', {
         columns: {
           title: 'text',
           content: 'text',
           tags: 'text[]'
         }
       });
-      return new module.exports(app, table, config);
+      return new module.exports(table, cmbird);
     } catch (e) {
       console.log(e);
       return false;

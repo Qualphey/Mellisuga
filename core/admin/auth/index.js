@@ -252,7 +252,9 @@ module.exports = class {
       }
 
       jwt_payload.super = found.super;
-      jwt_payload.rights = found.cfg.rights;
+      if (found.cfg) {
+        jwt_payload.rights = found.cfg.rights;
+      }
 
       return jwt_payload;
     } catch (e) {

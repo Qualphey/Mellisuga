@@ -91,8 +91,8 @@ module.exports = class {
               {
                 test: /\.js$/,
                 loader: 'babel-loader',
-                query: {
-                  presets: ['es2017']
+                options: {
+                  presets: ['env']
                 }
               },
               {

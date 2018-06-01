@@ -1,6 +1,6 @@
 # Mellisuga #
 
-### a lightweight NodeJS based content management system that aims for flexibility, performance, stability and ease of use. ###
+#### a lightweight NodeJS based content management system that aims for flexibility, performance, stability and ease of use. ####
 
 
 ### Installation ###

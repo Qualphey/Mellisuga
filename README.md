@@ -1,8 +1,7 @@
-# cmbird #
+# Mellisuga #
 
-### Content Management Bird ###
+### a lightweight NodeJS based content management system that aims for flexibility, performance, stability and ease of use. ###
 
-A lightweight NodeJS based content management system that aims for flexibility, performance, stability and ease of use.
 
 ### Installation ###
 

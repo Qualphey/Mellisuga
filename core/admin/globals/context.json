@@ -2,7 +2,8 @@
   "title": "CMBird Admin",
   "menu": [
     "Pages",
-		"Admins"
+		"Admins",
+    "Modules"
 	],
   "authorized_only": true,
   "required_rights": [

@@ -1,6 +1,8 @@
 const fs = require('fs-extra');
 const path = require('path');
 
+const Controls = require("./controls.js");
+
 module.exports = class ModulesIO {
   constructor(modules_path) {
     this.dir = modules_path;
@@ -14,6 +16,7 @@ module.exports = class ModulesIO {
     }
 
     let this_class = new module.exports(modules_path);
+    this_class.cmbird = cmbird;
 /*
     const default_path = path.resolve(__dirname, 'default');
 
@@ -61,6 +64,13 @@ module.exports = class ModulesIO {
         }
       }
     });
+  }
+
+  init_controls(auth) {
+    this.controls = new Controls({
+      command_path: this.cmbird.config.admin_path+"/pages.io",
+      auth: auth
+    }, this.cmbird);
   }
 
   all() {

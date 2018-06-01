@@ -15,12 +15,11 @@ const jsonlint = require("jsonlint");
 const Router = require("./router/index.js");
 const Admin = require("./admin/index.js")
 const Moduload = require("./moduload/index.js")
-const Pages = require("./pages/index.js")
 
 const Auth = require("./auth/index.js");
 
 const PostsIO = require("./posts/index.js");
-const PagesIO = require("./pages0/index.js");
+const PagesIO = require("./pages/index.js");
 //const BuiltinIO = require("./pages/builtin.js");
 
 /*
@@ -139,7 +138,7 @@ module.exports = class CMBird {
 
       var posts = this_class.posts = await PostsIO.init(this_class);
 
-      pages_io.serve_dirs('/', path.resolve(this_class.app_path, 'pages-test'), {
+      pages_io.serve_dirs('/', path.resolve(this_class.app_path, 'pages'), {
         auth: auth
       });
 
@@ -159,8 +158,10 @@ module.exports = class CMBird {
         '/g',
         Router.static(this_class.globals_path)
       );
+      return this_class;
     } catch (e) {
       console.error(e.stack);
+      return undefined;
     }
   }
 

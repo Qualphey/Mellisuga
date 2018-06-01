@@ -1,9 +1,0 @@
-{
-  "source": ".",
-  "destination": "./docs",
-  "includes": ["^index.js"],
-  "plugins": [
-    {"name": "esdoc2-standard-plugin"},
-    {"name": "esdoc2-external-nodejs-plugin", "option": { "enable": true } }
-  ]
-}

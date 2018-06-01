@@ -1,63 +1,58 @@
 
 const nunjucks = require('nunjucks');
 
-const fs = require("fs-extra");
+const fs = require("fs");
 const path = require('path');
 
 const webpack = require('webpack');
 const jsonlint = require("jsonlint");
 
 module.exports = class {
-  constructor(cfg, cmbird) {
-    let app = this.app = cmbird.app;
+  constructor(cfg, cmbird, pages) {
+    let app = cmbird.app;
 
     this.full_path = cfg.full_path || path.resolve(cfg.dir_path, cfg.name);
     this.http_path = cfg.custom_path || cfg.request_path || path.resolve(cfg.prefix, encodeURIComponent(cfg.name));
 
-    if (cfg.name) {
-      this.name = cfg.name;
-    } else {
-      this.name = this.full_path.substr(this.full_path.lastIndexOf('/') + 1);
-    }
-
-
-    this.dev_only = cfg.dev_only;
+    this.name = cfg.name;
 
     let index_path = this.index_path = path.resolve(this.full_path, "index.html");
     let context_path = this.context_path = path.resolve(this.full_path, "context.json");
-    const globals_path = cfg.globals_path || cmbird.globals_path;
-    let global_context_path = this.global_context_path = path.resolve(globals_path, "context.json");
+    let global_context_path = this.global_context_path = path.resolve(cmbird.globals_path, "context.json");
     this.update();
 
-    this.req_path = cfg.request_path;
+    if (!cfg.name) {
+      cfg.name = cfg.full_path.split('/').pop();
+    }
 
-    if (!this.req_path) this.req_path = "";
+    this.path_prefix = cfg.prefix;
+
+    if (!this.path_prefix) this.path_prefix = "";
 
     this.custom_paths = cfg.custom_paths;
 
     cfg.dir_path = cfg.dir_path || cfg.full_path;
 
+    this.auth_func = cfg.auth_func;
+
     if (this.context) {
-      /*if (this.context.authorized_only) {
-        this.auth_func = cfg.auth.orize;
-      } else */
-      if (this.context.required_rights && cfg.auth) {
+      if (this.context.required_rights) {
         this.auth_func = cfg.auth.orize_gen(this.context.required_rights);
       }
     }
 
-    this.parent_list = cfg.parent_list;
-    this.posts = cmbird.posts;
+    this.pages = pages;
+    this.posts = pages.posts;
 
     if (cfg.custom_path) {
-      app.get(cfg.request_path, function(req, res) {
+      app.get("/"+cfg.name, function(req, res) {
         res.redirect(cfg.custom_path);
       });
     }
 
     this.nunjucks_env = new nunjucks.Environment(new nunjucks.FileSystemLoader([
-      this.full_path,
-      globals_path
+      cfg.dir_path,
+      cmbird.globals_path
     ], {
       autoescape: true,
     //      watch: true,
@@ -92,7 +87,7 @@ module.exports = class {
                 test: /\.js$/,
                 loader: 'babel-loader',
                 options: {
-                  presets: ['env']
+                  presets: ['@babel/preset-env']
                 }
               },
               {
@@ -152,46 +147,40 @@ module.exports = class {
     }
 
     if (this.auth_func) {
-      console.log(this.http_path);
       app.get(this.http_path, this.auth_func, async function(req, res) {
         try {
-          if (this_class.destroyed) {   res.status(404).send(); } else {
-            this_class.update();
-            this_class.context = await this_class.compile_context(this_class.context);
-            this_class.context.sessions = [];
-            if (req.query.access_token) {
-              this_class.context.access_token = req.query.access_token;
-            }
+          this_class.update();
+          this_class.context = await this_class.compile_context(this_class.context);
+          this_class.context.sessions = [];
+          if (req.query.access_token) {
+            this_class.context.access_token = req.query.access_token;
+          }
 
-            if (req.customer_id) {
-              this_class.context.customer_id = req.customer_id;
-            }
+          if (req.customer_id) {
+            this_class.context.customer_id = req.customer_id;
+          }
 
-            for (var sess_key in req.access_tokens) {
-              this_class.context.sessions.push(sess_key);
-            }
+          for (var sess_key in req.access_tokens) {
+            this_class.context.sessions.push(sess_key);
+          }
 
-            if (this_class.context.accept_arguments) {
-              this_class.context.args = req.query;
-            }
+          if (this_class.context.accept_arguments) {
+            this_class.context.args = req.query;
+          }
 
-            const req_path = req.path;
-            if (req_path.slice(-1) != "/") {
-              var repath = req_path+"/";
-              if (Object.keys(req.query).length != 0 && req.query.constructor === Object) {
-                repath += "?"+obj_to_qstr(req.query);
-              }
-              res.redirect(repath);
+          const req_path = req.path;
+          if (req_path.slice(-1) != "/") {
+            var repath = req_path+"/";
+            if (Object.keys(req.query).length != 0 && req.query.constructor === Object) {
+              repath += "?"+obj_to_qstr(req.query);
+            }
+            res.redirect(repath);
+          } else {
+            var result = await this_class.render_page(this_class.full_path);
+            if (result.err) {
+              console.error(result.err);
             } else {
-              var result = await this_class.render_page(this_class.full_path);
-
-              this_class.context.page_name = this_class.name;
-
-              if (result.err) {
-                console.error(result.err);
-              } else {
-                res.send(result.html);
-              }
+              res.send(result.html);
             }
           }
         } catch (e) {
@@ -202,35 +191,33 @@ module.exports = class {
     } else {
       app.get(this.http_path, async function(req, res) {
         try {
-          if (this_class.destroyed) {   res.status(404).send(); } else {
-            this_class.update();
-            this_class.context = await this_class.compile_context(this_class.context);
-            this_class.context.sessions = [];
+          this_class.update();
+          this_class.context = await this_class.compile_context(this_class.context);
+          this_class.context.sessions = [];
 
 
-            for (var sess_key in req.access_tokens) {
-              this_class.context.sessions.push(sess_key);
+          for (var sess_key in req.access_tokens) {
+            this_class.context.sessions.push(sess_key);
+          }
+
+          if (this_class.context.accept_arguments) {
+            this_class.context.args = req.query;
+          }
+
+          const req_path = req.path;
+          if (req_path.slice(-1) != "/") {
+            var repath = req_path+"/";
+            if (Object.keys(req.query).length != 0 && req.query.constructor === Object) {
+              repath += "?"+obj_to_qstr(req.query);
             }
-
-            if (this_class.context.accept_arguments) {
-              this_class.context.args = req.query;
-            }
-
-            const req_path = req.path;
-            if (req_path.slice(-1) != "/") {
-              var repath = req_path+"/";
-              if (Object.keys(req.query).length != 0 && req.query.constructor === Object) {
-                repath += "?"+obj_to_qstr(req.query);
-              }
-              res.redirect(repath);
+            res.redirect(repath);
+          } else {
+            var result = await this_class.render_page(this_class.full_path);
+      //      console.log("RESULT", result);
+            if (result.err) {
+              console.error(result.err);
             } else {
-              var result = await this_class.render_page(this_class.full_path);
-        //      console.log("RESULT", result);
-              if (result.err) {
-                console.error(result.err);
-              } else {
-                res.send(result.html);
-              }
+              res.send(result.html);
             }
           }
         } catch (e) {
@@ -312,9 +299,11 @@ module.exports = class {
       this.context = {};
     }
 
+    this.context.page_name = this.name;
+
     if (fs.existsSync(this.global_context_path)) {
       try {
-        var global_context = JSON.parse(fs.readFileSync(this.global_context_path, 'utf8'));
+         var global_context = JSON.parse(fs.readFileSync(this.global_context_path, 'utf8'));
         this.context = Object.assign(this.context, global_context);
       } catch (e) {
         console.error(e);
@@ -338,16 +327,19 @@ module.exports = class {
         context.lang = JSON.parse(lang_json);
       }
 
-      if (context.menu && this.parent_list) {
+      if (context.menu) {
         var names = context.menu;
         context.menu = [];
-        var page_list = this.parent_list.list;
+        var page_list = this.pages.all();
 
         for (var n = 0; n < names.length; n++) {
           for (var p = 0; p < page_list.length; p++) {
-            if (page_list[p].name == names[n]) {
-              var req_path = this.parent_list.req_prefix + names[n] ;
-              var item = { name: names[n], path: req_path };
+            if (page_list[p].file == names[n]) {
+              var path_prefix = this.path_prefix;
+              while (path_prefix.slice(-1) === "/") {
+                path_prefix = path_prefix.slice(0, -1);
+              }
+              var item = { name: names[n], path: path_prefix + "/" + names[n] };
               if (this.custom_paths) {
                 this.custom_paths.forEach(function(cpath) {
                   const cpath_name = Object.keys(cpath)[0];
@@ -366,26 +358,6 @@ module.exports = class {
       return context;
     } catch (e) {
       console.error(e.stack)
-    }
-  }
-
-  destroy() {
-    this.destroyed = true;
-    fs.removeSync(this.full_path);
-  }
-
-  data() {
-    let parent_list = "unlisted";
-
-    if (this.parent_list) {
-      parent_list = this.parent_list.name;
-    }
-
-    return {
-      path: this.req_path,
-      name: this.name,
-      parent_list: parent_list,
-      watching: (typeof(this.watching) != "undefined")
     }
   }
 }

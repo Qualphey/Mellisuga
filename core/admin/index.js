@@ -38,7 +38,7 @@ module.exports = class {
     });
 //    cmbird.pages.serve_dir("/cmbird_admin", path.resolve(__dirname, 'dist-bak'), auth);
     if (!this_class.super_disabled) {
-      cmbird.pages.serve_dirs("/cmbird_admin", path.resolve(__dirname, 'dist'), {
+      cmbird.pages.serve_dirs("/mellisuga", path.resolve(__dirname, 'dist'), {
         auth: auth,
         globals_path: path.resolve(__dirname, 'globals'),
         name: "admin",

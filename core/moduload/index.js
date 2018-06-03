@@ -1,104 +1,65 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const Controls = require("./controls.js");
+const Controls = require('./controls.js');
+const ModuleList = require('./module_list.js');
 
 module.exports = class ModulesIO {
-  constructor(modules_path) {
+  constructor(modules_path, cms) {
     this.dir = modules_path;
+    this.cms = cms;
+
+    this.module_lists = [];
   }
 
-  static async init(cmbird) {
-    const modules_path = path.resolve(cmbird.app_path, 'cmbird_modules');
+  static async init(cms) {
+    const modules_path = path.resolve(cms.app_path, 'cms_modules');
 
     if (!fs.existsSync(modules_path)){
       fs.mkdirSync(modules_path);
     }
 
-    let this_class = new module.exports(modules_path);
-    this_class.cmbird = cmbird;
-/*
-    const default_path = path.resolve(__dirname, 'default');
+    let this_class = new module.exports(modules_path, cms);
 
-    var file_list = fs.readdirSync(default_path);
-    file_list.forEach(file => {
-      const file_path = path.resolve(default_path, file);
-      var lstat = fs.lstatSync(file_path);
-      if (lstat.isFile()) {
-        // ----++++
-      } else if (lstat.isDirectory()) {
-        const dest_path = path.resolve(modules_path, file);
-        if (!fs.existsSync(dest_path)){
-          fs.copy(file_path, dest_path, function (err) {
-            if (err) return console.error(err)
+    this_class.load_in_dir(modules_path);
 
-          });
-        }
-      }
-    });
-*/
-    cmbird.modules = {};
 
-    const priorities = [
-      "posts"
-    ];
 
-    let all_modules = this_class.all();
-
-    all_modules.forEach(module => {
-      if (priorities.indexOf(module.name) > -1) {
-        if (module.config) {
-          cmbird.modules[module.name] = require(module.index).init(cmbird, module.config);
-        } else {
-          cmbird.modules[module.name] = require(module.index).init(cmbird, {});
-        }
-      }
-    });
-
-    all_modules.forEach(module => {
-      if (!cmbird.modules[module.name]) {
-        if (module.config) {
-          cmbird.modules[module.name] = require(module.index).init(cmbird, module.config);
-        } else {
-          cmbird.modules[module.name] = require(module.index).init(cmbird, {});
-        }
-      }
-    });
+    return this_class;
   }
 
-  init_controls(auth) {
+  init_controls() {
     this.controls = new Controls({
-      command_path: this.cmbird.config.admin_path+"/pages.io",
-      auth: auth
-    }, this.cmbird);
+      command_path: '/mellisuga/modules.io',
+      auth: this.cms.admin.auth
+    }, this.cms);
   }
+
+  async load_in_dir(full_path) {
+    let module_list = await ModuleList.init(full_path, this.cms);
+    this.module_lists.push(module_list);
+    return module_list;
+  };
 
   all() {
-    var list = [];
-    var this_class = this;
+    let obj = {};
 
-    fs.readdirSync(this.dir).forEach(file => {
-      var module_path = path.resolve(this_class.dir, file);
-      var module_index_path = path.resolve(module_path, 'index.js');
-      var module_config_path = path.resolve(module_path, 'config.json');
-      var lstat = fs.lstatSync(module_path);
-      if (lstat.isDirectory()) {
-        if (fs.existsSync(module_index_path)){
-          var module = {
-            index: module_index_path,
-            path: module_path,
-            name: file
-          };
-
-          if (fs.existsSync(module_config_path)) {
-            module.config = JSON.parse(fs.readFileSync(module_config_path, "utf8"));
-          }
-
-          list.push(module);
-        }
+    for (let l = 0; l < this.module_lists.length; l++) {
+      let module_list = this.module_lists[l];
+      obj[module_list.name] = [];
+      for (let m = 0; m < module_list.list.length; m++) {
+        obj[module_list.name].push(module_list.list[m].data());
       }
-    });
+    }
+/*
+    obj.unlisted = [];
+    for (let p = 0; p < this.list.length; p++) {
+      if (!this.list[p].dev_only || this.list[p].dev_only && this.cmbird.dev_mode) {
+        obj.unlisted.push(this.list[p].data());
+      }
+    }
+*/
 
-    return list;
+    return obj;
   }
 }

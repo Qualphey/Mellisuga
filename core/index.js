@@ -94,7 +94,7 @@ module.exports = class CMBird {
             unauthorized: "/admin_auth",
             authenticated: config.admin_path
           },
-          prefix: '/cmb_admin',
+          prefix: '/mellisuga',
           rights: true,
           super_disabled: cfg.disable_super
         }, this_class);
@@ -152,7 +152,8 @@ module.exports = class CMBird {
 
       builtin_pages.load();
 */
-      let modules = await Moduload.init(this_class);
+      let modules = this_class.modules = await Moduload.init(this_class);
+      modules.init_controls();
 
       router.use(
         '/g',
@@ -173,7 +174,7 @@ module.exports = class CMBird {
       } else {
         config = {
           setup: true,
-          admin_path: "/cmbird_admin"
+          admin_path: "/mellisuga"
         }
       }
       return config;

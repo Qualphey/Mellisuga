@@ -4,7 +4,7 @@ module.exports = class {
   constructor(cfg, cms) {
     let command_path = cfg.command_path;
     let auth = cfg.auth;
-    let pages_io = cms.pages;
+    let modules_io = cms.modules;
 
     let err_response = function(res, text) {
       res.send(JSON.stringify({
@@ -24,11 +24,11 @@ module.exports = class {
         case 'select':
           switch (data.method) {
             case "all":
-              res.send(JSON.stringify( pages_io.all() ));
+              res.send(JSON.stringify( modules_io.all() ));
               break;
             case "name":
               if (data.name && data.name != '') {
-                res.send(JSON.stringify( pages_io.select(data.name) ));
+                res.send(JSON.stringify( modules_io.select(data.name) ));
 
               } else {
                 res.send(JSON.stringify({ err: "Name parameter missing" }));
@@ -36,14 +36,14 @@ module.exports = class {
               break;
             case "all_from_list":
               if (data.list && data.list != '') {
-                res.send(JSON.stringify( pages_io.all_from_list(data.list) ));
+                res.send(JSON.stringify( modules_io.all_from_list(data.list) ));
               } else {
                 res.send(JSON.stringify({ err: "List parameter missing" }));
               }
               break;
             case "name_from_list":
               if (data.list && data.list != '' && data.name && data.name != '') {
-                res.send(JSON.stringify( pages_io.select_from_list(data.list, data.name) ));
+                res.send(JSON.stringify( modules_io.select_from_list(data.list, data.name) ));
               } else {
                 res.send(JSON.stringify({ err: "List/Name parameter missing" }));
               }
@@ -54,7 +54,7 @@ module.exports = class {
           break;
         case 'add':
           if (data.name && data.name != '' && data.list && data.list != '') {
-            let taget_list = pages_io.select_list_obj(data.list);
+            let taget_list = modules_io.select_list_obj(data.list);
             res.send(JSON.stringify( taget_list.add(data.name) ));
           } else {
             res.send(JSON.stringify({ err: "Name/List parameter missing" }));
@@ -63,7 +63,7 @@ module.exports = class {
         case 'rm':
           console.log("rm", data.list, data.name);
           if (data.name && data.name != '' && data.list && data.list != '') {
-            let taget_list = pages_io.select_list_obj(data.list);
+            let taget_list = modules_io.select_list_obj(data.list);
             res.send(JSON.stringify( taget_list.remove(data.name) ));
           } else {
             res.send(JSON.stringify({ err: "Name/List parameter missing" }));
@@ -82,9 +82,8 @@ module.exports = class {
           }
           break;*/
         case 'webpack-watch':
-          let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
           if (data.list && data.name) {
-            let page = pages_io.select_obj(data.list, data.name);
+            let page = modules_io.select_obj(data.list, data.name);
             if (!page.watching) {
               page.watching = page.compiler.watch({
                 aggregateTimeout: 300,
@@ -92,6 +91,7 @@ module.exports = class {
               }, (err, stats) => {
                 if (err) console.error(err);
                 cms.router.clients.forEach(client => {
+                  let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
                   if (ip === client.address) {
                     if (stats.hasErrors()) {
                       client.socket.emit("webpack-err", stats.toString());

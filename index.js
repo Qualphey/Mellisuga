@@ -10,4 +10,5 @@ module.exports = class {
       console.error(e);
       return undefined;
     }
+  }
 }

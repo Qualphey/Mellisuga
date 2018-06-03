@@ -8,8 +8,8 @@ const webpack = require('webpack');
 const jsonlint = require("jsonlint");
 
 module.exports = class {
-  constructor(cfg, cmbird) {
-    let app = this.app = cmbird.app;
+  constructor(cfg, cms) {
+    let app = this.app = cms.app;
 
     this.full_path = cfg.full_path || path.resolve(cfg.dir_path, cfg.name);
     this.http_path = cfg.custom_path || cfg.request_path || path.resolve(cfg.prefix, encodeURIComponent(cfg.name));
@@ -25,7 +25,7 @@ module.exports = class {
 
     let index_path = this.index_path = path.resolve(this.full_path, "index.html");
     let context_path = this.context_path = path.resolve(this.full_path, "context.json");
-    const globals_path = cfg.globals_path || cmbird.globals_path;
+    const globals_path = cfg.globals_path || cms.globals_path;
     let global_context_path = this.global_context_path = path.resolve(globals_path, "context.json");
     this.update();
 
@@ -47,7 +47,7 @@ module.exports = class {
     }
 
     this.parent_list = cfg.parent_list;
-    this.posts = cmbird.posts;
+    this.posts = cms.posts;
 
     if (cfg.custom_path) {
       app.get(cfg.request_path, function(req, res) {
@@ -72,7 +72,7 @@ module.exports = class {
         },
         mode: 'development',
         entry: {
-          './main': path.resolve(this.full_path, 'src/index.js'),
+          './main': ["babel-polyfill", path.resolve(this.full_path, 'src/index.js')],
         },
         output: {
           path: this.full_path,
@@ -80,10 +80,10 @@ module.exports = class {
         },
         resolve: {
           modules: [
-            path.resolve(__dirname, '../../node_modules')
+            path.resolve(__dirname, '../../../node_modules')
           ],
           alias: {
-            globals: path.resolve(cmbird.globals_path, 'modules')
+            globals: path.resolve(cms.globals_path, 'modules')
           }
         },
         module: {
@@ -100,22 +100,15 @@ module.exports = class {
                 loader: 'json-loader'
               },
               {
-                test: /\.css$/,
-                use: [ 'style-loader', {
-                  loader: 'css-loader',
-                  options: {
-                    url: false
-                  }
-                }]
+                test: /\.css/,
+                loader: path.resolve(__dirname, './css-loader.js')
               },
               {
                 test: /\.less$/,
                 use: [{
-                  loader: "style-loader"
+                  loader: path.resolve(__dirname, './css-loader.js')
                 }, {
-                  loader: "css-loader"
-                }, {
-                  loader: "less-loader" // compiles Less to CSS
+                  loader: 'less-loader'
                 }]
               },
               {

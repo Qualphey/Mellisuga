@@ -4,6 +4,8 @@ const GridUI = require('globals/grid.ui/index.js');
 const Page = require('./page.js');
 const PageList = require('./page_list.js');
 
+// new stuff
+
 (async function() {
   try {
     let div = document.createElement('div');
@@ -32,7 +34,7 @@ const PageList = require('./page_list.js');
 
     window.addEventListener('resize', resize_grid);
 
-    let page_lists = await XHR.post('/cmbird_admin/pages.io', {
+    let page_lists = await XHR.post('/mellisuga/modules.io', {
     /*  command: "select",
       method: "all_from_list",
       list: "pages-test"*/

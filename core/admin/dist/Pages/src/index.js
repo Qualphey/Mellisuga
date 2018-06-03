@@ -32,7 +32,7 @@ const PageList = require('./page_list.js');
 
     window.addEventListener('resize', resize_grid);
 
-    let page_lists = await XHR.post('/cmbird_admin/pages.io', {
+    let page_lists = await XHR.post('/mellisuga/pages.io', {
     /*  command: "select",
       method: "all_from_list",
       list: "pages-test"*/

@@ -95,7 +95,7 @@ module.exports = class {
             name: input.value
           }
 
-          var res = await XHR.post('/cmbird_admin/pages.io', {
+          var res = await XHR.post('/mellisuga/pages.io', {
             command: "add",
             name: data.name,
             list: name,

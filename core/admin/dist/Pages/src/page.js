@@ -44,13 +44,13 @@ module.exports = class {
     edit_btn.innerHTML = '/';
 
     let webpack_btn = page_element.querySelector('.webpack_btn');
-    
+
     if (this.watching) {
       webpack_btn.src = "webpack-on.png";
     }
 
     webpack_btn.addEventListener('click', async function(e) {
-      const state = await XHR.post("/cmbird_admin/pages.io", {
+      const state = await XHR.post("/mellisuga/pages.io", {
         command: "webpack-watch",
         list: this_class.parent_list,
         name: this_class.name
@@ -104,7 +104,7 @@ module.exports = class {
 
       async function proceed() {
         if (input.value === this_class.name) {
-          var response = await XHR.post('/cmbird_admin/pages.io', {
+          var response = await XHR.post('/mellisuga/pages.io', {
             command: 'rm',
             list: this_class.parent_list,
             name: this_class.name

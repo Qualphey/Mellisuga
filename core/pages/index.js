@@ -10,10 +10,10 @@ module.exports = class PagesIO {
    * creates a instance of MyClass.
    * @param {number} value - initial value.
    */
-  constructor(cfg, cmbird) {
-    this.router = cmbird.router;
+  constructor(cfg, cms) {
+    this.router = cms.router;
 
-    this.cmbird = cmbird;
+    this.cms = cms;
 
     this.list = [];
     this.page_lists = [];
@@ -21,13 +21,13 @@ module.exports = class PagesIO {
 
   }
 
-  static async init(cfg, cmbird) {
+  static async init(cfg, cms) {
     try {
       console.log("TESTING NEW PAGES IMPLEMENTATION..");
 
 
 
-      return new module.exports(cfg, cmbird);
+      return new module.exports(cfg, cms);
     } catch (e) {
       console.error(e.stack);
       return undefined;
@@ -37,9 +37,9 @@ module.exports = class PagesIO {
 
   init_controls(auth) {
     this.controls = new Controls({
-      command_path: this.cmbird.config.admin_path+"/pages.io",
+      command_path: this.cms.config.admin_path+"/pages.io",
       auth: auth
-    }, this.cmbird);
+    }, this.cms);
   }
 
   serve_dir(request_path, dir_full_path, cfg) {
@@ -55,7 +55,7 @@ module.exports = class PagesIO {
       page_cfg.dev_only = cfg.dev_only;
     }
 
-    let new_page = new Page(page_cfg, this.cmbird);
+    let new_page = new Page(page_cfg, this.cms);
     this.list.push(new_page);
   }
 
@@ -72,7 +72,7 @@ module.exports = class PagesIO {
       page_list_cfg.dev_only = cfg.dev_only;
     }
 
-    let new_page_list = new PageList(page_list_cfg, this.cmbird);
+    let new_page_list = new PageList(page_list_cfg, this.cms);
     this.page_lists.push(new_page_list);
   }
 
@@ -85,7 +85,7 @@ module.exports = class PagesIO {
     let obj = {};
 
     for (let l = 0; l < this.page_lists.length; l++) {
-      if (!this.page_lists[l].dev_only || this.page_lists[l].dev_only && this.cmbird.dev_mode) {
+      if (!this.page_lists[l].dev_only || this.page_lists[l].dev_only && this.cms.dev_mode) {
         obj[this.page_lists[l].name] = [];
         for (let p = 0; p < this.page_lists[l].list.length; p++) {
           obj[this.page_lists[l].name].push(this.page_lists[l].list[p].data());
@@ -95,7 +95,7 @@ module.exports = class PagesIO {
 
     obj.unlisted = [];
     for (let p = 0; p < this.list.length; p++) {
-      if (!this.list[p].dev_only || this.list[p].dev_only && this.cmbird.dev_mode) {
+      if (!this.list[p].dev_only || this.list[p].dev_only && this.cms.dev_mode) {
         obj.unlisted.push(this.list[p].data());
       }
     }
@@ -112,7 +112,7 @@ module.exports = class PagesIO {
     }
 
     for (let l = 0; l < this.page_lists.length; l++) {
-      if (!this.page_lists[l].dev_only || this.page_lists[l].dev_only && this.cmbird.dev_mode) {
+      if (!this.page_lists[l].dev_only || this.page_lists[l].dev_only && this.cms.dev_mode) {
         for (let p = 0; p < this.page_lists[l].list.length; p++) {
           let pdata = this.page_lists[l].list[p].data();
           if (pdata.name === page_name) {
@@ -127,7 +127,7 @@ module.exports = class PagesIO {
 */
   all_from_list(list_name) {
     for (let l = 0; l < this.page_lists.length; l++) {
-      if (!this.page_lists[l].dev_only || this.page_lists[l].dev_only && this.cmbird.dev_mode) {
+      if (!this.page_lists[l].dev_only || this.page_lists[l].dev_only && this.cms.dev_mode) {
         if (this.page_lists[l].name === list_name) {
           return this.page_lists[l].all();
         }
@@ -139,7 +139,7 @@ module.exports = class PagesIO {
 
   select_from_list(list_name, page_name) {
     for (let l = 0; l < this.page_lists.length; l++) {
-      if (!this.page_lists[l].dev_only || this.page_lists[l].dev_only && this.cmbird.dev_mode) {
+      if (!this.page_lists[l].dev_only || this.page_lists[l].dev_only && this.cms.dev_mode) {
         if (this.page_lists[l].name === list_name) {
           return this.page_lists[l].select(page_name);
         }
@@ -151,7 +151,7 @@ module.exports = class PagesIO {
   select_obj(list_name, page_name) {
     if (list_name === "unlisted") {
       for (let p = 0; p < this.list.length; p++) {
-        if (!this.list[p].dev_only || this.list[p].dev_only && this.cmbird.dev_mode) {
+        if (!this.list[p].dev_only || this.list[p].dev_only && this.cms.dev_mode) {
           let pdata = this.list[p];
           if (pdata.name === page_name) {
             return pdata;
@@ -160,7 +160,7 @@ module.exports = class PagesIO {
       }
     } else {
       for (let l = 0; l < this.page_lists.length; l++) {
-        if (!this.page_lists[l].dev_only || this.page_lists[l].dev_only && this.cmbird.dev_mode) {
+        if (!this.page_lists[l].dev_only || this.page_lists[l].dev_only && this.cms.dev_mode) {
           if (this.page_lists[l].name === list_name) {
             for (let p = 0; p < this.page_lists[l].list.length; p++) {
               let pdata = this.page_lists[l].list[p];
@@ -177,7 +177,7 @@ module.exports = class PagesIO {
 
   select_list_obj(list_name) {
     for (let l = 0; l < this.page_lists.length; l++) {
-      if (!this.page_lists[l].dev_only || this.page_lists[l].dev_only && this.cmbird.dev_mode) {
+      if (!this.page_lists[l].dev_only || this.page_lists[l].dev_only && this.cms.dev_mode) {
         if (this.page_lists[l].name === list_name) {
           return this.page_lists[l];
         }

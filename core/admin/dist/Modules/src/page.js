@@ -43,25 +43,6 @@ module.exports = class {
     });
     edit_btn.innerHTML = '/';
 
-    let webpack_btn = page_element.querySelector('.webpack_btn');
-    
-    if (this.watching) {
-      webpack_btn.src = "webpack-on.png";
-    }
-
-    webpack_btn.addEventListener('click', async function(e) {
-      const state = await XHR.post("/cmbird_admin/pages.io", {
-        command: "webpack-watch",
-        list: this_class.parent_list,
-        name: this_class.name
-      }, 'access_token');
-
-      if (state) {
-        webpack_btn.src = "webpack-on.png";
-      } else {
-        webpack_btn.src = "webpack-off.png";
-      }
-    });
 
     var del_button = page_element.querySelector('.del_btn');
     del_button.addEventListener('click', function(e) {

@@ -16,8 +16,8 @@ var default_css = fs.readFileSync(__dirname+'/default_templates/theme.css', 'utf
 var default_js = fs.readFileSync(__dirname+'/default_templates/main.js', 'utf8');
 
 module.exports = class PageList {
-  constructor(cfg, cmbird) {
-    this.cmbird = cmbird;
+  constructor(cfg, cms) {
+    this.cms = cms;
 
     this.blacklist = page_blacklist
 
@@ -47,9 +47,9 @@ module.exports = class PageList {
     this.list = [];
 
     let this_class = this;
-    let app = this.app = cmbird.app;
+    let app = this.app = cms.app;
 
-    this.globals_path = cfg.globals_path || cmbird.globals_path;
+    this.globals_path = cfg.globals_path || cms.globals_path;
 
     this.config = {};
     const config_path = path.resolve(this.full_path, ".config.json");
@@ -62,7 +62,7 @@ module.exports = class PageList {
     }
 
     if (cfg.globals_path) {
-      cmbird.app.use(
+      cms.app.use(
         this_class.req_prefix+'g',
         express.static(cfg.globals_path)
       );
@@ -88,7 +88,7 @@ module.exports = class PageList {
         auth: this_class.auth,
         parent_list: this_class,
         globals_path: this_class.globals_path
-      }, cmbird);
+      }, cms);
 
       this_class.list.push(npage);
     });
@@ -165,7 +165,7 @@ module.exports = class PageList {
         var src_path = path.resolve(this_class.tamplate_dir, data.template);
         fs.copy(src_path, data.path, function (err) {
           if (err) return console.error(err)
-          var npage = new Page(npage_cfg, cmbird, this_class);
+          var npage = new Page(npage_cfg, cms, this_class);
           this_class.hosted_pages.push(npage);
           res.send(JSON.stringify({ msg: "success" }));
         });
@@ -175,7 +175,7 @@ module.exports = class PageList {
         fs.writeFileSync(path.resolve(npage_path, "context.json"), default_json);
         fs.writeFileSync(path.resolve(npage_path, "theme.css"), default_css);
         fs.writeFileSync(path.resolve(npage_path, "main.js"), default_js);
-        var npage = new Page(npage_cfg, this.cmbird);
+        var npage = new Page(npage_cfg, this.cms);
         this.list.push(npage);
         return { msg: "success" };
     //  }

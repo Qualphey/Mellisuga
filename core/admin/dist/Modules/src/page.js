@@ -14,8 +14,6 @@ module.exports = class {
     this.path = cfg.path;
     this.watching = cfg.watching;
 
-    console.log(cfg);
-
     this.fname = this.name;
 
     var max_length = 16;

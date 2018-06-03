@@ -9,21 +9,64 @@ const cookieParser = require('cookie-parser');
 
 const Client = require('./client.js');
 
+var cookie = require('cookie');
+
 module.exports = class {
-    constructor(app, server, io) {
+    constructor(app, server, io, cfg) {
       this.app = app;
       this.server = server;
       this.io = io;
       this.clients = [];
-      let this_class = this;
+      this.host = cfg.host;
+      this.port = cfg.port;
+    }
 
-      io.on('connection', function(socket) {
-        console.log("SOCKET CONNECTED");
-        this_class.clients.push(new Client(socket));
-        socket.on("token_test", function(data) {
-          console.log(data, socket.access_token);
+    async listen(admin_auth) {
+      try {
+        let io = this.io;
+        io.use(async function(socket, next){
+          try {
+            if (socket.request.headers.cookie) {
+              socket.request.cookies = cookie.parse(socket.request.headers.cookie);
+
+              // Authorization
+              if (socket.request.cookies.access_token) {
+                let payload = await admin_auth.decrypt_token(socket.request.cookies.access_token);
+                if (payload) {
+                  next();
+                }
+              } else {
+                unauthorized();
+              }
+            } else {
+              unauthorized();
+            }
+
+            function unauthorized() {
+              let err  = new Error('Authentication error');
+              err.data = { type : 'authentication_error' };
+              next(err);
+            }
+          } catch(e) {
+            console.error(e.stack);
+          }
         });
-      });
+
+        let server = this.server;
+
+        let this_class = this;
+
+        return await new Promise((resolve, reject) => {
+          server.listen(this_class.port, this_class.host, function() {
+            var addr = server.address();
+            console.log("Server running ", addr.address + ":" + addr.port);
+            resolve();
+          });
+        });
+      } catch (e) {
+        console.error(e.stack);
+        return undefined;
+      }
     }
 
     get(path, ...callbacks) {
@@ -58,13 +101,6 @@ module.exports = class {
         extended: true
       }));
 
-      await new Promise((resolve, reject) => {
-        server.listen(port, host, function(){
-          var addr = server.address();
-          console.log("Server running ", addr.address + ":" + addr.port);
-          resolve();
-        });
-      });
-      return new module.exports(app, server, io);
+      return new module.exports(app, server, io, { host: host, port: port });
     }
 }

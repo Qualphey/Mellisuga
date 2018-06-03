@@ -248,6 +248,7 @@ module.exports = class {
       try {
         jwt_payload = jwt.verify(jwt_token, found.password);
       } catch (e) {
+            console.log('fail');
         return undefined;
       }
 

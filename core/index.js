@@ -106,7 +106,11 @@ module.exports = class CMBird {
 /*      pages_io.pages.init_admin(admin.auth);
       pages_io.templates.init_admin(admin.auth);*/
 
+
+      await router.listen(admin.auth);
+
       let aura = this_class.aura;
+
 
       let user_auth_cfg = {
         table_name: "user_accounts",

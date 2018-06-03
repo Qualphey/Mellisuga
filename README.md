@@ -2,7 +2,7 @@
 
 #### a lightweight NodeJS based content management system that aims for flexibility, performance, stability and ease of use. ####
 
-##### also [Mellisuga is a genus of hummingbirds](https://github.com/user/repo/blob/branch/other_file.md) #####
+##### also [Mellisuga is a genus of hummingbirds](https://en.wikipedia.org/wiki/Mellisuga) #####
 
 
 

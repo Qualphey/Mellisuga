@@ -1,6 +1,6 @@
 {
   "name": "mellisuga",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "description": "Node.js based, highly configurable content management system",
   "main": "index.js",
   "repository": "https://github.com/Qualphey/CMBird.git",

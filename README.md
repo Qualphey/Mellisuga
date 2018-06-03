@@ -8,21 +8,28 @@
 
 ### Installation ###
 
-`npm install cmbird`
+`npm install mellisuga`
 
-Though you also need to install `PostgreSQL` database.
+You also need to install `PostgreSQL` database.
 
 ### Basic usage ###
 
 ```javascript
-var CMS = require("cmbird");
-var cms = new CMS({
-  host : '127.0.0.1',
-  port : 9639,
-  db_user : 'postgres', // or any other database user with super permissions
-  db_pwd: 'password',
-  app_path : __dirname
-});
+var Mellisuga = require("mellisuga");
+
+(async function() {
+  try {
+    let cms = await Mellisuga.init({
+      host: '127.0.0.1',
+      port: 8080,
+      db_user: 'postgres',
+      db_pwd: 'password',
+      app_path: __dirname
+    });
+  } catch (e) {
+    console.error(e.stack);
+  }
+})();
 ```
 
 #### WARNING: This is an experimental version. There might be serious security vulnerabilities and bugs. Reported issues and calaborators appreciated. ####

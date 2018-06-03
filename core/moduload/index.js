@@ -62,4 +62,15 @@ module.exports = class ModulesIO {
 
     return obj;
   }
+
+  select_list_obj(list_name) {
+    for (let l = 0; l < this.module_lists.length; l++) {
+      if (!this.module_lists[l].dev_only || this.module_lists[l].dev_only && this.cms.dev_mode) {
+        if (this.module_lists[l].name === list_name) {
+          return this.module_lists[l];
+        }
+      }
+    }
+    return undefined;
+  }
 }

@@ -14,6 +14,8 @@ module.exports = class {
     this.path = cfg.path;
     this.watching = cfg.watching;
 
+    console.log(cfg);
+
     this.fname = this.name;
 
     var max_length = 16;
@@ -85,7 +87,7 @@ module.exports = class {
 
       async function proceed() {
         if (input.value === this_class.name) {
-          var response = await XHR.post('/cmbird_admin/pages.io', {
+          var response = await XHR.post('/mellisuga/modules.io', {
             command: 'rm',
             list: this_class.parent_list,
             name: this_class.name

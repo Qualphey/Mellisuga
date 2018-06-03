@@ -95,7 +95,7 @@ module.exports = class {
             name: input.value
           }
 
-          var res = await XHR.post('/cmbird_admin/pages.io', {
+          var res = await XHR.post('/mellisuga/modules.io', {
             command: "add",
             name: data.name,
             list: name,
@@ -105,7 +105,7 @@ module.exports = class {
           if (res.err) {
             console.log(res.err);
           } else {
-            var page = new Page(data, grid_ui);
+            var page = new Page(res, grid_ui);
 
             grid_ui.remove(add_temp_btn);
             grid_ui.add(page.element);

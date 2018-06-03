@@ -1,10 +1,12 @@
 
+const fs = require('fs-extra');
 
 module.exports = class {
   constructor(cfg, cms) {
     this.name = cfg.name;
     this.full_path = cfg.full_path;
     this.config = cfg.config;
+    this.parent_list =  cfg.parent_list
   }
 
   static async init(cfg, cms) {
@@ -18,10 +20,23 @@ module.exports = class {
   }
 
   data() {
+    let parent_list = "unlisted";
+
+    if (this.parent_list) {
+      parent_list = this.parent_list.name;
+    }
+
+
     return {
       name: this.name,
       full_path: this.full_path,
-      config: this.config
-    };
+      config: this.config,
+      parent_list: parent_list
+    }
+  }
+
+  destroy() {
+    this.destroyed = true;
+    fs.removeSync(this.full_path);
   }
 }

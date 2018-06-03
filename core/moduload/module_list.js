@@ -1,5 +1,5 @@
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 const Module = require('./module.js');
@@ -43,7 +43,8 @@ module.exports = class {
           var module = {
             index: module_index_path,
             full_path: module_path,
-            name: file
+            name: file,
+            parent_list: this_class
           };
 
           if (fs.existsSync(module_config_path)) {
@@ -56,5 +57,39 @@ module.exports = class {
     });
 
     return list;
+  }
+
+  async add(name, template) {
+    try {
+      const nmodul_path = path.resolve(this.full_path, name);
+      if (!fs.existsSync(nmodul_path)) {
+        const template_path = path.resolve(__dirname, "default_template")
+
+        fs.copySync(template_path, nmodul_path)
+        let nmod = await Module.init({
+          name: name,
+          full_path: nmodul_path,
+          parent_list: this
+        }, this.cms);
+        this.list.push(nmod);
+        console.log(nmod.data());
+        return nmod.data();
+      } else {
+        return undefined;
+      }
+    } catch (err) {
+      console.error(err)
+      return undefined;
+    }
+  }
+
+  remove(name) {
+    for (let l = 0; l < this.list.length; l++) {
+      if (this.list[l].name === name) {
+        this.list[l].destroy();
+        this.list.splice(l, 1);
+        return { msg: "success" };
+      }
+    }
   }
 }

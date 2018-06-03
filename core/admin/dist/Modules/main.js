@@ -241,6 +241,8 @@ module.exports = function () {
     this.path = cfg.path;
     this.watching = cfg.watching;
 
+    console.log(cfg);
+
     this.fname = this.name;
 
     var max_length = 16;
@@ -287,7 +289,7 @@ module.exports = function () {
                     }
 
                     _context.next = 3;
-                    return XHR.post('/cmbird_admin/pages.io', {
+                    return XHR.post('/mellisuga/modules.io', {
                       command: 'rm',
                       list: this_class.parent_list,
                       name: this_class.name
@@ -478,7 +480,7 @@ module.exports = function () {
                                 name: input.value
                               };
                               _context.next = 3;
-                              return XHR.post('/cmbird_admin/pages.io', {
+                              return XHR.post('/mellisuga/modules.io', {
                                 command: "add",
                                 name: data.name,
                                 list: name,
@@ -492,7 +494,7 @@ module.exports = function () {
                               if (res.err) {
                                 console.log(res.err);
                               } else {
-                                page = new Page(data, grid_ui);
+                                page = new Page(res, grid_ui);
 
 
                                 grid_ui.remove(add_temp_btn);

@@ -4,7 +4,7 @@
 
 ##### also [Mellisuga is a genus of hummingbirds](https://en.wikipedia.org/wiki/Mellisuga) #####
 
-
+###### WARNING: This is an experimental version. There might be serious security vulnerabilities and bugs. Reported issues and calaborators appreciated. ######
 
 ### Installation ###
 
@@ -31,5 +31,3 @@ var Mellisuga = require("mellisuga");
   }
 })();
 ```
-
-#### WARNING: This is an experimental version. There might be serious security vulnerabilities and bugs. Reported issues and calaborators appreciated. ####

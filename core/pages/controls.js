@@ -12,6 +12,8 @@ module.exports = class {
       }));
     }
 
+      console.log('PAGESIO', command_path);
+
     cms.app.post(command_path, auth.orize, function(req, res) {
       var data = JSON.parse(req.body.data);
       /*

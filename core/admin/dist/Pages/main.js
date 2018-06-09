@@ -176,8 +176,8 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
   }, _callee, this, [[0, 14]]);
 }))();
 
-var socket = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js")('http://127.0.0.1:9639');
-console.log("CONNECTING TO http://127.0.0.1:9369");
+var socket = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js")(server_addr);
+console.log("CONNECTING TO", server_addr);
 socket.on('connect', function () {
   console.log("CONNECTED");
 });
@@ -632,8 +632,9 @@ module.exports = function () {
     this.padding = padding;
     this.min_a = min_a;
     this.min_width = items_in_row * min_a + padding;
-    this.element.style.minWidth = this.min_width + "px";
+    //  this.element.style.minWidth = this.min_width+"px";
     this.items_in_row = items_in_row;
+    this.inrow_default = items_in_row;
     this.item_a = width / items_in_row - padding;
     if (this.item_a < this.min_a) {
       this.item_a = this.min_a;
@@ -647,16 +648,50 @@ module.exports = function () {
   }
 
   _createClass(_class, [{
+    key: 'reconstruct',
+    value: function reconstruct() {
+      this.trs = [];
+      var cloned_tds = [];
+      for (var i = 0; i < this.tds.length; i++) {
+        cloned_tds.push(this.tds[i]);
+      }
+      this.tds = [];
+
+      this.element.innerHTML = "";
+      this.cur_tr = new TR(this.items_in_row);
+      this.element.appendChild(this.cur_tr.element);
+      this.trs.push(this.cur_tr);
+
+      for (var i = 0; i < cloned_tds.length; i++) {
+        if (this.cur_tr.items == this.items_in_row) {
+          this.cur_tr = new TR(this.items_in_row);
+          this.element.appendChild(this.cur_tr.element);
+          this.trs.push(this.cur_tr);
+
+          this.cur_tr.add(cloned_tds[i]);
+          this.tds.push(cloned_tds[i]);
+        } else {
+          this.cur_tr.add(cloned_tds[i]);
+          this.tds.push(cloned_tds[i]);
+        }
+      }
+    }
+  }, {
     key: 'resize',
     value: function resize(width, break_lines) {
       if (width) {
-        if (break_lines) {
-          this.item_a = width - this.padding;
+        var width_per_item = width / this.inrow_default - this.padding;
+        if (width_per_item < this.min_a) {
+          this.items_in_row = Math.floor((width - this.padding * this.inrow_default) / this.min_a);
         } else {
-          this.item_a = width / this.items_in_row - this.padding;
-          if (this.item_a < this.min_a) {
-            this.item_a = this.min_a;
-          }
+          this.items_in_row = this.inrow_default;
+        }
+        if (this.items_in_row < 1) this.items_in_row = 1;
+        this.reconstruct();
+
+        this.item_a = Math.floor(width / this.items_in_row - this.padding * 2);
+        if (this.item_a < this.min_a) {
+          this.item_a = this.min_a;
         }
       }
 
@@ -665,15 +700,18 @@ module.exports = function () {
         this.tds[i].style.height = this.item_a + "px";
 
         this.tds[i].style.minWidth = this.min_a + "px";
+        this.tds[i].style.mimHeight = this.min_a + "px";
       }
 
       this.element.style.width = this.item_a * this.items_in_row + "px";
 
-      if (break_lines) {
-        var nwidth = width - this.padding;
-        this.element.style.minWidth = nwidth + "px";
-      }
-
+      /*
+          if (break_lines) {
+            const nwidth = width-this.padding;
+            this.element.style.minWidth = nwidth+"px";
+            this.element.style.width = nwidth+"px";
+          }
+      */
       this.element.parentNode.style.minHeight = this.element.offsetHeight + "px";
     }
   }, {
@@ -748,7 +786,7 @@ module.exports = function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-let style = document.createElement('style');style.innerHTML = '.grid_ui {  width: 100%;  table-layout: fixed;}.grid_ui tr {  width: 100%;}.grid_ui td {  padding: 0;}@media only screen and (max-width: 719px) {  .grid_ui td {    display: block;  }}';document.head.appendChild(style);
+let style = document.createElement('style');style.innerHTML = '.grid_ui {  width: 100%;  table-layout: fixed;}.grid_ui tr {  width: 100%;}.grid_ui td {  padding: 0;}';document.head.appendChild(style);
 
 /***/ }),
 
@@ -20914,7 +20952,7 @@ module.exports = yeast;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! babel-polyfill */"./node_modules/babel-polyfill/lib/index.js");
-module.exports = __webpack_require__(/*! /home/qualphey/Development/larvita/Mellisuga/core/admin/dist/Pages/src/index.js */"./Mellisuga/core/admin/dist/Pages/src/index.js");
+module.exports = __webpack_require__(/*! /home/qualphey/Development/teisine_apsauga/Mellisuga/core/admin/dist/Pages/src/index.js */"./Mellisuga/core/admin/dist/Pages/src/index.js");
 
 
 /***/ }),

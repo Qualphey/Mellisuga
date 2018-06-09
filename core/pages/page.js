@@ -20,6 +20,7 @@ module.exports = class {
       this.name = this.full_path.substr(this.full_path.lastIndexOf('/') + 1);
     }
 
+    this.cms = cms;
 
     this.dev_only = cfg.dev_only;
 
@@ -265,6 +266,7 @@ module.exports = class {
 
       if (this.index_html) {
         if (this.context) {
+          this.context.server_addr = this.cms.host+":"+this.cms.port;
           var rendered_html = this.nunjucks_env.render(this.index_path, this.context);
           result.html = rendered_html;
         } else {

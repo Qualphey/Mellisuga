@@ -1,10 +1,22 @@
 
 module.exports = class {
-  static async init() {
-    console.log("                    - TESTRON 3000 -");
-/*
-    setInterval(function() {
+  constructor() {
+    this.interval = setInterval(function() {
       console.log("                    - TESTRON 3000 -");
-    }, 5000);*/
+    }, 1000);
+  }
+
+  static async init() {
+    try {
+      return new module.exports();
+    } catch (e) {
+      console.error(e.stack);
+      return undefined;
+    }
+  }
+
+  destroy() {
+    console.log("DESTROYED");
+    clearInterval(this.interval);
   }
 }

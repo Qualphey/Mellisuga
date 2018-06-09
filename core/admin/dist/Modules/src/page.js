@@ -38,10 +38,17 @@ module.exports = class {
 
     var edit_btn = page_element.querySelector('.edit_btn');
 
-    edit_btn.addEventListener('click', function(e) {
-      window.location.href = "edit.html?page="+this_class.filename;
+    edit_btn.addEventListener('click', async function(e) {
+      try {
+        var response = await XHR.post('/mellisuga/modules.io', {
+          command: 'reload',
+          list: this_class.parent_list,
+          name: this_class.name
+        }, 'access_token');
+      } catch (e) {
+        console.error(e);
+      }
     });
-    edit_btn.innerHTML = '/';
 
 
     var del_button = page_element.querySelector('.del_btn');

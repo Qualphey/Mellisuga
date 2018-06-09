@@ -92,4 +92,24 @@ module.exports = class {
       }
     }
   }
+
+  async reload(name) {
+    try {
+      const nmodul_path = path.resolve(this.full_path, name);
+      for (let l = 0; l < this.list.length; l++) {
+        if (this.list[l].name === name) {
+          console.log(this.list[l].name);
+          console.log(this.list[l].object.destroy);
+          if (typeof this.list[l].object.destroy == 'function' ) {
+            this.list[l].object.destroy();
+          }
+
+          await this.list[l].reload();
+          return { msg: "success" };
+        }
+      }
+    } catch (e) {
+      console.error(e.stack);
+    }
+  }
 }

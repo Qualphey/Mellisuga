@@ -51,8 +51,8 @@ const PageList = require('./page_list.js');
 })();
 
 
-var socket = require('socket.io-client')('http://127.0.0.1:9639');
-console.log("CONNECTING TO http://127.0.0.1:9369");
+var socket = require('socket.io-client')(server_addr);
+console.log("CONNECTING TO", server_addr);
 socket.on('connect', function(){
   console.log("CONNECTED");
 });

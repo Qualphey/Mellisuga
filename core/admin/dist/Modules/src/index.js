@@ -51,22 +51,3 @@ const PageList = require('./page_list.js');
     console.error(e.stack);
   }
 })();
-
-
-var socket = require('socket.io-client')('http://127.0.0.1:9639');
-console.log("CONNECTING TO http://127.0.0.1:9369");
-socket.on('connect', function(){
-  console.log("CONNECTED");
-});
-
-socket.on('webpack-done', function(stats){
-  console.log(stats);
-});
-
-socket.on('webpack-err', function(err){
-  console.error(err);
-});
-
-socket.on('disconnect', function(){
-  console.log("DISCONNETED");
-});

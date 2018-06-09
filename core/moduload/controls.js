@@ -70,6 +70,15 @@ module.exports = class {
               res.send(JSON.stringify({ err: "Name/List parameter missing" }));
             }
             break;
+
+          case 'reload':
+            if (data.name && data.name != '' && data.list && data.list != '') {
+              let taget_list = modules_io.select_list_obj(data.list);
+              res.send(JSON.stringify( taget_list.reload(data.name) ));
+            } else {
+              res.send(JSON.stringify({ err: "Name/List parameter missing" }));
+            }
+            break;
           default:
             console.error("PagesIO: unknown command", data.command);
         }

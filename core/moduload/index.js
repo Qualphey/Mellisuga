@@ -8,8 +8,6 @@ module.exports = class ModulesIO {
   constructor(modules_path, cms) {
     this.dir = modules_path;
     this.cms = cms;
-
-    this.module_lists = [];
   }
 
   static async init(cms) {
@@ -35,7 +33,9 @@ module.exports = class ModulesIO {
     }, this.cms);
   }
 
-  async load_in_dir(full_path) {
+  async load_in_dir() {
+    const full_path = this.dir;
+    this.module_lists = [];
     let module_list = await ModuleList.init(full_path, this.cms);
     this.module_lists.push(module_list);
     return module_list;

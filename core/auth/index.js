@@ -390,7 +390,7 @@ module.exports = class {
     try {
       if (code) {
         let found = await this.table.select(
-          ["vardas", "pavarde", "imone", "pareigos", "email", "id"],
+          ["vardas", "pavarde", "imone", "planas","pareigos", "email", "id"],
           "email = $1",
           [decrypt(code)]
         );
@@ -428,7 +428,7 @@ module.exports = class {
         }));
       } else {
         let found = await this.table.select(
-          '*', "(email = $1)", [data.email]
+          '*', "(email = $1)", [data.email.toLowerCase()]
         );
 
         if (0 < found.length) {

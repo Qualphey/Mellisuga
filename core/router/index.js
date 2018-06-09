@@ -23,6 +23,7 @@ module.exports = class {
 
     async listen(admin_auth) {
       try {
+        let this_class = this;
         let io = this.io;
         io.use(async function(socket, next){
           try {
@@ -31,6 +32,25 @@ module.exports = class {
 
               // Authorization
               if (socket.request.cookies.access_token) {
+                let client_exists = false;
+
+                this_class.clients.forEach(client => {
+                  if (socket.request.cookies.access_token === client.jwt) {
+                    client_exists = true;
+                  }
+                });
+
+                if (!client_exists) {
+                  let n_client = new Client(socket, socket.request.cookies.access_token);
+                  this_class.clients.push(n_client);
+                  this.clients_cache = [];
+
+                  socket.on('disconnect', function() {
+                    console.log("disconnect", this_class.clients.indexOf(n_client));
+                    this_class.clients.splice(this_class.clients.indexOf(n_client), 1);
+                  });
+                }
+
                 let payload = await admin_auth.decrypt_token(socket.request.cookies.access_token);
                 if (payload) {
                   next();
@@ -53,8 +73,6 @@ module.exports = class {
         });
 
         let server = this.server;
-
-        let this_class = this;
 
         return await new Promise((resolve, reject) => {
           server.listen(this_class.port, this_class.host, function() {

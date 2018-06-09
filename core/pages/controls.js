@@ -1,5 +1,7 @@
 
 
+const cookie = require('cookie');
+
 module.exports = class {
   constructor(cfg, cms) {
     let command_path = cfg.command_path;
@@ -84,7 +86,13 @@ module.exports = class {
           }
           break;*/
         case 'webpack-watch':
-          let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+          let jwt_token = undefined;
+          if (req.headers.cookie) {
+            var cookies = cookie.parse(req.headers.cookie);
+            if (cookies['access_token']) {
+              jwt_token = cookies['access_token'];
+            }
+          }
           if (data.list && data.name) {
             let page = pages_io.select_obj(data.list, data.name);
             if (!page.watching) {
@@ -93,8 +101,10 @@ module.exports = class {
                 poll: 1000
               }, (err, stats) => {
                 if (err) console.error(err);
+                console.log("clients", cms.router.clients.length);
                 cms.router.clients.forEach(client => {
-                  if (ip === client.address) {
+                  if (jwt_token === client.jwt) {
+                    console.log("RESPONSE");
                     if (stats.hasErrors()) {
                       client.socket.emit("webpack-err", stats.toString());
                     } else {

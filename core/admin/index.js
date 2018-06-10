@@ -71,6 +71,8 @@ module.exports = class {
       }
     });
 
+    await cmbird.router.listen();
+
     return await new Promise(function(resolve) {
       app.post("/initialise", async function(req, res, next) {
         try {

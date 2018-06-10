@@ -25,57 +25,64 @@ module.exports = class {
       try {
         let this_class = this;
         let io = this.io;
-        io.use(async function(socket, next){
-          try {
-            if (socket.request.headers.cookie) {
-              socket.request.cookies = cookie.parse(socket.request.headers.cookie);
 
-              // Authorization
-              if (socket.request.cookies.access_token) {
-                let client_exists = false;
+        if (this.instance) {
+          this.instance.close();
+        }
 
-                this_class.clients.forEach(client => {
-                  if (socket.request.cookies.access_token === client.jwt) {
-                    client_exists = true;
-                  }
-                });
+        if (admin_auth) {
+          io.use(async function(socket, next){
+            try {
+              if (socket.request.headers.cookie) {
+                socket.request.cookies = cookie.parse(socket.request.headers.cookie);
 
-                if (!client_exists) {
-                  let n_client = new Client(socket, socket.request.cookies.access_token);
-                  this_class.clients.push(n_client);
-                  this.clients_cache = [];
+                // Authorization
+                if (socket.request.cookies.access_token) {
+                  let client_exists = false;
 
-                  socket.on('disconnect', function() {
-                    console.log("disconnect", this_class.clients.indexOf(n_client));
-                    this_class.clients.splice(this_class.clients.indexOf(n_client), 1);
+                  this_class.clients.forEach(client => {
+                    if (socket.request.cookies.access_token === client.jwt) {
+                      client_exists = true;
+                    }
                   });
-                }
 
-                let payload = await admin_auth.decrypt_token(socket.request.cookies.access_token);
-                if (payload) {
-                  next();
+                  if (!client_exists) {
+                    let n_client = new Client(socket, socket.request.cookies.access_token);
+                    this_class.clients.push(n_client);
+                    this.clients_cache = [];
+
+                    socket.on('disconnect', function() {
+                      console.log("disconnect", this_class.clients.indexOf(n_client));
+                      this_class.clients.splice(this_class.clients.indexOf(n_client), 1);
+                    });
+                  }
+
+                  let payload = await admin_auth.decrypt_token(socket.request.cookies.access_token);
+                  if (payload) {
+                    next();
+                  }
+                } else {
+                  unauthorized();
                 }
               } else {
                 unauthorized();
               }
-            } else {
-              unauthorized();
-            }
 
-            function unauthorized() {
-              let err  = new Error('Authentication error');
-              err.data = { type : 'authentication_error' };
-              next(err);
+              function unauthorized() {
+                let err  = new Error('Authentication error');
+                err.data = { type : 'authentication_error' };
+                next(err);
+              }
+            } catch(e) {
+              console.error(e.stack);
             }
-          } catch(e) {
-            console.error(e.stack);
-          }
-        });
+          });
+        }
 
         let server = this.server;
 
         return await new Promise((resolve, reject) => {
-          server.listen(this_class.port, this_class.host, function() {
+          this_class.instance = server.listen(this_class.port, this_class.host, function() {
             var addr = server.address();
             console.log("Server running ", addr.address + ":" + addr.port);
             resolve();
@@ -108,17 +115,21 @@ module.exports = class {
     }
 
     static async init(host, port) {
-      let app = express();
-      let server = http.createServer(app);
-      let io = require('socket.io')(server);
+      try {
+        let app = express();
+        let server = http.createServer(app);
+        let io = require('socket.io')(server);
 
 
-      app.use(cookieParser());
-      app.use(bodyParser.json());         // to support JSON-encoded bodies
-      app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-        extended: true
-      }));
+        app.use(cookieParser());
+        app.use(bodyParser.json());         // to support JSON-encoded bodies
+        app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+          extended: true
+        }));
 
-      return new module.exports(app, server, io, { host: host, port: port });
+        return new module.exports(app, server, io, { host: host, port: port });
+      } catch (e) {
+        console.error(e.stack);
+      }
     }
 }

@@ -240,8 +240,9 @@ module.exports = class {
             resolve(transporter);
           }
 
-          const timeout_id = setTimeout(timeout, 15000);
+          let timeout_ms = cfg.smtp.timeout || 5000;
 
+          const timeout_id = setTimeout(timeout, timeout_ms);
           transporter.verify(function(error, success) {
             if (error) {
               console.log(error);

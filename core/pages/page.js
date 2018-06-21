@@ -56,6 +56,8 @@ module.exports = class {
       });
     }
 
+    console.log(this.name, "|", globals_path, "|");
+
     this.nunjucks_env = new nunjucks.Environment(new nunjucks.FileSystemLoader([
       this.full_path,
       globals_path

@@ -20,6 +20,10 @@ const Auth = require("./auth/index.js");
 
 const PostsIO = require("./posts/index.js");
 const PagesIO = require("./pages/index.js");
+
+const Mailer = require("./mailer/index.js");
+
+
 //const BuiltinIO = require("./pages/builtin.js");
 
 /*
@@ -54,6 +58,8 @@ module.exports = class CMBird {
     this.pages_path = path.resolve(cfg.app_path, 'pages');
     this.templates_path = path.resolve(cfg.app_path, 'templates');
     this.globals_path = path.resolve(cfg.app_path, 'globals');
+   
+    this.admin_path = "/mellisuga";
 
     this.host = cfg.host;
     this.port = cfg.port;
@@ -110,7 +116,7 @@ module.exports = class CMBird {
       await router.listen(admin.auth);
 
       let aura = this_class.aura;
-
+      this_class.mailer = await Mailer.init(this_class, cfg.smtp);
 
       let user_auth_cfg = {
         table_name: "user_accounts",

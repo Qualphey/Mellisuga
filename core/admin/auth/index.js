@@ -102,7 +102,7 @@ module.exports = class {
         });
       } else {
         let found = await this.table.select(
-          '*', "(email = $1)", [data.email]
+          '*', "(email = $1)", [data.email.toLowerCase()]
         );
 
         if (0 < found.length) {

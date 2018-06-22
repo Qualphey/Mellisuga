@@ -56,29 +56,45 @@ module.exports = class {
         switch(data.command) {
           case 'send_public':
             if (data.from && data.to && data.full_name && data.subject && data.text) {
-              data.text = sanitizer.sanitize(data.text);
-              let mailOptions = {
-                from: '"'+data.full_name+'"<'+data.from+'>',
-                to: data.to,
-                subject: data.subject,
-                text: data.text,
-                html: data.text
-              };
+              function validateEmail(email) {
+                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+              }
 
-              this_class.transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                  res.send({ err: error });
-                  return console.error(error);
-                } else {
-                  res.send({ success: "success"});
-                }
-                console.log('Message sent: %s', info.messageId);
-                // Preview only available when sending through an Ethereal account
-                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-              
-                // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-                // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-              });
+              let err = false;
+              let errs = [];
+
+              if (!validateEmail(data.from)) {
+                err = true;
+                errs.push("email");
+              }             
+              if (err) {
+                res.send({ err : errs });  
+              } else {
+                data.text = sanitizer.sanitize(data.text);
+                let mailOptions = {
+                  from: '"'+data.full_name+'"<'+data.from+'>',
+                  to: data.to,
+                  subject: data.subject,
+                  text: data.text,
+                  html: data.text
+                };
+
+                this_class.transporter.sendMail(mailOptions, (error, info) => {
+                  if (error) {
+                    res.send({ err: error });
+                    return console.error(error);
+                  } else {
+                    res.send({ success: "success"});
+                  }
+                  console.log('Message sent: %s', info.messageId);
+                  // Preview only available when sending through an Ethereal account
+                  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                
+                  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+                  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+                });
+              }
             } else {
               res.status(400);
               res.send("Bad Request");

@@ -7,16 +7,15 @@ var cookie = require('cookie');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const cryptorithm = 'aes-256-cbc';
-const cryptword = '41631b983cc0906948401650d5636e8afac451c74abfd7935989cad7116e0c75';
 
-function encrypt(text){
+function encrypt(text, cryptword) {
   var cipher = crypto.createCipher(cryptorithm, cryptword)
   var crypted = cipher.update(text,'utf8','hex')
   crypted += cipher.final('hex');
   return crypted;
 }
 
-function decrypt(text){
+function decrypt(text, cryptword) {
   var decipher = crypto.createDecipher(cryptorithm, cryptword)
   var dec = decipher.update(text, 'hex', 'utf8')
   dec += decipher.final('utf8');
@@ -73,6 +72,7 @@ module.exports = class {
     if (cfg.smtp) {
       this.smtp = cfg.smtp;
       this.msg = cfg.msg;
+      this.reset_msg = cfg.reset_msg;
     }
 
     this.rights = cfg.rights;
@@ -145,6 +145,12 @@ module.exports = class {
           case 'terminate':
             this_class.terminate(req, res, next);
             break;
+          case 'reset-pwd':
+            await this_class.reset_pwd(req, res, next);
+            break;
+          case 'cpwd':
+            await this_class.cpwd(data, res);
+            break;
           default:
         }
       } catch (e) {
@@ -199,6 +205,7 @@ module.exports = class {
         id: 'uuid',
         email: 'varchar(256)',
         password: 'varchar(256)',
+        secret: 'varchar(64)',
         jwt_token: 'varchar(512)',
         cfg: 'jsonb',
         email_confirmation: 'boolean',
@@ -269,6 +276,14 @@ module.exports = class {
         err = true;
         empty_fields.push('email');
       }
+      function validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+      }
+      if (!validateEmail(data.email)) {
+        err = true;
+        empty_fields.push('invalid-email');
+      }
       if (!data.pwd) {
         err = true;
         empty_fields.push('pwd');
@@ -288,7 +303,8 @@ module.exports = class {
       let values_in_use = [];
       var found_email = await this.table.select(
         ['email'],
-        "(email = $1)", [data.email]
+        "(email = $1)", 
+        [data.email]
       );
       if (found_email.length > 0) {
         err = true;
@@ -320,8 +336,10 @@ module.exports = class {
           password: bcrypt.hashSync(data.pwd, salt),
           cfg: {
             rights: ["paskyra"]
-          }
-        }
+          },
+          secret: crypto.randomBytes(32).toString('hex')
+        } 
+
         if (this.rights) {
           acc_data.super = (data.super == true);
           acc_data.creator = (data.creator == true);
@@ -340,12 +358,12 @@ module.exports = class {
         if (this.autolock) {
           acc_data.locked = true;
         }
-
+        
         result.success = true;
         result.id = await this.table.insert(acc_data);
 
         if (this.smtp) {
-          const confirmation_code = encrypt(acc_data.email);
+          const confirmation_code = acc_data.secret;
 
           let mailOptions = {
             from: this.msg.from,
@@ -392,8 +410,8 @@ module.exports = class {
       if (code) {
         let found = await this.table.select(
           ["vardas", "pavarde", "imone", "planas","pareigos", "email", "id"],
-          "email = $1",
-          [decrypt(code)]
+          "secret = $1",
+          [code]
         );
 
         if (1 < found.length) {
@@ -717,6 +735,64 @@ module.exports = class {
           break;
         default:
           console.error("AUTH.IO: invalid edit target: ", data.what);
+      }
+    } catch (e) {
+      console.error(e.stack);
+    }
+  }
+
+  async reset_pwd(req, res, next) {
+    try {
+     // TODO: determine if email exists database before doing anything...
+      const data = JSON.parse(req.body.data);
+
+      const n_secret = crypto.randomBytes(32).toString('hex');
+
+      await this.table.update({
+        secret: n_secret
+      }, "email = $1", [data.email]);
+
+      const mailOptions = {
+        from: this.reset_msg.from,
+        to: data.email,
+        subject: this.reset_msg.subject,
+        text: nunjucks.renderString(this.reset_msg.text, { code: n_secret }),
+        html: nunjucks.renderString(this.reset_msg.html, { code: n_secret })
+
+      };
+
+      this.smtp.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return console.log(error);
+        }
+        console.log('Message sent: %s', info.messageId);
+        // Preview only available when sending through an Ethereal account
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+      });
+      res.send({ success: "success" }); 
+    } catch (e) {
+      console.error(e.stack);
+    }
+  }
+
+  async cpwd(data, res) {
+    try {
+      if (data.pwd === data.pwdr && data.code) {
+        var salt = bcrypt.genSaltSync(10);
+        await this.table.update({
+          password: bcrypt.hashSync(data.pwd, salt),
+          secret: ''
+        }, "secret = $1", [data.code]);
+        res.send({
+          success: "success"
+        });
+      } else {
+        res.send({
+          err: "err"
+        });
       }
     } catch (e) {
       console.error(e.stack);

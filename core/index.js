@@ -142,6 +142,8 @@ module.exports = class CMBird {
       if (cfg.smtp) {
         user_auth_cfg.smtp = cfg.smtp;
         user_auth_cfg.msg = cfg.smtp.msg;
+        user_auth_cfg.reset_msg = cfg.smtp.reset_msg;
+
       }
 
       var auth = this_class.auth = await Auth.init(this_class.app, aura, user_auth_cfg);

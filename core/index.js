@@ -23,8 +23,6 @@ const PagesIO = require("./pages/index.js");
 
 const Mailer = require("./mailer/index.js");
 
-const Gallery = require("./gallery/index.js");
-
 
 //const BuiltinIO = require("./pages/builtin.js");
 
@@ -170,11 +168,6 @@ module.exports = class CMBird {
 */
       let modules = this_class.modules = await Moduload.init(this_class);
       modules.init_controls();
-
-      let gallery = this_class.gallery = await Gallery.init(
-        path.resolve(this_class.app_path, "gallery"),
-        this_class.admin_path, this_class.app
-      );
 
       router.use(
         '/g',

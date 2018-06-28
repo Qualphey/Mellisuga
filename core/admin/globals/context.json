@@ -3,7 +3,8 @@
   "menu": [
     "Pages",
 		"Admins",
-    "Modules"
+    "Modules",
+    "Gallery"
 	],
   "authorized_only": true,
   "required_rights": [

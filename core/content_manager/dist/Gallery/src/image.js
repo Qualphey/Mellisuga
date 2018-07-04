@@ -1,6 +1,7 @@
+
 'use strict'
 
-const XHR = require('../utils/xhr.js');
+const XHR = require('globals/utils/xhr.js');
 
 module.exports = class {
   constructor(img, src, grid_ui) {
@@ -12,7 +13,7 @@ module.exports = class {
     this.display_element.classList.add("gallery_ui_display");
     let dimg = document.createElement("img");
     dimg.src = src;
-    this.display_element.appendChild(dimg);
+    this.display_element.appendChild(dimg); 
 
     let this_class = this;
 
@@ -108,3 +109,4 @@ module.exports = class {
     });
   }
 }
+

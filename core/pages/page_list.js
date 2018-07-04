@@ -36,6 +36,8 @@ module.exports = class PageList {
       this.name = this.full_path.substr(this.full_path.lastIndexOf('/') + 1);
     }
 
+    this.required_rights = cfg.required_rights;
+
     this.dev_only = cfg.dev_only;
 
     this.auth = cfg.auth;
@@ -87,7 +89,8 @@ module.exports = class PageList {
         custom_path: custom_path,
         auth: this_class.auth,
         parent_list: this_class,
-        globals_path: this_class.globals_path
+        globals_path: this_class.globals_path,
+        required_rights: this_class.required_rights
       }, cms);
 
       this_class.list.push(npage);
@@ -155,7 +158,8 @@ module.exports = class PageList {
         custom_path: custom_path,
         auth: this.auth,
         parent_list: this,
-        globals_path: this.globals_path
+        globals_path: this.globals_path,
+        required_rights: this.required_rights
       };
 
 

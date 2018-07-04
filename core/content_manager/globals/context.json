@@ -1,0 +1,12 @@
+{
+  "title": "Content Management",
+  "menu": [
+    "Gallery",
+    "Posts",
+    "Mailbox"
+  ],
+  "authorized_only": true,
+  "required_rights": [
+    "super_admin"
+  ]
+}

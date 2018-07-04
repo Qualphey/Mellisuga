@@ -279,7 +279,12 @@ module.exports = class {
             break;
           }
         } else {
-          if (!session_data.rights.includes(required_right)) {
+          if (session_data.rights) {
+            if (!session_data.rights.includes(required_right)) {
+              access_granted = false;
+              break;
+            }
+          } else {
             access_granted = false;
             break;
           }

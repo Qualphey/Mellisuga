@@ -18,10 +18,12 @@ const Moduload = require("./moduload/index.js")
 
 const Auth = require("./auth/index.js");
 
-const PostsIO = require("./posts/index.js");
+
 const PagesIO = require("./pages/index.js");
 
 const Mailer = require("./mailer/index.js");
+
+const ContentManager = require("./content_manager/index.js");
 
 
 //const BuiltinIO = require("./pages/builtin.js");
@@ -150,7 +152,9 @@ module.exports = class CMBird {
 
       var auth = this_class.auth = await Auth.init(this_class.app, aura, user_auth_cfg);
 
-      var posts = this_class.posts = await PostsIO.init(this_class);
+      var content_manager = this_class.content_manager = await ContentManager.init(this_class, {});
+
+      
 
       pages_io.serve_dirs('/', path.resolve(this_class.app_path, 'pages'), {
         auth: auth

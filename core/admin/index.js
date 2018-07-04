@@ -42,7 +42,10 @@ module.exports = class {
         auth: auth,
         globals_path: path.resolve(__dirname, 'globals'),
         name: "admin",
-        dev_only: true
+        dev_only: true,
+        required_rights: [
+          'super_admin'
+        ]
       });
     }
 

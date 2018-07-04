@@ -19,7 +19,7 @@ module.exports = class {
     } else {
       this.name = this.full_path.substr(this.full_path.lastIndexOf('/') + 1);
     }
-
+ 
     this.cms = cms;
 
     this.dev_only = cfg.dev_only;
@@ -38,14 +38,22 @@ module.exports = class {
 
     cfg.dir_path = cfg.dir_path || cfg.full_path;
 
-    if (this.context) {
-      /*if (this.context.authorized_only) {
+    /*if (this.context) {
+      if (this.context.authorized_only) {
         this.auth_func = cfg.auth.orize;
-      } else */
-      if (this.context.required_rights && cfg.auth) {
+      } else 
+      if (this.context.required_rights) {
         this.auth_func = cfg.auth.orize_gen(this.context.required_rights);
       }
+    }*/
+    
+    if (cfg.auth && cfg.required_rights) {
+      console.log(this.name, cfg.required_rights);
+
+      this.auth_func = cfg.auth.orize_gen(cfg.required_rights);
     }
+
+ //   console.log(this.auth_func);
 
     this.parent_list = cfg.parent_list;
     this.posts = cms.posts;
@@ -56,7 +64,6 @@ module.exports = class {
       });
     }
 
-    console.log(this.name, "|", globals_path, "|");
 
     this.nunjucks_env = new nunjucks.Environment(new nunjucks.FileSystemLoader([
       this.full_path,

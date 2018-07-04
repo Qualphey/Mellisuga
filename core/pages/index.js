@@ -53,6 +53,7 @@ module.exports = class PagesIO {
       page_cfg.globals_path = cfg.globals_path;
       page_cfg.name = cfg.name;
       page_cfg.dev_only = cfg.dev_only;
+      page_cfg.required_rights = cfg.required_rights;
     }
 
     let new_page = new Page(page_cfg, this.cms);
@@ -70,6 +71,7 @@ module.exports = class PagesIO {
       page_list_cfg.globals_path = cfg.globals_path;
       page_list_cfg.name = cfg.name;
       page_list_cfg.dev_only = cfg.dev_only;
+      page_list_cfg.required_rights = cfg.required_rights;
     }
 
     let new_page_list = new PageList(page_list_cfg, this.cms);

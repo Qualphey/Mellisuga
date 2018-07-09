@@ -8,7 +8,7 @@ module.exports = class {
 
   static async init(cms, cfg) {
     const gallery_path = path.resolve(cms.app_path, "gallery");
-    const admin_path = cms.admin_path;
+    const path_prefix = "/content-manager";
     let app = cms.app;
 
 
@@ -18,7 +18,7 @@ module.exports = class {
 
     this.path = gallery_path;
 
-    app.get("/gallery.ui", function(req, res) {
+    app.get(path_prefix+"/gallery", function(req, res) {
       var data = JSON.parse(req.query.data);
 
       switch (data.command) {
@@ -36,7 +36,7 @@ module.exports = class {
           })
 
           for (var i = 0; i < srcs.length; i++) {
-            srcs[i] = "/gallery.ui-directory/"+srcs[i];
+            srcs[i] = "/gallery-directory/"+srcs[i];
           }
 
           res.send(JSON.stringify(srcs));
@@ -47,10 +47,10 @@ module.exports = class {
 
     });
 
-    app.use('/gallery.ui-directory', express.static(gallery_path));
+    app.use('/gallery-directory', express.static(gallery_path));
 
 
-    app.post(admin_path+"/gallery.io", cms.admin.auth.orize_gen(["content_management"]), function(req, res) {
+    app.post(path_prefix+"/gallery", cms.admin.auth.orize_gen(["content_management"]), function(req, res) {
       var data = JSON.parse(req.body.data);
 
       switch (data.command) {
@@ -78,11 +78,11 @@ module.exports = class {
 
     var upload = multer({ storage: storage })
 
-    app.post(admin_path+'/gallery.io-upload', upload.array('filei'), function(req, res) {
+    app.post(path_prefix+'/gallery-upload', cms.admin.auth.orize_gen(["content_management"]), upload.array('filei'), function(req, res) {
       var data = req.files;
       var name_list = [];
       for (var f = 0; f < data.length; f++) {
-        name_list.push("/gallery.ui-directory/"+data[f].filename);
+        name_list.push("/gallery-directory/"+data[f].filename);
         console.log("File uploaded to: ", data[f].path);
       }
 

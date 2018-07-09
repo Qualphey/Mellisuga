@@ -16,7 +16,7 @@
       grid_ui.resize(window.innerWidth);
     });
 
-    var srcs = await XHR.get('/gallery.ui', {
+    var srcs = await XHR.get('/content-manager/gallery', {
       command: "all"
     });
 
@@ -30,7 +30,7 @@
         grid_ui.add(image.element);
       }
     }
-
+ 
     grid_ui.resize(window.innerWidth);
 
     var add_temp_btn = document.createElement("div");
@@ -60,7 +60,11 @@
 
         var formData = new FormData(form);
 
-        var nsrcs = await XHR.post('gallery.io-upload', { formData: formData });
+        var nsrcs = await XHR.post(
+          '/content-manager/gallery-upload',
+          { formData: formData },
+          'access_token'
+        );
 
         grid_ui.remove(add_temp_btn);
 
@@ -68,13 +72,11 @@
           var src = nsrcs[i];
           var existing = undefined;
           images.forEach(image => {
-            console.log("image", image);
             if (image.src === src) {
               existing = image;
             }
           });
 
-          console.log("existing", existing);
 
           if (existing) {
             grid_ui.remove(existing.element);

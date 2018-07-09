@@ -103,7 +103,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var XHR = __webpack_require__(/*! globals/utils/xhr.js */ "./globals/modules/utils/xhr.js");
+var XHR = __webpack_require__(/*! globals/utils/xhr_async.js */ "./globals/modules/utils/xhr_async.js");
 
 module.exports = function () {
   function _class(img, src, grid_ui) {
@@ -144,10 +144,10 @@ module.exports = function () {
               switch (_context.prev = _context.next) {
                 case 0:
                   _context.next = 2;
-                  return XHR.post("gallery.io", {
+                  return XHR.post("/content-manager/gallery", {
                     command: "rm",
                     src: src
-                  });
+                  }, "access_token");
 
                 case 2:
                   grid_ui.remove(this_class.element);
@@ -308,7 +308,7 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
                         files = this.files;
                         formData = new FormData(form);
                         _context.next = 4;
-                        return XHR.post('gallery.io-upload', { formData: formData });
+                        return XHR.post('/content-manager/gallery-upload', { formData: formData }, 'access_token');
 
                       case 4:
                         nsrcs = _context.sent;
@@ -320,7 +320,7 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
 
                       case 7:
                         if (!(i < nsrcs.length)) {
-                          _context.next = 20;
+                          _context.next = 19;
                           break;
                         }
 
@@ -328,36 +328,33 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
                         existing = undefined;
 
                         images.forEach(function (image) {
-                          console.log("image", image);
                           if (image.src === src) {
                             existing = image;
                           }
                         });
 
-                        console.log("existing", existing);
-
                         if (existing) {
                           grid_ui.remove(existing.element);
                         }
-                        _context.next = 15;
+                        _context.next = 14;
                         return Image.init(src, grid_ui);
 
-                      case 15:
+                      case 14:
                         image = _context.sent;
 
                         if (image) {
                           grid_ui.add(image.element);
                         }
 
-                      case 17:
+                      case 16:
                         i++;
                         _context.next = 7;
                         break;
 
-                      case 20:
+                      case 19:
                         grid_ui.add(add_temp_btn);
 
-                      case 21:
+                      case 20:
                       case 'end':
                         return _context.stop();
                     }
@@ -388,7 +385,7 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
           });
 
           _context2.next = 11;
-          return XHR.get('/gallery.ui', {
+          return XHR.get('/content-manager/gallery', {
             command: "all"
           });
 
@@ -609,6 +606,8 @@ module.exports = function () {
   }, {
     key: 'remove',
     value: function remove(item) {
+      var td_index = this.tds.indexOf(item.parentNode);
+      this.tds.splice(td_index, 1);
       for (var t = 0; t < this.trs.length; t++) {
         var tr = this.trs[t];
         if (tr.contains(item)) {
@@ -736,87 +735,6 @@ module.exports = function () {
 
 /***/ }),
 
-/***/ "./globals/modules/utils/xhr.js":
-/*!**************************************!*\
-  !*** ./globals/modules/utils/xhr.js ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-module.exports = function () {
-  function _class() {
-    _classCallCheck(this, _class);
-  }
-
-  _createClass(_class, null, [{
-    key: "get",
-    value: function get(url, params, callback) {
-      if (params) {
-        url += "?data=" + encodeURIComponent(JSON.stringify(params));
-      }
-
-      var xhr = new XMLHttpRequest();
-      xhr.addEventListener("load", callback);
-      xhr.open("GET", url);
-      xhr.send();
-
-      console.log(url);
-    }
-  }, {
-    key: "post",
-    value: function post(url, params, callback) {
-      if (params.formData) {
-        console.log("FORM DATA");
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url);
-        //  xhr.setRequestHeader("Content-Type","multipart/form-data");
-        xhr.send(params.formData);
-        xhr.addEventListener("load", callback);
-        console.log(url);
-      } else {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url, true);
-
-        //Send the proper header information along with the request
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-        xhr.onreadystatechange = function () {
-          //Call a function when the state changes.
-          if (xhr.readyState == 4 && xhr.status == 200) {
-            callback(xhr.responseText);
-          }
-        };
-
-        var json = JSON.stringify(params);
-        var param_str = 'data=' + encodeURIComponent(json);
-        xhr.send(param_str);
-      }
-    }
-  }, {
-    key: "getParamByName",
-    value: function getParamByName(name, url) {
-      if (!url) url = window.location.href;
-      name = name.replace(/[\[\]]/g, "\\$&");
-      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-          results = regex.exec(url);
-      if (!results) return null;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
-  }]);
-
-  return _class;
-}();
-
-/***/ }),
-
 /***/ "./globals/modules/utils/xhr_async.js":
 /*!********************************************!*\
   !*** ./globals/modules/utils/xhr_async.js ***!
@@ -898,15 +816,18 @@ module.exports = function () {
                 _context2.next = 3;
                 return new Promise(function (resolve) {
                   if (params.formData) {
-                    console.log("FORM DATA");
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", url);
                     //  xhr.setRequestHeader("Content-Type","multipart/form-data");
+                    var token = localStorage.getItem(token_name || "user_access_token");
+                    if (token) {
+                      xhr.setRequestHeader("Authorization", token);
+                    }
+
                     xhr.send(params.formData);
                     xhr.addEventListener("load", function () {
                       resolve(JSON.parse(xhr.responseText));
                     });
-                    console.log(url);
                   } else {
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", url, true);
@@ -925,16 +846,15 @@ module.exports = function () {
                       }
                     };
 
-                    var token = localStorage.getItem(token_name || "user_access_token");
+                    var _token = localStorage.getItem(token_name || "user_access_token");
+                    if (_token) {
+                      xhr.setRequestHeader("Authorization", _token);
+                    }
 
                     var json = JSON.stringify(params);
                     var param_str = 'data=' + encodeURIComponent(json);
-                    if (token) {
-                      param_str += '&access_token=' + token;
-                      xhr.send(param_str);
-                    } else {
-                      xhr.send(param_str);
-                    }
+
+                    xhr.send(param_str);
                   }
                 });
 

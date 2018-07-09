@@ -178,6 +178,7 @@ module.exports = class {
           jwt_token = cookies['access_token'];
         }
       }
+      console.log("HEADERS", req.headers);
 
       let redirect_path = undefined;
       if (req.method === "GET") {
@@ -194,8 +195,8 @@ module.exports = class {
         let session_data = await this.decrypt_token(jwt_token);
         if (session_data) {
           if (req.method === "POST") {
-            if (req.body.access_token) {
-              const csrf_token = req.body.access_token;
+            if (req.body.access_token || req.headers.authorization) {
+              const csrf_token = req.body.access_token || req.headers.authorization;
               if (session_data.csrf === csrf_token) {
                 if (this.check_rights(session_data, required_rights)) {
                   next();

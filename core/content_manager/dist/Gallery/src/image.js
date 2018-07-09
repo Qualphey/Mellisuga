@@ -1,7 +1,7 @@
 
 'use strict'
 
-const XHR = require('globals/utils/xhr.js');
+const XHR = require('globals/utils/xhr_async.js');
 
 module.exports = class {
   constructor(img, src, grid_ui) {
@@ -32,10 +32,10 @@ module.exports = class {
       var ybtn = document.createElement("button");
       ybtn.innerHTML = "yes";
       ybtn.addEventListener("click", async (e) => {
-        await XHR.post("gallery.io", {
+        await XHR.post("/content-manager/gallery", {
           command: "rm",
           src: src
-        });
+        }, "access_token");
         grid_ui.remove(this_class.element);
         document.body.removeChild(popup);
       });

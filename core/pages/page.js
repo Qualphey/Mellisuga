@@ -27,7 +27,9 @@ module.exports = class {
     let index_path = this.index_path = path.resolve(this.full_path, "index.html");
     let context_path = this.context_path = path.resolve(this.full_path, "context.json");
     const globals_path = cfg.globals_path || cms.globals_path;
-    let global_context_path = this.global_context_path = path.resolve(globals_path, "context.json");
+    let global_context_path = this.global_context_path = path.resolve(
+      globals_path, cfg.global_context_path || "context.json"
+    );
     this.update();
 
     this.req_path = cfg.request_path;
@@ -186,10 +188,7 @@ module.exports = class {
               }
               res.redirect(repath);
             } else {
-              var result = await this_class.render_page(this_class.full_path);
-
-              this_class.context.page_name = this_class.name;
-
+              var result = await this_class.render_page(this_class.full_path); 
               if (result.err) {
                 console.error(result.err);
               } else {
@@ -334,6 +333,8 @@ module.exports = class {
 
         context.posts = result;
       }
+
+      context.page_name = this.name;
 
       if (context.lang) {
         const lang_json = fs.readFileSync(

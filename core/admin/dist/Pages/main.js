@@ -625,6 +625,9 @@ module.exports = function () {
     this.element = document.createElement('table');
     this.element.classList.add('grid_ui');
 
+    this.element.cellSpacing = 0;
+    this.element.cellPadding = 0;
+
     for (var i = 0; i < items_in_row; i++) {
       this.element.appendChild(document.createElement('col'));
     }
@@ -680,6 +683,7 @@ module.exports = function () {
     key: 'resize',
     value: function resize(width, break_lines) {
       if (width) {
+        width -= getScrollbarWidth();
         var width_per_item = width / this.inrow_default - this.padding;
         if (width_per_item < this.min_a) {
           this.items_in_row = Math.floor((width - this.padding * this.inrow_default) / this.min_a);
@@ -696,14 +700,14 @@ module.exports = function () {
       }
 
       for (var i = 0; i < this.tds.length; i++) {
-        this.tds[i].style.width = this.item_a + "px";
-        this.tds[i].style.height = this.item_a + "px";
+        this.tds[i].firstChild.style.width = this.item_a + "px";
+        this.tds[i].firstChild.style.height = this.item_a + "px";
 
         this.tds[i].style.minWidth = this.min_a + "px";
         this.tds[i].style.mimHeight = this.min_a + "px";
       }
 
-      this.element.style.width = this.item_a * this.items_in_row + "px";
+      this.element.style.width = (this.item_a + this.padding) * this.items_in_row + "px";
 
       /*
           if (break_lines) {
@@ -739,6 +743,8 @@ module.exports = function () {
   }, {
     key: 'remove',
     value: function remove(item) {
+      var td_index = this.tds.indexOf(item.parentNode);
+      this.tds.splice(td_index, 1);
       for (var t = 0; t < this.trs.length; t++) {
         var tr = this.trs[t];
         if (tr.contains(item)) {
@@ -777,6 +783,31 @@ module.exports = function () {
   return _class;
 }();
 
+function getScrollbarWidth() {
+  var outer = document.createElement("div");
+  outer.style.visibility = "hidden";
+  outer.style.width = "100px";
+  outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+
+  document.body.appendChild(outer);
+
+  var widthNoScroll = outer.offsetWidth;
+  // force scrollbars
+  outer.style.overflow = "scroll";
+
+  // add innerdiv
+  var inner = document.createElement("div");
+  inner.style.width = "100%";
+  outer.appendChild(inner);
+
+  var widthWithScroll = inner.offsetWidth;
+
+  // remove divs
+  outer.parentNode.removeChild(outer);
+
+  return widthNoScroll - widthWithScroll;
+}
+
 /***/ }),
 
 /***/ "./globals/modules/grid.ui/theme.less":
@@ -786,7 +817,7 @@ module.exports = function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-let style = document.createElement('style');style.innerHTML = '.grid_ui {  width: 100%;  table-layout: fixed;}.grid_ui tr {  width: 100%;}.grid_ui td {  padding: 0;}';document.head.appendChild(style);
+let style = document.createElement('style');style.innerHTML = '.grid_ui {  width: 100%;  table-layout: fixed;  margin: 0 auto;}.grid_ui tr {  width: 100%;}.grid_ui td {  padding: 0;}';document.head.appendChild(style);
 
 /***/ }),
 
@@ -922,15 +953,18 @@ module.exports = function () {
                 _context2.next = 3;
                 return new Promise(function (resolve) {
                   if (params.formData) {
-                    console.log("FORM DATA");
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", url);
                     //  xhr.setRequestHeader("Content-Type","multipart/form-data");
+                    var token = localStorage.getItem(token_name || "user_access_token");
+                    if (token) {
+                      xhr.setRequestHeader("Authorization", token);
+                    }
+
                     xhr.send(params.formData);
                     xhr.addEventListener("load", function () {
                       resolve(JSON.parse(xhr.responseText));
                     });
-                    console.log(url);
                   } else {
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", url, true);
@@ -949,16 +983,15 @@ module.exports = function () {
                       }
                     };
 
-                    var token = localStorage.getItem(token_name || "user_access_token");
+                    var _token = localStorage.getItem(token_name || "user_access_token");
+                    if (_token) {
+                      xhr.setRequestHeader("Authorization", _token);
+                    }
 
                     var json = JSON.stringify(params);
                     var param_str = 'data=' + encodeURIComponent(json);
-                    if (token) {
-                      param_str += '&access_token=' + token;
-                      xhr.send(param_str);
-                    } else {
-                      xhr.send(param_str);
-                    }
+
+                    xhr.send(param_str);
                   }
                 });
 
@@ -20952,7 +20985,7 @@ module.exports = yeast;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! babel-polyfill */"./node_modules/babel-polyfill/lib/index.js");
-module.exports = __webpack_require__(/*! /home/qualphey/Development/teisine_apsauga/Mellisuga/core/admin/dist/Pages/src/index.js */"./Mellisuga/core/admin/dist/Pages/src/index.js");
+module.exports = __webpack_require__(/*! /home/qualphey/Development/larvita/Mellisuga/core/admin/dist/Pages/src/index.js */"./Mellisuga/core/admin/dist/Pages/src/index.js");
 
 
 /***/ }),

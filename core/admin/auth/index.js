@@ -280,14 +280,16 @@ module.exports = class {
             break;
           }
         } else {
-          if (session_data.rights) {
+          if (session_data.rights && !session_data.super) {
             if (!session_data.rights.includes(required_right)) {
               access_granted = false;
               break;
             }
           } else {
-            access_granted = false;
-            break;
+            if (!session_data.super) {
+              access_granted = false;
+              break;
+            }
           }
         }
       }

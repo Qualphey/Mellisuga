@@ -72,6 +72,7 @@ module.exports = class PagesIO {
       page_list_cfg.name = cfg.name;
       page_list_cfg.dev_only = cfg.dev_only;
       page_list_cfg.required_rights = cfg.required_rights;
+      page_list_cfg.global_context_path = cfg.global_context_path;
     }
 
     let new_page_list = new PageList(page_list_cfg, this.cms);

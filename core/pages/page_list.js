@@ -38,6 +38,8 @@ module.exports = class PageList {
 
     this.required_rights = cfg.required_rights;
 
+    this.global_context_path = cfg.global_context_path;
+
     this.dev_only = cfg.dev_only;
 
     this.auth = cfg.auth;
@@ -90,7 +92,8 @@ module.exports = class PageList {
         auth: this_class.auth,
         parent_list: this_class,
         globals_path: this_class.globals_path,
-        required_rights: this_class.required_rights
+        required_rights: this_class.required_rights,
+        global_context_path: this_class.global_context_path
       }, cms);
 
       this_class.list.push(npage);

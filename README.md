@@ -1,6 +1,6 @@
 # Mellisuga #
 
-#### a lightweight NodeJS based content management system that aims for flexibility, performance, stability and ease of use. ####
+#### a lightweight NodeJS based content management system and web development environment that aims for flexibility, performance, stability and ease of use. ####
 
 ##### also [Mellisuga is a genus of hummingbirds](https://en.wikipedia.org/wiki/Mellisuga) #####
 

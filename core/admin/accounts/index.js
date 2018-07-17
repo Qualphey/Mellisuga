@@ -8,7 +8,6 @@ module.exports = class {
     this.table = table;
 
     var this_class = this;
-    console.log("ADMINS");
 
     app.post(cmbird.config.admin_path+"/admin_accounts.io", cmbird.admin.auth.orize_gen(["super_admin"]), async function(req, res) {
       try {

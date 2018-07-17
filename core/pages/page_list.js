@@ -53,7 +53,7 @@ module.exports = class PageList {
     let this_class = this;
     let app = this.app = cms.app;
 
-    this.globals_path = cfg.globals_path || cms.globals_path;
+    this.globals_path = cfg.globals_path;
 
     this.config = {};
     const config_path = path.resolve(this.full_path, ".config.json");
@@ -81,9 +81,9 @@ module.exports = class PageList {
           if (page.file == cpath_name) {
             custom_path = cpath[cpath_name];
           }
-
         });
       }
+
 
       let npage = new Page({
         request_path: this_class.req_prefix+encodeURIComponent(page.file),

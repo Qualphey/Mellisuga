@@ -106,7 +106,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var XHR = __webpack_require__(/*! globals/utils/xhr_async.js */ "./globals/modules/utils/xhr_async.js");
 
 module.exports = function () {
-  function _class(img, src, grid_ui) {
+  function _class(img, src, grid_ui, select_all) {
     var _this = this;
 
     _classCallCheck(this, _class);
@@ -123,56 +123,12 @@ module.exports = function () {
 
     var this_class = this;
 
-    var xbtn = document.createElement('button');
-    xbtn.innerHTML = "x";
-
-    xbtn.addEventListener("click", function (e) {
-      var popup = document.createElement('div');
-      popup.classList.add("gallery_ui_popup");
-      document.body.appendChild(popup);
-
-      var message = document.createElement("p");
-      message.innerHTML = "Are you sure you want to delete this image?";
-      popup.appendChild(message);
-
-      var ybtn = document.createElement("button");
-      ybtn.innerHTML = "yes";
-      ybtn.addEventListener("click", function () {
-        var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
-          return regeneratorRuntime.wrap(function _callee$(_context) {
-            while (1) {
-              switch (_context.prev = _context.next) {
-                case 0:
-                  _context.next = 2;
-                  return XHR.post("/content-manager/gallery", {
-                    command: "rm",
-                    src: src
-                  }, "access_token");
-
-                case 2:
-                  grid_ui.remove(this_class.element);
-                  document.body.removeChild(popup);
-
-                case 4:
-                case 'end':
-                  return _context.stop();
-              }
-            }
-          }, _callee, _this);
-        }));
-
-        return function (_x) {
-          return _ref.apply(this, arguments);
-        };
-      }());
-      popup.appendChild(ybtn);
-
-      var nbtn = document.createElement("button");
-      nbtn.innerHTML = "no";
-      nbtn.addEventListener("click", function (e) {
-        document.body.removeChild(popup);
-      });
-      popup.appendChild(nbtn);
+    var checkbox = this.checkbox = document.createElement('input');
+    checkbox.type = "checkbox";
+    checkbox.addEventListener("change", function (e) {
+      if (!checkbox.checked) {
+        select_all.checked = false;
+      }
     });
 
     var displayed = false;
@@ -207,33 +163,49 @@ module.exports = function () {
 
     this.element.addEventListener('mouseover', function (e) {
       if (!displayed) {
-        _this.element.appendChild(xbtn);
+        _this.element.appendChild(checkbox);
       }
     });
 
     this.element.addEventListener('mouseleave', function (e) {
       if (!displayed) {
-        _this.element.removeChild(xbtn);
+        if (!checkbox.checked) {
+          _this.element.removeChild(checkbox);
+        }
       }
     });
 
     this.src = src;
   }
 
-  _createClass(_class, null, [{
+  _createClass(_class, [{
+    key: 'select',
+    value: function select() {
+      this.checkbox.checked = true;
+      this.element.appendChild(this.checkbox);
+    }
+  }, {
+    key: 'deselect',
+    value: function deselect() {
+      this.checkbox.checked = false;
+      if (this.element.contains(this.checkbox)) {
+        this.element.removeChild(this.checkbox);
+      }
+    }
+  }], [{
     key: 'init',
     value: function () {
-      var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(src, grid_ui) {
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(src, grid_ui, select_all) {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context.prev = _context.next) {
               case 0:
-                _context2.next = 2;
+                _context.next = 2;
                 return new Promise(function (resolve) {
                   var img = document.createElement('img');
                   img.src = src;
                   img.addEventListener("load", function (e) {
-                    resolve(new module.exports(img, src, grid_ui));
+                    resolve(new module.exports(img, src, grid_ui, select_all));
                   });
 
                   img.addEventListener("error", function (e) {
@@ -243,18 +215,18 @@ module.exports = function () {
                 });
 
               case 2:
-                return _context2.abrupt('return', _context2.sent);
+                return _context.abrupt('return', _context.sent);
 
               case 3:
               case 'end':
-                return _context2.stop();
+                return _context.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee, this);
       }));
 
-      function init(_x2, _x3) {
-        return _ref2.apply(this, arguments);
+      function init(_x, _x2, _x3) {
+        return _ref.apply(this, arguments);
       }
 
       return init;
@@ -278,13 +250,13 @@ module.exports = function () {
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-  var upload_image, XHR, Image, GridUI, grid_ui, srcs, images, i, src, image, add_temp_btn, text;
-  return regeneratorRuntime.wrap(function _callee2$(_context2) {
+_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+  var upload_image, XHR, Image, GridUI, grid_ui, add_temp_btn, text, srcs, images, select_all, delete_selection_button, i, src, image;
+  return regeneratorRuntime.wrap(function _callee3$(_context3) {
     while (1) {
-      switch (_context2.prev = _context2.next) {
+      switch (_context3.prev = _context3.next) {
         case 0:
-          _context2.prev = 0;
+          _context3.prev = 0;
 
           upload_image = function upload_image() {
             var form = document.createElement('form');
@@ -299,28 +271,24 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
             form.appendChild(upload_input);
 
             upload_input.addEventListener("change", function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
+              var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(e) {
                 var files, formData, nsrcs, i, src, existing, image;
-                return regeneratorRuntime.wrap(function _callee$(_context) {
+                return regeneratorRuntime.wrap(function _callee2$(_context2) {
                   while (1) {
-                    switch (_context.prev = _context.next) {
+                    switch (_context2.prev = _context2.next) {
                       case 0:
                         files = this.files;
                         formData = new FormData(form);
-                        _context.next = 4;
+                        _context2.next = 4;
                         return XHR.post('/content-manager/gallery-upload', { formData: formData }, 'access_token');
 
                       case 4:
-                        nsrcs = _context.sent;
-
-
-                        grid_ui.remove(add_temp_btn);
-
+                        nsrcs = _context2.sent;
                         i = 0;
 
-                      case 7:
+                      case 6:
                         if (!(i < nsrcs.length)) {
-                          _context.next = 19;
+                          _context2.next = 18;
                           break;
                         }
 
@@ -336,34 +304,32 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
                         if (existing) {
                           grid_ui.remove(existing.element);
                         }
-                        _context.next = 14;
-                        return Image.init(src, grid_ui);
+                        _context2.next = 13;
+                        return Image.init(src, grid_ui, select_all);
 
-                      case 14:
-                        image = _context.sent;
+                      case 13:
+                        image = _context2.sent;
 
                         if (image) {
-                          grid_ui.add(image.element);
+                          grid_ui.insert(image.element, 1);
+                          images.push(image);
                         }
 
-                      case 16:
+                      case 15:
                         i++;
-                        _context.next = 7;
+                        _context2.next = 6;
                         break;
 
-                      case 19:
-                        grid_ui.add(add_temp_btn);
-
-                      case 20:
+                      case 18:
                       case 'end':
-                        return _context.stop();
+                        return _context2.stop();
                     }
                   }
-                }, _callee, this);
+                }, _callee2, this);
               }));
 
-              return function (_x) {
-                return _ref2.apply(this, arguments);
+              return function (_x2) {
+                return _ref3.apply(this, arguments);
               };
             }(), false);
             upload_input.click();
@@ -371,95 +337,172 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
 
           XHR = __webpack_require__(/*! globals/utils/xhr_async.js */ "./globals/modules/utils/xhr_async.js");
           Image = __webpack_require__(/*! ./image.js */ "./Mellisuga/core/content_manager/dist/Gallery/src/image.js");
-
-
-          __webpack_require__(/*! ./style.less */ "./Mellisuga/core/content_manager/dist/Gallery/src/style.less");
-
           GridUI = __webpack_require__(/*! globals/grid.ui/index.js */ "./globals/modules/grid.ui/index.js");
           grid_ui = new GridUI(6, window.innerWidth, 10, 300);
 
           document.body.appendChild(grid_ui.element);
+          grid_ui.resize(window.innerWidth);
 
           window.addEventListener('resize', function () {
             grid_ui.resize(window.innerWidth);
           });
-
-          _context2.next = 11;
-          return XHR.get('/content-manager/gallery', {
-            command: "all"
-          });
-
-        case 11:
-          srcs = _context2.sent;
-          images = [];
-          i = 0;
-
-        case 14:
-          if (!(i < srcs.length)) {
-            _context2.next = 23;
-            break;
-          }
-
-          src = srcs[i];
-          _context2.next = 18;
-          return Image.init(src, grid_ui);
-
-        case 18:
-          image = _context2.sent;
-
-          if (image) {
-            images.push(image);
-            grid_ui.add(image.element);
-          }
-
-        case 20:
-          i++;
-          _context2.next = 14;
-          break;
-
-        case 23:
-
-          grid_ui.resize(window.innerWidth);
 
           add_temp_btn = document.createElement("div");
 
           add_temp_btn.classList.add("gallery_ui_item");
           add_temp_btn.classList.add("gallery_ui_add");
           add_temp_btn.addEventListener("click", upload_image);
-          grid_ui.add(add_temp_btn);
 
           text = document.createElement("h3");
 
           text.innerHTML = "++";
           add_temp_btn.appendChild(text);
 
-          _context2.next = 37;
+          grid_ui.add(add_temp_btn);
+
+          _context3.next = 19;
+          return XHR.get('/content-manager/gallery', {
+            command: "all"
+          });
+
+        case 19:
+          srcs = _context3.sent;
+          images = [];
+          select_all = document.getElementById("select_all");
+
+          select_all.addEventListener("change", function (e) {
+            if (select_all.checked) {
+              for (var _i = 0; _i < images.length; _i++) {
+                images[_i].select();
+              }
+            } else {
+              for (var _i2 = 0; _i2 < images.length; _i2++) {
+                images[_i2].deselect();
+              }
+            }
+          });
+
+          delete_selection_button = document.getElementById("delete_selection");
+
+          delete_selection_button.addEventListener('click', function (e) {
+            var _this = this;
+
+            var selected_items = [];
+            var srcs = [];
+            for (var _i3 = 0; _i3 < images.length; _i3++) {
+              if (images[_i3].checkbox.checked) {
+                selected_items.push(images[_i3]);
+                srcs.push(images[_i3].src);
+              }
+            }
+
+            if (selected_items.length > 0) {
+              var popup = document.createElement('div');
+              popup.classList.add("gallery_ui_popup");
+              document.body.appendChild(popup);
+
+              var message = document.createElement("p");
+              message.innerHTML = "Are you sure you want to delete the images that you've selected?";
+              popup.appendChild(message);
+
+              var ybtn = document.createElement("button");
+              ybtn.innerHTML = "yes";
+              ybtn.addEventListener("click", function () {
+                var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
+                  var resp, _i4;
+
+                  return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          _context.next = 2;
+                          return XHR.post("/content-manager/gallery", {
+                            command: "rm",
+                            src: srcs
+                          }, "access_token");
+
+                        case 2:
+                          resp = _context.sent;
+
+                          if (resp === "success") {
+                            for (_i4 = 0; _i4 < selected_items.length; _i4++) {
+                              grid_ui.remove(selected_items[_i4].element);
+                              images.splice(images.indexOf(selected_items[_i4]), 1);
+                            }
+
+                            document.body.removeChild(popup);
+
+                            select_all.checked = false;
+                          } else {
+                            window.location.reload();
+                          }
+
+                        case 4:
+                        case 'end':
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee, _this);
+                }));
+
+                return function (_x) {
+                  return _ref2.apply(this, arguments);
+                };
+              }());
+              popup.appendChild(ybtn);
+
+              var nbtn = document.createElement("button");
+              nbtn.innerHTML = "no";
+              nbtn.addEventListener("click", function (e) {
+                document.body.removeChild(popup);
+              });
+              popup.appendChild(nbtn);
+            }
+          });
+
+          i = 0;
+
+        case 26:
+          if (!(i < srcs.length)) {
+            _context3.next = 36;
+            break;
+          }
+
+          src = srcs[i];
+          _context3.next = 30;
+          return Image.init(src, grid_ui, select_all);
+
+        case 30:
+          image = _context3.sent;
+
+          if (image) {
+            images.push(image);
+            grid_ui.add(image.element);
+          }
+          grid_ui.resize(window.innerWidth);
+
+        case 33:
+          i++;
+          _context3.next = 26;
           break;
 
-        case 34:
-          _context2.prev = 34;
-          _context2.t0 = _context2['catch'](0);
+        case 36:
+          _context3.next = 41;
+          break;
 
-          console.error(_context2.t0);
+        case 38:
+          _context3.prev = 38;
+          _context3.t0 = _context3['catch'](0);
 
-        case 37:
+          console.error(_context3.t0);
+
+        case 41:
         case 'end':
-          return _context2.stop();
+          return _context3.stop();
       }
     }
-  }, _callee2, undefined, [[0, 34]]);
+  }, _callee3, undefined, [[0, 38]]);
 }))();
-
-/***/ }),
-
-/***/ "./Mellisuga/core/content_manager/dist/Gallery/src/style.less":
-/*!********************************************************************!*\
-  !*** ./Mellisuga/core/content_manager/dist/Gallery/src/style.less ***!
-  \********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-let style = document.createElement('style');style.innerHTML = '.gallery_ui {  padding: 0px;  width: calc(100% - 20px);  user-select: none;}.gallery_ui_item {  background-color: transparent;  width: 100%;  height: 100%;  padding: 2px;  display: flex;  align-items: center;  justify-content: center;  position: relative;  cursor: pointer;  border: 1px solid #444;  margin: 0 auto;  margin-top: 4px;}.gallery_ui_item img {  max-height: 100%;  max-width: 100%;}.gallery_ui_item:hover {  background-color: #04123a1f 1f;  border: 1px solid #222f5294 94;}.gallery_ui_item button {  position: absolute;  bottom: 5px;  right: 5px;}.gallery_ui_add {  display: flex;  align-items: center;  justify-content: center;  cursor: pointer;}.gallery_ui_popup {  background-color: #090909;  position: fixed;  left: 50%;  top: 50%;  transform: translate(-50%, -50%);  padding: 50px;  width: 500px;}.gallery_ui_popup button {  float: right;}.gallery_ui_display {  position: fixed;  left: 0;  top: 0;  right: 0;  bottom: 0;  z-index: 998;  background-color: #111;  cursor: default;  display: flex;  align-items: center;  justify-content: center;}.gallery_ui_display img {  max-height: 100%;  max-width: 100%;}.gallery_ui_display div {  position: fixed;  top: 0px;  right: 0px;  width: 300px;  height: 300px;  bottom: auto;}.gallery_ui_display button {  position: absolute;  top: 5px;  right: 5px;  bottom: auto;  background-color: #0001 1;  border: 0;  color: #FFF;  font-size: 26px;  cursor: pointer;}.gallery_ui_display button:hover {  position: absolute;  top: 5px;  right: 5px;  bottom: auto;  background-color: #0003 3;  border: 0;  color: #FFF;  font-size: 26px;}.gallery_ui_display:hover {  background-color: #111;}.eye_food {  width: 100%;  height: 100vh;  background-image: url(/gallery.ui-directory/10862620_637728049686166_6873412133900216545_o.jpg);  background-repeat: no-repeat;  background-position: center;  background-size: cover;  position: relative;}.eye_food h1 {  font-family: "Ruthie", cursive;  font-size: 72px;  font-weight: normal;  position: absolute;  color: #FFF;  margin: 0;  top: 15px;  left: 15px;  text-shadow: 0px 0px 10px #000000;  z-index: 2;}.lighting {  position: absolute;  left: 0;  right: 0;  top: 0;  bottom: 0;  z-index: 1;  background: radial-gradient(rgba(16, 16, 16, 0), rgba(16, 16, 16, 0.36), rgba(16, 16, 16, 0.65));}.shadow_space {  height: 50px;  width: 100%;  border-top: 1px solid #212e52;  background: linear-gradient(rgba(17, 24, 51, 0.53), rgba(9, 9, 9, 0));}#menu {  position: absolute;  left: 50%;  -webkit-transform: translateX(-50%);  transform: translateX(-50%);  bottom: 0;  z-index: 2;  min-width: 733px;}#menu button {  color: #FFF;  text-shadow: 0px 0px 10px #000000;  background: none;  border: 0;  font-family: "Caveat", cursive;  font-size: 32px;  padding: 20px 80px;  cursor: pointer;}#menu button:hover {  background: #00000044 44;  border: 0;}';document.head.appendChild(style);
 
 /***/ }),
 
@@ -544,8 +587,9 @@ module.exports = function () {
     }
   }, {
     key: 'resize',
-    value: function resize(width, break_lines) {
+    value: function resize(width) {
       if (width) {
+        this.cur_width = width;
         width -= getScrollbarWidth();
         var width_per_item = width / this.inrow_default - this.padding;
         if (width_per_item < this.min_a) {
@@ -572,13 +616,6 @@ module.exports = function () {
 
       this.element.style.width = (this.item_a + this.padding) * this.items_in_row + "px";
 
-      /*
-          if (break_lines) {
-            const nwidth = width-this.padding;
-            this.element.style.minWidth = nwidth+"px";
-            this.element.style.width = nwidth+"px";
-          }
-      */
       this.element.parentNode.style.minHeight = this.element.offsetHeight + "px";
     }
   }, {
@@ -594,13 +631,32 @@ module.exports = function () {
 
         this.trs.push(this.cur_tr);
         this.tds.push(td);
-        this.resize();
+        this.resize(this.cur_width);
       } else {
         var td = document.createElement('td');
         td.appendChild(item);
         this.cur_tr.add(td);
         this.tds.push(td);
-        this.resize();
+        this.resize(this.cur_width);
+      }
+    }
+  }, {
+    key: 'insert',
+    value: function insert(item, index) {
+
+      if (index >= this.tds.length) {
+        console.log("RE ADD");
+        this.add(item);
+      } else {
+        var cur_tr = this.trs[Math.floor(index / this.items_in_row)];
+
+        var td = document.createElement('td');
+        td.appendChild(item);
+
+        cur_tr.insert(td, index % this.items_in_row);
+
+        this.tds.splice(index, 0, td);
+        this.resize(this.cur_width);
       }
     }
   }, {
@@ -714,6 +770,14 @@ module.exports = function () {
       this.tds.push(td);
       this.items++;
       this.element.appendChild(td);
+    }
+  }, {
+    key: 'insert',
+    value: function insert(td, index) {
+      this.tds.splice(index, 0, td);
+      var cur_tds = this.element.getElementsByTagName('td');
+      this.element.insertBefore(td, cur_tds[index]);
+      this.items++;
     }
   }, {
     key: 'remove',

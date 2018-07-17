@@ -5,14 +5,16 @@
     <meta charset="UTF-8">
     <title>{{ title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="g/theme.css" rel="stylesheet">
+    <link href="/content_management/g/theme.css" rel="stylesheet">
+    <link href="theme.css" rel="stylesheet">
   </head>
   <body>
-    <header>
-      {% for item in menu %}
-      <a href="{{ item.path }}">{{ item.name }}</a>
-      {% endfor %}
-    </header>
+    {% include "header.njk" %} 
+    <div class="controls"> 
+      <input id="select_all" type="checkbox" value="Select All">
+      <button id="delete_selection">Delete</button>
+    </div>
+    
 	</body>
   <script src="main.js"></script>
 </html>

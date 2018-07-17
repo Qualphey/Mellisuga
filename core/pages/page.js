@@ -27,9 +27,11 @@ module.exports = class {
     let index_path = this.index_path = path.resolve(this.full_path, "index.html");
     let context_path = this.context_path = path.resolve(this.full_path, "context.json");
     const globals_path = cfg.globals_path || cms.globals_path;
+
     let global_context_path = this.global_context_path = path.resolve(
       globals_path, cfg.global_context_path || "context.json"
     );
+
     this.update();
 
     this.req_path = cfg.request_path;

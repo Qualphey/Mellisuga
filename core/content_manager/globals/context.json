@@ -3,7 +3,8 @@
   "menu": [
     "Gallery",
     "Posts",
-    "Mailbox"
+    "Mailbox",
+    "Users"
   ],
   "authorized_only": true,
   "required_rights": [

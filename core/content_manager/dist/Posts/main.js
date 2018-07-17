@@ -86,6 +86,526 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./Mellisuga/core/content_manager/dist/Posts/src/edit.html":
+/*!*****************************************************************!*\
+  !*** ./Mellisuga/core/content_manager/dist/Posts/src/edit.html ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"post_editor\" style=\"display: none\">\n  <input type=\"text\" class=\"post_title_input\" placeholder=\"Title\" />\n  <textarea class=\"jodit\" name=\"jodit\"></textarea>\n  <input type=\"text\" class=\"post_tags_input\" placeholder=\"Tags `i.e. tag1 tag2 tag3` (split by spaces)\" />\n  <input type=\"submit\" class=\"post_submit_input\" />\n  <input type=\"submit\" value=\"Cancel\" class=\"post_cancel_input\" />\n  <div class=\"post_element\">\n    <h3 class=\"post_display_title post_title\"></h3>\n    <div class=\"post_display post_content\"></div>\n  </div>\n</div>\n\n";
+
+/***/ }),
+
+/***/ "./Mellisuga/core/content_manager/dist/Posts/src/index.js":
+/*!****************************************************************!*\
+  !*** ./Mellisuga/core/content_manager/dist/Posts/src/index.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+var XHR = __webpack_require__(/*! globals/utils/xhr_async.js */ "./globals/modules/utils/xhr_async.js");
+var Post = __webpack_require__(/*! ./post.js */ "./Mellisuga/core/content_manager/dist/Posts/src/post.js");
+
+__webpack_require__(/*! ./style.css */ "./Mellisuga/core/content_manager/dist/Posts/src/style.css");
+
+_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+  var div, post_list, posts, p, post, post_editor, title_input, tags_input, submit_input, post_display_title, post_display, jodit_area, jodit, new_post_button;
+  return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          div = document.body.querySelector('.content-block');
+
+
+          div.classList.add('posts');
+
+          post_list = div.querySelector(".post_list");
+          _context2.next = 5;
+          return XHR.get('/posts', { command: "all" });
+
+        case 5:
+          posts = _context2.sent;
+
+
+          for (p = 0; p < posts.length; p++) {
+            post = new Post(posts[p]);
+
+            post_list.insertBefore(post.element, post_list.firstChild);
+          }
+
+          post_editor = div.querySelector(".post_editor"), title_input = div.querySelector(".post_title_input"), tags_input = div.querySelector(".post_tags_input"), submit_input = div.querySelector(".post_submit_input"), post_display_title = div.querySelector(".post_display_title"), post_display = div.querySelector(".post_display"), jodit_area = div.querySelector(".jodit");
+
+
+          title_input.addEventListener("input", function (e) {
+            post_display_title.innerHTML = title_input.value;
+          });
+
+          jodit_area.id = "jodit";
+          jodit = new Jodit('#jodit', {
+            toolbarAdaptive: false
+          });
+
+          jodit_area.id = "";
+
+          jodit.events.on("change", function () {
+            post_display.innerHTML = jodit.value;
+          });
+
+          submit_input.addEventListener("click", function () {
+            var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
+              var data, res, post;
+              return regeneratorRuntime.wrap(function _callee$(_context) {
+                while (1) {
+                  switch (_context.prev = _context.next) {
+                    case 0:
+                      data = {
+                        command: "create",
+                        post: {
+                          title: title_input.value,
+                          content: jodit.value,
+                          tags: tags_input.value.split(" ")
+                        }
+                      };
+
+
+                      console.log("CREATE ONE POST");
+
+                      _context.next = 4;
+                      return XHR.post('/content-manager/posts', data);
+
+                    case 4:
+                      res = _context.sent;
+
+
+                      if (res.err) {
+                        console.error(res.err);
+                      } else {
+                        data.post.id = res.id;
+                        post = new Post(data.post);
+
+                        post_list.insertBefore(post.element, post_list.firstChild);
+                        new_post_button.style.display = "block";
+                        post_editor.style.display = "none";
+
+                        title_input.value = '';
+                        jodit.value = '';
+                        tags_input.value = '';
+                      }
+
+                    case 6:
+                    case 'end':
+                      return _context.stop();
+                  }
+                }
+              }, _callee, this);
+            }));
+
+            return function (_x) {
+              return _ref2.apply(this, arguments);
+            };
+          }());
+
+          new_post_button = div.querySelector(".new_post_button");
+
+          new_post_button.addEventListener("click", function (e) {
+            new_post_button.style.display = "none";
+            post_editor.style.display = "block";
+          });
+
+        case 16:
+        case 'end':
+          return _context2.stop();
+      }
+    }
+  }, _callee2, this);
+}))();
+
+/***/ }),
+
+/***/ "./Mellisuga/core/content_manager/dist/Posts/src/post.html":
+/*!*****************************************************************!*\
+  !*** ./Mellisuga/core/content_manager/dist/Posts/src/post.html ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n<h3 class=\"post_title\"></h3>\n<button class=\"post_edit_btn\">/</button>\n<button class=\"post_del_btn\">X</button>\n<div class=\"post_content\"></div>\n";
+
+/***/ }),
+
+/***/ "./Mellisuga/core/content_manager/dist/Posts/src/post.js":
+/*!***************************************************************!*\
+  !*** ./Mellisuga/core/content_manager/dist/Posts/src/post.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var XHR = __webpack_require__(/*! globals/utils/xhr_async.js */ "./globals/modules/utils/xhr_async.js");
+
+var html = __webpack_require__(/*! ./post.html */ "./Mellisuga/core/content_manager/dist/Posts/src/post.html");
+var edit_html = __webpack_require__(/*! ./edit.html */ "./Mellisuga/core/content_manager/dist/Posts/src/edit.html");
+
+module.exports = function () {
+  function _class(obj) {
+    _classCallCheck(this, _class);
+
+    console.log("POST", obj);
+    this.element = document.createElement('div');
+
+    this.display(obj);
+  }
+
+  _createClass(_class, [{
+    key: 'edit',
+    value: function edit(obj) {
+      var div = this.element;
+
+      div.innerHTML = edit_html;
+
+      var post_editor = div.querySelector(".post_editor");
+      var title_input = div.querySelector(".post_title_input");
+      title_input.value = obj.title;
+      var tags_input = div.querySelector(".post_tags_input");
+      tags_input.value = obj.tags;
+      var submit_input = div.querySelector(".post_submit_input"),
+          cancel_input = div.querySelector(".post_cancel_input"),
+          post_display_title = div.querySelector(".post_display_title"),
+          post_display = div.querySelector(".post_display"),
+          jodit_area = div.querySelector(".jodit");
+
+      var this_class = this;
+      cancel_input.addEventListener("click", function (e) {
+        this_class.display(obj);
+      });
+
+      title_input.addEventListener("input", function (e) {
+        post_display_title.innerHTML = title_input.value;
+      });
+
+      jodit_area.id = "jodit";
+      var jodit = new Jodit('#jodit', {
+        toolbarAdaptive: false
+      });
+      jodit_area.id = "";
+
+      jodit.value = obj.content;
+
+      post_editor.style.display = "block";
+
+      submit_input.addEventListener("click", function () {
+        var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
+          var data, response;
+          return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  data = {
+                    command: "edit",
+                    post: {
+                      id: obj.id,
+                      title: title_input.value,
+                      content: jodit.value,
+                      tags: tags_input.value.split(" ")
+                    }
+                  };
+
+
+                  console.log("edit post");
+                  _context.next = 4;
+                  return XHR.post('/content-manager/posts', data);
+
+                case 4:
+                  response = _context.sent;
+
+                  console.log("response", response);
+                  if (response === "success") {
+                    console.log("Post successfuly edited!");
+                    obj.title = title_input.value;
+                    obj.content = jodit.value;
+                    obj.tags = tags_input.value.split(" ");
+                    this_class.make_first();
+                    div.innerHTML = html;
+                    this_class.display(obj);
+                  }
+
+                case 7:
+                case 'end':
+                  return _context.stop();
+              }
+            }
+          }, _callee, this);
+        }));
+
+        return function (_x) {
+          return _ref.apply(this, arguments);
+        };
+      }());
+    }
+  }, {
+    key: 'make_first',
+    value: function make_first() {
+      var parent = this.element.parentNode;
+      parent.removeChild(this.element);
+      parent.insertBefore(this.element, parent.firstChild);
+    }
+  }, {
+    key: 'display',
+    value: function display(obj) {
+      this.element.innerHTML = html;
+      this.element.classList.add('post_element');
+
+      var title = this.element.querySelector('.post_title');
+      title.innerHTML = obj.title;
+      title.classList.add('post_display_title');
+
+      var edit_btn = this.element.querySelector('.post_edit_btn');
+
+      var this_class = this;
+      edit_btn.addEventListener("click", function (e) {
+        this_class.edit(obj);
+      });
+
+      var del_btn = this.element.querySelector('.post_del_btn');
+      del_btn.addEventListener("click", function () {
+        var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(e) {
+          var response;
+          return regeneratorRuntime.wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  _context2.next = 2;
+                  return XHR.post('/content-manager/posts', {
+                    command: "delete", ids: [obj.id]
+                  });
+
+                case 2:
+                  response = _context2.sent;
+
+                  if (response == "success") {
+                    this_class.element.parentNode.removeChild(this_class.element);
+                  }
+
+                case 4:
+                case 'end':
+                  return _context2.stop();
+              }
+            }
+          }, _callee2, this);
+        }));
+
+        return function (_x2) {
+          return _ref2.apply(this, arguments);
+        };
+      }());
+
+      var content = this.element.querySelector('.post_content');
+
+      var content_str = obj.content;
+      var max_length = 1024;
+      if (content_str.length > max_length) {
+        content_str = content_str.substring(0, max_length) + '...';
+      }
+      content.innerHTML = content_str;
+      content.classList.add('post_display');
+    }
+  }]);
+
+  return _class;
+}();
+
+/***/ }),
+
+/***/ "./Mellisuga/core/content_manager/dist/Posts/src/style.css":
+/*!*****************************************************************!*\
+  !*** ./Mellisuga/core/content_manager/dist/Posts/src/style.css ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+let style = document.createElement('style');style.innerHTML = '.posts  {  width: calc(100%-20px);  margin: auto;  padding: 10px;}.post_display, table {  width: 100%;}.post_title {  display: inline-block;  margin: 0;  padding: 10px 30px;}.post_element button {  float: right;}.post_element {  margin-top: 20px;}.post_content {  padding: 0px 20px;  width: calc(100% - 40px);  word-wrap: break-word;}.new_post_button {  width: 100%;  height: 40px;  line-height: 40px;  text-align: center;  background-color: #111;  color: #FFF;  cursor: pointer;  user-select: none;}.new_post_button:hover {  background-color: #222;}.post_title_input {  width: 300px;}.post_tags_input {  width: 500px;}.post_submit_input, .post_cancel_input {  width: 120px;  float: right;}.note-toolbar {  z-index: 1;}';document.head.appendChild(style);
+
+/***/ }),
+
+/***/ "./globals/modules/utils/xhr_async.js":
+/*!********************************************!*\
+  !*** ./globals/modules/utils/xhr_async.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+module.exports = function () {
+  function _class() {
+    _classCallCheck(this, _class);
+  }
+
+  _createClass(_class, null, [{
+    key: "get",
+    value: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(url, params) {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return new Promise(function (resolve) {
+                  if (params) {
+                    url += "?data=" + encodeURIComponent(JSON.stringify(params));
+                  }
+
+                  var xhr = new XMLHttpRequest();
+
+                  xhr.addEventListener("load", function () {
+                    resolve(JSON.parse(this.responseText));
+                  });
+                  xhr.open("GET", url);
+                  xhr.send();
+                });
+
+              case 3:
+                return _context.abrupt("return", _context.sent);
+
+              case 6:
+                _context.prev = 6;
+                _context.t0 = _context["catch"](0);
+
+                console.error(_context.t0);
+                return _context.abrupt("return", undefined);
+
+              case 10:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[0, 6]]);
+      }));
+
+      function get(_x, _x2) {
+        return _ref.apply(this, arguments);
+      }
+
+      return get;
+    }()
+  }, {
+    key: "post",
+    value: function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(url, params, token_name) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return new Promise(function (resolve) {
+                  if (params.formData) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", url);
+                    //  xhr.setRequestHeader("Content-Type","multipart/form-data");
+                    var token = localStorage.getItem(token_name || "user_access_token");
+                    if (token) {
+                      xhr.setRequestHeader("Authorization", token);
+                    }
+
+                    xhr.send(params.formData);
+                    xhr.addEventListener("load", function () {
+                      resolve(JSON.parse(xhr.responseText));
+                    });
+                  } else {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", url, true);
+
+                    //Send the proper header information along with the request
+                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                    xhr.onreadystatechange = function () {
+                      //Call a function when the state changes.
+                      if (xhr.readyState == 4 && xhr.status == 200) {
+                        try {
+                          resolve(JSON.parse(xhr.responseText));
+                        } catch (e) {
+                          resolve(xhr.responseText);
+                        }
+                      }
+                    };
+
+                    var _token = localStorage.getItem(token_name || "user_access_token");
+                    if (_token) {
+                      xhr.setRequestHeader("Authorization", _token);
+                    }
+
+                    var json = JSON.stringify(params);
+                    var param_str = 'data=' + encodeURIComponent(json);
+
+                    xhr.send(param_str);
+                  }
+                });
+
+              case 3:
+                return _context2.abrupt("return", _context2.sent);
+
+              case 6:
+                _context2.prev = 6;
+                _context2.t0 = _context2["catch"](0);
+
+                console.error(_context2.t0);
+                return _context2.abrupt("return", undefined);
+
+              case 10:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[0, 6]]);
+      }));
+
+      function post(_x3, _x4, _x5) {
+        return _ref2.apply(this, arguments);
+      }
+
+      return post;
+    }()
+  }, {
+    key: "getParamByName",
+    value: function getParamByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+  }]);
+
+  return _class;
+}();
+
+/***/ }),
+
 /***/ "./node_modules/babel-polyfill/lib/index.js":
 /*!**************************************************!*\
   !*** ./node_modules/babel-polyfill/lib/index.js ***!
@@ -11256,7 +11776,7 @@ module.exports = function (module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! babel-polyfill */"./node_modules/babel-polyfill/lib/index.js");
-!(function webpackMissingModule() { var e = new Error("Cannot find module '/home/qualphey/Development/larvita/Mellisuga/core/content_manager/dist/Posts/src/index.js'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+module.exports = __webpack_require__(/*! /home/qualphey/Development/larvita/Mellisuga/core/content_manager/dist/Posts/src/index.js */"./Mellisuga/core/content_manager/dist/Posts/src/index.js");
 
 
 /***/ })

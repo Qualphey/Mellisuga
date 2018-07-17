@@ -1,6 +1,6 @@
 {
   "name": "mellisuga",
-  "version": "0.2.20",
+  "version": "0.2.21",
   "description": "a lightweight NodeJS based content management system that aims for flexibility, performance, stability and ease of use",
   "main": "index.js",
   "repository": "https://github.com/Qualphey/Mellisuga",

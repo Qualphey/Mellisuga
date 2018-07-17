@@ -4,7 +4,7 @@
 const XHR = require('globals/utils/xhr_async.js');
 
 module.exports = class {
-  constructor(img, src, grid_ui) {
+  constructor(img, src, grid_ui, select_all) {
     this.element = document.createElement("div");
     this.element.classList.add("gallery_ui_item");
     this.element.appendChild(img);
@@ -17,36 +17,12 @@ module.exports = class {
 
     let this_class = this;
 
-    var xbtn = document.createElement('button');
-    xbtn.innerHTML = "x";
-
-    xbtn.addEventListener("click", e => {
-      var popup = document.createElement('div');
-      popup.classList.add("gallery_ui_popup");
-      document.body.appendChild(popup);
-
-      var message = document.createElement("p");
-      message.innerHTML = "Are you sure you want to delete this image?";
-      popup.appendChild(message);
-
-      var ybtn = document.createElement("button");
-      ybtn.innerHTML = "yes";
-      ybtn.addEventListener("click", async (e) => {
-        await XHR.post("/content-manager/gallery", {
-          command: "rm",
-          src: src
-        }, "access_token");
-        grid_ui.remove(this_class.element);
-        document.body.removeChild(popup);
-      });
-      popup.appendChild(ybtn);
-
-      var nbtn = document.createElement("button");
-      nbtn.innerHTML = "no";
-      nbtn.addEventListener("click", (e) => {
-        document.body.removeChild(popup);
-      });
-      popup.appendChild(nbtn);
+    let checkbox = this.checkbox = document.createElement('input');
+    checkbox.type = "checkbox";
+    checkbox.addEventListener("change", function(e) {
+      if (!checkbox.checked) {
+        select_all.checked = false; 
+      }
     });
 
     let displayed = false;
@@ -81,25 +57,39 @@ module.exports = class {
 
     this.element.addEventListener('mouseover', e => {
       if (!displayed) {
-        this.element.appendChild(xbtn);
+        this.element.appendChild(checkbox);
       }
     });
 
     this.element.addEventListener('mouseleave', e => {
       if (!displayed) {
-        this.element.removeChild(xbtn);
+        if (!checkbox.checked) {
+          this.element.removeChild(checkbox);
+        }
       }
     });
 
     this.src = src;
   }
 
-  static async init(src, grid_ui) {
+  select() {
+    this.checkbox.checked = true;
+    this.element.appendChild(this.checkbox);
+  }
+
+  deselect() {
+    this.checkbox.checked = false;
+    if (this.element.contains(this.checkbox)) {
+      this.element.removeChild(this.checkbox);
+    } 
+  }
+
+  static async init(src, grid_ui, select_all) {
     return await new Promise(resolve => {
       var img = document.createElement('img');
       img.src = src;
       img.addEventListener("load", e => {
-        resolve(new module.exports(img, src, grid_ui));
+        resolve(new module.exports(img, src, grid_ui, select_all));
       });
 
       img.addEventListener("error", e => {

@@ -178,7 +178,6 @@ module.exports = class {
           jwt_token = cookies['access_token'];
         }
       }
-      console.log("HEADERS", req.headers);
 
       let redirect_path = undefined;
       if (req.method === "GET") {

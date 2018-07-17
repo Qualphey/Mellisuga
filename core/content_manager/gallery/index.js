@@ -29,7 +29,7 @@ module.exports = class {
           });
 
           srcs.sort((a, b) => {
-            return fs.statSync(path.resolve(gallery_path, a)).birthtime.getTime() - fs.statSync(path.resolve(gallery_path, b)).birthtime.getTime();
+            return fs.statSync(path.resolve(gallery_path, b)).birthtime.getTime() - fs.statSync(path.resolve(gallery_path, a)).birthtime.getTime();
           });
 
           srcs.forEach(src => {
@@ -55,8 +55,10 @@ module.exports = class {
 
       switch (data.command) {
         case 'rm':
-          var image_path = path.resolve(gallery_path, data.src.split('/').pop());
-          fs.unlinkSync(image_path);
+          for (let i = 0; i < data.src.length; i++) {
+            var image_path = path.resolve(gallery_path, data.src[i].split('/').pop());
+            fs.unlinkSync(image_path); 
+          } 
           res.send("success");
           break;
         default:

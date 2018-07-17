@@ -138,7 +138,7 @@ module.exports = function () {
 
     var json_edit = this.element.querySelector(".json_edit");
 
-    this.cfg_string = JSON.stringify(JSON.parse(cfg.cfg), null, 2);
+    this.cfg_string = JSON.stringify(JSON.parse(cfg.cfg || '{}'), null, 2);
 
     this.html_editor = new CodeMirror(this.cfg_string, 'js', true);
     json_edit.appendChild(this.html_editor.element);

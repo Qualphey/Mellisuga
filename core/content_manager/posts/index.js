@@ -2,12 +2,13 @@
 module.exports = class {
   constructor(table, cmbird) {
     let app = this.app = cmbird.app;
+    const path_prefix = "/content-manager";
 
     this.table = table;
 
     let this_class = this;
 
-    app.get("/posts.io", async function(req, res) {
+    app.get("/posts", async function(req, res) {
       try {
         var data = JSON.parse(req.query.data);
         /*
@@ -39,7 +40,7 @@ module.exports = class {
       };
     });
 
-    app.post(cmbird.admin_path+"/posts.io", async function(req, res) {
+    app.post(path_prefix+"/posts", async function(req, res) {
       try {
         var data = JSON.parse(req.body.data);
         /*
@@ -85,8 +86,9 @@ module.exports = class {
 
   static async init(cmbird) {
     try {
-      var table = await cmbird.aura.table('posts', {
+      let table = await cmbird.aura.table('posts', {
         columns: {
+          id: 'uuid',
           title: 'text',
           content: 'text',
           tags: 'text[]'
@@ -94,7 +96,7 @@ module.exports = class {
       });
       return new module.exports(table, cmbird);
     } catch (e) {
-      console.log(e);
+      console.error(e.stack);
       return false;
     }
   }
@@ -105,7 +107,7 @@ module.exports = class {
       var posts = await this.table.select('*');
       return posts;
     } catch (e) {
-      console.log(e);
+      console.error(e.stack);
       return false;
     }
   }
@@ -117,7 +119,7 @@ module.exports = class {
       );
       return found;
     } catch (e) {
-      console.log(e);
+      console.error(e.stack);
       return false;
     }
   };
@@ -128,7 +130,7 @@ module.exports = class {
         '*', "title = $1", [title]
       );
     } catch (e) {
-      console.log(e);
+      console.error(e.stack);
       return false;
     }
   }
@@ -151,7 +153,7 @@ module.exports = class {
       }
       return json;
     } catch (e) {
-      console.log(e);
+      console.error(e.stack);
       return false;
     }
 
@@ -164,7 +166,7 @@ module.exports = class {
       await this.table.update(data, "id = $1", [id]);
       return "success";
     } catch (e) {
-      console.log(e);
+      console.error(e.stack);
       return false;
     }
   }
@@ -186,7 +188,7 @@ module.exports = class {
         return false;
       }
     } catch (e) {
-      console.log(e);
+      console.error(e.stack);
       return false;
     }
   }

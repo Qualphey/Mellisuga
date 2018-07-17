@@ -5,13 +5,32 @@
   <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
-    <link href="/g/theme.css" rel="stylesheet">
+    <link href="/content_management/g/theme.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jodit/3.1.92/jodit.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jodit/3.1.92/jodit.min.js"></script>
   </head>
   <body>
-    <div>
-      {% for item in menu %}
-      <a href="{{ item.path }}">{{ item.name }}</a>
-      {% endfor %}
+    {% include "header.njk" %}
+
+    <div class="content-block">
+      <div class="new_post_button">
+        Write a new post
+      </div>
+
+      <div class="post_editor" style="display: none">
+        <input type="text" class="post_title_input" placeholder="Title" />
+        <textarea class="jodit" name="jodit"></textarea>
+        <input type="text" class="post_tags_input" placeholder="Tags `i.e. tag1 tag2 tag3` (split by spaces)" />
+        <input type="submit" class="post_submit_input" />
+        <div class="post_element">
+          <h3 class="post_display_title post_title"></h3>
+          <div class="post_display post_content"></div>
+        </div>
+      </div>
+
+      <div class="post_list">
+
+      </div> 
     </div>
 	</body>
   <script src="main.js"></script>

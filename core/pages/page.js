@@ -19,6 +19,8 @@ module.exports = class {
     } else {
       this.name = this.full_path.substr(this.full_path.lastIndexOf('/') + 1);
     }
+
+    this.custom_context = cfg.context;
  
     this.cms = cms;
 
@@ -337,6 +339,10 @@ module.exports = class {
       }
 
       context.page_name = this.name;
+      for (let key in this.custom_context) {
+        console.log("key", key);
+        context[key] = this.custom_context[key];
+      }
 
       if (context.lang) {
         const lang_json = fs.readFileSync(

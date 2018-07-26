@@ -23,12 +23,17 @@ module.exports = class {
     var title_input = div.querySelector(".post_title_input");
     title_input.value = obj.title;
     var tags_input = div.querySelector(".post_tags_input");
-    tags_input.value = obj.tags;
+    if (tags_input) {
+      tags_input.value = obj.tags;
+    }
     let submit_input = div.querySelector(".post_submit_input"),
     cancel_input = div.querySelector(".post_cancel_input"),
     post_display_title = div.querySelector(".post_display_title"),
     post_display = div.querySelector(".post_display"),
     jodit_area = div.querySelector(".jodit");
+
+    post_display_title.innerHTML = obj.title;
+    post_display.innerHTML = obj.content;
 
     var this_class = this;
     cancel_input.addEventListener("click", function(e) {
@@ -47,16 +52,24 @@ module.exports = class {
     
     jodit.value = obj.content;
 
+    jodit.events.on("change", function() {
+      post_display.innerHTML = jodit.value;
+    });
+
     post_editor.style.display = "block";
 
     submit_input.addEventListener("click", async function(e) {
+      let tags;
+      if (tags_input) {
+        tags = tags_input.value.split(" ");
+      }
       var data = {
         command: "edit",
         post: {
           id: obj.id,
           title: title_input.value,
           content: jodit.value,
-          tags: tags_input.value.split(" ")
+          tags: tags
         }
       }
 
@@ -67,8 +80,9 @@ module.exports = class {
         console.log("Post successfuly edited!");
         obj.title = title_input.value;
         obj.content = jodit.value;
-        obj.tags = tags_input.value.split(" ");
-        this_class.make_first();
+        obj.tags = tags;
+        obj.edit_date = Date.now();
+//        this_class.make_first();
         div.innerHTML = html;
         this_class.display(obj);
       }
@@ -89,6 +103,21 @@ module.exports = class {
     title.innerHTML = obj.title;
     title.classList.add('post_display_title');
 
+
+    let published = this.element.querySelector('.post_published');
+    const pdate = new Date(parseInt(obj.publish_date));
+    published.innerHTML = pdate.getFullYear()+"-"+pdate.getMonth()+
+    "-"+pdate.getDate()+" "+pdate.getHours()+":"+pdate.getMinutes(); 
+
+    const edate = new Date(parseInt(obj.edit_date));  
+    if (!isNaN(edate)) {
+      let edited = this.element.querySelector('.post_edited'); 
+      edited.innerHTML = edate.getFullYear()+"-"+edate.getMonth()+
+      "-"+edate.getDate()+" "+edate.getHours()+":"+edate.getMinutes();
+    }
+
+
+
     var edit_btn = this.element.querySelector('.post_edit_btn');
 
     var this_class = this;
@@ -98,12 +127,34 @@ module.exports = class {
 
     var del_btn = this.element.querySelector('.post_del_btn');
     del_btn.addEventListener("click", async function(e) {
-      const response = await XHR.post('/content-manager/posts', {
-        command: "delete", ids: [obj.id]
+      var popup = document.createElement('div');
+      popup.classList.add("del_post_popup");
+      document.body.appendChild(popup);
+
+      var message = document.createElement("p");
+      message.innerHTML = "Are you sure you want to delete the images that you've selected?";
+      popup.appendChild(message);
+  
+      var ybtn = document.createElement("button");
+      ybtn.innerHTML = "yes";
+      ybtn.addEventListener("click", async (e) => {
+        const response = await XHR.post('/content-manager/posts', {
+          command: "delete", ids: [obj.id]
+        });
+        if (response == "success") {
+          this_class.element.parentNode.removeChild(this_class.element);
+          document.body.removeChild(popup);
+        }
       });
-      if (response == "success") {
-        this_class.element.parentNode.removeChild(this_class.element);
-      } 
+      popup.appendChild(ybtn);
+
+      var nbtn = document.createElement("button");
+      nbtn.innerHTML = "no";
+      nbtn.addEventListener("click", (e) => {
+        document.body.removeChild(popup);
+      });
+      popup.appendChild(nbtn);
+       
     });
 
     var content = this.element.querySelector('.post_content');

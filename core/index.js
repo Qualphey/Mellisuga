@@ -152,7 +152,7 @@ module.exports = class CMBird {
 
       var auth = this_class.auth = await Auth.init(this_class.app, aura, user_auth_cfg);
 
-      var content_manager = this_class.content_manager = await ContentManager.init(this_class, {});
+      var content_manager = this_class.content_manager = await ContentManager.init(this_class, cfg.content_manager || {});
 
       
 

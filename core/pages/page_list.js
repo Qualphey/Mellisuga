@@ -19,6 +19,8 @@ module.exports = class PageList {
   constructor(cfg, cms) {
     this.cms = cms;
 
+    this.context = cfg.context;
+
     this.blacklist = page_blacklist
 
     this.req_prefix = cfg.req_prefix;
@@ -93,7 +95,8 @@ module.exports = class PageList {
         parent_list: this_class,
         globals_path: this_class.globals_path,
         required_rights: this_class.required_rights,
-        global_context_path: this_class.global_context_path
+        global_context_path: this_class.global_context_path,
+        context: this_class.context
       }, cms);
 
       this_class.list.push(npage);

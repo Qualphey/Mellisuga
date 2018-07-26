@@ -159,27 +159,32 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
 
           submit_input.addEventListener("click", function () {
             var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
-              var data, res, post;
+              var tags, data, res, post;
               return regeneratorRuntime.wrap(function _callee$(_context) {
                 while (1) {
                   switch (_context.prev = _context.next) {
                     case 0:
+                      tags = void 0;
+
+                      if (tags_input) {
+                        tags = tags_input.value.split(" ");
+                      }
                       data = {
                         command: "create",
                         post: {
                           title: title_input.value,
                           content: jodit.value,
-                          tags: tags_input.value.split(" ")
+                          tags: tags
                         }
                       };
 
 
                       console.log("CREATE ONE POST");
 
-                      _context.next = 4;
+                      _context.next = 6;
                       return XHR.post('/content-manager/posts', data);
 
-                    case 4:
+                    case 6:
                       res = _context.sent;
 
 
@@ -187,6 +192,7 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
                         console.error(res.err);
                       } else {
                         data.post.id = res.id;
+                        data.post.publish_date = Date.now();
                         post = new Post(data.post);
 
                         post_list.insertBefore(post.element, post_list.firstChild);
@@ -195,10 +201,12 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
 
                         title_input.value = '';
                         jodit.value = '';
-                        tags_input.value = '';
+                        if (tags_input) {
+                          tags_input.value = '';
+                        }
                       }
 
-                    case 6:
+                    case 8:
                     case 'end':
                       return _context.stop();
                   }
@@ -235,7 +243,7 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<h3 class=\"post_title\"></h3>\n<button class=\"post_edit_btn\">/</button>\n<button class=\"post_del_btn\">X</button>\n<div class=\"post_content\"></div>\n";
+module.exports = "\n<h3 class=\"post_title\"></h3>\n<span>Published: </span>\n<span class=\"post_published\"></span>\n<span>Edited: </span>\n<span class=\"post_edited\"></span>\n<button class=\"post_edit_btn\">/</button>\n<button class=\"post_del_btn\">X</button>\n<div class=\"post_content\"></div>\n";
 
 /***/ }),
 
@@ -281,12 +289,17 @@ module.exports = function () {
       var title_input = div.querySelector(".post_title_input");
       title_input.value = obj.title;
       var tags_input = div.querySelector(".post_tags_input");
-      tags_input.value = obj.tags;
+      if (tags_input) {
+        tags_input.value = obj.tags;
+      }
       var submit_input = div.querySelector(".post_submit_input"),
           cancel_input = div.querySelector(".post_cancel_input"),
           post_display_title = div.querySelector(".post_display_title"),
           post_display = div.querySelector(".post_display"),
           jodit_area = div.querySelector(".jodit");
+
+      post_display_title.innerHTML = obj.title;
+      post_display.innerHTML = obj.content;
 
       var this_class = this;
       cancel_input.addEventListener("click", function (e) {
@@ -305,31 +318,40 @@ module.exports = function () {
 
       jodit.value = obj.content;
 
+      jodit.events.on("change", function () {
+        post_display.innerHTML = jodit.value;
+      });
+
       post_editor.style.display = "block";
 
       submit_input.addEventListener("click", function () {
         var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
-          var data, response;
+          var tags, data, response;
           return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
+                  tags = void 0;
+
+                  if (tags_input) {
+                    tags = tags_input.value.split(" ");
+                  }
                   data = {
                     command: "edit",
                     post: {
                       id: obj.id,
                       title: title_input.value,
                       content: jodit.value,
-                      tags: tags_input.value.split(" ")
+                      tags: tags
                     }
                   };
 
 
                   console.log("edit post");
-                  _context.next = 4;
+                  _context.next = 6;
                   return XHR.post('/content-manager/posts', data);
 
-                case 4:
+                case 6:
                   response = _context.sent;
 
                   console.log("response", response);
@@ -337,13 +359,14 @@ module.exports = function () {
                     console.log("Post successfuly edited!");
                     obj.title = title_input.value;
                     obj.content = jodit.value;
-                    obj.tags = tags_input.value.split(" ");
-                    this_class.make_first();
+                    obj.tags = tags;
+                    obj.edit_date = Date.now();
+                    //        this_class.make_first();
                     div.innerHTML = html;
                     this_class.display(obj);
                   }
 
-                case 7:
+                case 9:
                 case 'end':
                   return _context.stop();
               }
@@ -373,6 +396,16 @@ module.exports = function () {
       title.innerHTML = obj.title;
       title.classList.add('post_display_title');
 
+      var published = this.element.querySelector('.post_published');
+      var pdate = new Date(parseInt(obj.publish_date));
+      published.innerHTML = pdate.getFullYear() + "-" + pdate.getMonth() + "-" + pdate.getDate() + " " + pdate.getHours() + ":" + pdate.getMinutes();
+
+      var edate = new Date(parseInt(obj.edit_date));
+      if (!isNaN(edate)) {
+        var edited = this.element.querySelector('.post_edited');
+        edited.innerHTML = edate.getFullYear() + "-" + edate.getMonth() + "-" + edate.getDate() + " " + edate.getHours() + ":" + edate.getMinutes();
+      }
+
       var edit_btn = this.element.querySelector('.post_edit_btn');
 
       var this_class = this;
@@ -382,30 +415,75 @@ module.exports = function () {
 
       var del_btn = this.element.querySelector('.post_del_btn');
       del_btn.addEventListener("click", function () {
-        var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(e) {
-          var response;
-          return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(e) {
+          var _this = this;
+
+          var popup, message, ybtn, nbtn;
+          return regeneratorRuntime.wrap(function _callee3$(_context3) {
             while (1) {
-              switch (_context2.prev = _context2.next) {
+              switch (_context3.prev = _context3.next) {
                 case 0:
-                  _context2.next = 2;
-                  return XHR.post('/content-manager/posts', {
-                    command: "delete", ids: [obj.id]
+                  popup = document.createElement('div');
+
+                  popup.classList.add("del_post_popup");
+                  document.body.appendChild(popup);
+
+                  message = document.createElement("p");
+
+                  message.innerHTML = "Are you sure you want to delete the images that you've selected?";
+                  popup.appendChild(message);
+
+                  ybtn = document.createElement("button");
+
+                  ybtn.innerHTML = "yes";
+                  ybtn.addEventListener("click", function () {
+                    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(e) {
+                      var response;
+                      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                        while (1) {
+                          switch (_context2.prev = _context2.next) {
+                            case 0:
+                              _context2.next = 2;
+                              return XHR.post('/content-manager/posts', {
+                                command: "delete", ids: [obj.id]
+                              });
+
+                            case 2:
+                              response = _context2.sent;
+
+                              if (response == "success") {
+                                this_class.element.parentNode.removeChild(this_class.element);
+                                document.body.removeChild(popup);
+                              }
+
+                            case 4:
+                            case 'end':
+                              return _context2.stop();
+                          }
+                        }
+                      }, _callee2, _this);
+                    }));
+
+                    return function (_x3) {
+                      return _ref3.apply(this, arguments);
+                    };
+                  }());
+                  popup.appendChild(ybtn);
+
+                  nbtn = document.createElement("button");
+
+                  nbtn.innerHTML = "no";
+                  nbtn.addEventListener("click", function (e) {
+                    document.body.removeChild(popup);
                   });
+                  popup.appendChild(nbtn);
 
-                case 2:
-                  response = _context2.sent;
-
-                  if (response == "success") {
-                    this_class.element.parentNode.removeChild(this_class.element);
-                  }
-
-                case 4:
+                case 14:
                 case 'end':
-                  return _context2.stop();
+                  return _context3.stop();
               }
             }
-          }, _callee2, this);
+          }, _callee3, this);
         }));
 
         return function (_x2) {
@@ -11776,7 +11854,7 @@ module.exports = function (module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! babel-polyfill */"./node_modules/babel-polyfill/lib/index.js");
-module.exports = __webpack_require__(/*! /home/qualphey/Development/larvita/Mellisuga/core/content_manager/dist/Posts/src/index.js */"./Mellisuga/core/content_manager/dist/Posts/src/index.js");
+module.exports = __webpack_require__(/*! /home/qualphey/Development/lsbaldai/Mellisuga/core/content_manager/dist/Posts/src/index.js */"./Mellisuga/core/content_manager/dist/Posts/src/index.js");
 
 
 /***/ })

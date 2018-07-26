@@ -12134,7 +12134,7 @@ module.exports = function (module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! babel-polyfill */"./node_modules/babel-polyfill/lib/index.js");
-module.exports = __webpack_require__(/*! /home/qualphey/Development/larvita/Mellisuga/core/content_manager/dist/Gallery/src/index.js */"./Mellisuga/core/content_manager/dist/Gallery/src/index.js");
+module.exports = __webpack_require__(/*! /home/qualphey/Development/lsbaldai/Mellisuga/core/content_manager/dist/Gallery/src/index.js */"./Mellisuga/core/content_manager/dist/Gallery/src/index.js");
 
 
 /***/ })

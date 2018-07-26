@@ -42,12 +42,16 @@ require('./style.css');
   });
 
   submit_input.addEventListener("click", async function(e) {
+    let tags; 
+    if (tags_input) {
+      tags = tags_input.value.split(" ");
+    }
     var data = {
       command: "create",
       post: {
         title: title_input.value,
         content: jodit.value,
-        tags: tags_input.value.split(" ")
+        tags: tags
       }
     }
 
@@ -59,6 +63,7 @@ require('./style.css');
       console.error(res.err);
     } else {
       data.post.id = res.id;
+      data.post.publish_date = Date.now();
       var post = new Post(data.post);
       post_list.insertBefore(post.element, post_list.firstChild);
       new_post_button.style.display = "block";
@@ -66,7 +71,9 @@ require('./style.css');
 
       title_input.value = '';
       jodit.value = '';
-      tags_input.value = '';
+      if (tags_input) {
+        tags_input.value = '';
+      }
     }
   });
 

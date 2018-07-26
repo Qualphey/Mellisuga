@@ -656,8 +656,9 @@ module.exports = function () {
     }
   }, {
     key: 'resize',
-    value: function resize(width, break_lines) {
+    value: function resize(width) {
       if (width) {
+        this.cur_width = width;
         width -= getScrollbarWidth();
         var width_per_item = width / this.inrow_default - this.padding;
         if (width_per_item < this.min_a) {
@@ -684,13 +685,6 @@ module.exports = function () {
 
       this.element.style.width = (this.item_a + this.padding) * this.items_in_row + "px";
 
-      /*
-          if (break_lines) {
-            const nwidth = width-this.padding;
-            this.element.style.minWidth = nwidth+"px";
-            this.element.style.width = nwidth+"px";
-          }
-      */
       this.element.parentNode.style.minHeight = this.element.offsetHeight + "px";
     }
   }, {
@@ -706,13 +700,32 @@ module.exports = function () {
 
         this.trs.push(this.cur_tr);
         this.tds.push(td);
-        this.resize();
+        this.resize(this.cur_width);
       } else {
         var td = document.createElement('td');
         td.appendChild(item);
         this.cur_tr.add(td);
         this.tds.push(td);
-        this.resize();
+        this.resize(this.cur_width);
+      }
+    }
+  }, {
+    key: 'insert',
+    value: function insert(item, index) {
+
+      if (index >= this.tds.length) {
+        console.log("RE ADD");
+        this.add(item);
+      } else {
+        var cur_tr = this.trs[Math.floor(index / this.items_in_row)];
+
+        var td = document.createElement('td');
+        td.appendChild(item);
+
+        cur_tr.insert(td, index % this.items_in_row);
+
+        this.tds.splice(index, 0, td);
+        this.resize(this.cur_width);
       }
     }
   }, {
@@ -826,6 +839,14 @@ module.exports = function () {
       this.tds.push(td);
       this.items++;
       this.element.appendChild(td);
+    }
+  }, {
+    key: 'insert',
+    value: function insert(td, index) {
+      this.tds.splice(index, 0, td);
+      var cur_tds = this.element.getElementsByTagName('td');
+      this.element.insertBefore(td, cur_tds[index]);
+      this.items++;
     }
   }, {
     key: 'remove',
@@ -12182,7 +12203,7 @@ module.exports = function (module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! babel-polyfill */"./node_modules/babel-polyfill/lib/index.js");
-module.exports = __webpack_require__(/*! /home/qualphey/Development/larvita/Mellisuga/core/admin/dist/Modules/src/index.js */"./Mellisuga/core/admin/dist/Modules/src/index.js");
+module.exports = __webpack_require__(/*! /home/qualphey/Development/lsbaldai/Mellisuga/core/admin/dist/Modules/src/index.js */"./Mellisuga/core/admin/dist/Modules/src/index.js");
 
 
 /***/ })

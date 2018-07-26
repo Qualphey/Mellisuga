@@ -21,14 +21,23 @@ module.exports = class {
         switch (data.command) {
           case 'all':
             var list = await this_class.all();
+            list.sort(function (a, b) {
+              return a.publish_date - b.publish_date;
+            });
             res.send(JSON.stringify(list));
             break;
           case 'select':
             if (data.title) {
               var result = await this_class.select_by_title(data.title);
+              result.sort(function (a, b) {
+                return a.publish_date - b.publish_date;
+              });
               res.send(JSON.stringify(result));
             } else if (data.tags) {
               var result = await this_class.select_by_tags(data.tags);
+              result.sort(function (a, b) {
+                return a.publish_date - b.publish_date;
+              });
               res.send(JSON.stringify(result));
             }
             break;
@@ -91,7 +100,9 @@ module.exports = class {
           id: 'uuid',
           title: 'text',
           content: 'text',
-          tags: 'text[]'
+          tags: 'text[]',
+          publish_date: 'bigint',
+          edit_date: 'bigint'
         }
       });
       return new module.exports(table, cmbird);
@@ -142,6 +153,7 @@ module.exports = class {
 
       var json;
       if (found.length == 0) {
+        data.publish_date = Date.now();
         var result = await this.table.insert(data);
         json = JSON.stringify({
           id: result
@@ -163,6 +175,7 @@ module.exports = class {
     try {
       var id = data.id;
       delete data.id;
+      data.edit_date = Date.now();
       await this.table.update(data, "id = $1", [id]);
       return "success";
     } catch (e) {

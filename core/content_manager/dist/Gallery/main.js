@@ -86,6 +86,17 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./Mellisuga/core/content_manager/dist/Gallery/src/display.html":
+/*!**********************************************************************!*\
+  !*** ./Mellisuga/core/content_manager/dist/Gallery/src/display.html ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<span class=\"display_controls\">\n  <button class=\"display_close\">x</button>\n  <button class=\"display_left\">&#60;</button>\n  <button class=\"display_right\">&#62;</button>\n</span>\n<img src=\"\" />\n\n";
+
+/***/ }),
+
 /***/ "./Mellisuga/core/content_manager/dist/Gallery/src/image.js":
 /*!******************************************************************!*\
   !*** ./Mellisuga/core/content_manager/dist/Gallery/src/image.js ***!
@@ -105,21 +116,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var XHR = __webpack_require__(/*! globals/utils/xhr_async.js */ "./globals/modules/utils/xhr_async.js");
 
+var display_html = __webpack_require__(/*! ./display.html */ "./Mellisuga/core/content_manager/dist/Gallery/src/display.html");
+
 module.exports = function () {
-  function _class(img, src, grid_ui, select_all) {
+  function _class(img, src, grid_ui, select_all, images) {
     var _this = this;
 
     _classCallCheck(this, _class);
 
+    this.images = images;
     this.element = document.createElement("div");
     this.element.classList.add("gallery_ui_item");
     this.element.appendChild(img);
 
     this.display_element = document.createElement("div");
     this.display_element.classList.add("gallery_ui_display");
-    var dimg = document.createElement("img");
+    this.display_element.innerHTML = display_html;
+    var dimg = this.display_element.querySelector("img");
     dimg.src = src;
-    this.display_element.appendChild(dimg);
 
     var this_class = this;
 
@@ -131,54 +145,123 @@ module.exports = function () {
       }
     });
 
-    var displayed = false;
+    this.displayed = false;
 
-    img.addEventListener('click', function (e) {
-      document.body.style.overflow = "hidden";
-      displayed = true;
-
-      document.body.appendChild(this_class.display_element);
-
-      var btn_box = document.createElement("div");
-      this_class.display_element.appendChild(btn_box);
-
-      var back_btn = document.createElement("button");
-      back_btn.innerHTML = "<";
-
-      btn_box.addEventListener("mouseover", function (e) {
-        btn_box.appendChild(back_btn);
-      });
-
-      btn_box.addEventListener("mouseleave", function (e) {
-        btn_box.removeChild(back_btn);
-      });
-
-      back_btn.addEventListener("click", function (e) {
-        document.body.style.overflow = "auto";
-        this_class.display_element.removeChild(btn_box);
-        document.body.removeChild(this_class.display_element);
-        displayed = false;
-      });
+    img.addEventListener('click', function () {
+      this_class.display();
     });
 
     this.element.addEventListener('mouseover', function (e) {
-      if (!displayed) {
+      if (!this_class.displayed) {
         _this.element.appendChild(checkbox);
       }
     });
 
     this.element.addEventListener('mouseleave', function (e) {
-      if (!displayed) {
+      if (!this_class.displayed) {
         if (!checkbox.checked) {
           _this.element.removeChild(checkbox);
         }
       }
     });
 
+    this.hide_element = function (e) {
+      document.body.style.overflow = "auto";
+      document.body.style.position = "";
+      this_class.hide();
+    };
+
+    this.navigate_left = function (e) {
+      var next_index = this_class.images.indexOf(this_class) - 1;
+      if (next_index > -1 && next_index < this_class.images.length) {
+        this_class.images[next_index].display();
+        this_class.hide();
+      }
+    };
+
+    this.navigate_right = function (e) {
+      var next_index = this_class.images.indexOf(this_class) + 1;
+      if (next_index > -1 && next_index < this_class.images.length) {
+        this_class.images[next_index].display();
+        this_class.hide();
+      }
+    };
+
     this.src = src;
   }
 
   _createClass(_class, [{
+    key: 'display',
+    value: function display() {
+      var display_controls = this.display_element.querySelector(".display_controls");
+      var back_btn = this.display_element.querySelector('.display_close');
+      var left_btn = this.display_element.querySelector('.display_left');
+      var right_btn = this.display_element.querySelector('.display_right');
+
+      var this_index = this.images.indexOf(this);
+      if (this_index < 1) {
+        if (display_controls.contains(left_btn)) {
+          display_controls.removeChild(left_btn);
+        }
+      } else {
+        if (!display_controls.contains(left_btn)) {
+          display_controls.appendChild(left_btn);
+        }
+        left_btn.addEventListener("click", this.navigate_left);
+      }
+
+      if (this_index > this.images.length - 2) {
+        if (display_controls.contains(right_btn)) {
+          display_controls.removeChild(right_btn);
+        }
+      } else {
+        if (!display_controls.contains(right_btn)) {
+          display_controls.appendChild(right_btn);
+        }
+        right_btn.addEventListener("click", this.navigate_right);
+      }
+
+      var this_class = this;
+
+      document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      this_class.displayed = true;
+
+      var hide_after = 2000; // 1000 miliseconds
+      var last_moved = Date.now();
+
+      this.interv = setInterval(function () {
+        var now = Date.now();
+        if (last_moved < now - hide_after) {
+          display_controls.style.display = "none";
+        }
+      }, 1000);
+
+      this.mouse_moved_listener = function () {
+        if (display_controls.style.display === "none") {
+          display_controls.style.display = "";
+        }
+        last_moved = Date.now();
+      };
+
+      document.addEventListener('mousemove', this.mouse_moved_listener, false);
+
+      back_btn.addEventListener("click", this.hide_element);
+
+      document.body.appendChild(this_class.display_element);
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      document.body.removeChild(this.display_element);
+      this.displayed = false;
+      document.removeEventListener('mousemove', this.mouse_moved_listener, false);
+      document.removeEventListener('click', this.hide_element, false);
+      document.removeEventListener('click', this.navigate_left, false);
+      document.removeEventListener('click', this.navigate_right, false);
+      clearInterval(this.interv);
+    }
+  }, {
     key: 'select',
     value: function select() {
       this.checkbox.checked = true;
@@ -190,12 +273,12 @@ module.exports = function () {
       this.checkbox.checked = false;
       if (this.element.contains(this.checkbox)) {
         this.element.removeChild(this.checkbox);
-      }
+      }t;
     }
   }], [{
     key: 'init',
     value: function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(src, grid_ui, select_all) {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(src, grid_ui, select_all, images) {
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -205,7 +288,7 @@ module.exports = function () {
                   var img = document.createElement('img');
                   img.src = src;
                   img.addEventListener("load", function (e) {
-                    resolve(new module.exports(img, src, grid_ui, select_all));
+                    resolve(new module.exports(img, src, grid_ui, select_all, images));
                   });
 
                   img.addEventListener("error", function (e) {
@@ -225,7 +308,7 @@ module.exports = function () {
         }, _callee, this);
       }));
 
-      function init(_x, _x2, _x3) {
+      function init(_x, _x2, _x3, _x4) {
         return _ref.apply(this, arguments);
       }
 
@@ -305,14 +388,14 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
                           grid_ui.remove(existing.element);
                         }
                         _context2.next = 13;
-                        return Image.init(src, grid_ui, select_all);
+                        return Image.init(src, grid_ui, select_all, images);
 
                       case 13:
                         image = _context2.sent;
 
                         if (image) {
                           grid_ui.insert(image.element, 1);
-                          images.push(image);
+                          images.splice(0, 0, image);
                         }
 
                       case 15:
@@ -470,7 +553,7 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
 
           src = srcs[i];
           _context3.next = 30;
-          return Image.init(src, grid_ui, select_all);
+          return Image.init(src, grid_ui, select_all, images);
 
         case 30:
           image = _context3.sent;

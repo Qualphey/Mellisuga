@@ -100,7 +100,7 @@
 
     for (var i = 0; i < srcs.length; i++) {
       var src = srcs[i];
-      var image = await Image.init(src, grid_ui, select_all);
+      var image = await Image.init(src, grid_ui, select_all, images);
       if (image) {
         images.push(image);
         grid_ui.add(image.element);
@@ -144,10 +144,10 @@
           if (existing) {
             grid_ui.remove(existing.element);
           }
-          var image = await Image.init(src, grid_ui, select_all);
+          var image = await Image.init(src, grid_ui, select_all, images);
           if (image) {
             grid_ui.insert(image.element, 1);
-            images.push(image);
+            images.splice(0, 0, image);
           }
         }
       }, false);

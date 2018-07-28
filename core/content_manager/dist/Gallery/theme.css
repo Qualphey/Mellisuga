@@ -50,12 +50,6 @@
   border: 1px solid #ddd;
 }
 
-.gallery_ui_item button {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-}
-
 .gallery_ui_item input[type=checkbox] {
   position: absolute;
   top: 5px;
@@ -113,31 +107,41 @@
 }
 
 .gallery_ui_display button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  bottom: auto;
-	background-color: #0001;
+  position: fixed;
+  background-color: #0001;
 	border: 0;
-	color: #FFF;
-	font-size: 26px;
+	color: #FFF; 
   cursor: pointer;
 }
 
 .gallery_ui_display button:hover {
-  position: absolute;
+	background-color: #0003;
+}
+
+.gallery_ui_display button.display_close {
   top: 5px;
   right: 5px;
   bottom: auto;
-	background-color: #0003;
-	border: 0;
-	color: #FFF;
+	
 	font-size: 26px;
 }
 
+.gallery_ui_display button.display_left {
+  left: 0px;
+  width: 100px;
+  height: 200px;
+  font-size: 26px;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
-.gallery_ui_display:hover {
-  background-color: #111;
+.gallery_ui_display button.display_right {
+  right: 0px;
+  width: 100px;
+  height: 200px; 
+  font-size: 26px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 

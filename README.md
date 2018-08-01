@@ -1,3 +1,5 @@
+## This repository has been [moved to GitLab](https://gitlab.com/subtledev/Mellisuga) ##
+
 # Mellisuga #
 
 #### a lightweight NodeJS based content management system and web development environment that aims for flexibility, performance, stability and ease of use. ####
